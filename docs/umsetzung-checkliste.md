@@ -140,8 +140,8 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 
 **Weltkarte und Fortschritt** (Spez. 5)
 
-- [ ] Weltkarte mit 8 Bereichsmarkern (gesperrt, offen, fertig)
-- [ ] Freischaltung: Start mit Affenwald und Pinguinfelsen, weitere Bereiche nach 6 Sternen im Vorgänger
+- [ ] Weltkarte mit 8 Bereichsmarkern (gesperrt, offen, fertig); gezeichnete Karte mit Schloss, Tier und Schild „bald“ fertig, Zustand „fertig“ offen
+- [x] Freischaltung: Start mit Affenwald und Pinguinfelsen, weitere Bereiche nach 6 Sternen im Vorgänger
 - [ ] Sterne einlösen für Baby-Tiere (benennbar) und Dekoration
 - [ ] Sticker-Album mit Mathe-Abzeichen
 
@@ -163,7 +163,7 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 
 **Grafik und Ressourcen** (Spez. 11)
 
-- [ ] Weltkarte (2048 × 1536) und 8 Bereichshintergründe
+- [ ] Weltkarte (2048 × 1536) und 8 Bereichshintergründe; Weltkarte fertig (`art/`, 1× im Spiel, @2× in `art/png`), Bereichshintergründe offen
 - [ ] 8 Tierarten × 4 Zustände plus 8 Baby-Varianten als Sprite-Sheets
 - [ ] Mathe-Darstellungen: Zehnerfeld, Hundertertafel, Rechenstrich, Zahlenstrahl, Zehnerstangen und Einerwürfel, Uhr, Münzen und Scheine (stilisiert), Muster-Kacheln, Formen, Körper
 - [ ] Rund 20 Aufgabenobjekte, 12 Dekorationen, 12 Abzeichen, 8 Profil-Avatare

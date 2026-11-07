@@ -1,7 +1,7 @@
 import { BaseScene } from './BaseScene';
 import type { Services } from '../services/services';
 import { SceneKey } from '../types/scenes';
-import { Tex } from '../ui/theme';
+import { AnimalIcon, Tex } from '../ui/theme';
 
 const DATA = ['strings.de', 'hints.de'] as const;
 
@@ -13,6 +13,10 @@ const IMAGES: Record<string, string> = {
   [Tex.tryAgain]: 'img/ui/ui_nochmal_wolke_96.png',
   [Tex.ten]: 'img/math/mathe_zehner_48x480.png',
   [Tex.one]: 'img/math/mathe_einer_64.png',
+  [Tex.map]: 'img/map/karte_hintergrund_1024x768.png',
+  [Tex.mapLock]: 'img/map/karte_schloss_128.png',
+  [Tex.mapSign]: 'img/map/karte_schild_128.png',
+  ...Object.fromEntries(Object.values(AnimalIcon).map((key) => [key, `img/map/${key}_128.png`])),
 };
 
 /** Lädt Texte und Grafiken und startet mit der Profilauswahl oder dem Menü. */

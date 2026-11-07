@@ -1,0 +1,13 @@
+{
+  "comment": "Lage der Gehege auf der Zoo-Karte (1024 × 768). Gemeinsame Quelle für art/build_map.py und MapScene.",
+  "areas": {
+    "affenwald": { "x": 150, "y": 270 },
+    "pinguinfelsen": { "x": 395, "y": 255 },
+    "elefantenwiese": { "x": 640, "y": 270 },
+    "zookasse": { "x": 880, "y": 255 },
+    "futteruhr": { "x": 880, "y": 560 },
+    "schmetterlingshaus": { "x": 640, "y": 575 },
+    "giraffenhof": { "x": 395, "y": 560 },
+    "zoozaehlung": { "x": 150, "y": 575 }
+  }
+}

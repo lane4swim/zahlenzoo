@@ -26,7 +26,7 @@ export class Penguin extends Phaser.GameObjects.Container {
       g.strokeEllipse(fx, -8, 44, 20);
     }
     // Körper
-    g.fillStyle(0x2f3e4a, 1);
+    g.fillStyle(Color.pinguinGefieder, 1);
     g.fillEllipse(0, -100, 150, 190);
     g.strokeEllipse(0, -100, 150, 190);
     // Bauch
@@ -35,7 +35,7 @@ export class Penguin extends Phaser.GameObjects.Container {
     g.lineStyle(Stroke.inner, k, 1);
     g.strokeEllipse(0, -80, 100, 140);
     // Kopf
-    g.fillStyle(0x2f3e4a, 1);
+    g.fillStyle(Color.pinguinGefieder, 1);
     g.lineStyle(Stroke.outline, k, 1);
     g.fillCircle(0, -200, 64);
     g.strokeCircle(0, -200, 64);
@@ -59,7 +59,7 @@ export class Penguin extends Phaser.GameObjects.Container {
     g.fillTriangle(-12, -184, 12, -184, 0, -168);
     g.strokeTriangle(-12, -184, 12, -184, 0, -168);
     // Flügel
-    g.fillStyle(0x2f3e4a, 1);
+    g.fillStyle(Color.pinguinGefieder, 1);
     g.lineStyle(Stroke.outline, k, 1);
     g.fillEllipse(-74, -100, 30, 100);
     g.strokeEllipse(-74, -100, 30, 100);
