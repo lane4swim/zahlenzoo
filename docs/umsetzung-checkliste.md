@@ -6,7 +6,7 @@ Die Checkliste folgt der Roadmap (Spez. Abschnitt 13): fünf Phasen mit je einem
 
 ## 0. Klärungen vor und während der Umsetzung
 
-- [ ] Aktuelle stabile Phaser-Hauptversion prüfen und festlegen (Spez. 3)
+- [x] Aktuelle stabile Phaser-Hauptversion prüfen und festlegen (Spez. 3): Phaser 4 (4.2.1)
 - [ ] Lehrkraft für die inhaltliche Prüfung gewinnen (Spez. 12, KE 5)
 - [ ] Die zehn unsicheren Zuordnungen mit der Lehrkraft am Lehrplan-Original klären (KE 5)
   - [ ] 1 Verteilung der Inhalte auf Klasse 1 und 2, Startstufen
@@ -29,13 +29,13 @@ Die Checkliste folgt der Roadmap (Spez. Abschnitt 13): fünf Phasen mit je einem
 
 **Projekt und Werkzeuge** (Spez. 3)
 
-- [ ] Projekt mit Vite (`vanilla-ts`) anlegen
-- [ ] Phaser, Vitest, ESLint, Prettier, vite-plugin-pwa installieren; Versionen in `package.json` festschreiben
-- [ ] Skripte `dev`, `build`, `preview`, `test`, `lint` einrichten
-- [ ] `tsconfig.json` mit `strict: true` und `noUncheckedIndexedAccess`
-- [ ] ESLint-Regel `no-restricted-imports`: kein `phaser` in `src/logic/` (Spez. 4)
-- [ ] Phaser-Skalierung „FIT“, zentriert, Basis 1024 × 768, Querformat
-- [ ] `base` in `vite.config.ts` für das gewählte Hosting setzen, falls Unterpfad (Spez. 12)
+- [x] Projekt mit Vite (TypeScript) anlegen
+- [x] Phaser, Vitest, ESLint, Prettier, vite-plugin-pwa installieren; Versionen in `package.json` festschreiben (exakt gepinnt; TypeScript 6.0, weil typescript-eslint TypeScript 7 noch nicht unterstützt)
+- [x] Skripte `dev`, `build`, `preview`, `test`, `lint` einrichten (dazu `typecheck`, `format`, `test:watch`)
+- [x] `tsconfig.json` mit `strict: true` und `noUncheckedIndexedAccess`
+- [x] ESLint-Regel `no-restricted-imports`: kein `phaser` in `src/logic/` (Spez. 4)
+- [x] Phaser-Skalierung „FIT“, zentriert, Basis 1024 × 768, Querformat
+- [ ] `base` in `vite.config.ts` für das gewählte Hosting setzen, falls Unterpfad (Spez. 12); vorbereitet über `BASE_PATH`, Hosting noch nicht gewählt
 
 **Gerüst** (Spez. 4)
 
