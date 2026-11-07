@@ -52,7 +52,7 @@ Die Checkliste folgt der Roadmap (Spez. Abschnitt 13): fünf Phasen mit je einem
 - [x] GitHub Actions: Lint, Tests und Build bei jeder Änderung (Spez. 12)
 - [x] Erste Vitest-Tests für `rng.ts` (dazu Runde und Texte)
 
-- [ ] **Tor 1:** Eine leere Runde läuft, Tests und Build sind grün.
+- [x] **Tor 1:** Eine leere Runde läuft, Tests und Build sind grün.
 
 ## Phase 2: Vertikaler Schnitt (3 bis 4 Wochen)
 
