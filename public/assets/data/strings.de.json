@@ -1,0 +1,23 @@
+{
+  "app.title": "Zahlen-Zoo",
+  "common.back": "Zurück",
+  "common.ok": "OK",
+  "menu.play": "Spielen",
+  "menu.settings": "Einstellungen",
+  "menu.parents": "Erwachsene",
+  "map.title": "Zoo-Karte",
+  "area.affenwald": "Affenwald",
+  "area.pinguinfelsen": "Pinguinfelsen",
+  "area.startRound": "Runde starten",
+  "task.progress": "Aufgabe {current} von {total}",
+  "task.placeholder": "Hier kommt bald eine Aufgabe.",
+  "task.toMap": "Karte",
+  "roundEnd.title": "Runde geschafft!",
+  "roundEnd.summary": "{total} Aufgaben gelöst",
+  "roundEnd.again": "Nochmal",
+  "roundEnd.toMap": "Zur Karte",
+  "parent.title": "Erwachsenenbereich",
+  "parent.placeholder": "Die Übersicht folgt in Phase 4.",
+  "settings.title": "Einstellungen",
+  "settings.placeholder": "Die Einstellungen folgen in Phase 4."
+}

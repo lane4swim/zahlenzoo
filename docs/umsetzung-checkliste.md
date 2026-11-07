@@ -6,7 +6,7 @@ Die Checkliste folgt der Roadmap (Spez. Abschnitt 13): fünf Phasen mit je einem
 
 ## 0. Klärungen vor und während der Umsetzung
 
-- [ ] Aktuelle stabile Phaser-Hauptversion prüfen und festlegen (Spez. 3)
+- [x] Aktuelle stabile Phaser-Hauptversion prüfen und festlegen (Spez. 3): Phaser 4 (4.2.1)
 - [ ] Lehrkraft für die inhaltliche Prüfung gewinnen (Spez. 12, KE 5)
 - [ ] Die zehn unsicheren Zuordnungen mit der Lehrkraft am Lehrplan-Original klären (KE 5)
   - [ ] 1 Verteilung der Inhalte auf Klasse 1 und 2, Startstufen
@@ -29,30 +29,30 @@ Die Checkliste folgt der Roadmap (Spez. Abschnitt 13): fünf Phasen mit je einem
 
 **Projekt und Werkzeuge** (Spez. 3)
 
-- [ ] Projekt mit Vite (`vanilla-ts`) anlegen
-- [ ] Phaser, Vitest, ESLint, Prettier, vite-plugin-pwa installieren; Versionen in `package.json` festschreiben
-- [ ] Skripte `dev`, `build`, `preview`, `test`, `lint` einrichten
-- [ ] `tsconfig.json` mit `strict: true` und `noUncheckedIndexedAccess`
-- [ ] ESLint-Regel `no-restricted-imports`: kein `phaser` in `src/logic/` (Spez. 4)
-- [ ] Phaser-Skalierung „FIT“, zentriert, Basis 1024 × 768, Querformat
-- [ ] `base` in `vite.config.ts` für das gewählte Hosting setzen, falls Unterpfad (Spez. 12)
+- [x] Projekt mit Vite (TypeScript) anlegen
+- [x] Phaser, Vitest, ESLint, Prettier, vite-plugin-pwa installieren; Versionen in `package.json` festschreiben (exakt gepinnt; TypeScript 6.0, weil typescript-eslint TypeScript 7 noch nicht unterstützt)
+- [x] Skripte `dev`, `build`, `preview`, `test`, `lint` einrichten (dazu `typecheck`, `format`, `test:watch`)
+- [x] `tsconfig.json` mit `strict: true` und `noUncheckedIndexedAccess`
+- [x] ESLint-Regel `no-restricted-imports`: kein `phaser` in `src/logic/` (Spez. 4)
+- [x] Phaser-Skalierung „FIT“, zentriert, Basis 1024 × 768, Querformat
+- [x] `base` in `vite.config.ts` für das gewählte Hosting setzen, falls Unterpfad (Spez. 12): GitHub Pages, `base` = `/zahlenzoo/`; über `BASE_PATH` überschreibbar
 
 **Gerüst** (Spez. 4)
 
-- [ ] Ordnerstruktur `src/scenes`, `src/ui`, `src/logic`, `src/services`, `src/types`, `public/assets`, `tests`
-- [ ] Leere Szenen: Boot, Menu, Map, Area, Task, RoundEnd, Parent, Settings
-- [ ] Typen `Task`, `TaskKind`, `Hint`, `CheckResult` in `src/types/task.ts` (Spez. 6)
-- [ ] `src/logic/rng.ts`: startwertbasierter Zufall (z. B. mulberry32), kein `Math.random()`
-- [ ] Ereignisse `answer-submitted` und `round-finished`; keine globalen Variablen
-- [ ] Aufräumen von Ereignissen und Tweens beim Verlassen jeder Szene
-- [ ] `t(key)`-Funktion und `strings.de.json` (Spez. 3, 11)
+- [x] Ordnerstruktur `src/scenes`, `src/ui`, `src/logic`, `src/services`, `src/types`, `public/assets`, `tests`
+- [x] Leere Szenen: Boot, Menu, Map, Area, Task, RoundEnd, Parent, Settings
+- [x] Typen `Task`, `TaskKind`, `Hint`, `CheckResult` in `src/types/task.ts` (Spez. 6); `level` umfasst auch Stufe 0 (Einspluseins im Pinguinfelsen)
+- [x] `src/logic/rng.ts`: startwertbasierter Zufall (z. B. mulberry32), kein `Math.random()` (per ESLint-Regel in `src/logic/` verboten)
+- [x] Ereignisse `answer-submitted` und `round-finished`; keine globalen Variablen (Dienste werden den Szenen im Konstruktor übergeben)
+- [x] Aufräumen von Ereignissen und Tweens beim Verlassen jeder Szene (`BaseScene`)
+- [x] `t(key)`-Funktion und `strings.de.json` (Spez. 3, 11)
 
 **Automatische Prüfung**
 
-- [ ] GitHub Actions: Lint, Tests und Build bei jeder Änderung (Spez. 12)
-- [ ] Erste Vitest-Tests für `rng.ts`
+- [x] GitHub Actions: Lint, Tests und Build bei jeder Änderung (Spez. 12)
+- [x] Erste Vitest-Tests für `rng.ts` (dazu Runde und Texte)
 
-- [ ] **Tor 1:** Eine leere Runde läuft, Tests und Build sind grün.
+- [x] **Tor 1:** Eine leere Runde läuft, Tests und Build sind grün.
 
 ## Phase 2: Vertikaler Schnitt (3 bis 4 Wochen)
 
@@ -226,7 +226,7 @@ Ein Bereich komplett, Vorschlag: Pinguinfelsen mit `add_100` (Spez. 13).
 
 ## Phase 5: Pilot und Erweiterung (3 bis 4 Wochen)
 
-- [ ] Deployment auf statischem Hosting mit HTTPS (GitHub Pages, Netlify, Cloudflare Pages oder Schulserver)
+- [ ] Deployment auf statischem Hosting mit HTTPS: GitHub Pages über `.github/workflows/deploy.yml` bei jedem Push auf `main` eingerichtet; offen ist die erste erfolgreiche Veröffentlichung
 - [ ] Bei Schuleinsatz: Abstimmung mit der Datenschutzstelle des Landes
 - [ ] Pilot in einer Klasse
 - [ ] Auswertung; Startwerte (Freischaltung, Stufenregeln, Sterne) in JSON anpassen
