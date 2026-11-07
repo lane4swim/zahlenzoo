@@ -75,5 +75,14 @@
   "parent.placeholder": "Übersicht, Export und Zugang mit Rechenaufgabe folgen in Phase 4.",
   "settings.title": "Einstellungen",
   "settings.placeholder": "Die Einstellungen folgen in Phase 4.",
-  "strategy.add_complement_tens": "Zehner ergänzen"
+  "strategy.add_complement_tens": "Zehner ergänzen",
+  "area.elefantenwiese": "Elefantenwiese",
+  "area.zookasse": "Zoo-Kasse",
+  "area.futteruhr": "Futteruhr",
+  "area.schmetterlingshaus": "Schmetterlingshaus",
+  "area.giraffenhof": "Giraffenhof",
+  "area.zoozaehlung": "Zoo-Zählung",
+  "map.lockedHint": "Sammle 6 Sterne im Bereich {area}, dann geht es hier weiter.",
+  "map.soonHint": "Hier wird noch gebaut. Bald kannst du hier spielen.",
+  "map.tapAnimal": "Tippe auf ein Tier."
 }

@@ -20,6 +20,7 @@ export const Color = {
   weiss: 0xffffff,
   grauWarm: 0xc9bba3,
   laub: 0x3f8f4f,
+  pinguinGefieder: 0x6c8ea3,
 } as const;
 
 export const CssColor = {
@@ -71,4 +72,13 @@ export const Tex = {
   tryAgain: 'ui_nochmal_wolke',
   ten: 'mathe_zehner',
   one: 'mathe_einer',
+  map: 'karte_hintergrund',
+  mapLock: 'karte_schloss',
+  mapSign: 'karte_schild',
 } as const;
+
+/** Kartensymbol je Tier; fehlt eines, zeigt die Karte das Schild „bald“. */
+export const AnimalIcon: Readonly<Record<string, string>> = {
+  monkey: 'karte_affe',
+  penguin: 'karte_pinguin',
+};

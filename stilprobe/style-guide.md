@@ -21,4 +21,9 @@ Verbindlich für alle Grafiken. Quelle der Werte: `tokens.json`. Erzeugung: `pyt
 ## Noch festzulegen
 - Hintergrund-Ebenen für Parallax (2 bis 3) und Auflösung der @2x-Hintergründe.
 - Münzen und Scheine (eigene vereinfachte Darstellung), Uhr, Lineal, Formen.
-- Silhouetten und Kartensymbole (128 × 128) je Tier.
+- Silhouetten je Tier; Kartensymbole für Elefant, Papagei, Eule, Schmetterling, Giraffe und Erdmännchen.
+
+## Ergänzungen (7.11.2026)
+- Neue Farbe `pinguin-gefieder` #6C8EA3 für Rücken und Kopf des Pinguins (Kontrast zur Kontur 3,3 : 1, wie `affe-fell`).
+- Zoo-Karte und Kartensymbole: Quellen in `art/build_map.py` (nutzt die Hilfsfunktionen dieser Stilprobe), Erzeugung mit `npm run art`.
+- Kartensymbole 128 × 128: Tierkopf in einem runden Abzeichen (Papier, Kontur 4 px) mit Bodenschatten; gesperrte Bereiche zeigen ein Schloss, Bereiche ohne Aufgaben ein leeres Schild, auf das das Spiel „bald“ setzt.
