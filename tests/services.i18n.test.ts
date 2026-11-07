@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
+import hints from '../public/assets/data/hints.de.json';
 import strings from '../public/assets/data/strings.de.json';
+import { add100 } from '../src/logic/generators/add100';
+import { typicalErrors } from '../src/logic/options';
+import { createRng } from '../src/logic/rng';
 import { I18n } from '../src/services/i18n';
+import { AVATARS } from '../src/types/save';
 
 describe('I18n', () => {
   it('übersetzt Schlüssel und setzt Platzhalter ein', () => {
@@ -19,17 +24,42 @@ describe('I18n', () => {
     expect(i18n.has('fehlt.noch')).toBe(false);
   });
 
+  it('führt mehrere Dateien zusammen', () => {
+    const i18n = new I18n();
+    i18n.load('de', { a: '1', b: '2' }, { b: '3' });
+    expect(i18n.t('a')).toBe('1');
+    expect(i18n.t('b')).toBe('3');
+  });
+
   it('lehnt ungültige Textdateien ab', () => {
     const i18n = new I18n();
     expect(() => i18n.load('de', [])).toThrow(TypeError);
     expect(() => i18n.load('de', null)).toThrow(TypeError);
     expect(() => i18n.load('de', { a: 1 })).toThrow(TypeError);
   });
+});
 
-  it('lädt strings.de.json mit allen Texten als String', () => {
-    const i18n = new I18n();
-    i18n.load('de', strings);
-    expect(i18n.locale).toBe('de');
-    expect(i18n.t('app.title')).toBe('Zahlen-Zoo');
+describe('Textdateien', () => {
+  const i18n = new I18n();
+  i18n.load('de', strings, hints);
+
+  it('enthalten alle Hinweise, die der Generator verwendet, ohne offene Platzhalter', () => {
+    for (let seed = 0; seed < 500; seed++) {
+      for (const level of [1, 2, 3] as const) {
+        const task = add100(level, createRng(seed), 'x');
+        for (const hint of task.hints) {
+          expect(i18n.has(hint.key), hint.key).toBe(true);
+          expect(i18n.t(hint.key, hint.params)).not.toMatch(/\{\w+\}/);
+        }
+        if (task.strategyId) expect(i18n.has(`strategy.${task.strategyId}`)).toBe(true);
+        for (const e of typicalErrors(task.math!)) {
+          expect(i18n.has(`error.${e.errorTag}`), e.errorTag).toBe(true);
+        }
+      }
+    }
+  });
+
+  it('enthalten Namen für alle Tierbilder', () => {
+    for (const avatar of AVATARS) expect(i18n.has(`avatar.${avatar}`)).toBe(true);
   });
 });

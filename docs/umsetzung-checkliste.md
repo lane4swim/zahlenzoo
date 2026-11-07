@@ -22,7 +22,7 @@ Die Checkliste folgt der Roadmap (Spez. Abschnitt 13): fünf Phasen mit je einem
 - [ ] Ergebnis der Klärung in `families.json` sowie in Spez. Abschnitt 2 und 6 nachtragen (KE 5)
 - [ ] Offene Familien ausarbeiten (KE 5): `smart_calc`, `strategy_pick`, `shapes_compose`, `time_units`, `exact_or_estimate`, `solids_basic`, `cube_buildings`, Raumorientierung (Lagebegriffe, Raster 5 × 5)
 - [ ] Illustrationsstil für Tiere und Karte festlegen (Spez. 11, Risiken); Stand: Stilvorgabe 0.1 in [`stilprobe/style-guide.md`](../stilprobe/style-guide.md), offene Punkte dort unter „Noch festzulegen“
-- [ ] Schrift wählen (Andika oder Atkinson Hyperlegible), Probedruck `1 l I` und `0 O` (Spez. 11)
+- [ ] Schrift wählen (Andika oder Atkinson Hyperlegible), Probedruck `1 l I` und `0 O` (Spez. 11); Andika laut Stilvorgabe gewählt und eingebunden, Probedruck offen
 - [ ] Testgeräte bereitstellen: iPad mit Safari, Android-Tablet mit Chrome, Chromebook, Laptop mit Maus (Spez. 12)
 
 ## Phase 1: Fundament (1 bis 2 Wochen)
@@ -56,40 +56,40 @@ Die Checkliste folgt der Roadmap (Spez. Abschnitt 13): fünf Phasen mit je einem
 
 ## Phase 2: Vertikaler Schnitt (3 bis 4 Wochen)
 
-Ein Bereich komplett, Vorschlag: Pinguinfelsen mit `add_100` (Spez. 13).
+Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 
 **Spiellogik** (Spez. 6, 7, 8)
 
-- [ ] Generator für den gewählten Bereich mit drei Stufen
-- [ ] Falsche Antwortkarten aus typischen Fehlern mit `errorTag` (± 10, ± 1, Ziffern vertauscht, Übertrag vergessen)
-- [ ] Duplikate verwerfen; Tauschaufgaben zählen als gleich
-- [ ] `check(task, input)` mit Normalisierung (führende Nullen, Leerzeichen) und gleichwertigen Antworten
-- [ ] Rundenzusammenstellung: 8 bis 12 Aufgaben, Mischung 70 / 20 / 10, leicht ansteigende Reihenfolge
-- [ ] Ablauf bei Fehlern: Hinweis 1, Hinweis 2 mit Bild, Lösung Schritt für Schritt; Familie kommt später erneut
-- [ ] Sterne pro Runde (1, 2 bei 70 %, 3 bei 90 % im ersten Versuch)
-- [ ] Stufenfreischaltung nach einer Runde mit mindestens 2 Sternen
+- [x] Generator für den gewählten Bereich mit drei Stufen (`src/logic/generators/add100.ts`)
+- [x] Falsche Antwortkarten aus typischen Fehlern mit `errorTag` (± 10, ± 1, Ziffern vertauscht, Übertrag vergessen; beim Ergänzen: Endzahl statt Differenz)
+- [x] Duplikate verwerfen; Tauschaufgaben zählen als gleich
+- [x] `check(task, input)` mit Normalisierung (führende Nullen, Leerzeichen) und gleichwertigen Antworten
+- [x] Rundenzusammenstellung: 8 bis 12 Aufgaben, Mischung 70 / 20 / 10, leicht ansteigende Reihenfolge
+- [x] Ablauf bei Fehlern: Hinweis 1, Hinweis 2 mit Bild, Lösung Schritt für Schritt; Familie kommt später erneut (höchstens 2 Wiederholungen je Runde)
+- [x] Sterne pro Runde (1, 2 bei 70 %, 3 bei 90 % im ersten Versuch)
+- [x] Stufenfreischaltung nach einer Runde mit mindestens 2 Sternen
 
 **Oberfläche** (Spez. 9)
 
-- [ ] Mindestens 3 Aufgabentypen, Vorschlag: `number-input`, `choice`, `gap`
-- [ ] UI-Bausteine: Numpad, AnswerCards, HintBar, StarMeter, Button
-- [ ] Tippflächen mindestens 64 × 64 px, Abstand mindestens 16 px
-- [ ] Layout: obere Leiste mit Fortschritt, Aufgabe in der Mitte, Eingabe unten, Tier links
-- [ ] Immer sichtbar: Zurück zur Karte, Hinweis, Vorlesen
-- [ ] Schrift mindestens 28 px, Ziffern 48 px; Kontrast mindestens 4,5 : 1
-- [ ] Hilfsdarstellungen einblendbar: Zehnerfeld, Rechenstrich, Hundertertafel (Spez. 2)
-- [ ] Platzhaltergrafiken für Tier, Hintergrund und UI
+- [x] Mindestens 3 Aufgabentypen: `number-input`, `choice`, `gap`
+- [x] UI-Bausteine: Numpad, AnswerCards, HintBar (`HintPanel`), StarMeter, Button
+- [x] Tippflächen mindestens 64 × 64 px, Abstand mindestens 16 px (Tasten 96 px nach Stilvorgabe)
+- [x] Layout: obere Leiste mit Fortschritt, Aufgabe in der Mitte, Eingabe unten, Tier links
+- [x] Immer sichtbar: Zurück zur Karte, Hinweis, Vorlesen (Vorlesen über die Sprachausgabe des Browsers)
+- [x] Schrift mindestens 28 px, Ziffern 48 px; Kontrast mindestens 4,5 : 1 (Andika und Fredoka selbst gehostet)
+- [x] Hilfsdarstellungen einblendbar: Zehner und Einer, Rechenstrich, Hundertertafel (Spez. 2)
+- [x] Platzhaltergrafiken für Tier, Hintergrund und UI (Pinguin gezeichnet, Hintergrund einfarbig, Symbole aus der Stilprobe)
 
 **Spielstand** (Spez. 10)
 
-- [ ] `save.ts` mit `localStorage`, Versionsnummer und Migrationsgerüst
-- [ ] Mehrere Profile mit Spitzname und Tierbild, Auswahl und Löschen
+- [x] `save.ts` mit `localStorage`, Versionsnummer und Migrationsgerüst; beschädigter Spielstand wird gesichert, Export und Import als JSON vorbereitet
+- [x] Mehrere Profile mit Spitzname und Tierbild, Auswahl und Löschen (Löschen im Erwachsenenbereich)
 
 **Tests**
 
-- [ ] Generator: 1000 Startwerte, Zahlenraum eingehalten, Antwortkarten verschieden, keine Duplikate
-- [ ] Prüfer: richtige, falsche, gleichwertige und fehlerhaft formatierte Eingaben
-- [ ] Spielstand: Speichern und Laden
+- [x] Generator: 1000 Startwerte, Zahlenraum eingehalten, Antwortkarten verschieden, keine Duplikate
+- [x] Prüfer: richtige, falsche, gleichwertige und fehlerhaft formatierte Eingaben
+- [x] Spielstand: Speichern und Laden (dazu Export, Import, Migration, Profile)
 
 **Spieltest**
 

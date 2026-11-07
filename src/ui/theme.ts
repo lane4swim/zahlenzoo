@@ -8,10 +8,18 @@ export const Color = {
   papier: 0xfff8ec,
   kartenSchatten: 0xe8d3a8,
   himmel: 0xbfe6f2,
+  himmelTief: 0x8fcde3,
+  wasser: 0x5bb8d9,
+  grasHell: 0xb5e08f,
   gras: 0x8ccb6b,
   stern: 0xffc83d,
+  sonne: 0xffd25a,
   orange: 0xffb347,
-  wasser: 0x5bb8d9,
+  rosa: 0xff8fa3,
+  erde: 0xc98f5a,
+  weiss: 0xffffff,
+  grauWarm: 0xc9bba3,
+  laub: 0x3f8f4f,
 } as const;
 
 export const CssColor = {
@@ -20,21 +28,23 @@ export const CssColor = {
   papier: '#FFF8EC',
 } as const;
 
-/** Schrift: Andika folgt (selbst gehostet); bis dahin eine Systemschrift. */
+/** Schriften: Andika (Text und Ziffern), Fredoka (Titel); beide selbst gehostet (SIL OFL). */
 export const FontFamily = {
-  text: 'Andika, "Atkinson Hyperlegible", system-ui, sans-serif',
+  text: 'Andika, system-ui, sans-serif',
   title: 'Fredoka, Andika, system-ui, sans-serif',
 } as const;
 
 /** Mindestgrößen in der Basisauflösung (Spezifikation, Abschnitt 9). */
 export const FontSize = {
+  small: 24,
   text: 28,
   digits: 48,
-  title: 64,
+  title: 56,
 } as const;
 
 export const Stroke = {
   outline: 4,
+  inner: 2.5,
 } as const;
 
 /** Tasten mindestens 96 × 96 px (Stilvorgabe); Abstand mindestens 16 px. */
@@ -42,4 +52,23 @@ export const Layout = {
   minTouch: 96,
   gap: 16,
   margin: 24,
+} as const;
+
+/** Bewegung reduzieren, wenn das Betriebssystem es verlangt (Spezifikation, Abschnitt 9). */
+export function reducedMotion(): boolean {
+  return (
+    typeof window !== 'undefined' &&
+    window.matchMedia?.('(prefers-reduced-motion: reduce)').matches === true
+  );
+}
+
+/** Texturschlüssel der geladenen Bilder. */
+export const Tex = {
+  starFull: 'ui_stern_voll',
+  starEmpty: 'ui_stern_leer',
+  hint: 'ui_hinweis_gluehbirne',
+  correct: 'ui_richtig_haken',
+  tryAgain: 'ui_nochmal_wolke',
+  ten: 'mathe_zehner',
+  one: 'mathe_einer',
 } as const;
