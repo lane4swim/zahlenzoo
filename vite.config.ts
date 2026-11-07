@@ -1,8 +1,8 @@
 import { defineConfig } from 'vitest/config';
 
-// Bei Hosting unter einem Unterpfad (z. B. GitHub Pages: /zahlenzoo/) BASE_PATH setzen:
-//   BASE_PATH=/zahlenzoo/ npm run build
-const base = process.env.BASE_PATH ?? '/';
+// Gehostet auf GitHub Pages unter https://lane4swim.github.io/zahlenzoo/.
+// Für anderes Hosting überschreiben, z. B. BASE_PATH=/ npm run build
+const base = process.env.BASE_PATH ?? '/zahlenzoo/';
 
 export default defineConfig({
   base,

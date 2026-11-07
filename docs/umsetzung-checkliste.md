@@ -35,7 +35,7 @@ Die Checkliste folgt der Roadmap (Spez. Abschnitt 13): fünf Phasen mit je einem
 - [x] `tsconfig.json` mit `strict: true` und `noUncheckedIndexedAccess`
 - [x] ESLint-Regel `no-restricted-imports`: kein `phaser` in `src/logic/` (Spez. 4)
 - [x] Phaser-Skalierung „FIT“, zentriert, Basis 1024 × 768, Querformat
-- [ ] `base` in `vite.config.ts` für das gewählte Hosting setzen, falls Unterpfad (Spez. 12); vorbereitet über `BASE_PATH`, Hosting noch nicht gewählt
+- [x] `base` in `vite.config.ts` für das gewählte Hosting setzen, falls Unterpfad (Spez. 12): GitHub Pages, `base` = `/zahlenzoo/`; über `BASE_PATH` überschreibbar
 
 **Gerüst** (Spez. 4)
 

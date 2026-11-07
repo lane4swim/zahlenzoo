@@ -11,6 +11,8 @@ export class BootScene extends BaseScene {
   }
 
   preload(): void {
+    // Pfade relativ zu `base` aus vite.config.ts (GitHub Pages: /zahlenzoo/).
+    this.load.setPath(import.meta.env.BASE_URL);
     this.load.json(STRINGS_KEY, 'assets/data/strings.de.json');
   }
 

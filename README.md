@@ -22,4 +22,4 @@ Voraussetzung: Node.js 22.13 oder neuer.
 | `npm run lint`    | ESLint und Prettier-Prüfung                 |
 | `npm run format`  | Code mit Prettier formatieren               |
 
-Bei Hosting unter einem Unterpfad: `BASE_PATH=/zahlenzoo/ npm run build`.
+Das Spiel wird über GitHub Pages unter <https://lane4swim.github.io/zahlenzoo/> ausgeliefert; `base` ist deshalb `/zahlenzoo/`. Für anderes Hosting: `BASE_PATH=/ npm run build`.
