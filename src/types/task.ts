@@ -1,3 +1,5 @@
+import type { Rng } from '../logic/rng';
+
 /** Eingabeformen einer Aufgabe (Spezifikation, Abschnitt 6). */
 export type TaskKind =
   | 'number-input'
@@ -16,18 +18,45 @@ export type TaskKind =
  */
 export type TaskLevel = 0 | 1 | 2 | 3;
 
-/** Eine Hilfestufe: 1 lenkender Satz, 2 Bild der Strategie, 3 Lösung mit Rechenweg. */
+export type TextParams = Readonly<Record<string, string | number>>;
+
+/** Darstellungen für Hinweise und einblendbare Hilfen. */
+export type Visual = {
+  /** Rechenstrich: Start, Sprünge; Zwischenwerte auf Wunsch verdeckt. */
+  type: 'jumps';
+  start: number;
+  jumps: number[];
+  hideResults?: boolean;
+};
+
+/**
+ * Eine Hilfestufe: 1 lenkender Satz, 2 Bild der Strategie, 3 Lösung mit Rechenweg.
+ * Texte stehen in `hints.de.json`; die Logik liefert nur Schlüssel und Werte.
+ */
 export type Hint = {
-  text: string;
-  /** Schlüssel für eine eingesprochene Audiodatei; sonst Sprachausgabe des Browsers. */
-  audioKey?: string;
-  /** Verweis auf eine Darstellung (Zehnerfeld, Rechenstrich, ...). */
-  visualId?: string;
+  key: string;
+  params?: TextParams;
+  visual?: Visual;
 };
 
 export type TaskOption = { value: string; errorTag?: string };
 
 export type TaskAnswer = number | number[] | string;
+
+/** Bestandteil einer Rechnung: Zahl, Zeichen oder die gesuchte Stelle. */
+export type Term = number | '+' | '-' | '=' | '?';
+
+/** Zahlen einer Rechnung, damit Prüfer und Hilfen nicht den Text zerlegen müssen. */
+export type MathInfo = {
+  op: '+' | '-';
+  a: number;
+  b: number;
+  result: number;
+  /** gesuchte Zahl: Ergebnis (Standard) oder zweiter Summand (Ergänzen) */
+  missing: 'result' | 'b';
+  /** Zehnerübergang */
+  carry: boolean;
+};
 
 export type Task = {
   /** eindeutig pro Runde */
@@ -36,15 +65,23 @@ export type Task = {
   family: string;
   level: TaskLevel;
   kind: TaskKind;
-  prompt: { text: string; images?: string[] };
+  prompt: { terms: Term[]; images?: string[] };
   answer: TaskAnswer;
+  /** true: Reihenfolge der Zahlen in einer Antwortliste ist egal */
+  unordered?: boolean;
   options?: TaskOption[];
   hints: [Hint, Hint, Hint];
-  /** Verweis auf die Visualisierung der Strategie */
+  /** Verweis auf die Strategie, z. B. "add_stepwise" */
   strategyId?: string;
+  math?: MathInfo;
+  /** Schlüssel zum Erkennen von Duplikaten; Tauschaufgaben haben denselben */
+  dedupeKey: string;
 };
 
 /** Rohe Eingabe des Kindes, bevor sie normalisiert und geprüft wird. */
 export type TaskInput = string | number | number[];
 
-export type CheckResult = { correct: boolean; errorTag?: string };
+export type CheckResult = { correct: boolean; errorTag?: string; invalid?: boolean };
+
+/** Erzeugt eine Aufgabe einer Familie und Stufe. */
+export type Generator = (level: TaskLevel, rng: Rng, id: string) => Task;

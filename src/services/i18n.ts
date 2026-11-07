@@ -1,26 +1,34 @@
+import type { TextParams } from '../types/task';
+
 export type Strings = Readonly<Record<string, string>>;
-export type TranslateParams = Readonly<Record<string, string | number>>;
+export type TranslateParams = TextParams;
 
 /**
- * Oberflächentexte aus JSON (`public/assets/data/strings.<locale>.json`).
- * Platzhalter im Text: `{name}`. Fehlende Schlüssel erscheinen als Schlüssel,
- * damit sie beim Testen auffallen.
+ * Texte aus JSON (`public/assets/data/*.de.json`). Platzhalter im Text: `{name}`.
+ * Fehlende Schlüssel erscheinen als Schlüssel, damit sie beim Testen auffallen.
  */
 export class I18n {
-  private strings: Strings = {};
+  private strings: Record<string, string> = {};
   private currentLocale = 'de';
 
   get locale(): string {
     return this.currentLocale;
   }
 
-  load(locale: string, strings: unknown): void {
-    this.strings = parseStrings(strings);
+  /** Ersetzt alle Texte durch die übergebenen Dateien (spätere überschreiben frühere). */
+  load(locale: string, ...files: unknown[]): void {
+    const merged: Record<string, string> = {};
+    for (const file of files) Object.assign(merged, parseStrings(file));
+    this.strings = merged;
     this.currentLocale = locale;
   }
 
   has(key: string): boolean {
     return Object.hasOwn(this.strings, key);
+  }
+
+  keys(): string[] {
+    return Object.keys(this.strings);
   }
 
   t(key: string, params?: TranslateParams): string {

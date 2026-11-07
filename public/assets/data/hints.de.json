@@ -1,0 +1,16 @@
+{
+  "hint.add_bridge.1": "Rechne erst bis zum nächsten Zehner: {a} + {toTen} = {nextTen}. Wie viel fehlt dann noch?",
+  "hint.add_complement.1": "Wie viel fehlt von {a} bis {result}? Rechne erst bis zum nächsten Zehner, dann in Zehnern weiter.",
+  "hint.add_complement_tens.1": "Wie viel fehlt von {a} bis {result}? Zähle in Zehnerschritten.",
+  "hint.add_ones.1": "Die Zehner bleiben gleich. Rechne nur die Einer: {aOnes} + {b}.",
+  "hint.add_stepwise.1": "Rechne erst die Zehner, dann die Einer.",
+  "hint.add_tens.1": "Rechne mit Zehnern: {aTens} und {bTens}. Das ist wie {aTensDigit} + {bTensDigit}.",
+  "hint.complement.3": "So geht es: {steps}. Es fehlen {b}.",
+  "hint.jumps.2": "Schau auf den Rechenstrich. Mach die Sprünge mit.",
+  "hint.steps.3": "So geht es: {steps}. Das Ergebnis ist {result}.",
+  "error.carry_forgotten": "Fast! Denk an den neuen Zehner.",
+  "error.digits_swapped": "Schau genau: Zehner und Einer sind vertauscht.",
+  "error.gave_total": "Das ist die Zahl am Ende. Gesucht ist, wie viel dazukommt.",
+  "error.ones_off": "Ganz nah dran! Schau noch mal auf die Einer.",
+  "error.tens_off": "Die Einer stimmen. Schau noch mal auf die Zehner."
+}

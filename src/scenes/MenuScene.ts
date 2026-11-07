@@ -1,6 +1,8 @@
 import { BaseScene } from './BaseScene';
 import type { Services } from '../services/services';
 import { SceneKey } from '../types/scenes';
+import { drawAvatar } from '../ui/AvatarBadge';
+import { Layout } from '../ui/theme';
 
 export class MenuScene extends BaseScene {
   constructor(services: Services) {
@@ -8,8 +10,15 @@ export class MenuScene extends BaseScene {
   }
 
   create(): void {
+    const profile = this.services.save.activeProfile;
+    if (!profile) {
+      this.scene.start(SceneKey.Profile);
+      return;
+    }
     const cx = this.scale.width / 2;
-    this.addTitle(this.t('app.title'), 200);
+    this.addTitle(this.t('app.title'), 150);
+    drawAvatar(this, cx - 160, 260, profile.avatar, this.t(`avatar.${profile.avatar}`), 30);
+    this.addText(cx + 30, 260, this.t('menu.hello', { name: profile.nickname }));
     this.addButton({
       x: cx,
       y: 400,
@@ -25,8 +34,15 @@ export class MenuScene extends BaseScene {
       onPress: () => this.scene.start(SceneKey.Settings),
     });
     this.addButton({
-      x: this.scale.width - 24 - 110,
-      y: this.scale.height - 24 - 48,
+      x: Layout.margin + 110,
+      y: this.scale.height - Layout.margin - 48,
+      width: 220,
+      label: this.t('menu.switchProfile'),
+      onPress: () => this.scene.start(SceneKey.Profile),
+    });
+    this.addButton({
+      x: this.scale.width - Layout.margin - 110,
+      y: this.scale.height - Layout.margin - 48,
       width: 220,
       label: this.t('menu.parents'),
       onPress: () => this.scene.start(SceneKey.Parent),

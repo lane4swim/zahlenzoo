@@ -1,4 +1,4 @@
-import type { RoundSummary } from './round';
+import type { RoundEndSceneData } from './scenes';
 import type { TaskInput } from './task';
 
 /** Die wenigen Phaser-Ereignisse zwischen UI-Bausteinen und Szenen (Spezifikation, Abschnitt 4). */
@@ -9,4 +9,4 @@ export const GameEvent = {
 
 export type AnswerSubmittedPayload = { taskId: string; input: TaskInput };
 
-export type RoundFinishedPayload = { areaId: string; summary: RoundSummary };
+export type RoundFinishedPayload = RoundEndSceneData;
