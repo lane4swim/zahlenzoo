@@ -226,7 +226,7 @@ Ein Bereich komplett, Vorschlag: Pinguinfelsen mit `add_100` (Spez. 13).
 
 ## Phase 5: Pilot und Erweiterung (3 bis 4 Wochen)
 
-- [ ] Deployment auf statischem Hosting mit HTTPS (GitHub Pages, Netlify, Cloudflare Pages oder Schulserver)
+- [ ] Deployment auf statischem Hosting mit HTTPS: GitHub Pages über `.github/workflows/deploy.yml` bei jedem Push auf `main` eingerichtet; offen ist die erste erfolgreiche Veröffentlichung
 - [ ] Bei Schuleinsatz: Abstimmung mit der Datenschutzstelle des Landes
 - [ ] Pilot in einer Klasse
 - [ ] Auswertung; Startwerte (Freischaltung, Stufenregeln, Sterne) in JSON anpassen

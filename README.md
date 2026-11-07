@@ -23,3 +23,5 @@ Voraussetzung: Node.js 22.13 oder neuer.
 | `npm run format`  | Code mit Prettier formatieren               |
 
 Das Spiel wird über GitHub Pages unter <https://lane4swim.github.io/zahlenzoo/> ausgeliefert; `base` ist deshalb `/zahlenzoo/`. Für anderes Hosting: `BASE_PATH=/ npm run build`.
+
+Jeder Push auf `main` baut das Spiel und veröffentlicht es (`.github/workflows/deploy.yml`). Voraussetzung: In den Einstellungen des Repositorys unter Pages ist als Quelle „GitHub Actions“ gewählt.
