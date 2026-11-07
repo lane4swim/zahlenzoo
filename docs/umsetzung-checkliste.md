@@ -39,18 +39,18 @@ Die Checkliste folgt der Roadmap (Spez. Abschnitt 13): fünf Phasen mit je einem
 
 **Gerüst** (Spez. 4)
 
-- [ ] Ordnerstruktur `src/scenes`, `src/ui`, `src/logic`, `src/services`, `src/types`, `public/assets`, `tests`
-- [ ] Leere Szenen: Boot, Menu, Map, Area, Task, RoundEnd, Parent, Settings
-- [ ] Typen `Task`, `TaskKind`, `Hint`, `CheckResult` in `src/types/task.ts` (Spez. 6)
-- [ ] `src/logic/rng.ts`: startwertbasierter Zufall (z. B. mulberry32), kein `Math.random()`
-- [ ] Ereignisse `answer-submitted` und `round-finished`; keine globalen Variablen
-- [ ] Aufräumen von Ereignissen und Tweens beim Verlassen jeder Szene
-- [ ] `t(key)`-Funktion und `strings.de.json` (Spez. 3, 11)
+- [x] Ordnerstruktur `src/scenes`, `src/ui`, `src/logic`, `src/services`, `src/types`, `public/assets`, `tests`
+- [x] Leere Szenen: Boot, Menu, Map, Area, Task, RoundEnd, Parent, Settings
+- [x] Typen `Task`, `TaskKind`, `Hint`, `CheckResult` in `src/types/task.ts` (Spez. 6); `level` umfasst auch Stufe 0 (Einspluseins im Pinguinfelsen)
+- [x] `src/logic/rng.ts`: startwertbasierter Zufall (z. B. mulberry32), kein `Math.random()` (per ESLint-Regel in `src/logic/` verboten)
+- [x] Ereignisse `answer-submitted` und `round-finished`; keine globalen Variablen (Dienste werden den Szenen im Konstruktor übergeben)
+- [x] Aufräumen von Ereignissen und Tweens beim Verlassen jeder Szene (`BaseScene`)
+- [x] `t(key)`-Funktion und `strings.de.json` (Spez. 3, 11)
 
 **Automatische Prüfung**
 
-- [ ] GitHub Actions: Lint, Tests und Build bei jeder Änderung (Spez. 12)
-- [ ] Erste Vitest-Tests für `rng.ts`
+- [x] GitHub Actions: Lint, Tests und Build bei jeder Änderung (Spez. 12)
+- [x] Erste Vitest-Tests für `rng.ts` (dazu Runde und Texte)
 
 - [ ] **Tor 1:** Eine leere Runde läuft, Tests und Build sind grün.
 

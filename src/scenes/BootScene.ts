@@ -1,19 +1,21 @@
-import Phaser from 'phaser';
+import { BaseScene } from './BaseScene';
+import type { Services } from '../services/services';
+import { SceneKey } from '../types/scenes';
 
-/** Startszene; lädt später Assets und Daten. Zeigt vorerst nur einen Platzhalter. */
-export class BootScene extends Phaser.Scene {
-  constructor() {
-    super('Boot');
+const STRINGS_KEY = 'strings.de';
+
+/** Lädt Texte (später auch Grafiken, Audio und Inhalte) und startet das Menü. */
+export class BootScene extends BaseScene {
+  constructor(services: Services) {
+    super(SceneKey.Boot, services);
+  }
+
+  preload(): void {
+    this.load.json(STRINGS_KEY, 'assets/data/strings.de.json');
   }
 
   create(): void {
-    const { width, height } = this.scale;
-    this.add
-      .text(width / 2, height / 2, 'Zahlen-Zoo', {
-        fontFamily: 'sans-serif',
-        fontSize: '64px',
-        color: '#4a3426',
-      })
-      .setOrigin(0.5);
+    this.services.i18n.load('de', this.cache.json.get(STRINGS_KEY));
+    this.scene.start(SceneKey.Menu);
   }
 }

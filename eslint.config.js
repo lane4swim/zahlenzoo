@@ -11,6 +11,12 @@ export default tseslint.config(
     languageOptions: {
       globals: { ...globals.browser },
     },
+    rules: {
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+      ],
+    },
   },
   {
     files: ['vite.config.ts', 'eslint.config.js'],
@@ -32,6 +38,11 @@ export default tseslint.config(
             },
           ],
         },
+      ],
+      // Zufall nur über src/logic/rng.ts (Spezifikation, Abschnitt 6).
+      'no-restricted-properties': [
+        'error',
+        { object: 'Math', property: 'random', message: 'createRng() aus src/logic/rng.ts nutzen.' },
       ],
     },
   },
