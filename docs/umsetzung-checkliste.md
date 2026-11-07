@@ -21,7 +21,7 @@ Die Checkliste folgt der Roadmap (Spez. Abschnitt 13): fünf Phasen mit je einem
   - [ ] 10 Familiennamen, Stufenzuschnitt, Zuordnung zu Bereichen
 - [ ] Ergebnis der Klärung in `families.json` sowie in Spez. Abschnitt 2 und 6 nachtragen (KE 5)
 - [ ] Offene Familien ausarbeiten (KE 5): `smart_calc`, `strategy_pick`, `shapes_compose`, `time_units`, `exact_or_estimate`, `solids_basic`, `cube_buildings`, Raumorientierung (Lagebegriffe, Raster 5 × 5)
-- [ ] Illustrationsstil für Tiere und Karte festlegen (Spez. 11, Risiken)
+- [ ] Illustrationsstil für Tiere und Karte festlegen (Spez. 11, Risiken); Stand: Stilvorgabe 0.1 in [`stilprobe/style-guide.md`](../stilprobe/style-guide.md), offene Punkte dort unter „Noch festzulegen“
 - [ ] Schrift wählen (Andika oder Atkinson Hyperlegible), Probedruck `1 l I` und `0 O` (Spez. 11)
 - [ ] Testgeräte bereitstellen: iPad mit Safari, Android-Tablet mit Chrome, Chromebook, Laptop mit Maus (Spez. 12)
 
