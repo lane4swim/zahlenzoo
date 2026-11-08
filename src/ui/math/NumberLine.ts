@@ -5,7 +5,8 @@ const ARC_H = 46;
 const LABEL = { fontFamily: FontFamily.text, fontSize: `${FontSize.text}px`, color: CssColor.text };
 
 /**
- * Rechenstrich: Startzahl, Sprünge als Bögen mit "+20", "+6".
+ * Rechenstrich: Startzahl, Sprünge als Bögen mit "+20", "+6" oder rückwärts "−20", "−6"
+ * (dann beginnt der Strich rechts und die Sprünge gehen nach links).
  * Zwischen- und Endwerte lassen sich als "?" verdecken (Hinweisstufe 2).
  * Ohne Sprünge zeigt er nur den leeren Strich mit der Startzahl.
  */
@@ -28,11 +29,13 @@ export class NumberLine extends Phaser.GameObjects.Container {
     const total = jumps.reduce((s, j) => s + j, 0);
     // Sprunglängen proportional, aber jeder Sprung mindestens 90 px breit.
     const minW = 90;
-    const raw = jumps.map((j) => (total > 0 ? j / total : 0) * (width - 80));
+    // Rückwärts (Subtraktion): Start rechts, Sprünge nach links.
+    const dir = total < 0 ? -1 : 1;
+    const raw = jumps.map((j) => (total !== 0 ? j / total : 0) * (width - 80));
     const widths = raw.map((w) => Math.max(minW, w));
     const scale =
       jumps.length > 0 ? Math.min(1, (width - 80) / widths.reduce((s, w) => s + w, 0)) : 1;
-    let px = -width / 2 + 40;
+    let px = dir * (-width / 2 + 40);
     let value = start;
     const mark = (pxAt: number, label: string, emphasize: boolean) => {
       g.lineStyle(Stroke.outline, Color.kontur, 1);
@@ -43,7 +46,7 @@ export class NumberLine extends Phaser.GameObjects.Container {
     };
     mark(px, String(start), true);
     jumps.forEach((jump, i) => {
-      const w = (widths[i] ?? minW) * scale;
+      const w = (widths[i] ?? minW) * scale * dir;
       // Bogen als halbe Ellipse mit fester Höhe, damit lange Sprünge nicht zu hoch werden.
       const points: Phaser.Math.Vector2[] = [];
       for (let k = 0; k <= 24; k++) {
@@ -56,7 +59,10 @@ export class NumberLine extends Phaser.GameObjects.Container {
       g.strokePoints(points);
       objects.push(
         scene.add
-          .text(px + w / 2, -ARC_H - 22, `+${jump}`, { ...LABEL, color: CssColor.kontur })
+          .text(px + w / 2, -ARC_H - 22, jump < 0 ? `−${-jump}` : `+${jump}`, {
+            ...LABEL,
+            color: CssColor.kontur,
+          })
           .setOrigin(0.5),
       );
       px += w;

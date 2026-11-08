@@ -6,6 +6,7 @@ import {
   emptySave,
   exportSave,
   migrate,
+  MIGRATIONS,
   parseSave,
   SAVE_VERSION,
   SaveService,
@@ -119,6 +120,30 @@ describe('Profile', () => {
 });
 
 describe('Migration', () => {
+  it('überträgt die Stufe eines Bereichs aus Version 1 auf seine Familie', () => {
+    const v1 = {
+      version: 1,
+      activeProfileId: 'p1',
+      profiles: [
+        {
+          ...createProfile('Mia', 'owl'),
+          id: 'p1',
+          areas: {
+            pinguinfelsen: { stars: 7, unlockedLevel: 3, rounds: 4 },
+            affenwald: { stars: 2, unlockedLevel: 2, rounds: 1 },
+          },
+        },
+      ],
+    };
+    const loaded = parseSave(JSON.stringify(v1));
+    expect(loaded.version).toBe(SAVE_VERSION);
+    expect(loaded.profiles[0]!.areas).toEqual({
+      pinguinfelsen: { stars: 7, rounds: 4, levels: { add_100: 3 } },
+      affenwald: { stars: 2, rounds: 1, levels: { neighbors_100: 2 } },
+    });
+    expect(MIGRATIONS[1]).toBeDefined();
+  });
+
   it('führt Versionssprünge nacheinander aus', () => {
     const migrations = {
       1: (d: Record<string, unknown>) => ({ ...d, renamed: d.old }),

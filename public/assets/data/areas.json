@@ -1,18 +1,46 @@
 {
-  "_hinweis": "Bereiche der Weltkarte in der Reihenfolge der Freischaltung. family: Aufgabenfamilie aus families.json; ohne family zeigt die Karte „bald“. requires: Vorgängerbereich.",
+  "_hinweis": "Bereiche der Weltkarte in der Reihenfolge der Freischaltung. families: Aufgabenfamilien aus families.json in der Reihenfolge im Gehege; ohne families zeigt die Karte „bald“. requires: Vorgängerbereich.",
   "areas": [
-    { "id": "affenwald", "animal": "monkey", "family": "neighbors_100" },
-    { "id": "pinguinfelsen", "animal": "penguin", "family": "add_100" },
+    {
+      "id": "affenwald",
+      "animal": "monkey",
+      "families": ["neighbors_100"]
+    },
+    {
+      "id": "pinguinfelsen",
+      "animal": "penguin",
+      "families": ["plus_facts_20", "add_100", "sub_100"]
+    },
     {
       "id": "elefantenwiese",
       "animal": "elephant",
-      "family": "mult_table",
+      "families": ["mult_table"],
       "requires": "pinguinfelsen"
     },
-    { "id": "zookasse", "animal": "parrot", "requires": "elefantenwiese" },
-    { "id": "futteruhr", "animal": "owl", "requires": "zookasse" },
-    { "id": "schmetterlingshaus", "animal": "butterfly", "requires": "futteruhr" },
-    { "id": "giraffenhof", "animal": "giraffe", "requires": "schmetterlingshaus" },
-    { "id": "zoozaehlung", "animal": "meerkat", "requires": "giraffenhof" }
+    {
+      "id": "zookasse",
+      "animal": "parrot",
+      "requires": "elefantenwiese"
+    },
+    {
+      "id": "futteruhr",
+      "animal": "owl",
+      "requires": "zookasse"
+    },
+    {
+      "id": "schmetterlingshaus",
+      "animal": "butterfly",
+      "requires": "futteruhr"
+    },
+    {
+      "id": "giraffenhof",
+      "animal": "giraffe",
+      "requires": "schmetterlingshaus"
+    },
+    {
+      "id": "zoozaehlung",
+      "animal": "meerkat",
+      "requires": "giraffenhof"
+    }
   ]
 }

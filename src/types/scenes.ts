@@ -15,8 +15,9 @@ export const SceneKey = {
   Settings: 'Settings',
 } as const;
 
-export type AreaSceneData = { areaId: string };
-export type TaskSceneData = { areaId: string; level: TaskLevel };
+/** family: zuletzt gewähltes Thema im Gehege (bei mehreren Aufgabenfamilien) */
+export type AreaSceneData = { areaId: string; family?: string };
+export type TaskSceneData = { areaId: string; family: string; level: TaskLevel };
 export type RoundEndSceneData = {
   areaId: string;
   family: string;

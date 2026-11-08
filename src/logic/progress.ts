@@ -30,12 +30,9 @@ export function applyRoundResult(
   rules: Rules,
 ): { profile: Profile; reward: RoundReward } {
   const stars = starsForRound(result.summary, rules);
-  const area: AreaProgress = profile.areas[result.areaId] ?? {
-    stars: 0,
-    unlockedLevel: 1,
-    rounds: 0,
-  };
-  const unlockedLevel = unlockedLevelAfter(area.unlockedLevel, result.level, stars, rules);
+  const area: AreaProgress = profile.areas[result.areaId] ?? { stars: 0, rounds: 0, levels: {} };
+  const before = area.levels[result.family] ?? 1;
+  const unlockedLevel = unlockedLevelAfter(before, result.level, stars, rules);
   const skill: SkillState = profile.skills[result.family] ?? {
     level: result.level,
     last: [],
@@ -49,13 +46,17 @@ export function applyRoundResult(
       stars: profile.stars + stars,
       areas: {
         ...profile.areas,
-        [result.areaId]: { stars: area.stars + stars, unlockedLevel, rounds: area.rounds + 1 },
+        [result.areaId]: {
+          stars: area.stars + stars,
+          rounds: area.rounds + 1,
+          levels: { ...area.levels, [result.family]: unlockedLevel },
+        },
       },
       skills: {
         ...profile.skills,
         [result.family]: { level: result.level, last, lastPlayed: result.date },
       },
     },
-    reward: { stars, unlockedLevel, levelUnlocked: unlockedLevel > area.unlockedLevel },
+    reward: { stars, unlockedLevel, levelUnlocked: unlockedLevel > before },
   };
 }

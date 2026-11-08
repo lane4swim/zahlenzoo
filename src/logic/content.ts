@@ -91,11 +91,17 @@ export function parseAreas(data: unknown): AreaConfig[] {
     throw new ContentError('areas.json: Liste „areas“ fehlt');
   const areas = d.areas.map((a, i) => {
     const o = obj(a, `areas.json areas[${i}]`);
+    if (o.families !== undefined && !Array.isArray(o.families)) {
+      throw new ContentError(`areas.json areas[${i}].families: Liste erwartet`);
+    }
+    const families = ((o.families as unknown[] | undefined) ?? []).map((f, k) =>
+      str(f, `areas[${i}].families[${k}]`),
+    );
     const area: AreaConfig = {
       id: str(o.id, `areas[${i}].id`),
       animal: str(o.animal, `areas[${i}].animal`),
+      families,
     };
-    if (o.family !== undefined) area.family = str(o.family, `areas[${i}].family`);
     if (o.requires !== undefined) area.requires = str(o.requires, `areas[${i}].requires`);
     return area;
   });
@@ -219,12 +225,12 @@ export function parseContent(raw: RawContent, generatorIds: readonly string[]): 
     if (!content.animals[area.animal]) {
       throw new ContentError(`areas.json: ${area.id} nennt unbekanntes Tier ${area.animal}`);
     }
-    if (area.family) {
-      if (!content.families[area.family]) {
-        throw new ContentError(`areas.json: ${area.id} nennt unbekannte Familie ${area.family}`);
+    for (const family of area.families) {
+      if (!content.families[family]) {
+        throw new ContentError(`areas.json: ${area.id} nennt unbekannte Familie ${family}`);
       }
-      if (!generatorIds.includes(area.family)) {
-        throw new ContentError(`Für die Familie ${area.family} gibt es keinen Generator`);
+      if (!generatorIds.includes(family)) {
+        throw new ContentError(`Für die Familie ${family} gibt es keinen Generator`);
       }
     }
   }

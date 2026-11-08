@@ -21,8 +21,8 @@ export type Rules = {
 export type AreaConfig = {
   id: string;
   animal: string;
-  /** Aufgabenfamilie; fehlt, solange der Bereich noch keine Aufgaben hat */
-  family?: string;
+  /** Aufgabenfamilien in der Reihenfolge im Gehege; leer, solange der Bereich keine Aufgaben hat */
+  families: string[];
   /** Vorgängerbereich; fehlt bei Startbereichen */
   requires?: string;
 };

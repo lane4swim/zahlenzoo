@@ -4,6 +4,8 @@ import strings from '../public/assets/data/strings.de.json';
 import { add100 } from '../src/logic/generators/add100';
 import { multTable } from '../src/logic/generators/multTable';
 import { neighbors100 } from '../src/logic/generators/neighbors100';
+import { plusFacts20 } from '../src/logic/generators/plusFacts20';
+import { sub100 } from '../src/logic/generators/sub100';
 import { typicalErrors } from '../src/logic/options';
 import { createRng } from '../src/logic/rng';
 import { I18n } from '../src/services/i18n';
@@ -53,6 +55,8 @@ describe('Textdateien', () => {
           add100(level, createRng(seed), 'x', paramsOf('add_100')(level)),
           neighbors100(level, createRng(seed), 'y', paramsOf('neighbors_100')(level)),
           multTable(level, createRng(seed), 'z', paramsOf('mult_table')(level)),
+          sub100(level, createRng(seed), 's', paramsOf('sub_100')(level)),
+          plusFacts20(level, createRng(seed), 'p', paramsOf('plus_facts_20')(level)),
         ]) {
           for (const hint of task.hints) {
             expect(i18n.has(hint.key), hint.key).toBe(true);

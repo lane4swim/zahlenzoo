@@ -1,9 +1,32 @@
 {
   "_hinweis": "Aufgabenfamilien mit Parametern je Stufe. kinds: Anteile der Eingabeformen. Anteile (Share) liegen zwischen 0 und 1. Zahlenraum jeweils bis 100.",
   "families": {
+    "plus_facts_20": {
+      "title": "Einspluseins bis 20",
+      "kinds": {
+        "choice": 0.3
+      },
+      "levels": {
+        "1": {
+          "description": "Plus bis 10 und Zerlegungen der 10 (6 + ? = 10)",
+          "toTenShare": 0.35
+        },
+        "2": {
+          "description": "Plus bis 20 ohne Übergang (12 + 5)"
+        },
+        "3": {
+          "description": "Zehnerübergang (8 + 5) und Umkehraufgaben (13 − 5)",
+          "inverseShare": 0.35
+        }
+      }
+    },
     "add_100": {
       "title": "Addition bis 100",
-      "kinds": { "number-input": 0.5, "choice": 0.3, "gap": 0.2 },
+      "kinds": {
+        "number-input": 0.5,
+        "choice": 0.3,
+        "gap": 0.2
+      },
       "levels": {
         "1": {
           "description": "Zehner plus Einer ohne Übergang (34 + 5) und Zehner plus Zehner (40 + 20)",
@@ -18,9 +41,32 @@
         }
       }
     },
+    "sub_100": {
+      "title": "Subtraktion bis 100",
+      "kinds": {
+        "number-input": 0.5,
+        "choice": 0.3,
+        "gap": 0.2
+      },
+      "levels": {
+        "1": {
+          "description": "Zehner minus Zehner (70 − 30) und Einer abziehen ohne Übergang (47 − 5)",
+          "tensMinusTensShare": 0.3
+        },
+        "2": {
+          "description": "zweistellig minus einstellig mit Übergang über den Zehner (43 − 7)"
+        },
+        "3": {
+          "description": "zweistellig minus zweistellig (73 − 26), meist mit Übergang",
+          "borrowPreference": 0.7
+        }
+      }
+    },
     "neighbors_100": {
       "title": "Nachbarzahlen und Zahlenfolgen bis 100",
-      "kinds": { "choice": 0.35 },
+      "kinds": {
+        "choice": 0.35
+      },
       "levels": {
         "1": {
           "description": "Nachbarzahlen: Vorgänger, Nachfolger, Zahl dazwischen",
@@ -39,7 +85,9 @@
     },
     "mult_table": {
       "title": "Einmaleins: Kernaufgaben, Ableiten, Umkehren und Verteilen",
-      "kinds": { "choice": 0.35 },
+      "kinds": {
+        "choice": 0.35
+      },
       "levels": {
         "1": {
           "description": "Kernaufgaben (Reihen mit Lehrkraft bestätigen), Verdoppeln und Halbieren",
