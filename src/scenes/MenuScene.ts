@@ -2,7 +2,7 @@ import { BaseScene } from './BaseScene';
 import type { Services } from '../services/services';
 import { SceneKey } from '../types/scenes';
 import { drawAvatar } from '../ui/AvatarBadge';
-import { Layout } from '../ui/theme';
+import { Layout, Tex } from '../ui/theme';
 
 export class MenuScene extends BaseScene {
   constructor(services: Services) {
@@ -16,6 +16,8 @@ export class MenuScene extends BaseScene {
       return;
     }
     const cx = this.scale.width / 2;
+    this.addBackground(Tex.menuStart);
+    // Der Titel steht auf dem Schild über dem Zoo-Eingang.
     this.addTitle(this.t('app.title'), 150);
     drawAvatar(this, cx - 160, 260, profile.avatar, this.t(`avatar.${profile.avatar}`), 30);
     this.addText(cx + 30, 260, this.t('menu.hello', { name: profile.nickname }));

@@ -6,7 +6,7 @@ import { SceneKey, type RoundEndSceneData, type TaskSceneData } from '../types/s
 import { AnimalSprite } from '../ui/AnimalSprite';
 import { ANIMAL_ART } from '../ui/animals';
 import { StarMeter } from '../ui/StarMeter';
-import { Color } from '../ui/theme';
+import { Color, Tex } from '../ui/theme';
 
 /** Rundenabschluss: Sterne, kurzer Rückblick, freigeschaltete Stufe. */
 export class RoundEndScene extends BaseScene<RoundEndSceneData> {
@@ -34,8 +34,9 @@ export class RoundEndScene extends BaseScene<RoundEndSceneData> {
   create(): void {
     const cx = this.scale.width / 2;
     const { summary } = this.result;
-    this.addTitle(this.t('roundEnd.title'), 90);
-    new StarMeter(this, cx, 220, this.reward.stars);
+    this.addBackground(Tex.menuRoundEnd);
+    this.addTitle(this.t('roundEnd.title'), 104);
+    new StarMeter(this, cx, 230, this.reward.stars);
     this.addText(
       cx,
       330,

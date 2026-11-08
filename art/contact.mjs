@@ -65,6 +65,33 @@ const SHEETS = {
       'zoozaehlung',
     ].map((a) => [a, [`${a}_hintergrund_1024x768`, `${a}_aufgabe_1024x768`]]),
   },
+  tiere: {
+    title: 'Tiere: Ausdrücke, Baby und Kartensymbol',
+    tile: 116,
+    rows: [
+      ['elefantenwiese_elefant', 'elefant'],
+      ['zookasse_papagei', 'papagei'],
+      ['futteruhr_eule', 'eule'],
+      ['schmetterlingshaus_schmetterling', 'schmetterling'],
+      ['giraffenhof_giraffe', 'giraffe'],
+      ['zoozaehlung_erdmaennchen', 'erdmaennchen'],
+    ].map(([p, short]) => [short, [...expr(p), `${p}_baby_512`, `karte_${short}_128`]]),
+  },
+  tiere_animation: {
+    title: 'Tiere: Idle, Freude, Fütterung',
+    tile: 72,
+    rows: [
+      'elefantenwiese_elefant',
+      'zookasse_papagei',
+      'futteruhr_eule',
+      'schmetterlingshaus_schmetterling',
+      'giraffenhof_giraffe',
+      'zoozaehlung_erdmaennchen',
+    ].map((p) => [
+      p.split('_')[1],
+      [...range(`${p}_idle`, 6), ...range(`${p}_freude`, 8), ...range(`${p}_fuetterung`, 8)],
+    ]),
+  },
   objekte_ui: {
     title: 'Futter und Symbole der Aufgabenansicht',
     tile: 130,
@@ -116,7 +143,7 @@ for (const [key, sheet] of Object.entries(SHEETS)) {
     h1{font-size:26px;margin:0 0 12px} h2{font-size:18px;margin:16px 0 8px}
     .row{display:flex;gap:14px;flex-wrap:nowrap} figure{margin:0}
     .tile{background:#E8D3A8;border-radius:10px;overflow:hidden}
-    .tile svg{display:block} figcaption{font-size:11px;margin-top:4px;max-width:${sheet.tile}px;word-break:break-all}
+    .tile svg{display:block} figcaption{font-size:10px;margin-top:4px;max-width:${sheet.tile}px;word-break:break-all}
   </style></head><body><h1>${sheet.title}</h1>${rows}</body></html>`;
   const page = await browser.newPage({
     viewport: { width: 800, height: 600 },

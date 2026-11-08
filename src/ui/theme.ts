@@ -80,6 +80,10 @@ export const Tex = {
   aidTens: 'ui_hilfe_zehner',
   aidLine: 'ui_hilfe_rechenstrich',
   aidHundred: 'ui_hilfe_hundertertafel',
+  menuStart: 'menue_start',
+  menuProfile: 'menue_profil',
+  menuAdults: 'menue_erwachsene',
+  menuRoundEnd: 'menue_rundenende',
   map: 'karte_hintergrund',
   mapLock: 'karte_schloss',
   mapSign: 'karte_schild',
@@ -89,4 +93,10 @@ export const Tex = {
 export const AnimalIcon: Readonly<Record<string, string>> = {
   monkey: 'karte_affe',
   penguin: 'karte_pinguin',
+  elephant: 'karte_elefant',
+  parrot: 'karte_papagei',
+  owl: 'karte_eule',
+  butterfly: 'karte_schmetterling',
+  giraffe: 'karte_giraffe',
+  meerkat: 'karte_erdmaennchen',
 };

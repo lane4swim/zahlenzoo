@@ -41,7 +41,8 @@ TOKENS = {
     "affe-fell":     {"hex": "#B9794A", "use": "Affe Fell"},
     "affe-hell":     {"hex": "#F1CFA0", "use": "Affe Gesicht und Bauch"},
     "affe-dunkel":   {"hex": "#8F5A34", "use": "Affe Haarschopf und Nase"},
-    "pinguin-gefieder": {"hex": "#6C8EA3", "use": "Pinguin Rücken und Kopf"}
+    "pinguin-gefieder": {"hex": "#6C8EA3", "use": "Pinguin Rücken und Kopf"},
+    "elefant-haut": {"hex": "#A3A9B8", "use": "Elefant Haut"}
   },
   "shadow": {"color": "kontur", "opacity": 0.14, "rule": "nur Bodenschatten, flache Ellipse"}
 }

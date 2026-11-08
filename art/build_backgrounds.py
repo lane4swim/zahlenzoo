@@ -181,9 +181,10 @@ def menu_profile():
     b.append(hills(560, C["laub-hell"], False, 36))
     b.append(hills(630, C["gras"], True, 22, 1))
     b.append(path(f"M 0 700 Q 512 676 {W} 700 V {H} H 0 Z", C["gras-hell"]))
-    for (x, y, c) in [(70, 300, "rosa"), (120, 250, "wasser"), (40, 230, "sonne"),
-                      (950, 290, "gras"), (900, 240, "orange"), (985, 220, "rosa")]:
-        b.append(path(f"M {x} {y + 40} Q {x + 10} {y + 120} {x - 6} {y + 200}", sw=SI))
+    # Luftballons an den Büschen unten, unterhalb der Profilknöpfe
+    for (x, y, c) in [(44, 520, "rosa"), (96, 490, "wasser"), (20, 470, "sonne"),
+                      (980, 520, "gras"), (930, 490, "orange"), (1004, 466, "rosa")]:
+        b.append(path(f"M {x} {y + 40} Q {x + 10} {y + 80} {60 if x < 512 else 970} 640", sw=SI))
         b.append(ell(x, y, 30, 38, C[c]) + ell(x - 10, y - 14, 7, 11, C["weiss"], False, 'opacity="0.5"'))
         b.append(path(f"M {x - 6} {y + 38} L {x + 6} {y + 38} L {x} {y + 46} Z", C[c], sw=SI))
     b.append(bush(60, 650, 0.9) + bush(970, 660, 1.0))

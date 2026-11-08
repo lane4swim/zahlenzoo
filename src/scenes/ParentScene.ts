@@ -3,7 +3,7 @@ import type { Services } from '../services/services';
 import { SceneKey } from '../types/scenes';
 import { drawAvatar } from '../ui/AvatarBadge';
 import { Button } from '../ui/Button';
-import { Color, CssColor, FontFamily, FontSize } from '../ui/theme';
+import { Color, CssColor, FontFamily, FontSize, Tex } from '../ui/theme';
 
 /**
  * Erwachsenenbereich. Bisher: Profile ansehen und löschen (zweimal tippen zur Sicherheit).
@@ -15,6 +15,7 @@ export class ParentScene extends BaseScene {
   }
 
   create(): void {
+    this.addBackground(Tex.menuAdults);
     this.addBackButton(() => this.scene.start(SceneKey.Menu));
     this.addTitle(this.t('parent.title'));
     this.renderProfiles();
