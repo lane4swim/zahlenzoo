@@ -2,6 +2,8 @@
 
 Stand: 7. November 2026. Grundlage: [`zahlen-zoo-spezifikation.md`](zahlen-zoo-spezifikation.md) (kurz „Spez.“) und [`kompetenzerwartungen-klasse-2.md`](kompetenzerwartungen-klasse-2.md) (kurz „KE“).
 
+Die offenen Punkte sind als GitHub-Issues #6 bis #34 angelegt (Titel mit Phase, z. B. „[Phase 3] Zoo-Kasse: …“); dort werden sie im Detail verfolgt. Diese Checkliste bleibt die Übersicht.
+
 Die Checkliste folgt der Roadmap (Spez. Abschnitt 13): fünf Phasen mit je einem Tor. Ein Tor gilt erst als erreicht, wenn alle Punkte der Phase abgehakt sind. Verweise in Klammern nennen den Abschnitt der Quelle.
 
 ## 0. Klärungen vor und während der Umsetzung
