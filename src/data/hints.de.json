@@ -25,6 +25,9 @@
   "hint.half.3": "{half} + {half} = {n}. Die Hälfte von {n} ist {half}.",
   "hint.hundred.2": "Schau auf die Hundertertafel. Die bekannten Zahlen sind markiert.",
   "hint.jumps.2": "Schau auf den Rechenstrich. Mach die Sprünge mit.",
+  "hint.money_lay.1": "Nimm zuerst große Scheine oder Münzen. Dann legst du den Rest mit kleinen dazu.",
+  "hint.money_lay.2": "Fang mit {first} an. Wie viel fehlt dann noch bis {amount}?",
+  "hint.money_lay.3": "So geht es mit wenigen Münzen und Scheinen: {coins}.",
   "hint.mult.3": "So geht es: {steps}. Das Ergebnis ist {result}.",
   "hint.mult_1.1": "Mal 1: Die Zahl bleibt, wie sie ist.",
   "hint.mult_10.1": "Mal 10: Aus Einern werden Zehner. {k} · 10 sind {k} Zehner.",
@@ -76,5 +79,7 @@
   "error.subtracted": "Achtung: Hier wird geteilt, nicht minus gerechnet.",
   "error.tens_crossing": "Denk an den Zehnerübergang: Nach 9 Einern kommt ein neuer Zehner.",
   "error.tens_off": "Die Einer stimmen. Schau noch mal auf die Zehner.",
+  "error.too_little": "Das ist noch zu wenig. Lege etwas dazu.",
+  "error.too_much": "Das ist zu viel. Lege etwas zurück.",
   "error.wrong_operation": "Lies noch einmal genau: Kommt etwas dazu oder geht etwas weg?"
 }

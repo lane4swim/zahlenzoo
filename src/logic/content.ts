@@ -213,7 +213,7 @@ export function parseStories(data: unknown): StoryTemplate[] {
     return {
       id: str(o.id, `stories[${i}].id`),
       op,
-      icon: str(o.icon, `stories[${i}].icon`),
+      icon: str(o.icon, `stories[${i}].icon`, true),
       family: str(o.family, `stories[${i}].family`),
     };
   });

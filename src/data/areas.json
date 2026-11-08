@@ -20,6 +20,7 @@
     {
       "id": "zookasse",
       "animal": "parrot",
+      "families": ["money_lay", "money_calc"],
       "requires": "elefantenwiese"
     },
     {

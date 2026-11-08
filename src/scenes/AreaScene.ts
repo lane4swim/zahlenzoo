@@ -10,6 +10,8 @@ import { Color, Stroke } from '../ui/theme';
 
 const BOARD = { x: 660, y: 150, w: 460, h: 520 };
 const TAB = { w: 140, gap: 10 };
+/** Ab dieser Länge passt ein Themenname nicht mehr einzeilig in eine Registerkarte. */
+const LONG_TAB_LABEL = 13;
 
 /**
  * Gehege eines Bereichs mit Hintergrund, Tier und Tafel. Hat der Bereich mehrere
@@ -69,7 +71,7 @@ export class AreaScene extends BaseScene<AreaSceneData> {
           x: BOARD.x - rowW / 2 + tabW / 2 + i * (tabW + TAB.gap),
           y: BOARD.y + 120,
           width: tabW,
-          label: this.t(n > 3 ? `family.${f}.short` : `family.${f}`),
+          label: this.tabLabel(f, n),
           fontSize: 20,
           fill: f === family ? Color.sonne : Color.papier,
           onPress: () => this.scene.restart(data),
@@ -95,5 +97,11 @@ export class AreaScene extends BaseScene<AreaSceneData> {
         onPress: () => this.scene.start(SceneKey.Task, data),
       }).setEnabled(open);
     });
+  }
+
+  /** Bei vielen Themen oder langen Namen die zweizeilige Kurzform, damit nichts übersteht. */
+  private tabLabel(family: string, tabs: number): string {
+    const full = this.t(`family.${family}`);
+    return tabs > 3 || full.length > LONG_TAB_LABEL ? this.t(`family.${family}.short`) : full;
   }
 }

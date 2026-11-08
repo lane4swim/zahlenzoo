@@ -92,6 +92,30 @@ const SHEETS = {
       [...range(`${p}_idle`, 6), ...range(`${p}_freude`, 8), ...range(`${p}_fuetterung`, 8)],
     ]),
   },
+  geld: {
+    title: 'Zoo-Kasse: Münzen und Scheine (Werte setzt das Spiel darauf)',
+    tile: 130,
+    rows: [
+      [
+        'Münzen',
+        [
+          'geld_muenze_kupfer_128',
+          'geld_muenze_gold_128',
+          'geld_muenze_euro1_128',
+          'geld_muenze_euro2_128',
+        ],
+      ],
+      [
+        'Scheine',
+        [
+          'geld_schein_5_240x128',
+          'geld_schein_10_240x128',
+          'geld_schein_20_240x128',
+          'geld_schein_50_240x128',
+        ],
+      ],
+    ],
+  },
   objekte_ui: {
     title: 'Futter und Symbole der Aufgabenansicht',
     tile: 130,

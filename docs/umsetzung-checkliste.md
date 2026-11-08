@@ -95,9 +95,9 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 
 **Spieltest**
 
-- [ ] Spieltest mit mindestens 5 Kindern der 2. Klasse, beobachtet, ohne Erklärung; Stockstellen notieren
+- [x] Spieltest mit mindestens 5 Kindern der 2. Klasse, beobachtet, ohne Erklärung; Stockstellen notieren (erfolgreich)
 
-- [ ] **Tor 2:** 5 Kinder spielen den Bereich ohne Hilfe von außen.
+- [x] **Tor 2:** 5 Kinder spielen den Bereich ohne Hilfe von außen.
 
 ## Phase 3: Inhalte Klasse 2 (8 bis 10 Wochen)
 
@@ -107,7 +107,7 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 - [x] `families.json` (Parameter je Stufe, Anteile der Eingabeformen)
 - [x] `animals.json`
 - [x] `hints.de.json`
-- [x] `word-templates.de.json` (30 Vorlagen; Rechenart, Bild und Familie in `stories.json`)
+- [x] `word-templates.de.json` (40 Vorlagen, davon 10 mit Geld; Rechenart, Bild und Familie in `stories.json`)
 - [x] `strings.de.json` (vollständig; ein Test prüft jeden Schlüssel, den der Code nutzt)
 - [x] `praise.de.json` (mehrere Varianten je Anlass)
 - [ ] `achievements.json`; folgt mit dem Sticker-Album (#23)
@@ -118,7 +118,7 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 - [ ] Affenwald: `count_steps_100`, `read_write_100`, `place_value_100`, `quick_count`, `order_100`, `compare_100`, `neighbors_100`, `number_sequences`; davon `neighbors_100` fertig (Stufe 1 Nachbarzahlen, Stufe 2 Nachbarzehner, Stufe 3 Zahlenfolgen in 2er-, 5er- und 10er-Schritten)
 - [ ] Pinguinfelsen: Stufe 0 `plus_facts_20`; `add_100`, `sub_100`, `decompose_10`, `complement_tens`, `tens_calc`, `estimate_100`, `smart_calc`, `path_choice`, `story_addsub`; davon fertig: `add_100`, `plus_facts_20` (Stufe 0: Plus bis 10 mit Zerlegen der 10, Plus bis 20, Zehnerübergang und Umkehraufgaben), `sub_100`; Themenwahl im Gehege
 - [ ] Elefantenwiese: `double_half`, `mult_core`, `mult_derive`, Division als Verteilen und Aufteilen, `story_multdiv`; davon `mult_table` fertig (Stufe 1 Kernaufgaben 1, 2, 5, 10 mit Verdoppeln und Halbieren, Stufe 2 Ableiten, Stufe 3 Umkehren und Verteilen), `story_multdiv` offen
-- [ ] Zoo-Kasse: `money_calc`, `money_convert`, `compare_money`, `question_pick`, `exact_or_estimate`
+- [ ] Zoo-Kasse: `money_lay`, `money_calc`, `money_convert`, `compare_money`, `question_pick`, `exact_or_estimate`; davon fertig: `money_lay` (Münzen und Scheine auf den Zahlteller legen; Stufe 1 Euro bis 20, Stufe 2 Euro bis 100, Stufe 3 Cent bis 100), `money_calc` (Sachaufgaben mit Geld, Stufe 1 bis 20 €, Stufe 2 und 3 bis 100 € ohne und mit Übergang); Papagei und Themenwahl im Gehege
 - [ ] Futteruhr: `clock_full`, `clock_half`, `clock_quarter` (mit Dreiviertelstunde), `clock_digital`, `compare_duration`, `time_units`, `fraction_units`
 - [ ] Schmetterlingshaus: `shapes_basic`, `pattern_continue`, `shapes_compose`, `symmetry_check` (erkennen, nicht zeichnen), `grid_draw`
 - [ ] Giraffenhof: `measure_length`, `compare_length`, `anchor_sizes`, `length_convert`, `fraction_units`

@@ -134,5 +134,12 @@
   "strategy.story_sub": "Sachaufgaben mit minus",
   "strategy.story_mult": "Sachaufgaben mit mal",
   "strategy.story_share": "Verteilen",
-  "strategy.story_measure": "Aufteilen"
+  "strategy.story_measure": "Aufteilen",
+  "family.money_lay": "Geld legen",
+  "family.money_calc": "Rechnen mit Geld",
+  "family.money_lay.short": "Geld\nlegen",
+  "family.money_calc.short": "Rechnen\nmit Geld",
+  "task.prompt.lay": "Lege {amount}.",
+  "strategy.money_lay": "Geld legen",
+  "task.money.plate": "Tippe Münzen und Scheine an. Tippe auf dem Teller, um etwas zurückzulegen."
 }

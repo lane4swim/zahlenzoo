@@ -76,6 +76,9 @@ export type Term = number | '+' | '-' | '·' | ':' | '=' | '<' | ',' | '?';
  */
 export type StoryPicture = { icon: string; groups: number[]; crossed?: number };
 
+/** Betrag in Euro oder Cent (ganzzahlig, Klasse 2) und die Münzen und Scheine dafür. */
+export type MoneyInfo = { amount: number; unit: 'euro' | 'cent'; denominations: number[] };
+
 /** Typische falsche Antwort mit Fehlerart (für Antwortkarten und Rückmeldung). */
 export type TypicalError = { value: number; errorTag: string };
 
@@ -105,6 +108,8 @@ export type Task = {
   prompt: {
     terms: Term[];
     textKey?: string;
+    /** Werte für Platzhalter in der Frage, z. B. { amount: '17 €' } */
+    textParams?: TextParams;
     images?: string[];
     story?: { id: string; params: TextParams };
     picture?: StoryPicture;
@@ -117,6 +122,8 @@ export type Task = {
   /** Verweis auf die Strategie, z. B. "add_stepwise" */
   strategyId?: string;
   math?: MathInfo;
+  /** Geld legen: Betrag und angebotene Münzen und Scheine (Werte in Cent) */
+  money?: MoneyInfo;
   /** typische Fehler, falls nicht aus `math` ableitbar */
   typicalErrors?: TypicalError[];
   /** Schlüssel zum Erkennen von Duplikaten; Tauschaufgaben haben denselben */

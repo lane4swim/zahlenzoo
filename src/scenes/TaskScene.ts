@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { BaseScene } from './BaseScene';
 import { familyParams, findArea } from '../logic/content';
+import { fewestCoins } from '../logic/generators/moneyLay';
 import { GENERATORS } from '../logic/generators';
 import { check } from '../logic/check';
 import { createRng } from '../logic/rng';
@@ -31,6 +32,7 @@ import { HundredBoard } from '../ui/math/HundredBoard';
 import { NumberLine } from '../ui/math/NumberLine';
 import { TenFrame } from '../ui/math/TenFrame';
 import { TensOnes } from '../ui/math/TensOnes';
+import { MoneyInput } from '../ui/MoneyInput';
 import { Numpad } from '../ui/Numpad';
 import { ProgressDots } from '../ui/ProgressDots';
 import { StoryPictureView } from '../ui/StoryPictureView';
@@ -47,6 +49,9 @@ const INPUT_X = 600;
 const VISUAL_Y = 448;
 const INPUT_Y = 648;
 const ANIMAL_HEIGHT = 230;
+/** Zahlteller beim Geldlegen: zwischen Hinweistext und Münzleiste */
+const PLATE_Y = 428;
+const PLATE_H = 190;
 
 /**
  * Aufgabenansicht: Tier links, Rechnung oben, Hinweise in der Mitte, Eingabe unten.
@@ -75,7 +80,8 @@ export class TaskScene extends BaseScene<TaskSceneData> {
   private dots!: ProgressDots;
   private panel!: HintPanel;
   private expression?: Expression;
-  private answerInput?: Numpad | AnswerCards;
+  private answerInput?: Numpad | AnswerCards | MoneyInput;
+  private aidButtons: Button[] = [];
   private feedbackIcon?: Phaser.GameObjects.Image;
   /** Frage, Sachtext, Einheit und Bild (werden je Aufgabe neu angelegt) */
   private storyObjects: Phaser.GameObjects.GameObject[] = [];
@@ -171,7 +177,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       ['numberLine', Tex.aidLine],
       ['hundredBoard', Tex.aidHundred],
     ];
-    aids.forEach(([aid, icon], i) => {
+    this.aidButtons = aids.map(([aid, icon], i) =>
       this.addButton({
         x: Layout.margin + 48,
         y: 420 + i * 112,
@@ -179,8 +185,8 @@ export class TaskScene extends BaseScene<TaskSceneData> {
         icon,
         iconScale: 0.8,
         onPress: () => this.toggleAid(aid),
-      });
-    });
+      }),
+    );
   }
 
   private showTask(): void {
@@ -211,6 +217,20 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     }
     this.panel.clear();
     this.expression?.setAnswer('');
+    // Beim Geldlegen sind Teller und Münzen die Darstellung; die Rechenhilfen passen nicht.
+    for (const b of this.aidButtons) b.setVisible(!task.money);
+    if (task.money) {
+      this.panel.show(this.t('task.money.plate'));
+      this.answerInput = new MoneyInput(this, {
+        x: INPUT_X,
+        y: INPUT_Y,
+        plate: { x: PANEL.x, y: PLATE_Y, width: PANEL.width, height: PLATE_H },
+        money: task.money,
+        okLabel: this.t('common.ok'),
+        onSubmit: (value) => this.submit(value),
+      });
+      return;
+    }
     if (task.options) {
       this.answerInput = new AnswerCards(this, INPUT_X, INPUT_Y, task.options, (value) =>
         this.submit(value),
@@ -277,7 +297,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       return;
     }
     const question = this.add
-      .text(PANEL.x, 146, this.t(key), {
+      .text(PANEL.x, 146, this.t(key, task.prompt.textParams), {
         fontFamily: FontFamily.text,
         fontSize: `${FontSize.text}px`,
         color: CssColor.text,
@@ -286,6 +306,10 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       })
       .setOrigin(0.5, 0);
     this.storyObjects.push(question);
+    if (task.money) {
+      this.panel.setY(146 + question.height + 20);
+      return;
+    }
     const exprY = 146 + question.height + 52;
     this.expression = new Expression(this, PANEL.x, exprY, task.prompt.terms);
     this.panel.setY(exprY + 62);
@@ -294,7 +318,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
   /** Frage zur Aufgabe (über den Zahlen), für das Vorlesen. */
   private question(): string {
     const key = this.task.prompt.textKey;
-    return key ? this.t(key) : '';
+    return key ? this.t(key, this.task.prompt.textParams) : '';
   }
 
   /** Lob abwechselnd verwenden, damit es nicht leer klingt (Spezifikation, Abschnitt 8). */
@@ -343,6 +367,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     this.animal?.think();
     if (this.answerInput instanceof AnswerCards) this.answerInput.markWrong(value);
     if (this.answerInput instanceof Numpad) this.answerInput.clear();
+    // Gelegtes Geld bleibt liegen, damit das Kind ergänzen oder zurücklegen kann.
 
     if (this.attempts >= this.content.rules.attempts) {
       this.showSolution();
@@ -371,8 +396,15 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       this.round = appendTask(this.round, this.factory.next(this.task.level));
     }
     // Die Eingabe weicht dem Weiter-Knopf, damit klar ist, was als Nächstes zu tun ist.
-    this.answerInput?.destroy();
-    this.answerInput = undefined;
+    // Beim Geldlegen bleibt der Teller stehen und zeigt den Lösungsweg.
+    const money = this.task.money;
+    if (this.answerInput instanceof MoneyInput && money) {
+      const cents = money.unit === 'euro' ? money.amount * 100 : money.amount;
+      this.answerInput.setItems(fewestCoins(cents, money.denominations)).setTrayVisible(false);
+    } else {
+      this.answerInput?.destroy();
+      this.answerInput = undefined;
+    }
     this.nextButton = this.addButton({
       x: INPUT_X,
       y: INPUT_Y,
@@ -415,6 +447,11 @@ export class TaskScene extends BaseScene<TaskSceneData> {
 
   private showFeedbackIcon(texture: string): void {
     this.feedbackIcon?.destroy();
+    if (this.answerInput instanceof MoneyInput) {
+      const { x, y } = this.answerInput.feedbackAnchor;
+      this.feedbackIcon = this.add.image(x, y, texture).setScale(0.8);
+      return;
+    }
     if (!this.expression) return;
     // Bei Sachaufgaben steht der Haken hinter der Einheit.
     const right = Math.max(
