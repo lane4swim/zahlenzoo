@@ -101,17 +101,17 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 
 ## Phase 3: Inhalte Klasse 2 (8 bis 10 Wochen)
 
-**Daten** (Spez. 11)
+**Daten** (Spez. 11; Startwerte in `rules.json`)
 
-- [ ] `areas.json`
-- [ ] `families.json`
-- [ ] `animals.json`
-- [ ] `hints.de.json`
-- [ ] `word-templates.de.json` (30 bis 40 Vorlagen)
-- [ ] `strings.de.json` (vollständig)
-- [ ] `praise.de.json` (mehrere Varianten je Anlass)
-- [ ] `achievements.json`
-- [ ] `legal.json` (Gerüst; Daten folgen in Phase 4)
+- [x] `areas.json`
+- [x] `families.json` (Parameter je Stufe, Anteile der Eingabeformen)
+- [x] `animals.json`
+- [x] `hints.de.json`
+- [ ] `word-templates.de.json` (30 bis 40 Vorlagen); folgt mit der Eingabeform `word` (#22)
+- [x] `strings.de.json` (vollständig; ein Test prüft jeden Schlüssel, den der Code nutzt)
+- [x] `praise.de.json` (mehrere Varianten je Anlass)
+- [ ] `achievements.json`; folgt mit dem Sticker-Album (#23)
+- [x] `legal.json` (Gerüst; Daten folgen in Phase 4)
 
 **Bereiche und Familien** (Spez. 5, KE 2)
 

@@ -1,0 +1,62 @@
+{
+  "_hinweis": "Aufgabenfamilien mit Parametern je Stufe. kinds: Anteile der Eingabeformen. Anteile (Share) liegen zwischen 0 und 1. Zahlenraum jeweils bis 100.",
+  "families": {
+    "add_100": {
+      "title": "Addition bis 100",
+      "kinds": { "number-input": 0.5, "choice": 0.3, "gap": 0.2 },
+      "levels": {
+        "1": {
+          "description": "Zehner plus Einer ohne Übergang (34 + 5) und Zehner plus Zehner (40 + 20)",
+          "tensPlusTensShare": 0.3
+        },
+        "2": {
+          "description": "zweistellig plus einstellig mit Übergang über den Zehner (38 + 7)"
+        },
+        "3": {
+          "description": "zweistellig plus zweistellig (47 + 26), meist mit Übergang",
+          "carryPreference": 0.7
+        }
+      }
+    },
+    "neighbors_100": {
+      "title": "Nachbarzahlen und Zahlenfolgen bis 100",
+      "kinds": { "choice": 0.35 },
+      "levels": {
+        "1": {
+          "description": "Nachbarzahlen: Vorgänger, Nachfolger, Zahl dazwischen",
+          "crossingShare": 0.35
+        },
+        "2": {
+          "description": "Nachbarzehner (40 < 47 < 50)"
+        },
+        "3": {
+          "description": "Zahlenfolgen vorwärts und rückwärts",
+          "steps": [2, 5, 10],
+          "forwardShare": 0.7,
+          "length": 4
+        }
+      }
+    },
+    "mult_table": {
+      "title": "Einmaleins: Kernaufgaben, Ableiten, Umkehren und Verteilen",
+      "kinds": { "choice": 0.35 },
+      "levels": {
+        "1": {
+          "description": "Kernaufgaben (Reihen mit Lehrkraft bestätigen), Verdoppeln und Halbieren",
+          "rows": [1, 2, 5, 10],
+          "doubleShare": 0.2,
+          "halfShare": 0.2
+        },
+        "2": {
+          "description": "Ableiten aus Kernaufgaben",
+          "rows": [3, 4, 6, 7, 8, 9]
+        },
+        "3": {
+          "description": "Umkehren (? · 5 = 35) und Verteilen (20 : 5)",
+          "divisors": [2, 5, 10, 3, 4],
+          "shareShare": 0.5
+        }
+      }
+    }
+  }
+}

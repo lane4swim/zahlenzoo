@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { BaseScene } from './BaseScene';
-import { findArea } from '../logic/areas';
+import { familyParams, findArea } from '../logic/content';
+import { GENERATORS } from '../logic/generators';
 import { check } from '../logic/check';
 import { createRng } from '../logic/rng';
 import {
@@ -20,7 +21,7 @@ import type { AnswerOutcome } from '../types/round';
 import { SceneKey, type TaskSceneData } from '../types/scenes';
 import type { CheckResult, Hint, Task, TaskLevel, Visual } from '../types/task';
 import { AnimalSprite } from '../ui/AnimalSprite';
-import { ANIMAL_ART, hasAreaArt, taskBackground } from '../ui/animals';
+import { taskBackground } from '../ui/animals';
 import { AnswerCards } from '../ui/AnswerCards';
 import { Button } from '../ui/Button';
 import { Expression } from '../ui/Expression';
@@ -33,11 +34,6 @@ import { Numpad } from '../ui/Numpad';
 import { ProgressDots } from '../ui/ProgressDots';
 import { Color, Layout, reducedMotion, Tex } from '../ui/theme';
 
-/** Versuche je Aufgabe, danach wird der Rechenweg gezeigt (Spezifikation, Abschnitt 8). */
-const MAX_ATTEMPTS = 3;
-/** Höchstens so viele Wiederholungen hängt eine Runde an. */
-const MAX_REPEATS = 2;
-const PRAISE_COUNT = 6;
 const NEXT_DELAY = 1600;
 
 type Aid = 'tensOnes' | 'numberLine' | 'hundredBoard';
@@ -91,18 +87,23 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     this.repeats = 0;
     this.strategies = [];
     this.aid = undefined;
-    const area = findArea(data.areaId);
-    if (!area?.family) throw new Error(`Bereich ${data.areaId} hat keine Aufgaben`);
-    this.family = area.family.id;
+    const content = this.content;
+    const area = findArea(content, data.areaId);
+    const generator = area?.family ? GENERATORS[area.family] : undefined;
+    if (!area?.family || !generator) throw new Error(`Bereich ${data.areaId} hat keine Aufgaben`);
+    const family = area.family;
+    this.family = family;
     this.animalId = area.animal;
     // Startwert aus der Uhrzeit: jede Runde ist anders, im Test aber reproduzierbar.
     const rng = createRng(Date.now() >>> 0);
-    this.praiseIndex = rng.int(0, PRAISE_COUNT - 1);
+    this.praiseIndex = rng.int(0, content.praise.firstTry.length - 1);
     const composed = composeRound({
-      family: area.family.id,
-      generator: area.family.generator,
+      family,
+      generator,
+      params: (level) => familyParams(content, family, level),
       level: data.level,
       rng,
+      rules: content.rules,
     });
     this.round = composed.round;
     this.factory = composed.factory;
@@ -110,8 +111,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
 
   create(): void {
     const { width } = this.scale;
-    if (hasAreaArt(this.areaId)) this.add.image(0, 0, taskBackground(this.areaId)).setOrigin(0);
-    else this.add.rectangle(0, 0, width, 132, Color.himmel).setOrigin(0);
+    this.addBackground(taskBackground(this.areaId));
 
     const top = Layout.margin + Layout.minTouch / 2;
     this.addButton({
@@ -143,15 +143,9 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       onPress: () => this.showNextHint(),
     });
 
-    const art = ANIMAL_ART[this.animalId];
+    const art = this.content.animals[this.animalId];
     if (art) {
-      this.animal = new AnimalSprite(
-        this,
-        art.taskSpot.x,
-        art.taskSpot.y,
-        this.animalId,
-        ANIMAL_HEIGHT,
-      );
+      this.animal = new AnimalSprite(this, art.taskSpot.x, art.taskSpot.y, art, ANIMAL_HEIGHT);
     }
     this.createAidButtons();
 
@@ -225,6 +219,11 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     this.panel.show(key ? this.t(key) : '');
   }
 
+  /** Lob abwechselnd verwenden, damit es nicht leer klingt (Spezifikation, Abschnitt 8). */
+  private pick(list: readonly string[]): string {
+    return list[this.praiseIndex++ % list.length] ?? '';
+  }
+
   private submit(value: string): void {
     const payload: AnswerSubmittedPayload = { taskId: this.task.id, input: value };
     this.events.emit(GameEvent.AnswerSubmitted, payload);
@@ -254,8 +253,8 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     this.animal?.feed();
     const praise =
       outcome === 'first_try'
-        ? this.t(`praise.${(this.praiseIndex++ % PRAISE_COUNT) + 1}`)
-        : this.t('praise.withHelp');
+        ? this.pick(this.content.praise.firstTry)
+        : this.pick(this.content.praise.withHelp);
     this.panel.show(praise, Tex.correct);
     this.finishTask(outcome);
     this.time.delayedCall(NEXT_DELAY, () => this.advance());
@@ -267,7 +266,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     if (this.answerInput instanceof AnswerCards) this.answerInput.markWrong(value);
     if (this.answerInput instanceof Numpad) this.answerInput.clear();
 
-    if (this.attempts >= MAX_ATTEMPTS) {
+    if (this.attempts >= this.content.rules.attempts) {
       this.showSolution();
       return;
     }
@@ -289,7 +288,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     this.expression?.setAnswer(String(this.task.answer), 'solution');
     this.showHint(hint, `${this.hintText(hint)} ${this.t('task.solutionShown')}`, Tex.hint);
     this.finishTask('wrong');
-    if (this.repeats < MAX_REPEATS) {
+    if (this.repeats < this.content.rules.maxRepeats) {
       this.repeats++;
       this.round = appendTask(this.round, this.factory.next(this.task.level));
     }

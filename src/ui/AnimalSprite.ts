@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
-import { ANIMAL_ART, type Animation, type AnimalArt, type Expression } from './animals';
+import type { Animation, Expression } from './animals';
+import type { AnimalConfig } from '../types/content';
 import { reducedMotion } from './theme';
 
 /** Fußpunkt in den Tierbildern: Standlinie y = 481 von 512 (Stilvorgabe). */
@@ -15,13 +16,11 @@ export const animKey = (prefix: string, animation: Animation) => `${prefix}_${an
  * zeigt es statt Animationen kurz den passenden Ausdruck.
  */
 export class AnimalSprite extends Phaser.GameObjects.Sprite {
-  private readonly art: AnimalArt;
+  private readonly art: AnimalConfig;
   private readonly baseScale: number;
   private stillTimer?: Phaser.Time.TimerEvent;
 
-  constructor(scene: Phaser.Scene, x: number, y: number, animal: string, height: number) {
-    const art = ANIMAL_ART[animal];
-    if (!art) throw new Error(`Keine Grafik für das Tier ${animal}`);
+  constructor(scene: Phaser.Scene, x: number, y: number, art: AnimalConfig, height: number) {
     const idle = animKey(art.prefix, 'idle');
     super(scene, x, y, idle, `${idle}_0`);
     this.art = art;
@@ -84,8 +83,9 @@ export class AnimalSprite extends Phaser.GameObjects.Sprite {
 }
 
 /** Legt die Animationen aller Tiere einmal an (in der BootScene). */
-export function createAnimalAnimations(scene: Phaser.Scene): void {
-  for (const art of Object.values(ANIMAL_ART)) {
+export function createAnimalAnimations(scene: Phaser.Scene, arts: readonly AnimalConfig[]): void {
+  for (const art of arts) {
+    if (scene.anims.exists(animKey(art.prefix, 'idle'))) continue;
     const frames = (animation: Animation, sequence: number[]) =>
       sequence.map((i) => ({
         key: animKey(art.prefix, animation),

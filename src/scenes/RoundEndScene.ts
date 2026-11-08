@@ -1,10 +1,9 @@
 import { BaseScene } from './BaseScene';
-import { findArea } from '../logic/areas';
+import { findArea } from '../logic/content';
 import { applyRoundResult, type RoundReward } from '../logic/progress';
 import type { Services } from '../services/services';
 import { SceneKey, type RoundEndSceneData, type TaskSceneData } from '../types/scenes';
 import { AnimalSprite } from '../ui/AnimalSprite';
-import { ANIMAL_ART } from '../ui/animals';
 import { StarMeter } from '../ui/StarMeter';
 import { Color, Tex } from '../ui/theme';
 
@@ -26,7 +25,7 @@ export class RoundEndScene extends BaseScene<RoundEndSceneData> {
       this.reward = { stars: 1, unlockedLevel: data.level, levelUnlocked: false };
       return;
     }
-    const applied = applyRoundResult(profile, { ...data, date });
+    const applied = applyRoundResult(profile, { ...data, date }, this.content.rules);
     save.updateProfile(applied.profile);
     this.reward = applied.reward;
   }
@@ -57,9 +56,10 @@ export class RoundEndScene extends BaseScene<RoundEndSceneData> {
     }
 
     // Das Tier freut sich über die geschaffte Runde.
-    const animalId = findArea(this.result.areaId)?.animal;
-    if (animalId && ANIMAL_ART[animalId]) {
-      const animal = new AnimalSprite(this, 100, 744, animalId, 190);
+    const animalId = findArea(this.content, this.result.areaId)?.animal;
+    const art = animalId ? this.content.animals[animalId] : undefined;
+    if (art) {
+      const animal = new AnimalSprite(this, 100, 744, art, 190);
       this.time.delayedCall(500, () => animal.cheer());
     }
 

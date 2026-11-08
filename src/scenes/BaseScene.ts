@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import type { Services } from '../services/services';
+import type { GameContent } from '../types/content';
 import { Button, type ButtonOptions } from '../ui/Button';
 import { CssColor, FontFamily, FontSize, Layout } from '../ui/theme';
 
@@ -37,6 +38,11 @@ export abstract class BaseScene<TData extends object = object> extends Phaser.Sc
   ): void {
     emitter.on(event, fn, this);
     this.cleanups.push(() => emitter.off(event, fn, this));
+  }
+
+  /** Geprüfte Inhalte (Bereiche, Familien, Tiere, Startwerte). */
+  protected get content(): GameContent {
+    return this.services.content.get();
   }
 
   protected t(key: string, params?: Readonly<Record<string, string | number>>): string {

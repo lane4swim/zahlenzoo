@@ -1,4 +1,5 @@
 import { AudioService } from './audio';
+import { ContentStore } from './content';
 import { I18n } from './i18n';
 import { SaveService, type KeyValueStore } from './save';
 
@@ -10,6 +11,7 @@ export type Services = {
   i18n: I18n;
   save: SaveService;
   audio: AudioService;
+  content: ContentStore;
 };
 
 function browserStore(): KeyValueStore | undefined {
@@ -21,5 +23,10 @@ function browserStore(): KeyValueStore | undefined {
 }
 
 export function createServices(store: KeyValueStore | undefined = browserStore()): Services {
-  return { i18n: new I18n(), save: new SaveService(store), audio: new AudioService() };
+  return {
+    i18n: new I18n(),
+    save: new SaveService(store),
+    audio: new AudioService(),
+    content: new ContentStore(),
+  };
 }

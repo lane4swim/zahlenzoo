@@ -1,0 +1,61 @@
+{
+  "_hinweis": "Tiergrafiken aus art/ und ihre Plätze in den Szenen (Fußpunkt in Pixeln der Basisauflösung 1024 × 768). babyPrice: Sterne für ein Baby-Tier.",
+  "animals": {
+    "penguin": {
+      "prefix": "pinguinfelsen_pinguin",
+      "icon": "karte_pinguin",
+      "taskSpot": { "x": 118, "y": 328 },
+      "areaSpot": { "x": 200, "y": 604 },
+      "babyPrice": 5
+    },
+    "monkey": {
+      "prefix": "affenwald_affe",
+      "icon": "karte_affe",
+      "taskSpot": { "x": 150, "y": 342 },
+      "areaSpot": { "x": 290, "y": 722 },
+      "babyPrice": 5
+    },
+    "elephant": {
+      "prefix": "elefantenwiese_elefant",
+      "icon": "karte_elefant",
+      "taskSpot": { "x": 112, "y": 336 },
+      "areaSpot": { "x": 220, "y": 712 },
+      "babyPrice": 5
+    },
+    "parrot": {
+      "prefix": "zookasse_papagei",
+      "icon": "karte_papagei",
+      "taskSpot": { "x": 128, "y": 330 },
+      "areaSpot": { "x": 300, "y": 712 },
+      "babyPrice": 5
+    },
+    "owl": {
+      "prefix": "futteruhr_eule",
+      "icon": "karte_eule",
+      "taskSpot": { "x": 150, "y": 342 },
+      "areaSpot": { "x": 220, "y": 476 },
+      "babyPrice": 5
+    },
+    "butterfly": {
+      "prefix": "schmetterlingshaus_schmetterling",
+      "icon": "karte_schmetterling",
+      "taskSpot": { "x": 112, "y": 340 },
+      "areaSpot": { "x": 200, "y": 704 },
+      "babyPrice": 5
+    },
+    "giraffe": {
+      "prefix": "giraffenhof_giraffe",
+      "icon": "karte_giraffe",
+      "taskSpot": { "x": 112, "y": 336 },
+      "areaSpot": { "x": 250, "y": 712 },
+      "babyPrice": 5
+    },
+    "meerkat": {
+      "prefix": "zoozaehlung_erdmaennchen",
+      "icon": "karte_erdmaennchen",
+      "taskSpot": { "x": 112, "y": 336 },
+      "areaSpot": { "x": 250, "y": 716 },
+      "babyPrice": 5
+    }
+  }
+}

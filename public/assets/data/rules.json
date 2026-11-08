@@ -1,0 +1,16 @@
+{
+  "_hinweis": "Startwerte aus der Spezifikation (Abschnitte 5, 6, 7, 8). Nach Spieltest und Pilot hier anpassen.",
+  "round": {
+    "size": 10,
+    "minSize": 8,
+    "maxSize": 12,
+    "mix": { "current": 0.7, "previous": 0.2, "next": 0.1 }
+  },
+  "maxLevel": 3,
+  "attempts": 3,
+  "maxRepeats": 2,
+  "stars": { "two": 0.7, "three": 0.9 },
+  "levelUnlockStars": 2,
+  "areaUnlockStars": 6,
+  "skillHistory": 10
+}

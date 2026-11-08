@@ -1,5 +1,7 @@
 import { optionsFromErrors, swapDigits } from '../options';
+import { kindShare, num, nums, share } from '../params';
 import type { Rng } from '../rng';
+import type { FamilyParams } from '../../types/content';
 import type {
   Generator,
   Hint,
@@ -44,9 +46,11 @@ function row(numbers: readonly number[], missing: number): Term[] {
   return terms;
 }
 
-function neighbors(rng: Rng): Variant {
+function neighbors(rng: Rng, params: FamilyParams): Variant {
   // Ein Drittel der Aufgaben liegt am Zehnerübergang (39, 40, 41).
-  const c = rng.chance(0.35) ? rng.int(1, 9) * 10 + rng.pick([-1, 0]) : rng.int(1, 99);
+  const c = rng.chance(share(params, 'crossingShare'))
+    ? rng.int(1, 9) * 10 + rng.pick([-1, 0])
+    : rng.int(1, 99);
   const numbers = [c - 1, c, c + 1];
   const missing = rng.int(0, 2);
   const answer = numbers[missing] as number;
@@ -105,10 +109,10 @@ function neighborTens(rng: Rng): Variant {
   };
 }
 
-function sequence(rng: Rng): Variant {
-  const step = rng.pick([2, 5, 10]);
-  const forward = rng.chance(0.7);
-  const length = 4;
+function sequence(rng: Rng, params: FamilyParams): Variant {
+  const step = rng.pick(nums(params, 'steps'));
+  const forward = rng.chance(share(params, 'forwardShare'));
+  const length = num(params, 'length');
   const span = step * (length - 1);
   const start = forward ? rng.int(MIN, MAX - span) : rng.int(MIN + span, MAX);
   const delta = forward ? step : -step;
@@ -139,14 +143,14 @@ function sequence(rng: Rng): Variant {
   };
 }
 
-function variant(level: TaskLevel, rng: Rng): Variant {
-  if (level <= 1) return neighbors(rng);
+function variant(level: TaskLevel, rng: Rng, params: FamilyParams): Variant {
+  if (level <= 1) return neighbors(rng, params);
   if (level === 2) return neighborTens(rng);
-  return sequence(rng);
+  return sequence(rng, params);
 }
 
-export const neighbors100: Generator = (level, rng, id): Task => {
-  const v = variant(level, rng);
+export const neighbors100: Generator = (level, rng, id, params): Task => {
+  const v = variant(level, rng, params);
   // Je Wert nur der erste (wichtigste) Fehler, nur Werte im Zahlenraum.
   const errors = v.errors.filter(
     (e, i) =>
@@ -155,7 +159,11 @@ export const neighbors100: Generator = (level, rng, id): Task => {
       v.errors.findIndex((f) => f.value === e.value) === i,
   );
   const lastIsGap = v.terms[v.terms.length - 1] === '?';
-  const kind: TaskKind = rng.chance(0.35) ? 'choice' : lastIsGap ? 'number-input' : 'gap';
+  const kind: TaskKind = rng.chance(kindShare(params, 'choice'))
+    ? 'choice'
+    : lastIsGap
+      ? 'number-input'
+      : 'gap';
   const task: Task = {
     id,
     family: NEIGHBORS_100,

@@ -1,5 +1,7 @@
 import { optionsFromErrors, swapDigits } from '../options';
+import { kindShare, nums, share } from '../params';
 import type { Rng } from '../rng';
+import type { FamilyParams } from '../../types/content';
 import type {
   Generator,
   Hint,
@@ -15,13 +17,12 @@ import type {
 /**
  * Elefantenwiese: Einmaleins in Klasse 2 (Spezifikation, Abschnitt 6; KE: mult_core,
  * mult_derive, double_half, Division als Verteilen).
- * Stufe 1: Kernaufgaben der Reihen 1, 2, 5, 10; Verdoppeln und Halbieren.
+ * Stufe 1: Kernaufgaben (Reihen aus families.json, Start 1, 2, 5, 10); Verdoppeln und Halbieren.
  * Stufe 2: Ableiten aus Kernaufgaben (3 · 4 = 2 · 4 + 4, 9 · 6 = 10 · 6 − 6).
  * Stufe 3: Umkehren und Ergänzen (? · 5 = 35) und Verteilen (20 : 5).
  * Alle Ergebnisse liegen im Zahlenraum bis 100.
  */
 export const MULT_TABLE = 'mult_table';
-export const CORE_ROWS = [1, 2, 5, 10] as const;
 
 type Variant = {
   terms: Term[];
@@ -92,9 +93,10 @@ function product(
   };
 }
 
-function core(rng: Rng): Variant {
+function core(rng: Rng, fp: FamilyParams): Variant {
   const r = rng.next();
-  if (r < 0.2) {
+  const doubleShare = share(fp, 'doubleShare');
+  if (r < doubleShare) {
     // Verdoppeln
     const n = rng.chance(0.5) ? rng.int(2, 10) : rng.int(11, 50);
     const params: TextParams = { n, result: 2 * n, tens: Math.floor(n / 10) * 10, ones: n % 10 };
@@ -118,7 +120,7 @@ function core(rng: Rng): Variant {
       dedupeKey: `dbl:${n}`,
     };
   }
-  if (r < 0.4) {
+  if (r < doubleShare + share(fp, 'halfShare')) {
     // Halbieren
     const half = rng.chance(0.5) ? rng.int(2, 10) : rng.int(11, 50);
     const n = 2 * half;
@@ -144,7 +146,7 @@ function core(rng: Rng): Variant {
       dedupeKey: `half:${n}`,
     };
   }
-  const row = rng.pick(CORE_ROWS);
+  const row = rng.pick(nums(fp, 'rows'));
   const k = rng.int(1, 10);
   const params: TextParams = { row, k, result: row * k, seq: rowStart(row) };
   return product(
@@ -170,8 +172,9 @@ const DERIVE: Record<number, { from: number; extra: number; key: string }> = {
   9: { from: 10, extra: -1, key: 'minus' }, // 9 · k = 10 · k − k
 };
 
-function derive(rng: Rng): Variant {
-  const row = rng.pick([3, 4, 6, 7, 8, 9]);
+function derive(rng: Rng, fp: FamilyParams): Variant {
+  const row = rng.pick(nums(fp, 'rows'));
+  if (!DERIVE[row]) throw new Error(`mult_table Stufe 2: keine Ableitung für die ${row}er-Reihe`);
   const maxK = Math.min(10, Math.floor(100 / row));
   const k = rng.int(2, maxK);
   const d = DERIVE[row] as { from: number; extra: number; key: string };
@@ -196,10 +199,11 @@ function derive(rng: Rng): Variant {
   );
 }
 
-function inverse(rng: Rng): Variant {
-  if (rng.chance(0.5)) {
+function inverse(rng: Rng, fp: FamilyParams): Variant {
+  const divisors = nums(fp, 'divisors');
+  if (rng.chance(share(fp, 'shareShare'))) {
     // Verteilen: n : k
-    const k = rng.pick([2, 5, 10, 3, 4]);
+    const k = rng.pick(divisors);
     const q = rng.int(2, Math.min(10, Math.floor(100 / k)));
     const n = k * q;
     const params: TextParams = { n, k, q };
@@ -223,7 +227,7 @@ function inverse(rng: Rng): Variant {
     };
   }
   // Ergänzen: ? · b = c
-  const b = rng.pick([2, 5, 10, 3, 4]);
+  const b = rng.pick(divisors);
   const a = rng.int(2, Math.min(10, Math.floor(100 / b)));
   const c = a * b;
   const params: TextParams = { a, b, c };
@@ -247,14 +251,14 @@ function inverse(rng: Rng): Variant {
   };
 }
 
-function variant(level: TaskLevel, rng: Rng): Variant {
-  if (level <= 1) return core(rng);
-  if (level === 2) return derive(rng);
-  return inverse(rng);
+function variant(level: TaskLevel, rng: Rng, params: FamilyParams): Variant {
+  if (level <= 1) return core(rng, params);
+  if (level === 2) return derive(rng, params);
+  return inverse(rng, params);
 }
 
-export const multTable: Generator = (level, rng, id): Task => {
-  const v = variant(level, rng);
+export const multTable: Generator = (level, rng, id, params): Task => {
+  const v = variant(level, rng, params);
   // Je Wert nur der erste Fehler, nur Werte im Zahlenraum und verschieden von der Lösung.
   const errors = v.errors.filter(
     (e, i) =>
@@ -263,7 +267,11 @@ export const multTable: Generator = (level, rng, id): Task => {
       e.value !== v.answer &&
       v.errors.findIndex((f) => f.value === e.value) === i,
   );
-  const kind: TaskKind = rng.chance(0.35) ? 'choice' : v.gap ? 'gap' : 'number-input';
+  const kind: TaskKind = rng.chance(kindShare(params, 'choice'))
+    ? 'choice'
+    : v.gap
+      ? 'gap'
+      : 'number-input';
   const task: Task = {
     id,
     family: MULT_TABLE,
