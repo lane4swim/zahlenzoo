@@ -1,0 +1,185 @@
+{
+  "_hinweis": "Vorlagen für Sachaufgaben (Spezifikation, Abschnitt 11): Rechenart, Bild und Familie. Texte und Einheiten stehen in word-templates.de.json unter story.<id> und story.<id>.unit. Platzhalter: add und sub {a} {b}; mult {groups} {each}; share {total} {groups}; measure {total} {size}.",
+  "stories": [
+    {
+      "id": "add_fische",
+      "op": "add",
+      "icon": "objekt_fisch",
+      "family": "story_addsub"
+    },
+    {
+      "id": "add_pinguine",
+      "op": "add",
+      "icon": "karte_pinguin",
+      "family": "story_addsub"
+    },
+    {
+      "id": "add_eimer",
+      "op": "add",
+      "icon": "objekt_eimer",
+      "family": "story_addsub"
+    },
+    {
+      "id": "add_bananen",
+      "op": "add",
+      "icon": "objekt_banane",
+      "family": "story_addsub"
+    },
+    {
+      "id": "add_naepfe",
+      "op": "add",
+      "icon": "objekt_futternapf",
+      "family": "story_addsub"
+    },
+    {
+      "id": "add_papageien",
+      "op": "add",
+      "icon": "karte_papagei",
+      "family": "story_addsub"
+    },
+    {
+      "id": "add_fische_tage",
+      "op": "add",
+      "icon": "objekt_fisch",
+      "family": "story_addsub"
+    },
+    {
+      "id": "add_elefanten",
+      "op": "add",
+      "icon": "karte_elefant",
+      "family": "story_addsub"
+    },
+    {
+      "id": "sub_fische",
+      "op": "sub",
+      "icon": "objekt_fisch",
+      "family": "story_addsub"
+    },
+    {
+      "id": "sub_pinguine",
+      "op": "sub",
+      "icon": "karte_pinguin",
+      "family": "story_addsub"
+    },
+    {
+      "id": "sub_eimer",
+      "op": "sub",
+      "icon": "objekt_eimer",
+      "family": "story_addsub"
+    },
+    {
+      "id": "sub_bananen",
+      "op": "sub",
+      "icon": "objekt_banane",
+      "family": "story_addsub"
+    },
+    {
+      "id": "sub_papageien",
+      "op": "sub",
+      "icon": "karte_papagei",
+      "family": "story_addsub"
+    },
+    {
+      "id": "sub_naepfe",
+      "op": "sub",
+      "icon": "objekt_futternapf",
+      "family": "story_addsub"
+    },
+    {
+      "id": "sub_elefanten",
+      "op": "sub",
+      "icon": "karte_elefant",
+      "family": "story_addsub"
+    },
+    {
+      "id": "mult_eimer",
+      "op": "mult",
+      "icon": "objekt_eimer",
+      "family": "story_multdiv"
+    },
+    {
+      "id": "mult_bananen",
+      "op": "mult",
+      "icon": "objekt_banane",
+      "family": "story_multdiv"
+    },
+    {
+      "id": "mult_fische",
+      "op": "mult",
+      "icon": "objekt_fisch",
+      "family": "story_multdiv"
+    },
+    {
+      "id": "mult_naepfe",
+      "op": "mult",
+      "icon": "objekt_futternapf",
+      "family": "story_multdiv"
+    },
+    {
+      "id": "mult_tragen",
+      "op": "mult",
+      "icon": "objekt_eimer",
+      "family": "story_multdiv"
+    },
+    {
+      "id": "mult_papageien",
+      "op": "mult",
+      "icon": "karte_papagei",
+      "family": "story_multdiv"
+    },
+    {
+      "id": "mult_pfleger",
+      "op": "mult",
+      "icon": "objekt_futternapf",
+      "family": "story_multdiv"
+    },
+    {
+      "id": "share_bananen",
+      "op": "share",
+      "icon": "objekt_banane",
+      "family": "story_multdiv"
+    },
+    {
+      "id": "share_fische",
+      "op": "share",
+      "icon": "objekt_fisch",
+      "family": "story_multdiv"
+    },
+    {
+      "id": "share_eimer",
+      "op": "share",
+      "icon": "objekt_eimer",
+      "family": "story_multdiv"
+    },
+    {
+      "id": "share_naepfe",
+      "op": "share",
+      "icon": "objekt_futternapf",
+      "family": "story_multdiv"
+    },
+    {
+      "id": "measure_fische",
+      "op": "measure",
+      "icon": "objekt_fisch",
+      "family": "story_multdiv"
+    },
+    {
+      "id": "measure_bananen",
+      "op": "measure",
+      "icon": "objekt_banane",
+      "family": "story_multdiv"
+    },
+    {
+      "id": "measure_elefanten",
+      "op": "measure",
+      "icon": "karte_elefant",
+      "family": "story_multdiv"
+    },
+    {
+      "id": "measure_naepfe",
+      "op": "measure",
+      "icon": "objekt_futternapf",
+      "family": "story_multdiv"
+    }
+  ]
+}

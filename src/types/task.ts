@@ -70,6 +70,12 @@ export type TaskAnswer = number | number[] | string;
 /** Bestandteil einer Rechnung oder Zahlenreihe: Zahl, Zeichen oder die gesuchte Stelle. */
 export type Term = number | '+' | '-' | '·' | ':' | '=' | '<' | ',' | '?';
 
+/**
+ * Bild zu einer Sachaufgabe: Gruppen gleicher Dinge (Texturschlüssel `icon`).
+ * crossed: so viele Dinge der letzten Gruppe sind durchgestrichen (Wegnehmen).
+ */
+export type StoryPicture = { icon: string; groups: number[]; crossed?: number };
+
 /** Typische falsche Antwort mit Fehlerart (für Antwortkarten und Rückmeldung). */
 export type TypicalError = { value: number; errorTag: string };
 
@@ -92,8 +98,17 @@ export type Task = {
   family: string;
   level: TaskLevel;
   kind: TaskKind;
-  /** Rechnung oder Zahlenreihe; textKey: Frage dazu (Schlüssel in den Texten) */
-  prompt: { terms: Term[]; textKey?: string; images?: string[] };
+  /**
+   * Rechnung oder Zahlenreihe; textKey: Frage dazu (Schlüssel in den Texten).
+   * Sachaufgaben: story (Vorlage und Zahlen) und picture (Bild der Dinge aus der Geschichte).
+   */
+  prompt: {
+    terms: Term[];
+    textKey?: string;
+    images?: string[];
+    story?: { id: string; params: TextParams };
+    picture?: StoryPicture;
+  };
   answer: TaskAnswer;
   /** true: Reihenfolge der Zahlen in einer Antwortliste ist egal */
   unordered?: boolean;

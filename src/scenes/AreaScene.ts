@@ -60,14 +60,16 @@ export class AreaScene extends BaseScene<AreaSceneData> {
     let levelsTop = BOARD.y + 150;
     if (area.families.length > 1) {
       const n = area.families.length;
-      const rowW = n * TAB.w + (n - 1) * TAB.gap;
+      // Bis zu vier Themen in einer Reihe; Beschriftungen zweizeilig, wenn es eng wird.
+      const tabW = Math.min(TAB.w, Math.floor((BOARD.w - 24 - (n - 1) * TAB.gap) / n));
+      const rowW = n * tabW + (n - 1) * TAB.gap;
       area.families.forEach((f, i) => {
         const data: AreaSceneData = { areaId: area.id, family: f };
         this.addButton({
-          x: BOARD.x - rowW / 2 + TAB.w / 2 + i * (TAB.w + TAB.gap),
+          x: BOARD.x - rowW / 2 + tabW / 2 + i * (tabW + TAB.gap),
           y: BOARD.y + 120,
-          width: TAB.w,
-          label: this.t(`family.${f}`),
+          width: tabW,
+          label: this.t(n > 3 ? `family.${f}.short` : `family.${f}`),
           fontSize: 20,
           fill: f === family ? Color.sonne : Color.papier,
           onPress: () => this.scene.restart(data),

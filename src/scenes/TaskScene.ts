@@ -33,7 +33,8 @@ import { TenFrame } from '../ui/math/TenFrame';
 import { TensOnes } from '../ui/math/TensOnes';
 import { Numpad } from '../ui/Numpad';
 import { ProgressDots } from '../ui/ProgressDots';
-import { Color, Layout, reducedMotion, Tex } from '../ui/theme';
+import { StoryPictureView } from '../ui/StoryPictureView';
+import { Color, CssColor, FontFamily, FontSize, Layout, reducedMotion, Tex } from '../ui/theme';
 
 const NEXT_DELAY = 1600;
 
@@ -76,6 +77,9 @@ export class TaskScene extends BaseScene<TaskSceneData> {
   private expression?: Expression;
   private answerInput?: Numpad | AnswerCards;
   private feedbackIcon?: Phaser.GameObjects.Image;
+  /** Text, Einheit und Bild einer Sachaufgabe */
+  private storyObjects: Phaser.GameObjects.GameObject[] = [];
+  private picture?: StoryPictureView;
   private nextButton?: Button;
 
   constructor(services: Services) {
@@ -193,14 +197,22 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     this.nextButton = undefined;
     this.expression?.destroy();
     this.answerInput?.destroy();
-    this.showQuestion();
+    for (const o of this.storyObjects) o.destroy();
+    this.storyObjects = [];
+    this.picture = undefined;
 
     const { done, total } = progress(this.round);
     this.dots.setProgress(done, total);
 
-    this.expression = new Expression(this, PANEL.x, 200, task.prompt.terms);
-    this.expression.setAnswer('');
-    if (task.kind === 'choice' && task.options) {
+    if (task.prompt.story) {
+      this.showStory(task);
+    } else {
+      this.panel.setY(PANEL.y);
+      this.expression = new Expression(this, PANEL.x, 200, task.prompt.terms);
+    }
+    this.showQuestion();
+    this.expression?.setAnswer('');
+    if (task.options) {
       this.answerInput = new AnswerCards(this, INPUT_X, INPUT_Y, task.options, (value) =>
         this.submit(value),
       );
@@ -214,6 +226,44 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       });
     }
     if (this.aid) this.showAid(this.aid);
+  }
+
+  /**
+   * Sachaufgabe: Text oben, darunter das Antwortkästchen mit Einheit, unten das Bild.
+   * Der Hinweisbereich rückt unter das Antwortkästchen; das Bild bleibt bei Hinweisen stehen.
+   */
+  private showStory(task: Task): void {
+    const story = task.prompt.story!;
+    const left = PANEL.x - PANEL.width / 2;
+    const text = this.add
+      .text(left, 140, this.t(`story.${story.id}`, story.params), {
+        fontFamily: FontFamily.text,
+        fontSize: `${FontSize.text}px`,
+        color: CssColor.text,
+        wordWrap: { width: PANEL.width },
+        lineSpacing: 4,
+      })
+      .setOrigin(0, 0);
+    const answerY = 140 + text.height + 52;
+    this.expression = new Expression(this, PANEL.x - 60, answerY, task.prompt.terms);
+    const unit = this.add
+      .text(PANEL.x + 16, answerY, this.storyUnit(), {
+        fontFamily: FontFamily.text,
+        fontSize: `${FontSize.digits - 8}px`,
+        color: CssColor.text,
+      })
+      .setOrigin(0, 0.5);
+    this.storyObjects.push(text, unit);
+    this.panel.setY(answerY + 54);
+    if (task.prompt.picture) {
+      this.picture = new StoryPictureView(this, PANEL.x, 470, task.prompt.picture, PANEL.width);
+      this.storyObjects.push(this.picture);
+    }
+  }
+
+  private storyUnit(): string {
+    const story = this.task.prompt.story;
+    return story ? this.t(`story.${story.id}.unit`) : '';
   }
 
   /** Frage zur Aufgabe (z. B. „Welche Zahl fehlt in der Reihe?“), sonst leer. */
@@ -341,7 +391,15 @@ export class TaskScene extends BaseScene<TaskSceneData> {
   private showFeedbackIcon(texture: string): void {
     this.feedbackIcon?.destroy();
     if (!this.expression) return;
-    this.feedbackIcon = this.add.image(this.expression.rightEdge + 50, 200, texture).setScale(0.8);
+    // Bei Sachaufgaben steht der Haken hinter der Einheit.
+    const right = Math.max(
+      this.expression.rightEdge,
+      ...this.storyObjects
+        .filter((o): o is Phaser.GameObjects.Text => o instanceof Phaser.GameObjects.Text)
+        .filter((t) => Math.abs(t.y - this.expression!.y) < 10)
+        .map((t) => t.x + t.width),
+    );
+    this.feedbackIcon = this.add.image(right + 50, this.expression.y, texture).setScale(0.8);
     if (!reducedMotion()) {
       this.feedbackIcon.setScale(0);
       this.tweens.add({
@@ -357,7 +415,8 @@ export class TaskScene extends BaseScene<TaskSceneData> {
   // Hinweise, Hilfen, Vorlesen
 
   private hintText(hint: Hint): string {
-    return this.t(hint.key, hint.params);
+    const unit = this.storyUnit();
+    return this.t(hint.key, unit ? { ...hint.params, unit } : hint.params);
   }
 
   private visualFor(visual: Visual): Phaser.GameObjects.GameObject {
@@ -383,6 +442,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
 
   private showHint(hint: Hint, text: string, icon: string): void {
     this.aid = undefined;
+    this.picture?.setVisible(true);
     this.panel.show(text, icon, hint.visual ? this.visualFor(hint.visual) : undefined);
   }
 
@@ -398,6 +458,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
   private toggleAid(aid: Aid): void {
     if (this.aid === aid) {
       this.aid = undefined;
+      this.picture?.setVisible(true);
       this.showQuestion();
       return;
     }
@@ -409,12 +470,17 @@ export class TaskScene extends BaseScene<TaskSceneData> {
   private knownNumbers(): number[] {
     const m = this.task.math;
     if (m) return m.missing === 'b' ? [m.a, m.result] : [m.a, m.b];
+    const story = this.task.prompt.story;
+    if (story) {
+      return Object.values(story.params).filter((v): v is number => typeof v === 'number');
+    }
     return this.task.prompt.terms.filter((t): t is number => typeof t === 'number');
   }
 
   private showAid(aid: Aid): void {
     const known = this.knownNumbers();
     if (known.length === 0) return;
+    this.picture?.setVisible(false);
     let visual: Phaser.GameObjects.GameObject;
     if (aid === 'tensOnes') {
       visual = new TensOnes(this, PANEL.x, VISUAL_Y - 10, known.slice(0, 3));
@@ -442,6 +508,12 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       ',': this.t('read.comma'),
       '?': this.t('read.unknown'),
     };
+    const story = this.task.prompt.story;
+    if (story) {
+      const extra = this.panel.message ? ` ${this.panel.message}` : '';
+      this.services.audio.speak(`${this.t(`story.${story.id}`, story.params)}${extra}`);
+      return;
+    }
     const terms = this.task.prompt.terms
       .map((term) => (typeof term === 'number' ? String(term) : (words[term] ?? term)))
       .join(' ')

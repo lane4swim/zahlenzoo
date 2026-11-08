@@ -9,12 +9,12 @@
     {
       "id": "pinguinfelsen",
       "animal": "penguin",
-      "families": ["plus_facts_20", "add_100", "sub_100"]
+      "families": ["plus_facts_20", "add_100", "sub_100", "story_addsub"]
     },
     {
       "id": "elefantenwiese",
       "animal": "elephant",
-      "families": ["mult_table"],
+      "families": ["mult_table", "story_multdiv"],
       "requires": "pinguinfelsen"
     },
     {

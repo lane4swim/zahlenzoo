@@ -5,7 +5,9 @@ import hints from './hints.de.json';
 import legal from './legal.json';
 import praise from './praise.de.json';
 import rules from './rules.json';
+import stories from './stories.json';
 import strings from './strings.de.json';
+import wordTemplates from './word-templates.de.json';
 import type { RawContent } from '../logic/content';
 
 /**
@@ -13,7 +15,15 @@ import type { RawContent } from '../logic/content';
  * So passen Code und Daten nach einem Update immer zusammen, auch wenn der Browser
  * einzelne Dateien noch aus dem Cache liefert.
  */
-export const RAW_CONTENT: RawContent = { rules, areas, families, animals, praise, legal };
+export const RAW_CONTENT: RawContent = {
+  rules,
+  areas,
+  families,
+  animals,
+  praise,
+  legal,
+  stories,
+};
 
-/** Texte je Sprache: Oberfläche und Hinweise. */
-export const TEXTS_DE: readonly unknown[] = [strings, hints];
+/** Texte je Sprache: Oberfläche, Hinweise und Sachaufgaben. */
+export const TEXTS_DE: readonly unknown[] = [strings, hints, wordTemplates];

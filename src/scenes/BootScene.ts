@@ -29,6 +29,12 @@ const IMAGES: Record<string, string> = {
   [Tex.mapLock]: 'img/map/karte_schloss_128.png',
   [Tex.mapSign]: 'img/map/karte_schild_128.png',
   ...Object.fromEntries(
+    ['objekt_fisch', 'objekt_eimer', 'objekt_banane', 'objekt_futternapf'].map((key) => [
+      key,
+      `img/objects/${key}_256.png`,
+    ]),
+  ),
+  ...Object.fromEntries(
     [Tex.menuStart, Tex.menuProfile, Tex.menuAdults, Tex.menuRoundEnd].map((key) => [
       key,
       `img/menus/${key}_1024x768.png`,

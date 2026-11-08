@@ -38,8 +38,19 @@ export type FamilyConfig = {
   levels: Readonly<Record<string, LevelParams>>;
 };
 
+/** Rechenart einer Sachaufgabe: hinzufügen, wegnehmen, malnehmen, verteilen, aufteilen. */
+export type StoryOp = 'add' | 'sub' | 'mult' | 'share' | 'measure';
+
+/** Vorlage einer Sachaufgabe (stories.json); Text und Einheit in word-templates.de.json. */
+export type StoryTemplate = { id: string; op: StoryOp; icon: string; family: string };
+
 /** Parameter, die ein Generator für eine Aufgabe bekommt. */
-export type FamilyParams = { kinds: Readonly<Record<string, number>>; level: LevelParams };
+export type FamilyParams = {
+  kinds: Readonly<Record<string, number>>;
+  level: LevelParams;
+  /** Sachaufgaben-Vorlagen dieser Familie */
+  stories?: readonly StoryTemplate[];
+};
 
 type Point = { x: number; y: number };
 
@@ -68,4 +79,5 @@ export type GameContent = {
   animals: Readonly<Record<string, AnimalConfig>>;
   praise: Praise;
   legal: Legal;
+  stories: StoryTemplate[];
 };
