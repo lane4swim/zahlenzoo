@@ -18,22 +18,17 @@ import type { Services } from '../services/services';
 import { GameEvent, type AnswerSubmittedPayload, type RoundFinishedPayload } from '../types/events';
 import type { AnswerOutcome } from '../types/round';
 import { SceneKey, type TaskSceneData } from '../types/scenes';
-import type { CheckResult, Hint, Task, TaskLevel } from '../types/task';
+import type { CheckResult, Hint, Task, TaskLevel, Visual } from '../types/task';
+import { AnimalSprite } from '../ui/AnimalSprite';
+import { ANIMAL_ART, hasAreaArt, taskBackground } from '../ui/animals';
 import { AnswerCards } from '../ui/AnswerCards';
 import { Button } from '../ui/Button';
 import { Expression } from '../ui/Expression';
 import { HintPanel } from '../ui/HintPanel';
-import {
-  drawHundredBoardIcon,
-  drawNumberLineIcon,
-  drawSpeaker,
-  drawTensOnesIcon,
-} from '../ui/icons';
 import { HundredBoard } from '../ui/math/HundredBoard';
 import { NumberLine } from '../ui/math/NumberLine';
 import { TensOnes } from '../ui/math/TensOnes';
 import { Numpad } from '../ui/Numpad';
-import { Penguin } from '../ui/Penguin';
 import { ProgressDots } from '../ui/ProgressDots';
 import { Color, Layout, reducedMotion, Tex } from '../ui/theme';
 
@@ -42,23 +37,27 @@ const MAX_ATTEMPTS = 3;
 /** Höchstens so viele Wiederholungen hängt eine Runde an. */
 const MAX_REPEATS = 2;
 const PRAISE_COUNT = 6;
-const NEXT_DELAY = 1400;
+const NEXT_DELAY = 1600;
 
 type Aid = 'tensOnes' | 'numberLine' | 'hundredBoard';
 
 // Aufteilung der Fläche 1024 × 768
-const PANEL = { x: 600, y: 300, width: 760 };
-const VISUAL_Y = 420;
+const PANEL = { x: 624, y: 300, width: 712 };
+/** Eingabe etwas weiter links als die Tafel, damit vier Antwortkarten Platz haben. */
+const INPUT_X = 600;
+const VISUAL_Y = 440;
 const INPUT_Y = 648;
+const ANIMAL_HEIGHT = 230;
 
 /**
  * Aufgabenansicht: Tier links, Rechnung oben, Hinweise in der Mitte, Eingabe unten.
- * Ablauf je Aufgabe: richtig → Lob und weiter; falsch → Hinweis 1 und zweiter Versuch;
- * wieder falsch → Hinweis 2 mit Rechenstrich und dritter Versuch; wieder falsch →
- * Rechenweg, dieselbe Familie kommt später in der Runde noch einmal.
+ * Ablauf je Aufgabe: richtig → Tier bekommt Futter, Lob, weiter; falsch → Hinweis 1
+ * und zweiter Versuch; wieder falsch → Hinweis 2 mit Bild und dritter Versuch;
+ * wieder falsch → Lösungsweg, dieselbe Familie kommt später in der Runde noch einmal.
  */
 export class TaskScene extends BaseScene<TaskSceneData> {
   private areaId = '';
+  private animalId = '';
   private level: TaskLevel = 1;
   private family = '';
   private round!: Round;
@@ -73,7 +72,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
   private aid: Aid | undefined;
   private strategies: Array<{ strategyId: string; outcome: AnswerOutcome }> = [];
 
-  private penguin!: Penguin;
+  private animal?: AnimalSprite;
   private dots!: ProgressDots;
   private panel!: HintPanel;
   private expression?: Expression;
@@ -94,6 +93,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     const area = findArea(data.areaId);
     if (!area?.family) throw new Error(`Bereich ${data.areaId} hat keine Aufgaben`);
     this.family = area.family.id;
+    this.animalId = area.animal;
     // Startwert aus der Uhrzeit: jede Runde ist anders, im Test aber reproduzierbar.
     const rng = createRng(Date.now() >>> 0);
     this.praiseIndex = rng.int(0, PRAISE_COUNT - 1);
@@ -109,20 +109,32 @@ export class TaskScene extends BaseScene<TaskSceneData> {
 
   create(): void {
     const { width } = this.scale;
-    this.add.rectangle(0, 0, width, 132, Color.himmel).setOrigin(0);
-    this.addBackButton(() => this.scene.start(SceneKey.Map), this.t('task.toMap'));
-    this.dots = new ProgressDots(this, width / 2 - 40, Layout.margin + Layout.minTouch / 2);
+    if (hasAreaArt(this.areaId)) this.add.image(0, 0, taskBackground(this.areaId)).setOrigin(0);
+    else this.add.rectangle(0, 0, width, 132, Color.himmel).setOrigin(0);
+
+    const top = Layout.margin + Layout.minTouch / 2;
+    this.addButton({
+      x: Layout.margin + 48,
+      y: top,
+      width: 96,
+      label: this.t('task.toMap'),
+      icon: Tex.mapIcon,
+      iconScale: 0.5,
+      onPress: () => this.scene.start(SceneKey.Map),
+    });
+    this.dots = new ProgressDots(this, width / 2 - 20, top);
     this.addButton({
       x: width - Layout.margin - 48 - 112,
-      y: Layout.margin + 48,
+      y: top,
       width: 96,
       label: this.t('task.readAloud'),
-      drawIcon: drawSpeaker,
+      icon: Tex.speaker,
+      iconScale: 0.5,
       onPress: () => this.readAloud(),
     });
     this.addButton({
       x: width - Layout.margin - 48,
-      y: Layout.margin + 48,
+      y: top,
       width: 96,
       label: this.t('task.hint'),
       icon: Tex.hint,
@@ -130,7 +142,16 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       onPress: () => this.showNextHint(),
     });
 
-    this.penguin = new Penguin(this, 120, 330).setScale(0.7);
+    const art = ANIMAL_ART[this.animalId];
+    if (art) {
+      this.animal = new AnimalSprite(
+        this,
+        art.taskSpot.x,
+        art.taskSpot.y,
+        this.animalId,
+        ANIMAL_HEIGHT,
+      );
+    }
     this.createAidButtons();
 
     this.panel = new HintPanel(this, PANEL.x, PANEL.y, PANEL.width);
@@ -143,17 +164,18 @@ export class TaskScene extends BaseScene<TaskSceneData> {
   // Aufbau einer Aufgabe
 
   private createAidButtons(): void {
-    const aids: Array<[Aid, (g: Phaser.GameObjects.Graphics) => void]> = [
-      ['tensOnes', drawTensOnesIcon],
-      ['numberLine', drawNumberLineIcon],
-      ['hundredBoard', drawHundredBoardIcon],
+    const aids: Array<[Aid, string]> = [
+      ['tensOnes', Tex.aidTens],
+      ['numberLine', Tex.aidLine],
+      ['hundredBoard', Tex.aidHundred],
     ];
     aids.forEach(([aid, icon], i) => {
       this.addButton({
         x: Layout.margin + 48,
         y: 420 + i * 112,
         width: 96,
-        drawIcon: icon,
+        icon,
+        iconScale: 0.8,
         onPress: () => this.toggleAid(aid),
       });
     });
@@ -167,13 +189,13 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     this.hintStage = 0;
     this.usedHelp = false;
     this.locked = false;
-    this.penguin.idle();
-    this.panel.clear();
+    this.animal?.idle();
     this.feedbackIcon?.destroy();
     this.nextButton?.destroy();
     this.nextButton = undefined;
     this.expression?.destroy();
     this.answerInput?.destroy();
+    this.showQuestion();
 
     const { done, total } = progress(this.round);
     this.dots.setProgress(done, total);
@@ -181,12 +203,12 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     this.expression = new Expression(this, PANEL.x, 200, task.prompt.terms);
     this.expression.setAnswer('');
     if (task.kind === 'choice' && task.options) {
-      this.answerInput = new AnswerCards(this, PANEL.x, INPUT_Y, task.options, (value) =>
+      this.answerInput = new AnswerCards(this, INPUT_X, INPUT_Y, task.options, (value) =>
         this.submit(value),
       );
     } else {
       this.answerInput = new Numpad(this, {
-        x: PANEL.x,
+        x: INPUT_X,
         y: INPUT_Y,
         okLabel: this.t('common.ok'),
         onChange: (value) => this.expression?.setAnswer(value),
@@ -194,6 +216,12 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       });
     }
     if (this.aid) this.showAid(this.aid);
+  }
+
+  /** Frage zur Aufgabe (z. B. „Welche Zahl fehlt in der Reihe?“), sonst leer. */
+  private showQuestion(): void {
+    const key = this.task.prompt.textKey;
+    this.panel.show(key ? this.t(key) : '');
   }
 
   private submit(value: string): void {
@@ -215,13 +243,14 @@ export class TaskScene extends BaseScene<TaskSceneData> {
 
   private onCorrect(value: string): void {
     this.locked = true;
-    this.lockInput(true);
+    this.answerInput?.setLocked(true);
     const outcome: AnswerOutcome =
       this.attempts === 0 && !this.usedHelp ? 'first_try' : 'with_help';
     this.expression?.setAnswer(value, 'correct');
     if (this.answerInput instanceof AnswerCards) this.answerInput.markCorrect(value);
     this.showFeedbackIcon(Tex.correct);
-    this.penguin.cheer();
+    // Jede richtige Antwort versorgt das Tier sichtbar (Spezifikation, Abschnitt 5).
+    this.animal?.feed();
     const praise =
       outcome === 'first_try'
         ? this.t(`praise.${(this.praiseIndex++ % PRAISE_COUNT) + 1}`)
@@ -233,7 +262,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
 
   private onWrong(value: string, result: CheckResult): void {
     this.attempts++;
-    this.penguin.think();
+    this.animal?.think();
     if (this.answerInput instanceof AnswerCards) this.answerInput.markWrong(value);
     if (this.answerInput instanceof Numpad) this.answerInput.clear();
 
@@ -252,7 +281,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
 
   private showSolution(): void {
     this.locked = true;
-    this.lockInput(true);
+    this.answerInput?.setLocked(true);
     this.hintStage = 3;
     const hint = this.task.hints[2];
     this.expression?.setAnswer(String(this.task.answer), 'solution');
@@ -266,7 +295,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     this.answerInput?.destroy();
     this.answerInput = undefined;
     this.nextButton = this.addButton({
-      x: PANEL.x,
+      x: INPUT_X,
       y: INPUT_Y,
       width: 260,
       label: this.t('common.next'),
@@ -305,10 +334,6 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     this.scene.start(SceneKey.RoundEnd, payload);
   }
 
-  private lockInput(locked: boolean): void {
-    this.answerInput?.setLocked(locked);
-  }
-
   private showFeedbackIcon(texture: string): void {
     this.feedbackIcon?.destroy();
     if (!this.expression) return;
@@ -331,20 +356,24 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     return this.t(hint.key, hint.params);
   }
 
+  private visualFor(visual: Visual): Phaser.GameObjects.GameObject {
+    if (visual.type === 'hundred') {
+      return new HundredBoard(this, PANEL.x, VISUAL_Y + 4, visual.marked);
+    }
+    return new NumberLine(
+      this,
+      PANEL.x,
+      VISUAL_Y + 40,
+      PANEL.width - 80,
+      visual.start,
+      visual.jumps,
+      visual.hideResults,
+    );
+  }
+
   private showHint(hint: Hint, text: string, icon: string): void {
     this.aid = undefined;
-    const visual = hint.visual
-      ? new NumberLine(
-          this,
-          PANEL.x,
-          VISUAL_Y + 30,
-          PANEL.width - 80,
-          hint.visual.start,
-          hint.visual.jumps,
-          hint.visual.hideResults,
-        )
-      : undefined;
-    this.panel.show(text, icon, visual);
+    this.panel.show(text, icon, hint.visual ? this.visualFor(hint.visual) : undefined);
   }
 
   /** Hinweis-Knopf: nächste Hilfestufe; die Antwort zählt dann als „mit Hilfe“. */
@@ -359,35 +388,52 @@ export class TaskScene extends BaseScene<TaskSceneData> {
   private toggleAid(aid: Aid): void {
     if (this.aid === aid) {
       this.aid = undefined;
-      this.panel.clear();
+      this.showQuestion();
       return;
     }
     this.aid = aid;
     this.showAid(aid);
   }
 
-  private showAid(aid: Aid): void {
+  /** Bekannte Zahlen der Aufgabe (ohne die gesuchte). */
+  private knownNumbers(): number[] {
     const m = this.task.math;
-    if (!m) return;
-    const known = m.missing === 'b' ? [m.a, m.result] : [m.a, m.b];
+    if (m) return m.missing === 'b' ? [m.a, m.result] : [m.a, m.b];
+    return this.task.prompt.terms.filter((t): t is number => typeof t === 'number');
+  }
+
+  private showAid(aid: Aid): void {
+    const known = this.knownNumbers();
+    if (known.length === 0) return;
     let visual: Phaser.GameObjects.GameObject;
-    if (aid === 'tensOnes') visual = new TensOnes(this, PANEL.x, VISUAL_Y - 10, known);
-    else if (aid === 'numberLine')
-      visual = new NumberLine(this, PANEL.x, VISUAL_Y + 30, PANEL.width - 80, m.a, []);
-    else visual = new HundredBoard(this, PANEL.x, VISUAL_Y - 30, known);
-    this.panel.show(aid === 'hundredBoard' ? '' : this.t(`task.aid.${aid}`), undefined, visual);
+    if (aid === 'tensOnes') {
+      visual = new TensOnes(this, PANEL.x, VISUAL_Y - 10, known.slice(0, 3));
+    } else if (aid === 'numberLine') {
+      visual = new NumberLine(this, PANEL.x, VISUAL_Y + 40, PANEL.width - 80, known[0] ?? 0, []);
+    } else {
+      visual = new HundredBoard(this, PANEL.x, VISUAL_Y + 4, known);
+    }
+    const question = this.task.prompt.textKey ? `${this.t(this.task.prompt.textKey)} ` : '';
+    this.panel.show(
+      aid === 'hundredBoard' ? question : `${question}${this.t(`task.aid.${aid}`)}`,
+      undefined,
+      visual,
+    );
   }
 
   private readAloud(): void {
+    const words: Record<string, string> = {
+      '+': this.t('read.plus'),
+      '-': this.t('read.minus'),
+      '=': this.t('read.equals'),
+      '<': this.t('read.less'),
+      ',': this.t('read.comma'),
+      '?': this.t('read.unknown'),
+    };
     const terms = this.task.prompt.terms
-      .map((term) => {
-        if (term === '+') return this.t('read.plus');
-        if (term === '-') return this.t('read.minus');
-        if (term === '=') return this.t('read.equals');
-        if (term === '?') return this.t('read.unknown');
-        return String(term);
-      })
-      .join(' ');
+      .map((term) => (typeof term === 'number' ? String(term) : (words[term] ?? term)))
+      .join(' ')
+      .replace(/ ,/g, ',');
     const extra = this.panel.message ? `. ${this.panel.message}` : '';
     this.services.audio.speak(`${terms}${extra}`);
   }

@@ -21,13 +21,19 @@ export type TaskLevel = 0 | 1 | 2 | 3;
 export type TextParams = Readonly<Record<string, string | number>>;
 
 /** Darstellungen für Hinweise und einblendbare Hilfen. */
-export type Visual = {
-  /** Rechenstrich: Start, Sprünge; Zwischenwerte auf Wunsch verdeckt. */
-  type: 'jumps';
-  start: number;
-  jumps: number[];
-  hideResults?: boolean;
-};
+export type Visual =
+  | {
+      /** Rechenstrich: Start, Sprünge; Zwischenwerte auf Wunsch verdeckt. */
+      type: 'jumps';
+      start: number;
+      jumps: number[];
+      hideResults?: boolean;
+    }
+  | {
+      /** Hundertertafel mit markierten Zahlen */
+      type: 'hundred';
+      marked: number[];
+    };
 
 /**
  * Eine Hilfestufe: 1 lenkender Satz, 2 Bild der Strategie, 3 Lösung mit Rechenweg.
@@ -43,8 +49,11 @@ export type TaskOption = { value: string; errorTag?: string };
 
 export type TaskAnswer = number | number[] | string;
 
-/** Bestandteil einer Rechnung: Zahl, Zeichen oder die gesuchte Stelle. */
-export type Term = number | '+' | '-' | '=' | '?';
+/** Bestandteil einer Rechnung oder Zahlenreihe: Zahl, Zeichen oder die gesuchte Stelle. */
+export type Term = number | '+' | '-' | '=' | '<' | ',' | '?';
+
+/** Typische falsche Antwort mit Fehlerart (für Antwortkarten und Rückmeldung). */
+export type TypicalError = { value: number; errorTag: string };
 
 /** Zahlen einer Rechnung, damit Prüfer und Hilfen nicht den Text zerlegen müssen. */
 export type MathInfo = {
@@ -65,7 +74,8 @@ export type Task = {
   family: string;
   level: TaskLevel;
   kind: TaskKind;
-  prompt: { terms: Term[]; images?: string[] };
+  /** Rechnung oder Zahlenreihe; textKey: Frage dazu (Schlüssel in den Texten) */
+  prompt: { terms: Term[]; textKey?: string; images?: string[] };
   answer: TaskAnswer;
   /** true: Reihenfolge der Zahlen in einer Antwortliste ist egal */
   unordered?: boolean;
@@ -74,6 +84,8 @@ export type Task = {
   /** Verweis auf die Strategie, z. B. "add_stepwise" */
   strategyId?: string;
   math?: MathInfo;
+  /** typische Fehler, falls nicht aus `math` ableitbar */
+  typicalErrors?: TypicalError[];
   /** Schlüssel zum Erkennen von Duplikaten; Tauschaufgaben haben denselben */
   dedupeKey: string;
 };

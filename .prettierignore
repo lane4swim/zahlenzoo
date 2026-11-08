@@ -4,3 +4,6 @@ coverage/
 package-lock.json
 docs/
 stilprobe/
+# erzeugt mit npm run art
+public/assets/img/
+art/svg/

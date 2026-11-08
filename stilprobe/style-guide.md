@@ -27,3 +27,7 @@ Verbindlich für alle Grafiken. Quelle der Werte: `tokens.json`. Erzeugung: `pyt
 - Neue Farbe `pinguin-gefieder` #6C8EA3 für Rücken und Kopf des Pinguins (Kontrast zur Kontur 3,3 : 1, wie `affe-fell`).
 - Zoo-Karte und Kartensymbole: Quellen in `art/build_map.py` (nutzt die Hilfsfunktionen dieser Stilprobe), Erzeugung mit `npm run art`.
 - Kartensymbole 128 × 128: Tierkopf in einem runden Abzeichen (Papier, Kontur 4 px) mit Bodenschatten; gesperrte Bereiche zeigen ein Schloss, Bereiche ohne Aufgaben ein leeres Schild, auf das das Spiel „bald“ setzt.
+- Szenengrafiken für Pinguinfelsen und Affenwald: `art/build_scenes.py`. Tiere in 5 Ausdrücken, Idle (6), Freude (8, Sprung mit erhobenen Armen bzw. Flossen), Fütterung (8, Banane bzw. Fisch), Baby (Körper kleiner, Kopf größer; Pinguinküken in `grau-warm`).
+- Hintergründe je Bereich zweimal: Gehege (`*_hintergrund_1024x768`) und Aufgabenansicht (`*_aufgabe_1024x768`, ruhige Mitte, Standfläche für das Tier links bei y = 330).
+- Skalierte Formen behalten 4 px Kontur (Linienstärke wird beim Skalieren ausgeglichen).
+- Kontaktbögen: `art/kontaktbogen_*.png`, erzeugt mit `npm run art`.

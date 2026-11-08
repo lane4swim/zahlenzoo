@@ -84,5 +84,18 @@
   "area.zoozaehlung": "Zoo-Zählung",
   "map.lockedHint": "Sammle 6 Sterne im Bereich {area}, dann geht es hier weiter.",
   "map.soonHint": "Hier wird noch gebaut. Bald kannst du hier spielen.",
-  "map.tapAnimal": "Tippe auf ein Tier."
+  "map.tapAnimal": "Tippe auf ein Tier.",
+  "task.prompt.neighbors": "Welche Zahl fehlt in der Reihe?",
+  "task.prompt.neighborTens": "Welcher Nachbarzehner fehlt?",
+  "task.prompt.sequenceNext": "Wie geht die Zahlenfolge weiter?",
+  "task.prompt.sequenceGap": "Welche Zahl fehlt in der Zahlenfolge?",
+  "read.comma": ",",
+  "read.less": "ist kleiner als",
+  "strategy.neighbor_pred": "Vorgänger",
+  "strategy.neighbor_succ": "Nachfolger",
+  "strategy.neighbor_between": "Zahl dazwischen",
+  "strategy.neighbor_tens_lower": "kleinerer Nachbarzehner",
+  "strategy.neighbor_tens_upper": "größerer Nachbarzehner",
+  "strategy.sequence_forward": "Zahlenfolgen vorwärts",
+  "strategy.sequence_backward": "Zahlenfolgen rückwärts"
 }

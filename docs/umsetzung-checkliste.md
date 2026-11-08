@@ -113,7 +113,7 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 
 **Bereiche und Familien** (Spez. 5, KE 2)
 
-- [ ] Affenwald: `count_steps_100`, `read_write_100`, `place_value_100`, `quick_count`, `order_100`, `compare_100`, `neighbors_100`, `number_sequences`
+- [ ] Affenwald: `count_steps_100`, `read_write_100`, `place_value_100`, `quick_count`, `order_100`, `compare_100`, `neighbors_100`, `number_sequences`; davon `neighbors_100` fertig (Stufe 1 Nachbarzahlen, Stufe 2 Nachbarzehner, Stufe 3 Zahlenfolgen in 2er-, 5er- und 10er-Schritten)
 - [ ] Pinguinfelsen: Stufe 0 `plus_facts_20`; `add_100`, `sub_100`, `decompose_10`, `complement_tens`, `tens_calc`, `estimate_100`, `smart_calc`, `path_choice`, `story_addsub`
 - [ ] Elefantenwiese: `double_half`, `mult_core`, `mult_derive`, Division als Verteilen und Aufteilen, `story_multdiv`
 - [ ] Zoo-Kasse: `money_calc`, `money_convert`, `compare_money`, `question_pick`, `exact_or_estimate`
@@ -163,11 +163,11 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 
 **Grafik und Ressourcen** (Spez. 11)
 
-- [ ] Weltkarte (2048 × 1536) und 8 Bereichshintergründe; Weltkarte fertig (`art/`, 1× im Spiel, @2× in `art/png`), Bereichshintergründe offen
-- [ ] 8 Tierarten × 4 Zustände plus 8 Baby-Varianten als Sprite-Sheets
+- [ ] Weltkarte (2048 × 1536) und 8 Bereichshintergründe; Weltkarte fertig, Hintergründe für Gehege und Aufgabenansicht von Pinguinfelsen und Affenwald fertig, 6 Bereiche offen (Quellen in `art/`, @2× mit `npm run art` erzeugbar)
+- [ ] 8 Tierarten × 4 Zustände plus 8 Baby-Varianten als Sprite-Sheets; Pinguin und Affe fertig (5 Ausdrücke, Idle, Freude, Fütterung, Baby), 6 Tierarten offen
 - [ ] Mathe-Darstellungen: Zehnerfeld, Hundertertafel, Rechenstrich, Zahlenstrahl, Zehnerstangen und Einerwürfel, Uhr, Münzen und Scheine (stilisiert), Muster-Kacheln, Formen, Körper
-- [ ] Rund 20 Aufgabenobjekte, 12 Dekorationen, 12 Abzeichen, 8 Profil-Avatare
-- [ ] UI-Atlas, Tier-Atlas, Objekt-Atlas
+- [ ] Rund 20 Aufgabenobjekte, 12 Dekorationen, 12 Abzeichen, 8 Profil-Avatare; 4 Futterobjekte fertig (Fisch, Eimer, Banane, Futternapf)
+- [ ] UI-Atlas, Tier-Atlas, Objekt-Atlas; Sprite-Sheets je Animation mit Atlas-JSON fertig, Symbole der Aufgabenansicht als Einzelbilder
 - [ ] 15 Soundeffekte und 8 Tierlaute, 3 Musikstücke
 - [ ] `ATTRIBUTIONS.md` für jede fremde Datei; Lizenzen geprüft (CC0, CC-BY mit Namensnennung, kein NC)
 

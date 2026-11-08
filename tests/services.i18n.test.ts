@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import hints from '../public/assets/data/hints.de.json';
 import strings from '../public/assets/data/strings.de.json';
 import { add100 } from '../src/logic/generators/add100';
+import { neighbors100 } from '../src/logic/generators/neighbors100';
 import { typicalErrors } from '../src/logic/options';
 import { createRng } from '../src/logic/rng';
 import { I18n } from '../src/services/i18n';
@@ -46,14 +47,20 @@ describe('Textdateien', () => {
   it('enthalten alle Hinweise, die der Generator verwendet, ohne offene Platzhalter', () => {
     for (let seed = 0; seed < 500; seed++) {
       for (const level of [1, 2, 3] as const) {
-        const task = add100(level, createRng(seed), 'x');
-        for (const hint of task.hints) {
-          expect(i18n.has(hint.key), hint.key).toBe(true);
-          expect(i18n.t(hint.key, hint.params)).not.toMatch(/\{\w+\}/);
-        }
-        if (task.strategyId) expect(i18n.has(`strategy.${task.strategyId}`)).toBe(true);
-        for (const e of typicalErrors(task.math!)) {
-          expect(i18n.has(`error.${e.errorTag}`), e.errorTag).toBe(true);
+        for (const task of [
+          add100(level, createRng(seed), 'x'),
+          neighbors100(level, createRng(seed), 'y'),
+        ]) {
+          for (const hint of task.hints) {
+            expect(i18n.has(hint.key), hint.key).toBe(true);
+            expect(i18n.t(hint.key, hint.params)).not.toMatch(/\{\w+\}/);
+          }
+          if (task.prompt.textKey) expect(i18n.has(task.prompt.textKey)).toBe(true);
+          if (task.strategyId) expect(i18n.has(`strategy.${task.strategyId}`)).toBe(true);
+          const errors = task.typicalErrors ?? typicalErrors(task.math!);
+          for (const e of errors) {
+            expect(i18n.has(`error.${e.errorTag}`), e.errorTag).toBe(true);
+          }
         }
       }
     }

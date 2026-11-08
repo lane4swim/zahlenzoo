@@ -55,8 +55,9 @@ export function check(task: Task, input: TaskInput): CheckResult {
 function tagFor(task: Task, value: number | string): { errorTag?: string } {
   const option = task.options?.find((o) => normalize(o.value) === String(value));
   if (option?.errorTag) return { errorTag: option.errorTag };
-  if (task.math && typeof value === 'number') {
-    const match = typicalErrors(task.math).find((e) => e.value === value);
+  if (typeof value === 'number') {
+    const errors = task.typicalErrors ?? (task.math ? typicalErrors(task.math) : []);
+    const match = errors.find((e) => e.value === value);
     if (match) return { errorTag: match.errorTag };
   }
   return {};
