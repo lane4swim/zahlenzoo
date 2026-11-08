@@ -23,6 +23,12 @@ const IMAGES: Record<string, string> = {
   [Tex.ten]: 'img/math/mathe_zehner_48x480.png',
   [Tex.one]: 'img/math/mathe_einer_64.png',
   [Tex.map]: 'img/map/karte_hintergrund_1024x768.png',
+  ...Object.fromEntries(
+    [Tex.menuStart, Tex.menuProfile, Tex.menuAdults, Tex.menuRoundEnd].map((key) => [
+      key,
+      `img/menus/${key}_1024x768.png`,
+    ]),
+  ),
   [Tex.mapLock]: 'img/map/karte_schloss_128.png',
   [Tex.mapSign]: 'img/map/karte_schild_128.png',
   ...Object.fromEntries(Object.values(AnimalIcon).map((key) => [key, `img/map/${key}_128.png`])),

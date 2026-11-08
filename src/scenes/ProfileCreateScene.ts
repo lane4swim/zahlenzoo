@@ -6,7 +6,7 @@ import { AVATARS, type Avatar } from '../types/save';
 import { SceneKey } from '../types/scenes';
 import { drawAvatar } from '../ui/AvatarBadge';
 import { Button } from '../ui/Button';
-import { Color, CssColor, FontFamily, FontSize } from '../ui/theme';
+import { Color, CssColor, FontFamily, FontSize, Tex } from '../ui/theme';
 
 /**
  * Neues Profil: Spitzname (HTML-Eingabefeld über der Leinwand, damit die
@@ -25,9 +25,10 @@ export class ProfileCreateScene extends BaseScene {
   create(): void {
     const cx = this.scale.width / 2;
     this.addBackButton(() => this.scene.start(SceneKey.Profile));
-    this.addTitle(this.t('profile.createTitle'), 80);
+    this.addBackground(Tex.menuProfile);
+    this.addTitle(this.t('profile.createTitle'), 106);
 
-    const field = this.add.dom(cx, 180, 'input', {
+    const field = this.add.dom(cx, 190, 'input', {
       width: '420px',
       height: '64px',
       fontSize: `${FontSize.text}px`,

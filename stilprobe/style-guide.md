@@ -21,7 +21,7 @@ Verbindlich für alle Grafiken. Quelle der Werte: `tokens.json`. Erzeugung: `pyt
 ## Noch festzulegen
 - Hintergrund-Ebenen für Parallax (2 bis 3) und Auflösung der @2x-Hintergründe.
 - Münzen und Scheine (eigene vereinfachte Darstellung), Uhr, Lineal, Formen.
-- Silhouetten je Tier; Kartensymbole für Elefant, Papagei, Eule, Schmetterling, Giraffe und Erdmännchen.
+- Silhouetten je Tier.
 
 ## Ergänzungen (7.11.2026)
 - Neue Farbe `pinguin-gefieder` #6C8EA3 für Rücken und Kopf des Pinguins (Kontrast zur Kontur 3,3 : 1, wie `affe-fell`).
@@ -31,3 +31,5 @@ Verbindlich für alle Grafiken. Quelle der Werte: `tokens.json`. Erzeugung: `pyt
 - Hintergründe je Bereich zweimal: Gehege (`*_hintergrund_1024x768`) und Aufgabenansicht (`*_aufgabe_1024x768`, ruhige Mitte, Standfläche für das Tier links bei y = 330).
 - Skalierte Formen behalten 4 px Kontur (Linienstärke wird beim Skalieren ausgeglichen).
 - Kontaktbögen: `art/kontaktbogen_*.png`, erzeugt mit `npm run art`.
+- Menü- und übrige Bereichshintergründe: `art/build_backgrounds.py`. Menüs: Start (Zoo-Eingang, Schild für den Titel bei y = 150), Profil (Wimpelkette, Luftballons), Erwachsene (ruhig), Rundenende (Strahlen, Konfetti am Rand). Aufgabenansichten: Hügel, Ast oder Stange links als Standfläche bei y ≈ 330, Fuß des Hügels verschwindet im Boden.
+- Übrige Tiere: `art/build_animals.py` (Elefant, Papagei, Eule, Schmetterling, Giraffe, Erdmännchen) mit gemeinsamem Gerüst für Ausdrücke, Idle, Freude, Fütterung, Baby und Kartensymbol. Futter: Heu, Nuss, Beeren, Blüte, Akazienzweig, Käfer. Neue Farbe `elefant-haut` #A3A9B8 (Kontrast zur Kontur 4,9 : 1).

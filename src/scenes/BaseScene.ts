@@ -43,6 +43,11 @@ export abstract class BaseScene<TData extends object = object> extends Phaser.Sc
     return this.services.i18n.t(key, params);
   }
 
+  /** Hintergrundbild über die ganze Fläche (1024 × 768). */
+  protected addBackground(key: string): Phaser.GameObjects.Image {
+    return this.add.image(0, 0, key).setOrigin(0);
+  }
+
   protected addButton(options: ButtonOptions): Button {
     return new Button(this, options);
   }

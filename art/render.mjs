@@ -26,6 +26,7 @@ const FPS = 12;
 function target(name) {
   if (FRAME.test(name)) return undefined;
   if (name.startsWith('karte_')) return 'map';
+  if (name.startsWith('menue_')) return 'menus';
   if (/_(hintergrund|aufgabe)_\d+x\d+$/.test(name)) return 'areas';
   if (name.startsWith('objekt_')) return 'objects';
   if (name.startsWith('ui_')) return 'ui';

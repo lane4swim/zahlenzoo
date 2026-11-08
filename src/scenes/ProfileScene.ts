@@ -3,6 +3,7 @@ import type { Services } from '../services/services';
 import { SceneKey } from '../types/scenes';
 import { drawAvatar } from '../ui/AvatarBadge';
 import { Button } from '../ui/Button';
+import { Tex } from '../ui/theme';
 
 const COLS = 3;
 
@@ -14,11 +15,12 @@ export class ProfileScene extends BaseScene {
 
   create(): void {
     const { save } = this.services;
-    this.addTitle(this.t('profile.title'), 80);
+    this.addBackground(Tex.menuProfile);
+    this.addTitle(this.t('profile.title'), 110);
     const profiles = save.profiles.slice(0, 9);
     profiles.forEach((profile, i) => {
       const x = this.scale.width / 2 + ((i % COLS) - 1) * 310;
-      const y = 200 + Math.floor(i / COLS) * 130;
+      const y = 230 + Math.floor(i / COLS) * 130;
       const button = new Button(this, {
         x,
         y,
