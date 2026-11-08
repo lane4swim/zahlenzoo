@@ -19,7 +19,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ['vite.config.ts', 'eslint.config.js'],
+    files: ['vite.config.ts', 'eslint.config.js', 'art/**/*.mjs'],
     languageOptions: { globals: { ...globals.node } },
   },
   {
