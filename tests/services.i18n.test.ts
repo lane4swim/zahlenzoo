@@ -10,7 +10,9 @@ import { sub100 } from '../src/logic/generators/sub100';
 import { typicalErrors } from '../src/logic/options';
 import { createRng } from '../src/logic/rng';
 import { I18n } from '../src/services/i18n';
-import { paramsOf } from './helpers/content';
+import { GENERATORS } from '../src/logic/generators';
+import type { TaskLevel } from '../src/types/task';
+import { CONTENT, paramsOf } from './helpers/content';
 import { AVATARS } from '../src/types/save';
 
 describe('I18n', () => {
@@ -69,6 +71,53 @@ describe('Textdateien', () => {
           for (const e of errors) {
             expect(i18n.has(`error.${e.errorTag}`), e.errorTag).toBe(true);
           }
+        }
+      }
+    }
+  });
+
+  it('enthalten für alle Familien Fragen, Antworten, Hinweise und Fehler ohne offene Platzhalter', () => {
+    const resolved = (params: Record<string, string | number> | undefined, own: object = {}) =>
+      Object.fromEntries(
+        Object.entries(params ?? {}).map(([k, v]) => [
+          k,
+          typeof v === 'string' && v.startsWith('@') ? i18n.t(v.slice(1), own as never) : v,
+        ]),
+      );
+    const open = /\{\w+\}/;
+    for (const family of Object.keys(CONTENT.families)) {
+      for (const level of [1, 2, 3] as TaskLevel[]) {
+        const params = paramsOf(family)(level);
+        for (let seed = 0; seed < 200; seed++) {
+          const task = GENERATORS[family]!(level, createRng(seed), 't', params);
+          const where = `${family} ${level} ${seed}`;
+          const own = task.prompt.textParams ?? {};
+          if (task.prompt.textKey) {
+            expect(i18n.has(task.prompt.textKey), where).toBe(true);
+            expect(i18n.t(task.prompt.textKey, own), where).not.toMatch(open);
+          }
+          if (task.prompt.instructionKey) {
+            expect(i18n.has(task.prompt.instructionKey), where).toBe(true);
+          }
+          for (const hint of task.hints) {
+            expect(i18n.has(hint.key), `${where} ${hint.key}`).toBe(true);
+            const text = i18n.t(hint.key, { unit: '€', ...resolved(hint.params, own) });
+            expect(text, `${where} ${hint.key}`).not.toMatch(open);
+            expect(text, `${where} ${hint.key}`).not.toMatch(/situation\./);
+          }
+          for (const o of task.options ?? []) {
+            if (o.label) {
+              expect(i18n.has(o.label.key), `${where} ${o.label.key}`).toBe(true);
+              expect(i18n.t(o.label.key, o.label.params), where).not.toMatch(open);
+            }
+            if (o.errorTag && o.errorTag !== 'other') {
+              expect(i18n.has(`error.${o.errorTag}`), `${where} ${o.errorTag}`).toBe(true);
+            }
+          }
+          for (const e of task.typicalErrors ?? []) {
+            expect(i18n.has(`error.${e.errorTag}`), `${where} ${e.errorTag}`).toBe(true);
+          }
+          if (task.strategyId) expect(i18n.has(`strategy.${task.strategyId}`), where).toBe(true);
         }
       }
     }

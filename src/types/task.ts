@@ -63,12 +63,20 @@ export type Hint = {
   visual?: Visual;
 };
 
-export type TaskOption = { value: string; errorTag?: string };
+/**
+ * Antwortkarte. Ohne `label` steht `value` auf der Karte; mit `label` ein Text aus den
+ * Sprachdateien (z. B. eine Frage zur Sachsituation).
+ */
+export type TaskOption = {
+  value: string;
+  errorTag?: string;
+  label?: { key: string; params?: TextParams };
+};
 
 export type TaskAnswer = number | number[] | string;
 
 /** Bestandteil einer Rechnung oder Zahlenreihe: Zahl, Zeichen oder die gesuchte Stelle. */
-export type Term = number | '+' | '-' | '·' | ':' | '=' | '<' | ',' | '?';
+export type Term = number | '+' | '-' | '·' | ':' | '=' | '<' | ',' | '?' | '€' | 'ct';
 
 /**
  * Bild zu einer Sachaufgabe: Gruppen gleicher Dinge (Texturschlüssel `icon`).
@@ -110,6 +118,8 @@ export type Task = {
     textKey?: string;
     /** Werte für Platzhalter in der Frage, z. B. { amount: '17 €' } */
     textParams?: TextParams;
+    /** Arbeitsanweisung, die zu Beginn im Hinweisbereich steht (z. B. „Welche Frage passt?“) */
+    instructionKey?: string;
     images?: string[];
     story?: { id: string; params: TextParams };
     picture?: StoryPicture;

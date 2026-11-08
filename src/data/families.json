@@ -206,6 +206,101 @@
           "subShare": 0.5
         }
       }
+    },
+    "money_convert": {
+      "title": "Cent und Euro umwandeln",
+      "kinds": {
+        "choice": 0.3
+      },
+      "levels": {
+        "1": {
+          "description": "Volle Euro in Cent und zurück (3 € = 300 ct)",
+          "maxEuro": 9,
+          "centStep": 0
+        },
+        "2": {
+          "description": "Euro und volle Zehner-Cent (2 € 30 ct = 230 ct)",
+          "maxEuro": 9,
+          "centStep": 10
+        },
+        "3": {
+          "description": "Beliebige Cent, auch mit Null an der Zehnerstelle (2 € 5 ct = 205 ct)",
+          "maxEuro": 9,
+          "centStep": 1
+        }
+      }
+    },
+    "compare_money": {
+      "title": "Geld vergleichen",
+      "kinds": {
+        "choice": 1
+      },
+      "levels": {
+        "1": {
+          "description": "Zwei Beträge in derselben Einheit, oft mit vertauschten Ziffern",
+          "options": 2,
+          "mixed": 0,
+          "max": 99,
+          "maxEuro": 9,
+          "equalShare": 0
+        },
+        "2": {
+          "description": "Zwei Beträge in verschiedenen Schreibweisen (1 € 50 ct oder 105 ct)",
+          "options": 2,
+          "mixed": 1,
+          "max": 99,
+          "maxEuro": 9,
+          "equalShare": 0
+        },
+        "3": {
+          "description": "Drei Beträge: am meisten oder gleich viel",
+          "options": 3,
+          "mixed": 1,
+          "max": 99,
+          "maxEuro": 9,
+          "equalShare": 0.5
+        }
+      }
+    },
+    "question_pick": {
+      "title": "Passende Frage",
+      "kinds": {
+        "choice": 1
+      },
+      "levels": {
+        "1": {
+          "description": "Falsche Fragen passen nicht zur Situation oder fragen nach Fehlendem"
+        },
+        "2": {
+          "description": "Falsche Fragen fragen nach Fehlendem oder nach dem, was schon im Text steht"
+        },
+        "3": {
+          "description": "Situationen mit überflüssigen Angaben"
+        }
+      }
+    },
+    "exact_or_estimate": {
+      "title": "Genau oder ungefähr",
+      "kinds": {
+        "choice": 1
+      },
+      "levels": {
+        "1": {
+          "description": "Eindeutige Situationen: genau rechnen oder ungefähr reicht",
+          "items": 3,
+          "maxBudget": 100
+        },
+        "2": {
+          "description": "Feinere Situationen",
+          "items": 3,
+          "maxBudget": 100
+        },
+        "3": {
+          "description": "Überschlag: Reicht das Geld? Preise nahe an vollen Zehnern",
+          "items": 3,
+          "maxBudget": 100
+        }
+      }
     }
   }
 }

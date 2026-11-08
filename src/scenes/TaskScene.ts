@@ -202,6 +202,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     this.nextButton?.destroy();
     this.nextButton = undefined;
     this.expression?.destroy();
+    this.expression = undefined as Expression | undefined;
     this.answerInput?.destroy();
     for (const o of this.storyObjects) o.destroy();
     this.storyObjects = [];
@@ -217,10 +218,12 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     }
     this.panel.clear();
     this.expression?.setAnswer('');
-    // Beim Geldlegen sind Teller und Münzen die Darstellung; die Rechenhilfen passen nicht.
-    for (const b of this.aidButtons) b.setVisible(!task.money);
+    // Rechenhilfen nur, wenn die Aufgabe Zahlen hat; beim Geldlegen sind Teller und
+    // Münzen die Darstellung.
+    for (const b of this.aidButtons) b.setVisible(!task.money && this.knownNumbers().length > 0);
+    const instruction = task.prompt.instructionKey ?? (task.money ? 'task.money.plate' : undefined);
+    if (instruction) this.panel.show(this.t(instruction));
     if (task.money) {
-      this.panel.show(this.t('task.money.plate'));
       this.answerInput = new MoneyInput(this, {
         x: INPUT_X,
         y: INPUT_Y,
@@ -232,8 +235,13 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       return;
     }
     if (task.options) {
-      this.answerInput = new AnswerCards(this, INPUT_X, INPUT_Y, task.options, (value) =>
-        this.submit(value),
+      this.answerInput = new AnswerCards(
+        this,
+        INPUT_X,
+        INPUT_Y,
+        task.options,
+        (value) => this.submit(value),
+        (option) => (option.label ? this.t(option.label.key, option.label.params) : option.value),
       );
     } else {
       this.answerInput = new Numpad(this, {
@@ -296,18 +304,23 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       this.expression = new Expression(this, PANEL.x, 200, task.prompt.terms);
       return;
     }
+    const text = this.t(key, task.prompt.textParams);
+    // Längere Sachsituationen stehen linksbündig wie bei Sachaufgaben.
+    const left = text.length > 60 || task.prompt.instructionKey !== undefined;
     const question = this.add
-      .text(PANEL.x, 146, this.t(key, task.prompt.textParams), {
+      .text(left ? PANEL.x - PANEL.width / 2 : PANEL.x, left ? 140 : 146, text, {
         fontFamily: FontFamily.text,
         fontSize: `${FontSize.text}px`,
         color: CssColor.text,
-        align: 'center',
+        align: left ? 'left' : 'center',
         wordWrap: { width: PANEL.width },
+        lineSpacing: 4,
       })
-      .setOrigin(0.5, 0);
+      .setOrigin(left ? 0 : 0.5, 0);
     this.storyObjects.push(question);
-    if (task.money) {
-      this.panel.setY(146 + question.height + 20);
+    if (task.prompt.terms.length === 0) {
+      // Ohne Rechnung (Geld legen, Vergleichen, Sachsituationen): Hinweise direkt darunter
+      this.panel.setY(question.y + question.height + 20);
       return;
     }
     const exprY = 146 + question.height + 52;
@@ -388,6 +401,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     this.answerInput?.setLocked(true);
     this.hintStage = 3;
     const hint = this.task.hints[2];
+    let nextY = INPUT_Y;
     this.expression?.setAnswer(String(this.task.answer), 'solution');
     this.showHint(hint, `${this.hintText(hint)} ${this.t('task.solutionShown')}`, Tex.hint);
     this.finishTask('wrong');
@@ -398,7 +412,11 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     // Die Eingabe weicht dem Weiter-Knopf, damit klar ist, was als Nächstes zu tun ist.
     // Beim Geldlegen bleibt der Teller stehen und zeigt den Lösungsweg.
     const money = this.task.money;
-    if (this.answerInput instanceof MoneyInput && money) {
+    if (this.answerInput instanceof AnswerCards && !this.expression) {
+      // Ohne Antwortkästchen bleibt die richtige Karte stehen, darunter „Weiter“.
+      this.answerInput.showSolution(String(this.task.answer), -110);
+      nextY = INPUT_Y + 40;
+    } else if (this.answerInput instanceof MoneyInput && money) {
       const cents = money.unit === 'euro' ? money.amount * 100 : money.amount;
       this.answerInput.setItems(fewestCoins(cents, money.denominations)).setTrayVisible(false);
     } else {
@@ -407,7 +425,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     }
     this.nextButton = this.addButton({
       x: INPUT_X,
-      y: INPUT_Y,
+      y: nextY,
       width: 260,
       label: this.t('common.next'),
       fill: Color.grasHell,
@@ -478,7 +496,15 @@ export class TaskScene extends BaseScene<TaskSceneData> {
 
   private hintText(hint: Hint): string {
     const unit = this.storyUnit();
-    return this.t(hint.key, unit ? { ...hint.params, unit } : hint.params);
+    const params: Record<string, string | number> = { ...hint.params };
+    // „@schlüssel“ verweist auf einen Text mit den Werten der Aufgabe (z. B. die passende Frage).
+    for (const [k, v] of Object.entries(params)) {
+      if (typeof v === 'string' && v.startsWith('@')) {
+        params[k] = this.t(v.slice(1), this.task.prompt.textParams);
+      }
+    }
+    if (unit) params.unit = unit;
+    return this.t(hint.key, params);
   }
 
   private visualFor(visual: Visual): Phaser.GameObjects.GameObject {
@@ -584,6 +610,8 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       '<': this.t('read.less'),
       ',': this.t('read.comma'),
       '?': this.t('read.unknown'),
+      '€': this.t('read.euro'),
+      ct: this.t('read.cent'),
     };
     const story = this.task.prompt.story;
     if (story) {
@@ -597,6 +625,11 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       .replace(/ ,/g, ',');
     const question = this.question();
     const extra = this.panel.message ? `. ${this.panel.message}` : '';
-    this.services.audio.speak(`${question ? `${question} ` : ''}${terms}${extra}`);
+    // Antwortsätze (z. B. Fragen zur Situation) werden mit vorgelesen.
+    const sentences = (this.task.options ?? [])
+      .filter((o) => o.label)
+      .map((o) => this.t(o.label!.key, o.label!.params));
+    const choices = sentences.length > 0 ? ` ${sentences.join(' ')}` : '';
+    this.services.audio.speak(`${question ? `${question} ` : ''}${terms}${extra}${choices}`);
   }
 }

@@ -5,6 +5,7 @@ import hints from './hints.de.json';
 import legal from './legal.json';
 import praise from './praise.de.json';
 import rules from './rules.json';
+import situations from './situations.json';
 import stories from './stories.json';
 import strings from './strings.de.json';
 import wordTemplates from './word-templates.de.json';
@@ -23,6 +24,7 @@ export const RAW_CONTENT: RawContent = {
   praise,
   legal,
   stories,
+  situations,
 };
 
 /** Texte je Sprache: Oberfläche, Hinweise und Sachaufgaben. */

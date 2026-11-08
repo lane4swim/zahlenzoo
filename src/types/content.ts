@@ -44,12 +44,27 @@ export type StoryOp = 'add' | 'sub' | 'mult' | 'share' | 'measure';
 /** Vorlage einer Sachaufgabe (stories.json); Text und Einheit in word-templates.de.json. */
 export type StoryTemplate = { id: string; op: StoryOp; icon: string; family: string };
 
+/**
+ * Sachsituation ohne Rechnung (situations.json): passende Frage wählen oder entscheiden,
+ * ob genau gerechnet werden muss. Texte in word-templates.de.json unter `situation.<id>`.
+ * params: Bereich [von, bis] je Platzhalter; answer: Lösung bei festen Antworten.
+ */
+export type SituationTemplate = {
+  id: string;
+  family: string;
+  levels: number[];
+  params: Readonly<Record<string, readonly [number, number]>>;
+  answer?: string;
+};
+
 /** Parameter, die ein Generator für eine Aufgabe bekommt. */
 export type FamilyParams = {
   kinds: Readonly<Record<string, number>>;
   level: LevelParams;
   /** Sachaufgaben-Vorlagen dieser Familie */
   stories?: readonly StoryTemplate[];
+  /** Sachsituationen dieser Familie */
+  situations?: readonly SituationTemplate[];
 };
 
 type Point = { x: number; y: number };
@@ -80,4 +95,5 @@ export type GameContent = {
   praise: Praise;
   legal: Legal;
   stories: StoryTemplate[];
+  situations: SituationTemplate[];
 };
