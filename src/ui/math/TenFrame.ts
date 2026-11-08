@@ -67,7 +67,8 @@ export class TenFrame extends Phaser.GameObjects.Container {
         g.strokeCircle(p.x, p.y, r);
       }
     }
-    this.add(g);
+    // Unsichtbare Fläche in Größe der Felder, damit die Größe für das Platzieren bekannt ist.
+    this.add([scene.add.zone(0, top + CELL, total, 2 * CELL), g]);
     scene.add.existing(this);
   }
 }

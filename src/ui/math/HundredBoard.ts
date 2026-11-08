@@ -8,7 +8,7 @@ export class HundredBoard extends Phaser.GameObjects.Container {
     x: number,
     y: number,
     marked: readonly number[],
-    private readonly cell = 18,
+    private readonly cell = 16,
   ) {
     super(scene, x, y);
     const g = scene.add.graphics();

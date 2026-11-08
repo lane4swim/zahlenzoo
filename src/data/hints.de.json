@@ -10,7 +10,7 @@
   "hint.divide.1": "Verteile {n} gerecht auf {k} Gruppen. Denk an: {k} · ? = {n}.",
   "hint.divide.2": "Schau auf das Punktefeld: {k} Reihen. Wie viele Punkte hat jede Reihe?",
   "hint.divide.3": "{k} · {q} = {n}, also ist {n} : {k} = {q}.",
-  "hint.dots.2": "Schau auf das Punktefeld: {rows} Reihen mit je {cols} Punkten.",
+  "hint.dots.2": "Schau auf das Punktefeld: {rows}-mal {cols} Punkte.",
   "hint.dots_minus.2": "Schau auf das Punktefeld: Rechne alle 10 Reihen und nimm die Reihe mit den Ringen weg.",
   "hint.dots_split.2": "Schau auf das Punktefeld: Die orangen Reihen kennst du schon. Die Ringe kommen dazu.",
   "hint.double.1": "Das Doppelte heißt: die Zahl zweimal. Rechne {n} + {n}.",

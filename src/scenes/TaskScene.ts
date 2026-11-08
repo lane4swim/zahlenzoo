@@ -77,7 +77,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
   private expression?: Expression;
   private answerInput?: Numpad | AnswerCards;
   private feedbackIcon?: Phaser.GameObjects.Image;
-  /** Text, Einheit und Bild einer Sachaufgabe */
+  /** Frage, Sachtext, Einheit und Bild (werden je Aufgabe neu angelegt) */
   private storyObjects: Phaser.GameObjects.GameObject[] = [];
   private picture?: StoryPictureView;
   private nextButton?: Button;
@@ -207,10 +207,9 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     if (task.prompt.story) {
       this.showStory(task);
     } else {
-      this.panel.setY(PANEL.y);
-      this.expression = new Expression(this, PANEL.x, 200, task.prompt.terms);
+      this.showTerms(task);
     }
-    this.showQuestion();
+    this.panel.clear();
     this.expression?.setAnswer('');
     if (task.options) {
       this.answerInput = new AnswerCards(this, INPUT_X, INPUT_Y, task.options, (value) =>
@@ -266,10 +265,36 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     return story ? this.t(`story.${story.id}.unit`) : '';
   }
 
-  /** Frage zur Aufgabe (z. B. „Welche Zahl fehlt in der Reihe?“), sonst leer. */
-  private showQuestion(): void {
+  /**
+   * Rechnung oder Zahlenreihe. Gehört eine Frage dazu (z. B. „Welche Zahl fehlt in der
+   * Reihe?“), steht sie über den Zahlen; der Hinweisbereich darunter bleibt frei.
+   */
+  private showTerms(task: Task): void {
+    const key = task.prompt.textKey;
+    if (!key) {
+      this.panel.setY(PANEL.y);
+      this.expression = new Expression(this, PANEL.x, 200, task.prompt.terms);
+      return;
+    }
+    const question = this.add
+      .text(PANEL.x, 146, this.t(key), {
+        fontFamily: FontFamily.text,
+        fontSize: `${FontSize.text}px`,
+        color: CssColor.text,
+        align: 'center',
+        wordWrap: { width: PANEL.width },
+      })
+      .setOrigin(0.5, 0);
+    this.storyObjects.push(question);
+    const exprY = 146 + question.height + 52;
+    this.expression = new Expression(this, PANEL.x, exprY, task.prompt.terms);
+    this.panel.setY(exprY + 62);
+  }
+
+  /** Frage zur Aufgabe (über den Zahlen), für das Vorlesen. */
+  private question(): string {
     const key = this.task.prompt.textKey;
-    this.panel.show(key ? this.t(key) : '');
+    return key ? this.t(key) : '';
   }
 
   /** Lob abwechselnd verwenden, damit es nicht leer klingt (Spezifikation, Abschnitt 8). */
@@ -443,7 +468,26 @@ export class TaskScene extends BaseScene<TaskSceneData> {
   private showHint(hint: Hint, text: string, icon: string): void {
     this.aid = undefined;
     this.picture?.setVisible(true);
-    this.panel.show(text, icon, hint.visual ? this.visualFor(hint.visual) : undefined);
+    const visual = hint.visual ? this.visualFor(hint.visual) : undefined;
+    this.panel.show(text, icon, visual);
+    if (visual) this.fitBelowText(visual);
+  }
+
+  /**
+   * Schiebt ein Hinweisbild unter den Hinweistext und hält es über der Eingabe,
+   * damit Text, Bild und Tasten sich nicht überdecken.
+   */
+  private fitBelowText(visual: Phaser.GameObjects.GameObject): void {
+    if (!(visual instanceof Phaser.GameObjects.Container)) return;
+    const bounds = visual.getBounds();
+    if (!Number.isFinite(bounds.top) || !Number.isFinite(bounds.bottom)) return;
+    const minTop = this.panel.textBottom + 14;
+    const maxBottom = INPUT_Y - 108;
+    let dy = 0;
+    if (bounds.top < minTop) dy = minTop - bounds.top;
+    if (bounds.bottom + dy > maxBottom)
+      dy = Math.max(minTop - bounds.top, maxBottom - bounds.bottom);
+    visual.y += dy;
   }
 
   /** Hinweis-Knopf: nächste Hilfestufe; die Antwort zählt dann als „mit Hilfe“. */
@@ -459,7 +503,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     if (this.aid === aid) {
       this.aid = undefined;
       this.picture?.setVisible(true);
-      this.showQuestion();
+      this.panel.clear();
       return;
     }
     this.aid = aid;
@@ -489,12 +533,8 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     } else {
       visual = new HundredBoard(this, PANEL.x, VISUAL_Y + 4, known);
     }
-    const question = this.task.prompt.textKey ? `${this.t(this.task.prompt.textKey)} ` : '';
-    this.panel.show(
-      aid === 'hundredBoard' ? question : `${question}${this.t(`task.aid.${aid}`)}`,
-      undefined,
-      visual,
-    );
+    this.panel.show(aid === 'hundredBoard' ? '' : this.t(`task.aid.${aid}`), undefined, visual);
+    this.fitBelowText(visual);
   }
 
   private readAloud(): void {
@@ -518,7 +558,8 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       .map((term) => (typeof term === 'number' ? String(term) : (words[term] ?? term)))
       .join(' ')
       .replace(/ ,/g, ',');
+    const question = this.question();
     const extra = this.panel.message ? `. ${this.panel.message}` : '';
-    this.services.audio.speak(`${terms}${extra}`);
+    this.services.audio.speak(`${question ? `${question} ` : ''}${terms}${extra}`);
   }
 }
