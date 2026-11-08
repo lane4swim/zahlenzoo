@@ -31,3 +31,4 @@ Verbindlich für alle Grafiken. Quelle der Werte: `tokens.json`. Erzeugung: `pyt
 - Hintergründe je Bereich zweimal: Gehege (`*_hintergrund_1024x768`) und Aufgabenansicht (`*_aufgabe_1024x768`, ruhige Mitte, Standfläche für das Tier links bei y = 330).
 - Skalierte Formen behalten 4 px Kontur (Linienstärke wird beim Skalieren ausgeglichen).
 - Kontaktbögen: `art/kontaktbogen_*.png`, erzeugt mit `npm run art`.
+- Menü- und übrige Bereichshintergründe: `art/build_backgrounds.py`. Menüs: Start (Zoo-Eingang, Schild für den Titel bei y = 150), Profil (Wimpelkette, Luftballons), Erwachsene (ruhig), Rundenende (Strahlen, Konfetti am Rand). Aufgabenansichten: Hügel, Ast oder Stange links als Standfläche bei y ≈ 330, Fuß des Hügels verschwindet im Boden.

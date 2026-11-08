@@ -45,6 +45,26 @@ const SHEETS = {
       ['Affenwald', ['affenwald_hintergrund_1024x768', 'affenwald_aufgabe_1024x768']],
     ],
   },
+  menues: {
+    title: 'Menüs: Start, Profil, Erwachsene, Rundenende',
+    tile: 470,
+    rows: [
+      ['Start und Profil', ['menue_start_1024x768', 'menue_profil_1024x768']],
+      ['Erwachsene und Rundenende', ['menue_erwachsene_1024x768', 'menue_rundenende_1024x768']],
+    ],
+  },
+  bereiche: {
+    title: 'Bereiche: Gehege (links) und Aufgabenansicht (rechts)',
+    tile: 360,
+    rows: [
+      'elefantenwiese',
+      'zookasse',
+      'futteruhr',
+      'schmetterlingshaus',
+      'giraffenhof',
+      'zoozaehlung',
+    ].map((a) => [a, [`${a}_hintergrund_1024x768`, `${a}_aufgabe_1024x768`]]),
+  },
   objekte_ui: {
     title: 'Futter und Symbole der Aufgabenansicht',
     tile: 130,
