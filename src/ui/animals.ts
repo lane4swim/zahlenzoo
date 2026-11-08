@@ -19,6 +19,11 @@ export const ANIMAL_ART: Readonly<Record<string, AnimalArt>> = {
     taskSpot: { x: 150, y: 342 },
     areaSpot: { x: 290, y: 722 },
   },
+  elephant: {
+    prefix: 'elefantenwiese_elefant',
+    taskSpot: { x: 112, y: 336 },
+    areaSpot: { x: 220, y: 712 },
+  },
 };
 
 /** Animationen als Sprite-Sheets; Ausdrücke als Einzelbilder (512 px). */
@@ -28,7 +33,7 @@ export type Animation = (typeof ANIMATIONS)[number];
 export type Expression = (typeof EXPRESSIONS)[number];
 
 /** Bereiche mit eigenen Hintergründen für Gehege und Aufgabenansicht. */
-export const AREA_ART = ['pinguinfelsen', 'affenwald'] as const;
+export const AREA_ART = ['pinguinfelsen', 'affenwald', 'elefantenwiese'] as const;
 
 export const areaBackground = (areaId: string) => `${areaId}_hintergrund`;
 export const taskBackground = (areaId: string) => `${areaId}_aufgabe`;
