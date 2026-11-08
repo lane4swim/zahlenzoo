@@ -7,6 +7,7 @@ import type {
   LevelParams,
   Praise,
   Rules,
+  SituationTemplate,
   StoryOp,
   StoryTemplate,
 } from '../types/content';
@@ -213,13 +214,49 @@ export function parseStories(data: unknown): StoryTemplate[] {
     return {
       id: str(o.id, `stories[${i}].id`),
       op,
-      icon: str(o.icon, `stories[${i}].icon`),
+      icon: str(o.icon, `stories[${i}].icon`, true),
       family: str(o.family, `stories[${i}].family`),
     };
   });
   const ids = stories.map((s) => s.id);
   if (new Set(ids).size !== ids.length) throw new ContentError('stories.json: doppelte IDs');
   return stories;
+}
+
+export function parseSituations(data: unknown): SituationTemplate[] {
+  const d = obj(data, 'situations.json');
+  if (!Array.isArray(d.situations)) {
+    throw new ContentError('situations.json: Liste „situations“ fehlt');
+  }
+  const list = d.situations.map((s, i) => {
+    const where = `situations[${i}]`;
+    const o = obj(s, `situations.json ${where}`);
+    if (!Array.isArray(o.levels) || o.levels.length === 0) {
+      throw new ContentError(`${where}.levels: Liste von Stufen erwartet`);
+    }
+    const params = Object.fromEntries(
+      Object.entries(obj(o.params ?? {}, `${where}.params`)).map(([k, v]) => {
+        if (!Array.isArray(v) || v.length !== 2) {
+          throw new ContentError(`${where}.params.${k}: [von, bis] erwartet`);
+        }
+        const from = int(v[0], `${where}.params.${k}[0]`);
+        const to = int(v[1], `${where}.params.${k}[1]`, from);
+        return [k, [from, to] as const];
+      }),
+    );
+    const template: SituationTemplate = {
+      id: str(o.id, `${where}.id`),
+      family: str(o.family, `${where}.family`),
+      levels: o.levels.map((l, j) => int(l, `${where}.levels[${j}]`, 1, 3)),
+      params,
+    };
+    return o.answer === undefined
+      ? template
+      : { ...template, answer: str(o.answer, `${where}.answer`) };
+  });
+  const ids = list.map((s) => s.id);
+  if (new Set(ids).size !== ids.length) throw new ContentError('situations.json: doppelte IDs');
+  return list;
 }
 
 export type RawContent = {
@@ -230,6 +267,7 @@ export type RawContent = {
   praise: unknown;
   legal: unknown;
   stories: unknown;
+  situations: unknown;
 };
 
 /**
@@ -246,7 +284,13 @@ export function parseContent(raw: RawContent, generatorIds: readonly string[]): 
     praise: parsePraise(raw.praise),
     legal: parseLegal(raw.legal),
     stories: parseStories(raw.stories),
+    situations: parseSituations(raw.situations),
   };
+  for (const s of content.situations) {
+    if (!content.families[s.family]) {
+      throw new ContentError(`situations.json: ${s.id} nennt unbekannte Familie ${s.family}`);
+    }
+  }
   for (const story of content.stories) {
     if (!content.families[story.family]) {
       throw new ContentError(`stories.json: ${story.id} nennt unbekannte Familie ${story.family}`);
@@ -279,7 +323,11 @@ export function familyParams(content: GameContent, family: string, level: number
   const lvl = f.levels[String(Math.max(1, level))];
   if (!lvl) throw new ContentError(`Familie ${family}: Stufe ${level} fehlt`);
   const stories = content.stories.filter((s) => s.family === family);
-  return stories.length > 0
-    ? { kinds: f.kinds, level: lvl, stories }
-    : { kinds: f.kinds, level: lvl };
+  const situations = content.situations.filter((s) => s.family === family);
+  return {
+    kinds: f.kinds,
+    level: lvl,
+    ...(stories.length > 0 ? { stories } : {}),
+    ...(situations.length > 0 ? { situations } : {}),
+  };
 }

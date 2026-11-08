@@ -10,6 +10,9 @@ import { Color, Stroke } from '../ui/theme';
 
 const BOARD = { x: 660, y: 150, w: 460, h: 520 };
 const TAB = { w: 140, gap: 10 };
+const MAX_TABS_PER_ROW = 4;
+/** Ab dieser Länge passt ein Themenname nicht mehr einzeilig in eine Registerkarte. */
+const LONG_TAB_LABEL = 12;
 
 /**
  * Gehege eines Bereichs mit Hintergrund, Tier und Tafel. Hat der Bereich mehrere
@@ -42,12 +45,18 @@ export class AreaScene extends BaseScene<AreaSceneData> {
     this.addBackButton(() => this.scene.start(SceneKey.Map));
     this.addTitle(this.t(`area.${area.id}`));
 
+    // Mehr als vier Themen stehen in zwei Reihen; die Tafel wird dann länger.
+    const n = area.families.length;
+    const tabRows = n > MAX_TABS_PER_ROW ? 2 : 1;
+    const boardH = tabRows === 2 ? BOARD.h + 80 : BOARD.h;
+    const levelStep = tabRows === 2 ? 100 : 110;
+
     // Ruhige Tafel hinter Sternen, Themen und Stufen, damit sie vor dem Bild gut lesbar sind.
     const board = this.add.graphics();
     board.fillStyle(Color.papier, 0.94);
     board.lineStyle(Stroke.outline, Color.kontur, 1);
-    board.fillRoundedRect(BOARD.x - BOARD.w / 2, BOARD.y, BOARD.w, BOARD.h, 28);
-    board.strokeRoundedRect(BOARD.x - BOARD.w / 2, BOARD.y, BOARD.w, BOARD.h, 28);
+    board.fillRoundedRect(BOARD.x - BOARD.w / 2, BOARD.y, BOARD.w, boardH, 28);
+    board.strokeRoundedRect(BOARD.x - BOARD.w / 2, BOARD.y, BOARD.w, boardH, 28);
     this.addText(BOARD.x, BOARD.y + 40, this.t('area.stars', { stars: progress.stars }));
 
     const art = this.content.animals[area.animal];
@@ -58,24 +67,26 @@ export class AreaScene extends BaseScene<AreaSceneData> {
     }
 
     let levelsTop = BOARD.y + 150;
-    if (area.families.length > 1) {
-      const n = area.families.length;
+    if (n > 1) {
       // Bis zu vier Themen in einer Reihe; Beschriftungen zweizeilig, wenn es eng wird.
-      const tabW = Math.min(TAB.w, Math.floor((BOARD.w - 24 - (n - 1) * TAB.gap) / n));
-      const rowW = n * tabW + (n - 1) * TAB.gap;
+      const perRow = Math.ceil(n / tabRows);
+      const tabW = Math.min(TAB.w, Math.floor((BOARD.w - 24 - (perRow - 1) * TAB.gap) / perRow));
       area.families.forEach((f, i) => {
         const data: AreaSceneData = { areaId: area.id, family: f };
+        const row = Math.floor(i / perRow);
+        const inRow = Math.min(perRow, n - row * perRow);
+        const rowW = inRow * tabW + (inRow - 1) * TAB.gap;
         this.addButton({
-          x: BOARD.x - rowW / 2 + tabW / 2 + i * (tabW + TAB.gap),
-          y: BOARD.y + 120,
+          x: BOARD.x - rowW / 2 + tabW / 2 + (i - row * perRow) * (tabW + TAB.gap),
+          y: BOARD.y + 120 + row * 104,
           width: tabW,
-          label: this.t(n > 3 ? `family.${f}.short` : `family.${f}`),
+          label: this.tabLabel(f, perRow),
           fontSize: 20,
           fill: f === family ? Color.sonne : Color.papier,
           onPress: () => this.scene.restart(data),
         });
       });
-      levelsTop = BOARD.y + 250;
+      levelsTop = BOARD.y + 250 + (tabRows - 1) * 96;
     }
 
     const unlocked = familyLevel(progress, family);
@@ -88,12 +99,18 @@ export class AreaScene extends BaseScene<AreaSceneData> {
       const data: TaskSceneData = { areaId: area.id, family, level };
       this.addButton({
         x: BOARD.x,
-        y: levelsTop + i * 110,
+        y: levelsTop + i * levelStep,
         width: 360,
         label: open ? this.t('area.level', { level }) : this.t('area.locked', { level }),
         fill: level === unlocked ? Color.grasHell : Color.papier,
         onPress: () => this.scene.start(SceneKey.Task, data),
       }).setEnabled(open);
     });
+  }
+
+  /** Bei vielen Themen oder langen Namen die zweizeilige Kurzform, damit nichts übersteht. */
+  private tabLabel(family: string, tabs: number): string {
+    const full = this.t(`family.${family}`);
+    return tabs > 3 || full.length > LONG_TAB_LABEL ? this.t(`family.${family}.short`) : full;
   }
 }

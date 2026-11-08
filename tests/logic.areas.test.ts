@@ -32,7 +32,8 @@ describe('Bereiche', () => {
     expect(areaState(area('elefantenwiese'), { pinguinfelsen: needed - 1 }, RULES)).toBe('locked');
     expect(areaState(area('elefantenwiese'), { pinguinfelsen: needed }, RULES)).toBe('open');
     expect(areaState(area('zookasse'), { pinguinfelsen: 99 }, RULES)).toBe('locked');
-    expect(areaState(area('zookasse'), { elefantenwiese: needed }, RULES)).toBe('soon');
+    expect(areaState(area('zookasse'), { elefantenwiese: needed }, RULES)).toBe('open');
+    expect(areaState(area('futteruhr'), { zookasse: needed }, RULES)).toBe('soon');
   });
 
   it('nutzt die Schwelle aus den Regeln', () => {

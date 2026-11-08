@@ -42,60 +42,60 @@ const near = (answer: number): TypicalError[] => [
   { value: answer - 10, errorTag: 'tens_off' },
 ];
 
-export const storyAddSub: Generator = (
-  level: TaskLevel,
-  rng: Rng,
-  id: string,
-  params: FamilyParams,
-): Task => {
-  const max = num(params, 'max');
-  const cross = crossing(params);
-  if (rng.chance(share(params, 'subShare'))) {
-    const [a, b] = subtraction(rng, max, cross);
-    const result = a - b;
-    const borrow = a % 10 < b % 10;
+/** Sachaufgaben zu Plus und Minus für eine Familie (auch „Rechnen mit Geld“). */
+export const storyAddSubFor =
+  (family: string): Generator =>
+  (level: TaskLevel, rng: Rng, id: string, params: FamilyParams): Task => {
+    const max = num(params, 'max');
+    const cross = crossing(params);
+    if (rng.chance(share(params, 'subShare'))) {
+      const [a, b] = subtraction(rng, max, cross);
+      const result = a - b;
+      const borrow = a % 10 < b % 10;
+      return storyTask(
+        {
+          family,
+          level,
+          id,
+          op: 'sub',
+          values: { a, b },
+          answer: result,
+          equation: `${a} − ${b} = ?`,
+          picture: { groups: [a], crossed: b },
+          errors: [
+            { value: a + b, errorTag: 'wrong_operation' },
+            ...(borrow ? [{ value: result + 10, errorTag: 'borrow_forgotten' }] : []),
+            ...near(result),
+          ],
+          math: { op: '-', a, b, result, missing: 'result', carry: borrow },
+        },
+        rng,
+        params,
+      );
+    }
+    const [a, b] = addition(rng, max, cross);
+    const result = a + b;
+    const carry = (a % 10) + (b % 10) >= 10;
     return storyTask(
       {
-        family: STORY_ADDSUB,
+        family,
         level,
         id,
-        op: 'sub',
+        op: 'add',
         values: { a, b },
         answer: result,
-        equation: `${a} − ${b} = ?`,
-        picture: { groups: [a], crossed: b },
+        equation: `${a} + ${b} = ?`,
+        picture: { groups: [a, b] },
         errors: [
-          { value: a + b, errorTag: 'wrong_operation' },
-          ...(borrow ? [{ value: result + 10, errorTag: 'borrow_forgotten' }] : []),
+          { value: a - b, errorTag: 'wrong_operation' },
+          ...(carry ? [{ value: result - 10, errorTag: 'carry_forgotten' }] : []),
           ...near(result),
         ],
-        math: { op: '-', a, b, result, missing: 'result', carry: borrow },
+        math: { op: '+', a, b, result, missing: 'result', carry },
       },
       rng,
       params,
     );
-  }
-  const [a, b] = addition(rng, max, cross);
-  const result = a + b;
-  const carry = (a % 10) + (b % 10) >= 10;
-  return storyTask(
-    {
-      family: STORY_ADDSUB,
-      level,
-      id,
-      op: 'add',
-      values: { a, b },
-      answer: result,
-      equation: `${a} + ${b} = ?`,
-      picture: { groups: [a, b] },
-      errors: [
-        { value: a - b, errorTag: 'wrong_operation' },
-        ...(carry ? [{ value: result - 10, errorTag: 'carry_forgotten' }] : []),
-        ...near(result),
-      ],
-      math: { op: '+', a, b, result, missing: 'result', carry },
-    },
-    rng,
-    params,
-  );
-};
+  };
+
+export const storyAddSub: Generator = storyAddSubFor(STORY_ADDSUB);

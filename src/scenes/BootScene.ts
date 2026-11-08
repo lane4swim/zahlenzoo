@@ -4,6 +4,7 @@ import type { Services } from '../services/services';
 import type { GameContent } from '../types/content';
 import { SceneKey } from '../types/scenes';
 import { createAnimalAnimations } from '../ui/AnimalSprite';
+import { MONEY_IMAGES } from '../ui/MoneyInput';
 import {
   ANIMATIONS,
   areaBackground,
@@ -28,6 +29,7 @@ const IMAGES: Record<string, string> = {
   [Tex.map]: 'img/map/karte_hintergrund_1024x768.png',
   [Tex.mapLock]: 'img/map/karte_schloss_128.png',
   [Tex.mapSign]: 'img/map/karte_schild_128.png',
+  ...MONEY_IMAGES,
   ...Object.fromEntries(
     ['objekt_fisch', 'objekt_eimer', 'objekt_banane', 'objekt_futternapf'].map((key) => [
       key,

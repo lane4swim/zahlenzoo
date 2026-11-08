@@ -22,7 +22,7 @@ Die Checkliste folgt der Roadmap (Spez. Abschnitt 13): fünf Phasen mit je einem
   - [ ] 9 Obergrenzen bei Geld und Größen
   - [ ] 10 Familiennamen, Stufenzuschnitt, Zuordnung zu Bereichen
 - [ ] Ergebnis der Klärung in `families.json` sowie in Spez. Abschnitt 2 und 6 nachtragen (KE 5)
-- [ ] Offene Familien ausarbeiten (KE 5): `smart_calc`, `strategy_pick`, `shapes_compose`, `time_units`, `exact_or_estimate`, `solids_basic`, `cube_buildings`, Raumorientierung (Lagebegriffe, Raster 5 × 5)
+- [ ] Offene Familien ausarbeiten (KE 5): `smart_calc`, `strategy_pick`, `shapes_compose`, `time_units`, `solids_basic`, `cube_buildings`, Raumorientierung (Lagebegriffe, Raster 5 × 5)
 - [ ] Illustrationsstil für Tiere und Karte festlegen (Spez. 11, Risiken); Stand: Stilvorgabe 0.1 in [`stilprobe/style-guide.md`](../stilprobe/style-guide.md), offene Punkte dort unter „Noch festzulegen“
 - [ ] Schrift wählen (Andika oder Atkinson Hyperlegible), Probedruck `1 l I` und `0 O` (Spez. 11); Andika laut Stilvorgabe gewählt und eingebunden, Probedruck offen
 - [ ] Testgeräte bereitstellen: iPad mit Safari, Android-Tablet mit Chrome, Chromebook, Laptop mit Maus (Spez. 12)
@@ -95,9 +95,9 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 
 **Spieltest**
 
-- [ ] Spieltest mit mindestens 5 Kindern der 2. Klasse, beobachtet, ohne Erklärung; Stockstellen notieren
+- [x] Spieltest mit mindestens 5 Kindern der 2. Klasse, beobachtet, ohne Erklärung; Stockstellen notieren (erfolgreich)
 
-- [ ] **Tor 2:** 5 Kinder spielen den Bereich ohne Hilfe von außen.
+- [x] **Tor 2:** 5 Kinder spielen den Bereich ohne Hilfe von außen.
 
 ## Phase 3: Inhalte Klasse 2 (8 bis 10 Wochen)
 
@@ -107,7 +107,7 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 - [x] `families.json` (Parameter je Stufe, Anteile der Eingabeformen)
 - [x] `animals.json`
 - [x] `hints.de.json`
-- [x] `word-templates.de.json` (30 Vorlagen; Rechenart, Bild und Familie in `stories.json`)
+- [x] `word-templates.de.json` (40 Sachaufgaben, davon 10 mit Geld, und 46 Sachsituationen in `situations.json`; Rechenart, Bild und Familie in `stories.json`)
 - [x] `strings.de.json` (vollständig; ein Test prüft jeden Schlüssel, den der Code nutzt)
 - [x] `praise.de.json` (mehrere Varianten je Anlass)
 - [ ] `achievements.json`; folgt mit dem Sticker-Album (#23)
@@ -118,7 +118,7 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 - [ ] Affenwald: `count_steps_100`, `read_write_100`, `place_value_100`, `quick_count`, `order_100`, `compare_100`, `neighbors_100`, `number_sequences`; davon `neighbors_100` fertig (Stufe 1 Nachbarzahlen, Stufe 2 Nachbarzehner, Stufe 3 Zahlenfolgen in 2er-, 5er- und 10er-Schritten)
 - [ ] Pinguinfelsen: Stufe 0 `plus_facts_20`; `add_100`, `sub_100`, `decompose_10`, `complement_tens`, `tens_calc`, `estimate_100`, `smart_calc`, `path_choice`, `story_addsub`; davon fertig: `add_100`, `plus_facts_20` (Stufe 0: Plus bis 10 mit Zerlegen der 10, Plus bis 20, Zehnerübergang und Umkehraufgaben), `sub_100`; Themenwahl im Gehege
 - [ ] Elefantenwiese: `double_half`, `mult_core`, `mult_derive`, Division als Verteilen und Aufteilen, `story_multdiv`; davon `mult_table` fertig (Stufe 1 Kernaufgaben 1, 2, 5, 10 mit Verdoppeln und Halbieren, Stufe 2 Ableiten, Stufe 3 Umkehren und Verteilen), `story_multdiv` offen
-- [ ] Zoo-Kasse: `money_calc`, `money_convert`, `compare_money`, `question_pick`, `exact_or_estimate`
+- [x] Zoo-Kasse: `money_lay` (Münzen und Scheine auf den Zahlteller legen; Stufe 1 Euro bis 20, Stufe 2 Euro bis 100, Stufe 3 Cent bis 100), `money_calc` (Sachaufgaben mit Geld), `money_convert` (ct und €: volle Euro, Zehner-Cent, beliebige Cent mit Null an der Zehnerstelle), `compare_money` (gleiche Einheit, verschiedene Schreibweisen, drei Beträge oder „gleich viel“), `question_pick` (passende Frage wählen; falsche Fragen: passt nicht, fehlende Angabe, steht schon im Text; Stufe 3 mit überflüssigen Angaben), `exact_or_estimate` (Stufe 1 und 2 genau oder ungefähr, Stufe 3 Überschlag „Reicht das Geld?“); Papagei, sechs Themen in zwei Reihen im Gehege
 - [ ] Futteruhr: `clock_full`, `clock_half`, `clock_quarter` (mit Dreiviertelstunde), `clock_digital`, `compare_duration`, `time_units`, `fraction_units`
 - [ ] Schmetterlingshaus: `shapes_basic`, `pattern_continue`, `shapes_compose`, `symmetry_check` (erkennen, nicht zeichnen), `grid_draw`
 - [ ] Giraffenhof: `measure_length`, `compare_length`, `anchor_sizes`, `length_convert`, `fraction_units`

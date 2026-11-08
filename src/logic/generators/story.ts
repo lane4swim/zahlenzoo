@@ -48,7 +48,8 @@ export function storyTask(spec: StorySpec, rng: Rng, params: FamilyParams): Task
     prompt: {
       terms: ['?'],
       story: { id: template.id, params: values },
-      picture: { icon: template.icon, ...spec.picture },
+      // Vorlagen ohne Bild (z. B. Geld) zeigen nur den Text.
+      ...(template.icon ? { picture: { icon: template.icon, ...spec.picture } } : {}),
     },
     answer: spec.answer,
     hints: [

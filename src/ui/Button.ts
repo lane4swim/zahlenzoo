@@ -17,6 +17,8 @@ export type ButtonOptions = {
   fill?: number;
   /** Beschriftung unten statt mittig, z. B. wenn ein Bild darüber eingefügt wird */
   labelBottom?: boolean;
+  /** Lange Beschriftungen umbrechen (Breite in Pixeln) */
+  wrapWidth?: number;
 };
 
 const EDGE = 8;
@@ -72,6 +74,7 @@ export class Button extends Phaser.GameObjects.Container {
           fontSize: `${options.fontSize ?? (withIcon ? FontSize.small - 4 : FontSize.text)}px`,
           color: CssColor.text,
           align: 'center',
+          ...(options.wrapWidth ? { wordWrap: { width: options.wrapWidth } } : {}),
         })
         .setOrigin(0.5);
       parts.push(this.label);

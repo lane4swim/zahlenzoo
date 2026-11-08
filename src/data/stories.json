@@ -1,5 +1,5 @@
 {
-  "_hinweis": "Vorlagen für Sachaufgaben (Spezifikation, Abschnitt 11): Rechenart, Bild und Familie. Texte und Einheiten stehen in word-templates.de.json unter story.<id> und story.<id>.unit. Platzhalter: add und sub {a} {b}; mult {groups} {each}; share {total} {groups}; measure {total} {size}.",
+  "_hinweis": "Vorlagen für Sachaufgaben (Spezifikation, Abschnitt 11): Rechenart, Bild und Familie. Texte und Einheiten stehen in word-templates.de.json unter story.<id> und story.<id>.unit. Platzhalter: add und sub {a} {b}; mult {groups} {each}; share {total} {groups}; measure {total} {size}. icon leer: Sachaufgabe ohne Bild (z. B. Geld).",
   "stories": [
     {
       "id": "add_fische",
@@ -180,6 +180,66 @@
       "op": "measure",
       "icon": "objekt_futternapf",
       "family": "story_multdiv"
+    },
+    {
+      "id": "geld_eis",
+      "op": "add",
+      "icon": "",
+      "family": "money_calc"
+    },
+    {
+      "id": "geld_sparen",
+      "op": "add",
+      "icon": "",
+      "family": "money_calc"
+    },
+    {
+      "id": "geld_eintritt",
+      "op": "add",
+      "icon": "",
+      "family": "money_calc"
+    },
+    {
+      "id": "geld_kasse",
+      "op": "add",
+      "icon": "",
+      "family": "money_calc"
+    },
+    {
+      "id": "geld_laden",
+      "op": "add",
+      "icon": "",
+      "family": "money_calc"
+    },
+    {
+      "id": "geld_karte",
+      "op": "sub",
+      "icon": "",
+      "family": "money_calc"
+    },
+    {
+      "id": "geld_zurueck",
+      "op": "sub",
+      "icon": "",
+      "family": "money_calc"
+    },
+    {
+      "id": "geld_sparschwein",
+      "op": "sub",
+      "icon": "",
+      "family": "money_calc"
+    },
+    {
+      "id": "geld_billiger",
+      "op": "sub",
+      "icon": "",
+      "family": "money_calc"
+    },
+    {
+      "id": "geld_klasse",
+      "op": "sub",
+      "icon": "",
+      "family": "money_calc"
     }
   ]
 }

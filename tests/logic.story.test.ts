@@ -126,7 +126,8 @@ describe('Vorlagen', () => {
 
   it('verweisen auf vorhandene Bilder', () => {
     const images = Object.keys(import.meta.glob('../public/assets/img/**/*.png'));
-    for (const s of CONTENT.stories) {
+    // Geldgeschichten haben kein Bild: Mengenbilder passen nicht zu Euro-Beträgen.
+    for (const s of CONTENT.stories.filter((t) => t.icon !== '')) {
       const found = images.some(
         (p) => p.endsWith(`/${s.icon}_256.png`) || p.endsWith(`/${s.icon}_128.png`),
       );
