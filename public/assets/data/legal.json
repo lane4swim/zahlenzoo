@@ -1,0 +1,14 @@
+{
+  "_hinweis": "Gerüst für Impressum und Datenschutzerklärung (Spezifikation, Abschnitt 10). Angaben vor der Veröffentlichung eintragen und rechtlich prüfen lassen.",
+  "imprint": {
+    "provider": "",
+    "street": "",
+    "city": "",
+    "email": ""
+  },
+  "privacy": [
+    "Der Zahlen-Zoo speichert Spielstände nur auf diesem Gerät im Speicher des Browsers (localStorage).",
+    "Es gibt kein Konto, keine Cookies, keine Analyse-Dienste und keine Übertragung an Server.",
+    "Alle Daten lassen sich im Erwachsenenbereich löschen."
+  ]
+}

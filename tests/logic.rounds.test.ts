@@ -15,11 +15,14 @@ import {
   TaskFactory,
 } from '../src/logic/rounds';
 import type { TaskLevel } from '../src/types/task';
+import { paramsOf, RULES } from './helpers/content';
 
 const compose = (level: TaskLevel, seed: number, size?: number) =>
   composeRound({
     family: ADD_100,
     generator: add100,
+    params: paramsOf(ADD_100),
+    rules: RULES,
     level,
     rng: createRng(seed),
     ...(size ? { size } : {}),
@@ -59,22 +62,22 @@ describe('Runde', () => {
 
 describe('Rundenzusammenstellung', () => {
   it('mischt 70 / 20 / 10 aus aktueller, vorheriger und nächster Stufe', () => {
-    expect(levelMix(2, 10)).toEqual([
+    expect(levelMix(2, 10, RULES)).toEqual([
       [2, 7],
       [1, 2],
       [3, 1],
     ]);
-    expect(levelMix(1, 10)).toEqual([
+    expect(levelMix(1, 10, RULES)).toEqual([
       [1, 9],
       [2, 1],
     ]);
-    expect(levelMix(3, 10)).toEqual([
+    expect(levelMix(3, 10, RULES)).toEqual([
       [3, 8],
       [2, 2],
     ]);
     for (const size of [8, 9, 10, 11, 12]) {
       for (const level of [1, 2, 3] as TaskLevel[]) {
-        const total = levelMix(level, size).reduce((sum, [, n]) => sum + n, 0);
+        const total = levelMix(level, size, RULES).reduce((sum, [, n]) => sum + n, 0);
         expect(total).toBe(size);
       }
     }
@@ -105,7 +108,7 @@ describe('Rundenzusammenstellung', () => {
   });
 
   it('liefert mit TaskFactory immer neue Aufgaben', () => {
-    const factory = new TaskFactory(ADD_100, add100, createRng(8));
+    const factory = new TaskFactory(ADD_100, add100, paramsOf(ADD_100), createRng(8));
     const keys = Array.from({ length: 40 }, () => factory.next(1).dedupeKey);
     expect(new Set(keys).size).toBe(40);
   });

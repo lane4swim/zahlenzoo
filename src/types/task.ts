@@ -1,4 +1,5 @@
 import type { Rng } from '../logic/rng';
+import type { FamilyParams } from './content';
 
 /** Eingabeformen einer Aufgabe (Spezifikation, Abschnitt 6). */
 export type TaskKind =
@@ -102,5 +103,5 @@ export type TaskInput = string | number | number[];
 
 export type CheckResult = { correct: boolean; errorTag?: string; invalid?: boolean };
 
-/** Erzeugt eine Aufgabe einer Familie und Stufe. */
-export type Generator = (level: TaskLevel, rng: Rng, id: string) => Task;
+/** Erzeugt eine Aufgabe einer Familie und Stufe mit den Parametern aus families.json. */
+export type Generator = (level: TaskLevel, rng: Rng, id: string, params: FamilyParams) => Task;

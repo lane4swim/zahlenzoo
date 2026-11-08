@@ -1,14 +1,19 @@
 import { describe, expect, it } from 'vitest';
 import { check } from '../src/logic/check';
-import { CORE_ROWS, multTable } from '../src/logic/generators/multTable';
+import { multTable } from '../src/logic/generators/multTable';
 import { createRng } from '../src/logic/rng';
 import { composeRound } from '../src/logic/rounds';
+import { paramsOf, RULES } from './helpers/content';
 import type { Task, TaskLevel } from '../src/types/task';
 
 const SEEDS = 1000;
+const P = paramsOf('mult_table');
+const CORE_ROWS = P(1).level.rows as number[];
+const DERIVE_ROWS = P(2).level.rows as number[];
 
 function forAllSeeds(level: TaskLevel, fn: (task: Task) => void) {
-  for (let seed = 0; seed < SEEDS; seed++) fn(multTable(level, createRng(seed), `t${seed}`));
+  for (let seed = 0; seed < SEEDS; seed++)
+    fn(multTable(level, createRng(seed), `t${seed}`, P(level)));
 }
 
 /** Wertet die Rechnung mit eingesetzter Lösung aus und prüft die Gleichung. */
@@ -50,10 +55,10 @@ describe('mult_table', () => {
     expect([...seen].sort()).toEqual(['double', 'half', 'mult_core']);
   });
 
-  it('leitet in Stufe 2 Reihen 3, 4, 6, 7, 8, 9 ab und zeigt die Kernaufgabe farbig', () => {
+  it('leitet in Stufe 2 die Reihen aus families.json ab und zeigt die Kernaufgabe farbig', () => {
     forAllSeeds(2, (task) => {
       const [a, , b] = task.prompt.terms as [number, string, number];
-      expect([3, 4, 6, 7, 8, 9].some((r) => r === a || r === b)).toBe(true);
+      expect(DERIVE_ROWS.some((r) => r === a || r === b)).toBe(true);
       const visual = task.hints[1].visual;
       expect(visual?.type).toBe('dots');
       if (visual?.type === 'dots') {
@@ -101,8 +106,10 @@ describe('mult_table', () => {
       const { round } = composeRound({
         family: 'mult_table',
         generator: multTable,
+        params: P,
         level,
         rng: createRng(seed),
+        rules: RULES,
       });
       const keys = round.tasks.map((t) => t.dedupeKey);
       expect(new Set(keys).size).toBe(keys.length);

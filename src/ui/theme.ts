@@ -88,15 +88,3 @@ export const Tex = {
   mapLock: 'karte_schloss',
   mapSign: 'karte_schild',
 } as const;
-
-/** Kartensymbol je Tier; fehlt eines, zeigt die Karte das Schild „bald“. */
-export const AnimalIcon: Readonly<Record<string, string>> = {
-  monkey: 'karte_affe',
-  penguin: 'karte_pinguin',
-  elephant: 'karte_elefant',
-  parrot: 'karte_papagei',
-  owl: 'karte_eule',
-  butterfly: 'karte_schmetterling',
-  giraffe: 'karte_giraffe',
-  meerkat: 'karte_erdmaennchen',
-};

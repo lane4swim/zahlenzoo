@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { check, normalize } from '../src/logic/check';
 import { add100 } from '../src/logic/generators/add100';
 import { createRng } from '../src/logic/rng';
+import { paramsOf } from './helpers/content';
 import { additionHints } from '../src/logic/strategy';
 import type { MathInfo, Task } from '../src/types/task';
 
@@ -70,7 +71,7 @@ describe('check', () => {
 
   it('nimmt den errorTag einer angetippten Antwortkarte', () => {
     for (let seed = 0; seed < 200; seed++) {
-      const t = add100(2, createRng(seed), 'c');
+      const t = add100(2, createRng(seed), 'c', paramsOf('add_100')(2));
       if (t.kind !== 'choice') continue;
       for (const option of t.options!) {
         const result = check(t, option.value);

@@ -7,6 +7,7 @@ import { neighbors100 } from '../src/logic/generators/neighbors100';
 import { typicalErrors } from '../src/logic/options';
 import { createRng } from '../src/logic/rng';
 import { I18n } from '../src/services/i18n';
+import { paramsOf } from './helpers/content';
 import { AVATARS } from '../src/types/save';
 
 describe('I18n', () => {
@@ -49,9 +50,9 @@ describe('Textdateien', () => {
     for (let seed = 0; seed < 500; seed++) {
       for (const level of [1, 2, 3] as const) {
         for (const task of [
-          add100(level, createRng(seed), 'x'),
-          neighbors100(level, createRng(seed), 'y'),
-          multTable(level, createRng(seed), 'z'),
+          add100(level, createRng(seed), 'x', paramsOf('add_100')(level)),
+          neighbors100(level, createRng(seed), 'y', paramsOf('neighbors_100')(level)),
+          multTable(level, createRng(seed), 'z', paramsOf('mult_table')(level)),
         ]) {
           for (const hint of task.hints) {
             expect(i18n.has(hint.key), hint.key).toBe(true);

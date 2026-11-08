@@ -1,23 +1,22 @@
 import { additionHints, additionStrategy } from '../strategy';
 import { additionOptions } from '../options';
+import { kindShare, share } from '../params';
 import type { Rng } from '../rng';
+import type { FamilyParams } from '../../types/content';
 import type { Generator, MathInfo, Task, TaskKind, TaskLevel, Term } from '../../types/task';
 
 export const ADD_100 = 'add_100';
 const MAX = 100;
 
-/** Anteile der Eingabeformen je Aufgabe. */
-const KIND_WEIGHTS: ReadonlyArray<[TaskKind, number]> = [
-  ['number-input', 0.5],
-  ['choice', 0.3],
-  ['gap', 0.2],
-];
+const KINDS: readonly TaskKind[] = ['number-input', 'choice', 'gap'];
 
-function pickKind(rng: Rng): TaskKind {
-  let r = rng.next();
-  for (const [kind, weight] of KIND_WEIGHTS) {
-    if (r < weight) return kind;
-    r -= weight;
+/** Eingabeform nach den Anteilen in families.json. */
+function pickKind(rng: Rng, params: FamilyParams): TaskKind {
+  const total = KINDS.reduce((sum, k) => sum + kindShare(params, k), 0) || 1;
+  let r = rng.next() * total;
+  for (const kind of KINDS) {
+    r -= kindShare(params, kind);
+    if (r < 0) return kind;
   }
   return 'number-input';
 }
@@ -25,12 +24,12 @@ function pickKind(rng: Rng): TaskKind {
 const hasCarry = (a: number, b: number) => (a % 10) + (b % 10) >= 10;
 
 /** Zahlenpaar a + b passend zur Stufe (Spezifikation, Abschnitt 6). */
-function operands(level: TaskLevel, rng: Rng): [number, number] {
+function operands(level: TaskLevel, rng: Rng, params: FamilyParams): [number, number] {
   switch (level) {
     case 0:
     case 1: {
       // Zehner plus Zehner (40 + 20) oder Zehner plus Einer ohne Übergang (34 + 5).
-      if (rng.chance(0.3)) {
+      if (rng.chance(share(params, 'tensPlusTensShare'))) {
         const aTens = rng.int(1, 8);
         return [aTens * 10, rng.int(1, 10 - aTens) * 10];
       }
@@ -50,16 +49,16 @@ function operands(level: TaskLevel, rng: Rng): [number, number] {
         if (a % 10 === 0 || MAX - a < 11) continue;
         const b = rng.int(11, MAX - a);
         if (b % 10 === 0) continue;
-        if (!hasCarry(a, b) && rng.chance(0.7)) continue;
+        if (!hasCarry(a, b) && rng.chance(share(params, 'carryPreference'))) continue;
         return [a, b];
       }
     }
   }
 }
 
-export const add100: Generator = (level, rng, id): Task => {
-  const [a, b] = operands(level, rng);
-  const kind = pickKind(rng);
+export const add100: Generator = (level, rng, id, params): Task => {
+  const [a, b] = operands(level, rng, params);
+  const kind = pickKind(rng, params);
   const result = a + b;
   const missing = kind === 'gap' ? 'b' : 'result';
   const math: MathInfo = { op: '+', a, b, result, missing, carry: hasCarry(a, b) };

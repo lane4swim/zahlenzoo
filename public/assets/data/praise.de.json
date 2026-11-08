@@ -1,0 +1,16 @@
+{
+  "_hinweis": "Lob für Strategie und Durchhalten, nicht für Begabung (Spezifikation, Abschnitt 8). Varianten werden abwechselnd verwendet.",
+  "firstTry": [
+    "Richtig! Gut gerechnet.",
+    "Super, das stimmt!",
+    "Prima! Du hast die Zahlen gut im Blick.",
+    "Genau! Weiter so.",
+    "Richtig! Du hast gut aufgepasst.",
+    "Stimmt! Dein Rechenweg klappt."
+  ],
+  "withHelp": [
+    "Richtig! Gut, dass du drangeblieben bist.",
+    "Geschafft! Der Hinweis hat dir geholfen.",
+    "Richtig! Du hast es noch einmal versucht."
+  ]
+}

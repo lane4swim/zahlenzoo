@@ -1,4 +1,5 @@
 import type { Rng } from './rng';
+import type { FamilyParams, Rules } from '../types/content';
 import type { AnswerOutcome, RoundSummary } from '../types/round';
 import type { Generator, Task, TaskLevel } from '../types/task';
 
@@ -53,20 +54,28 @@ export function summarize(round: Round): RoundSummary {
 // ---------------------------------------------------------------------------
 // Rundenzusammenstellung (Spezifikation, Abschnitt 7)
 
-export const ROUND_SIZE = { min: 8, max: 12, default: 10 } as const;
-const MAX_LEVEL = 3;
 /** Versuche, eine neue (nicht doppelte) Aufgabe zu erzeugen, bevor aufgegeben wird. */
 const MAX_TRIES = 200;
 
-/** Anzahl Aufgaben je Stufe: 70 % aktuell, 20 % Vorstufe, 10 % nächste Stufe. */
-export function levelMix(level: TaskLevel, size: number): Array<[TaskLevel, number]> {
-  const prev = level > 1 ? Math.round(size * 0.2) : 0;
-  const next = level < MAX_LEVEL ? Math.max(1, Math.round(size * 0.1)) : 0;
+/**
+ * Anzahl Aufgaben je Stufe nach rules.json (Start: 70 % aktuell, 20 % Vorstufe,
+ * 10 % nächste Stufe). Ohne Vor- oder Folgestufe fällt der Anteil der aktuellen zu;
+ * gibt es eine nächste Stufe, ist mindestens eine Aufgabe daraus dabei.
+ */
+export function levelMix(
+  level: TaskLevel,
+  size: number,
+  rules: Pick<Rules, 'round' | 'maxLevel'>,
+): Array<[TaskLevel, number]> {
+  const { mix } = rules.round;
+  const prev = level > 1 ? Math.round(size * mix.previous) : 0;
+  const next =
+    level < rules.maxLevel && mix.next > 0 ? Math.max(1, Math.round(size * mix.next)) : 0;
   const current = size - prev - next;
-  const mix: Array<[TaskLevel, number]> = [[level, current]];
-  if (prev > 0) mix.push([(level - 1) as TaskLevel, prev]);
-  if (next > 0) mix.push([(level + 1) as TaskLevel, next]);
-  return mix;
+  const result: Array<[TaskLevel, number]> = [[level, current]];
+  if (prev > 0) result.push([(level - 1) as TaskLevel, prev]);
+  if (next > 0) result.push([(level + 1) as TaskLevel, next]);
+  return result;
 }
 
 /**
@@ -81,11 +90,16 @@ export function hillOrder<T>(items: readonly T[], difficulty: (item: T) => numbe
   return [...front, ...back.reverse()];
 }
 
+/** Parameter je Stufe aus families.json. */
+export type ParamsFor = (level: TaskLevel) => FamilyParams;
+
 export type ComposeOptions = {
   family: string;
   generator: Generator;
+  params: ParamsFor;
   level: TaskLevel;
   rng: Rng;
+  rules: Pick<Rules, 'round' | 'maxLevel'>;
   size?: number;
 };
 
@@ -97,12 +111,14 @@ export class TaskFactory {
   constructor(
     private readonly family: string,
     private readonly generator: Generator,
+    private readonly params: ParamsFor,
     private readonly rng: Rng,
   ) {}
 
   next(level: TaskLevel): Task {
+    const params = this.params(level);
     for (let i = 0; i < MAX_TRIES; i++) {
-      const task = this.generator(level, this.rng, `${this.family}-${this.counter + 1}`);
+      const task = this.generator(level, this.rng, `${this.family}-${this.counter + 1}`, params);
       if (this.used.has(task.dedupeKey)) continue;
       this.used.add(task.dedupeKey);
       this.counter++;
@@ -113,13 +129,16 @@ export class TaskFactory {
 }
 
 export function composeRound(options: ComposeOptions): { round: Round; factory: TaskFactory } {
-  const size = options.size ?? ROUND_SIZE.default;
-  if (size < ROUND_SIZE.min || size > ROUND_SIZE.max) {
-    throw new RangeError(`composeRound(): ${size} Aufgaben, erlaubt 8 bis 12`);
+  const { round } = options.rules;
+  const size = options.size ?? round.size;
+  if (size < round.minSize || size > round.maxSize) {
+    throw new RangeError(
+      `composeRound(): ${size} Aufgaben, erlaubt ${round.minSize} bis ${round.maxSize}`,
+    );
   }
-  const factory = new TaskFactory(options.family, options.generator, options.rng);
+  const factory = new TaskFactory(options.family, options.generator, options.params, options.rng);
   const tasks: Task[] = [];
-  for (const [level, count] of levelMix(options.level, size)) {
+  for (const [level, count] of levelMix(options.level, size, options.rules)) {
     for (let i = 0; i < count; i++) tasks.push(factory.next(level));
   }
   const ordered = hillOrder(tasks, (t) => t.level, options.rng);

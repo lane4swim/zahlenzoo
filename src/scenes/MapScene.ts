@@ -1,12 +1,14 @@
 import Phaser from 'phaser';
 import { BaseScene } from './BaseScene';
 import layout from '../data/map-layout.json';
-import { AREAS, areaState, findArea, type AreaDef } from '../logic/areas';
+import { areaState } from '../logic/areas';
+import { findArea } from '../logic/content';
 import { areaProgress } from '../services/save';
 import type { Services } from '../services/services';
+import type { AreaConfig } from '../types/content';
 import { SceneKey, type AreaSceneData } from '../types/scenes';
 import { AreaMarker } from '../ui/AreaMarker';
-import { AnimalIcon, Color, CssColor, FontFamily, FontSize, Stroke, Tex } from '../ui/theme';
+import { Color, CssColor, FontFamily, FontSize, Stroke, Tex } from '../ui/theme';
 
 type Point = { x: number; y: number };
 const POSITIONS: Readonly<Record<string, Point>> = layout.areas;
@@ -38,12 +40,13 @@ export class MapScene extends BaseScene {
     this.addTitle(this.t('map.title'), 62);
 
     const starsByArea = Object.fromEntries(
-      AREAS.map((a) => [a.id, areaProgress(profile, a.id).stars]),
+      this.content.areas.map((a) => [a.id, areaProgress(profile, a.id).stars]),
     );
-    for (const area of AREAS) {
+    for (const area of this.content.areas) {
       const pos = POSITIONS[area.id];
       if (!pos) continue;
-      this.addMarker(area, pos, areaState(area, starsByArea), starsByArea[area.id] ?? 0);
+      const state = areaState(area, starsByArea, this.content.rules);
+      this.addMarker(area, pos, state, starsByArea[area.id] ?? 0);
     }
 
     this.messagePlate = this.add.graphics();
@@ -58,9 +61,9 @@ export class MapScene extends BaseScene {
     this.showMessage(this.t('map.tapAnimal'));
   }
 
-  private addMarker(area: AreaDef, pos: Point, state: string, stars: number): void {
+  private addMarker(area: AreaConfig, pos: Point, state: string, stars: number): void {
     const name = this.t(`area.${area.id}`);
-    const icon = AnimalIcon[area.animal];
+    const icon = this.content.animals[area.animal]?.icon;
     if (state === 'open' && icon) {
       const data: AreaSceneData = { areaId: area.id };
       new AreaMarker(this, {
@@ -72,7 +75,7 @@ export class MapScene extends BaseScene {
         onPress: () => this.scene.start(SceneKey.Area, data),
       });
     } else if (state === 'locked') {
-      const required = area.requires ? findArea(area.requires) : undefined;
+      const required = area.requires ? findArea(this.content, area.requires) : undefined;
       new AreaMarker(this, {
         ...pos,
         name,

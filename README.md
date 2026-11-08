@@ -25,3 +25,19 @@ Voraussetzung: Node.js 22.13 oder neuer.
 Das Spiel wird über GitHub Pages unter <https://lane4swim.github.io/zahlenzoo/> ausgeliefert; `base` ist deshalb `/zahlenzoo/`. Für anderes Hosting: `BASE_PATH=/ npm run build`.
 
 Jeder Push auf `main` baut das Spiel und veröffentlicht es (`.github/workflows/deploy.yml`). Voraussetzung: In den Einstellungen des Repositorys unter Pages ist als Quelle „GitHub Actions“ gewählt.
+
+## Inhalte anpassen
+
+Bereiche, Aufgaben und Startwerte stehen in `public/assets/data/` und werden beim Start geladen und geprüft. Ein Fehler in einer Datei wird im Spiel mit Datei und Stelle angezeigt.
+
+| Datei                              | Inhalt                                                                                                    |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `rules.json`                       | Startwerte: Rundengröße, Mischung der Stufen, Versuche, Sternschwellen, Freischaltung                     |
+| `areas.json`                       | Bereiche der Weltkarte, Tier, Aufgabenfamilie, Vorgängerbereich                                           |
+| `families.json`                    | Aufgabenfamilien mit Parametern je Stufe (z. B. Kernreihen des Einmaleins) und Anteilen der Eingabeformen |
+| `animals.json`                     | Tiergrafiken, Kartensymbol, Plätze in Gehege und Aufgabenansicht, Sternpreis der Babys                    |
+| `strings.de.json`, `hints.de.json` | Oberflächentexte, Hinweise und Fehlerrückmeldungen                                                        |
+| `praise.de.json`                   | Lob, abwechselnd verwendet                                                                                |
+| `legal.json`                       | Impressum und Datenschutz (Angaben folgen vor der Veröffentlichung)                                       |
+
+Neue Aufgabenfamilien brauchen zusätzlich einen Generator in `src/logic/generators/` (Eintrag in `index.ts`).

@@ -1,14 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import { add100 } from '../src/logic/generators/add100';
 import { createRng } from '../src/logic/rng';
+import { paramsOf } from './helpers/content';
 import { stepsText, additionStrategy } from '../src/logic/strategy';
 import type { Task, TaskLevel } from '../src/types/task';
 
 const SEEDS = 1000;
+const P = paramsOf('add_100');
 const LEVELS: TaskLevel[] = [1, 2, 3];
 
 function forAllSeeds(level: TaskLevel, fn: (task: Task) => void) {
-  for (let seed = 0; seed < SEEDS; seed++) fn(add100(level, createRng(seed), `t${seed}`));
+  for (let seed = 0; seed < SEEDS; seed++) fn(add100(level, createRng(seed), `t${seed}`, P(level)));
 }
 
 describe('add_100', () => {
@@ -97,11 +99,11 @@ describe('add_100', () => {
   });
 
   it('ist mit gleichem Startwert reproduzierbar', () => {
-    expect(add100(2, createRng(99), 'x')).toEqual(add100(2, createRng(99), 'x'));
+    expect(add100(2, createRng(99), 'x', P(2))).toEqual(add100(2, createRng(99), 'x', P(2)));
   });
 
   it('gibt Tauschaufgaben denselben Duplikat-Schlüssel', () => {
-    const task = add100(3, createRng(5), 'x');
+    const task = add100(3, createRng(5), 'x', P(3));
     const { a, b } = task.math!;
     if (task.kind === 'gap') return;
     expect(task.dedupeKey).toBe(`add:${Math.min(a, b)}:${Math.max(a, b)}`);

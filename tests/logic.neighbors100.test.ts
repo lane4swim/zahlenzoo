@@ -2,12 +2,15 @@ import { describe, expect, it } from 'vitest';
 import { check } from '../src/logic/check';
 import { neighbors100 } from '../src/logic/generators/neighbors100';
 import { createRng } from '../src/logic/rng';
+import { paramsOf } from './helpers/content';
 import type { Task, TaskLevel, Term } from '../src/types/task';
 
 const SEEDS = 1000;
+const P = paramsOf('neighbors_100');
 
 function forAllSeeds(level: TaskLevel, fn: (task: Task) => void) {
-  for (let seed = 0; seed < SEEDS; seed++) fn(neighbors100(level, createRng(seed), `t${seed}`));
+  for (let seed = 0; seed < SEEDS; seed++)
+    fn(neighbors100(level, createRng(seed), `t${seed}`, P(level)));
 }
 
 const numbersOf = (terms: readonly Term[]) =>
@@ -105,6 +108,8 @@ describe('neighbors_100', () => {
   });
 
   it('ist mit gleichem Startwert reproduzierbar', () => {
-    expect(neighbors100(3, createRng(42), 'x')).toEqual(neighbors100(3, createRng(42), 'x'));
+    expect(neighbors100(3, createRng(42), 'x', P(3))).toEqual(
+      neighbors100(3, createRng(42), 'x', P(3)),
+    );
   });
 });
