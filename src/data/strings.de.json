@@ -120,5 +120,19 @@
   "strategy.facts_10": "Plus bis 10",
   "strategy.facts_decompose": "Zerlegen der 10",
   "strategy.facts_20": "Plus bis 20",
-  "roundEnd.playLevel": "Stufe {level} spielen"
+  "roundEnd.playLevel": "Stufe {level} spielen",
+  "family.story_addsub": "Sachaufgaben",
+  "family.story_multdiv": "Sachaufgaben",
+  "family.plus_facts_20.short": "Plus\nbis 20",
+  "family.add_100.short": "Plus\nbis 100",
+  "family.sub_100.short": "Minus\nbis 100",
+  "family.story_addsub.short": "Sach-\naufgaben",
+  "family.story_multdiv.short": "Sach-\naufgaben",
+  "family.neighbors_100.short": "Nachbar-\nzahlen",
+  "family.mult_table.short": "Ein-\nmaleins",
+  "strategy.story_add": "Sachaufgaben mit plus",
+  "strategy.story_sub": "Sachaufgaben mit minus",
+  "strategy.story_mult": "Sachaufgaben mit mal",
+  "strategy.story_share": "Verteilen",
+  "strategy.story_measure": "Aufteilen"
 }

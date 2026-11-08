@@ -105,6 +105,55 @@
           "shareShare": 0.5
         }
       }
+    },
+    "story_addsub": {
+      "title": "Sachaufgaben zu Plus und Minus",
+      "kinds": {
+        "choice": 0.3
+      },
+      "levels": {
+        "1": {
+          "description": "Hinzufügen und Wegnehmen bis 20",
+          "max": 20,
+          "subShare": 0.5
+        },
+        "2": {
+          "description": "bis 100 ohne Zehnerübergang",
+          "max": 100,
+          "crossing": 0,
+          "subShare": 0.5
+        },
+        "3": {
+          "description": "bis 100 mit Zehnerübergang",
+          "max": 100,
+          "crossing": 1,
+          "subShare": 0.5
+        }
+      }
+    },
+    "story_multdiv": {
+      "title": "Sachaufgaben zu Mal und Geteilt",
+      "kinds": {
+        "choice": 0.3
+      },
+      "levels": {
+        "1": {
+          "description": "gleich große Gruppen (Malnehmen) mit Kernreihen",
+          "rows": [2, 5, 10]
+        },
+        "2": {
+          "description": "Verteilen, gemischt mit Malnehmen",
+          "rows": [2, 5, 10],
+          "divisors": [2, 5, 10],
+          "shareShare": 0.6
+        },
+        "3": {
+          "description": "Aufteilen, gemischt mit Verteilen",
+          "sizes": [2, 3, 4, 5, 10],
+          "divisors": [3, 4],
+          "measureShare": 0.6
+        }
+      }
     }
   }
 }

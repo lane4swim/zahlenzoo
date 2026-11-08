@@ -7,6 +7,8 @@ import type {
   LevelParams,
   Praise,
   Rules,
+  StoryOp,
+  StoryTemplate,
 } from '../types/content';
 
 /**
@@ -198,6 +200,28 @@ export function parseLegal(data: unknown): Legal {
   };
 }
 
+const STORY_OPS: readonly StoryOp[] = ['add', 'sub', 'mult', 'share', 'measure'];
+
+export function parseStories(data: unknown): StoryTemplate[] {
+  const d = obj(data, 'stories.json');
+  if (!Array.isArray(d.stories)) throw new ContentError('stories.json: Liste „stories“ fehlt');
+  const stories = d.stories.map((s, i) => {
+    const o = obj(s, `stories.json stories[${i}]`);
+    const op = str(o.op, `stories[${i}].op`) as StoryOp;
+    if (!STORY_OPS.includes(op))
+      throw new ContentError(`stories[${i}].op: unbekannte Rechenart ${op}`);
+    return {
+      id: str(o.id, `stories[${i}].id`),
+      op,
+      icon: str(o.icon, `stories[${i}].icon`),
+      family: str(o.family, `stories[${i}].family`),
+    };
+  });
+  const ids = stories.map((s) => s.id);
+  if (new Set(ids).size !== ids.length) throw new ContentError('stories.json: doppelte IDs');
+  return stories;
+}
+
 export type RawContent = {
   rules: unknown;
   areas: unknown;
@@ -205,6 +229,7 @@ export type RawContent = {
   animals: unknown;
   praise: unknown;
   legal: unknown;
+  stories: unknown;
 };
 
 /**
@@ -220,7 +245,13 @@ export function parseContent(raw: RawContent, generatorIds: readonly string[]): 
     animals: parseAnimals(raw.animals),
     praise: parsePraise(raw.praise),
     legal: parseLegal(raw.legal),
+    stories: parseStories(raw.stories),
   };
+  for (const story of content.stories) {
+    if (!content.families[story.family]) {
+      throw new ContentError(`stories.json: ${story.id} nennt unbekannte Familie ${story.family}`);
+    }
+  }
   for (const area of content.areas) {
     if (!content.animals[area.animal]) {
       throw new ContentError(`areas.json: ${area.id} nennt unbekanntes Tier ${area.animal}`);
@@ -247,5 +278,8 @@ export function familyParams(content: GameContent, family: string, level: number
   if (!f) throw new ContentError(`Unbekannte Familie ${family}`);
   const lvl = f.levels[String(Math.max(1, level))];
   if (!lvl) throw new ContentError(`Familie ${family}: Stufe ${level} fehlt`);
-  return { kinds: f.kinds, level: lvl };
+  const stories = content.stories.filter((s) => s.family === family);
+  return stories.length > 0
+    ? { kinds: f.kinds, level: lvl, stories }
+    : { kinds: f.kinds, level: lvl };
 }

@@ -107,7 +107,7 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 - [x] `families.json` (Parameter je Stufe, Anteile der Eingabeformen)
 - [x] `animals.json`
 - [x] `hints.de.json`
-- [ ] `word-templates.de.json` (30 bis 40 Vorlagen); folgt mit der Eingabeform `word` (#22)
+- [x] `word-templates.de.json` (30 Vorlagen; Rechenart, Bild und Familie in `stories.json`)
 - [x] `strings.de.json` (vollständig; ein Test prüft jeden Schlüssel, den der Code nutzt)
 - [x] `praise.de.json` (mehrere Varianten je Anlass)
 - [ ] `achievements.json`; folgt mit dem Sticker-Album (#23)
@@ -135,7 +135,7 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 - [ ] `clock` (Zeiger einstellen, Uhrzeit wählen)
 - [ ] `money` (Münzen und Scheine ziehen)
 - [ ] `pattern` (Raster antippen)
-- [ ] `word` (Bild plus Text)
+- [x] `word` (Bild plus Text): Sachtext, Bild der Dinge aus der Geschichte, Antwort mit Einheit über Ziffernblock oder Antwortkarten
 - [ ] Typen mit geringem Aufwand: `true_false`, `compare_symbol`, `sequence`, `inverse`, `number_house`, `odd_one_out`, `time_order`
 - [ ] Typen mit mittlerem Aufwand: `match_pairs`, `table_read`, `route`, `combinatorics`
 - [ ] `cube_build` für den Baumodus
