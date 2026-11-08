@@ -533,13 +533,19 @@ export class TaskScene extends BaseScene<TaskSceneData> {
 
   /**
    * Text mit Platzhaltern. Ein Wert „@schlüssel“ verweist auf einen weiteren Text, der mit
-   * denselben Werten gefüllt wird (z. B. „halb {next}“ in „Stelle die Uhr auf {time}.“).
+   * denselben Werten gefüllt wird (z. B. „halb {next}“ in „Stelle die Uhr auf {time}.“);
+   * „@schlüssel|n=40“ füllt ihn mit eigenen Werten (z. B. „40 Minuten“).
    */
   private text(key: string, params?: TextParams): string {
     if (!params) return this.t(key);
     const own: Record<string, string | number> = { ...params };
     for (const [k, v] of Object.entries(params)) {
-      if (typeof v === 'string' && v.startsWith('@')) own[k] = this.t(v.slice(1), params);
+      if (typeof v !== 'string' || !v.startsWith('@')) continue;
+      const [ref = '', ...pairs] = v.slice(1).split('|');
+      const values = pairs.length
+        ? Object.fromEntries(pairs.map((pair) => pair.split('=') as [string, string]))
+        : params;
+      own[k] = this.t(ref, values);
     }
     return this.t(key, own);
   }
@@ -649,6 +655,11 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       '?': this.t('read.unknown'),
       '€': this.t('read.euro'),
       ct: this.t('read.cent'),
+      h: this.t('read.hours'),
+      min: this.t('read.minutes'),
+      '¼': this.t('read.quarter'),
+      '½': this.t('read.half'),
+      '¾': this.t('read.threeQuarters'),
     };
     const story = this.task.prompt.story;
     if (story) {

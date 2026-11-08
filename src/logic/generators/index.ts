@@ -10,6 +10,7 @@ import { EXACT_OR_ESTIMATE, exactOrEstimate, QUESTION_PICK, questionPick } from 
 import { storyAddSub, STORY_ADDSUB, storyAddSubFor } from './storyAddSub';
 import { storyMultDiv, STORY_MULTDIV } from './storyMultDiv';
 import { sub100, SUB_100 } from './sub100';
+import { COMPARE_DURATION, compareDuration, TIME_UNITS, timeUnits } from './time';
 import type { Generator } from '../../types/task';
 
 /** Generatoren je Aufgabenfamilie; areas.json und families.json verweisen auf diese IDs. */
@@ -28,6 +29,8 @@ export const GENERATORS: Readonly<Record<string, Generator>> = {
   [QUESTION_PICK]: questionPick,
   [EXACT_OR_ESTIMATE]: exactOrEstimate,
   ...Object.fromEntries(CLOCK_FAMILIES.map((f) => [f, clockFor(f)])),
+  [COMPARE_DURATION]: compareDuration,
+  [TIME_UNITS]: timeUnits,
 };
 
 export const GENERATOR_IDS = Object.keys(GENERATORS);

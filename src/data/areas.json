@@ -33,7 +33,14 @@
     {
       "id": "futteruhr",
       "animal": "owl",
-      "families": ["clock_full", "clock_half", "clock_quarter", "clock_digital"],
+      "families": [
+        "clock_full",
+        "clock_half",
+        "clock_quarter",
+        "clock_digital",
+        "compare_duration",
+        "time_units"
+      ],
       "requires": "zookasse"
     },
     {

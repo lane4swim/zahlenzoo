@@ -82,7 +82,19 @@ describe('Textdateien', () => {
       Object.fromEntries(
         Object.entries(params ?? {}).map(([k, v]) => [
           k,
-          typeof v === 'string' && v.startsWith('@') ? i18n.t(v.slice(1), params) : v,
+          typeof v === 'string' && v.startsWith('@')
+            ? i18n.t(
+                v.slice(1).split('|')[0]!,
+                v.includes('|')
+                  ? Object.fromEntries(
+                      v
+                        .split('|')
+                        .slice(1)
+                        .map((pair) => pair.split('=') as [string, string]),
+                    )
+                  : params,
+              )
+            : v,
         ]),
       );
     const open = /\{\w+\}/;

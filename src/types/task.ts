@@ -76,7 +76,23 @@ export type TaskOption = {
 export type TaskAnswer = number | number[] | string;
 
 /** Bestandteil einer Rechnung oder Zahlenreihe: Zahl, Zeichen oder die gesuchte Stelle. */
-export type Term = number | '+' | '-' | '·' | ':' | '=' | '<' | ',' | '?' | '€' | 'ct';
+export type Term =
+  | number
+  | '+'
+  | '-'
+  | '·'
+  | ':'
+  | '='
+  | '<'
+  | ','
+  | '?'
+  | '€'
+  | 'ct'
+  | 'h'
+  | 'min'
+  | '¼'
+  | '½'
+  | '¾';
 
 /**
  * Bild zu einer Sachaufgabe: Gruppen gleicher Dinge (Texturschlüssel `icon`).
