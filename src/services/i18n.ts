@@ -4,7 +4,7 @@ export type Strings = Readonly<Record<string, string>>;
 export type TranslateParams = TextParams;
 
 /**
- * Texte aus JSON (`public/assets/data/*.de.json`). Platzhalter im Text: `{name}`.
+ * Texte aus JSON (`src/data/*.de.json`). Platzhalter im Text: `{name}`.
  * Fehlende Schlüssel erscheinen als Schlüssel, damit sie beim Testen auffallen.
  */
 export class I18n {

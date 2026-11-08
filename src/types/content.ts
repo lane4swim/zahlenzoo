@@ -1,4 +1,4 @@
-/** Inhalte aus public/assets/data/*.json (Spezifikation, Abschnitt 11). */
+/** Inhalte aus src/data/*.json (Spezifikation, Abschnitt 11). */
 
 /** Startwerte (rules.json). */
 export type Rules = {

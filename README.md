@@ -28,7 +28,7 @@ Jeder Push auf `main` baut das Spiel und veröffentlicht es (`.github/workflows/
 
 ## Inhalte anpassen
 
-Bereiche, Aufgaben und Startwerte stehen in `public/assets/data/` und werden beim Start geladen und geprüft. Ein Fehler in einer Datei wird im Spiel mit Datei und Stelle angezeigt.
+Bereiche, Aufgaben und Startwerte stehen in `src/data/`. Sie werden mit dem Programm gebaut, damit Code und Daten nach einem Update immer zusammenpassen, und beim Start geprüft. Ein Fehler in einer Datei wird im Spiel mit Datei und Stelle angezeigt. Nach einer Änderung genügt ein Push auf `main`: Der Workflow baut und veröffentlicht neu.
 
 | Datei                              | Inhalt                                                                                                    |
 | ---------------------------------- | --------------------------------------------------------------------------------------------------------- |
