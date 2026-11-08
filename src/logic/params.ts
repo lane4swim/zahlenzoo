@@ -31,3 +31,16 @@ export function nums(params: FamilyParams, key: string): number[] {
 export function kindShare(params: FamilyParams, kind: string): number {
   return params.kinds[kind] ?? 0;
 }
+
+/** Text-Parameter, z. B. eine Aufgabenart; erlaubt sind nur die genannten Werte. */
+export function choice<T extends string>(
+  params: FamilyParams,
+  key: string,
+  allowed: readonly T[],
+): T {
+  const value = params.level[key];
+  if (typeof value !== 'string' || !allowed.includes(value as T)) {
+    throw new Error(`Parameter „${key}“ muss einer der Werte ${allowed.join(', ')} sein`);
+  }
+  return value as T;
+}

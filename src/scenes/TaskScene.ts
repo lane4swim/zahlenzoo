@@ -20,7 +20,7 @@ import type { Services } from '../services/services';
 import { GameEvent, type AnswerSubmittedPayload, type RoundFinishedPayload } from '../types/events';
 import type { AnswerOutcome } from '../types/round';
 import { SceneKey, type TaskSceneData } from '../types/scenes';
-import type { CheckResult, Hint, Task, TaskLevel, Visual } from '../types/task';
+import type { CheckResult, Hint, Task, TaskLevel, TextParams, Visual } from '../types/task';
 import { AnimalSprite } from '../ui/AnimalSprite';
 import { taskBackground } from '../ui/animals';
 import { AnswerCards } from '../ui/AnswerCards';
@@ -32,6 +32,8 @@ import { HundredBoard } from '../ui/math/HundredBoard';
 import { NumberLine } from '../ui/math/NumberLine';
 import { TenFrame } from '../ui/math/TenFrame';
 import { TensOnes } from '../ui/math/TensOnes';
+import { ClockInput } from '../ui/ClockInput';
+import { ClockFace } from '../ui/math/ClockFace';
 import { MoneyInput } from '../ui/MoneyInput';
 import { Numpad } from '../ui/Numpad';
 import { ProgressDots } from '../ui/ProgressDots';
@@ -52,6 +54,8 @@ const ANIMAL_HEIGHT = 230;
 /** Zahlteller beim Geldlegen: zwischen Hinweistext und Münzleiste */
 const PLATE_Y = 428;
 const PLATE_H = 190;
+/** Uhr beim Lesen und Einstellen: unter dem Hinweistext, über den Antwortkarten */
+const CLOCK = { y: 432, radius: 105 };
 
 /**
  * Aufgabenansicht: Tier links, Rechnung oben, Hinweise in der Mitte, Eingabe unten.
@@ -80,7 +84,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
   private dots!: ProgressDots;
   private panel!: HintPanel;
   private expression?: Expression;
-  private answerInput?: Numpad | AnswerCards | MoneyInput;
+  private answerInput?: Numpad | AnswerCards | MoneyInput | ClockInput;
   private aidButtons: Button[] = [];
   private feedbackIcon?: Phaser.GameObjects.Image;
   /** Frage, Sachtext, Einheit und Bild (werden je Aufgabe neu angelegt) */
@@ -234,6 +238,22 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       });
       return;
     }
+    if (task.clock?.set) {
+      this.answerInput = new ClockInput(this, {
+        x: INPUT_X,
+        y: INPUT_Y + 44,
+        clock: { x: PANEL.x, y: CLOCK.y, radius: CLOCK.radius },
+        step: task.clock.set.step,
+        okLabel: this.t('common.ok'),
+        hourLabel: this.t('task.clock.hour'),
+        minuteLabel: this.t('task.clock.minute'),
+        onSubmit: (value) => this.submit(value),
+      });
+      return;
+    }
+    if (task.clock?.face) {
+      this.storyObjects.push(new ClockFace(this, PANEL.x, CLOCK.y, CLOCK.radius, task.clock.time));
+    }
     if (task.options) {
       this.answerInput = new AnswerCards(
         this,
@@ -241,7 +261,8 @@ export class TaskScene extends BaseScene<TaskSceneData> {
         INPUT_Y,
         task.options,
         (value) => this.submit(value),
-        (option) => (option.label ? this.t(option.label.key, option.label.params) : option.value),
+        (option) =>
+          option.label ? this.text(option.label.key, option.label.params) : option.value,
       );
     } else {
       this.answerInput = new Numpad(this, {
@@ -304,7 +325,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       this.expression = new Expression(this, PANEL.x, 200, task.prompt.terms);
       return;
     }
-    const text = this.t(key, task.prompt.textParams);
+    const text = this.text(key, task.prompt.textParams);
     // Längere Sachsituationen stehen linksbündig wie bei Sachaufgaben.
     const left = text.length > 60 || task.prompt.instructionKey !== undefined;
     const question = this.add
@@ -331,7 +352,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
   /** Frage zur Aufgabe (über den Zahlen), für das Vorlesen. */
   private question(): string {
     const key = this.task.prompt.textKey;
-    return key ? this.t(key, this.task.prompt.textParams) : '';
+    return key ? this.text(key, this.task.prompt.textParams) : '';
   }
 
   /** Lob abwechselnd verwenden, damit es nicht leer klingt (Spezifikation, Abschnitt 8). */
@@ -416,6 +437,10 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       // Ohne Antwortkästchen bleibt die richtige Karte stehen, darunter „Weiter“.
       this.answerInput.showSolution(String(this.task.answer), -110);
       nextY = INPUT_Y + 40;
+    } else if (this.answerInput instanceof ClockInput && this.task.clock) {
+      // Die Uhr zeigt die richtige Zeit, die Tasten machen Platz für „Weiter“.
+      this.answerInput.setTime(this.task.clock.time).setButtonsVisible(false);
+      nextY = INPUT_Y + 44;
     } else if (this.answerInput instanceof MoneyInput && money) {
       const cents = money.unit === 'euro' ? money.amount * 100 : money.amount;
       this.answerInput.setItems(fewestCoins(cents, money.denominations)).setTrayVisible(false);
@@ -470,6 +495,13 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       this.feedbackIcon = this.add.image(x, y, texture).setScale(0.8);
       return;
     }
+    if (this.task.clock) {
+      // Bei der Uhr steht der Haken rechts oben neben dem Zifferblatt.
+      this.feedbackIcon = this.add
+        .image(PANEL.x + CLOCK.radius + 50, CLOCK.y - CLOCK.radius + 30, texture)
+        .setScale(0.8);
+      return;
+    }
     if (!this.expression) return;
     // Bei Sachaufgaben steht der Haken hinter der Einheit.
     const right = Math.max(
@@ -496,15 +528,20 @@ export class TaskScene extends BaseScene<TaskSceneData> {
 
   private hintText(hint: Hint): string {
     const unit = this.storyUnit();
-    const params: Record<string, string | number> = { ...hint.params };
-    // „@schlüssel“ verweist auf einen Text mit den Werten der Aufgabe (z. B. die passende Frage).
+    return this.text(hint.key, unit ? { ...hint.params, unit } : hint.params);
+  }
+
+  /**
+   * Text mit Platzhaltern. Ein Wert „@schlüssel“ verweist auf einen weiteren Text, der mit
+   * denselben Werten gefüllt wird (z. B. „halb {next}“ in „Stelle die Uhr auf {time}.“).
+   */
+  private text(key: string, params?: TextParams): string {
+    if (!params) return this.t(key);
+    const own: Record<string, string | number> = { ...params };
     for (const [k, v] of Object.entries(params)) {
-      if (typeof v === 'string' && v.startsWith('@')) {
-        params[k] = this.t(v.slice(1), this.task.prompt.textParams);
-      }
+      if (typeof v === 'string' && v.startsWith('@')) own[k] = this.t(v.slice(1), params);
     }
-    if (unit) params.unit = unit;
-    return this.t(hint.key, params);
+    return this.t(key, own);
   }
 
   private visualFor(visual: Visual): Phaser.GameObjects.GameObject {
@@ -628,7 +665,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     // Antwortsätze (z. B. Fragen zur Situation) werden mit vorgelesen.
     const sentences = (this.task.options ?? [])
       .filter((o) => o.label)
-      .map((o) => this.t(o.label!.key, o.label!.params));
+      .map((o) => this.text(o.label!.key, o.label!.params));
     const choices = sentences.length > 0 ? ` ${sentences.join(' ')}` : '';
     this.services.audio.speak(`${question ? `${question} ` : ''}${terms}${extra}${choices}`);
   }

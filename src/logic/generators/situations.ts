@@ -51,7 +51,7 @@ export const questionPick: Generator = (level, rng, id, params): Task => {
   const hints: [Hint, Hint, Hint] = [
     { key: 'hint.question_pick.1' },
     { key: 'hint.question_pick.2' },
-    { key: 'hint.question_pick.3', params: { question: `@${base}.right` } },
+    { key: 'hint.question_pick.3', params: { ...p, question: `@${base}.right` } },
   ];
   return {
     id,

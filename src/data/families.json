@@ -301,6 +301,104 @@
           "maxBudget": 100
         }
       }
+    },
+    "clock_full": {
+      "title": "Volle Stunden",
+      "kinds": {
+        "choice": 1
+      },
+      "levels": {
+        "1": {
+          "description": "Uhr lesen: volle Stunden",
+          "mode": "read",
+          "minutes": [0]
+        },
+        "2": {
+          "description": "Zeiger einstellen: volle Stunden",
+          "mode": "set",
+          "minutes": [0]
+        },
+        "3": {
+          "description": "Eine Stunde später oder früher",
+          "mode": "later",
+          "minutes": [0],
+          "span": 60
+        }
+      }
+    },
+    "clock_half": {
+      "title": "Halbe Stunden",
+      "kinds": {
+        "choice": 1
+      },
+      "levels": {
+        "1": {
+          "description": "Uhr lesen: halbe Stunden (halb 8 = 7:30)",
+          "mode": "read",
+          "minutes": [30]
+        },
+        "2": {
+          "description": "Zeiger einstellen: halbe und volle Stunden",
+          "mode": "set",
+          "minutes": [0, 30]
+        },
+        "3": {
+          "description": "Eine halbe Stunde (30 Minuten) später oder früher",
+          "mode": "later",
+          "minutes": [0, 30],
+          "span": 30
+        }
+      }
+    },
+    "clock_quarter": {
+      "title": "Viertelstunden",
+      "kinds": {
+        "choice": 1
+      },
+      "levels": {
+        "1": {
+          "description": "Uhr lesen: Viertel nach und Viertel vor",
+          "mode": "read",
+          "minutes": [15, 45]
+        },
+        "2": {
+          "description": "Zeiger einstellen: Viertel- und Dreiviertelstunden",
+          "mode": "set",
+          "minutes": [15, 45]
+        },
+        "3": {
+          "description": "Eine Viertelstunde (15 Minuten) später oder früher",
+          "mode": "later",
+          "minutes": [0, 15, 30, 45],
+          "span": 15
+        }
+      }
+    },
+    "clock_digital": {
+      "title": "Digitaluhr",
+      "kinds": {
+        "choice": 1
+      },
+      "levels": {
+        "1": {
+          "description": "Analoge Uhr digital schreiben (vormittags)",
+          "mode": "toDigital",
+          "minutes": [0, 15, 30, 45],
+          "afternoon": 0
+        },
+        "2": {
+          "description": "Am Nachmittag und Abend: 19:30 statt 7:30",
+          "mode": "toDigital",
+          "minutes": [0, 15, 30, 45],
+          "afternoon": 1
+        },
+        "3": {
+          "description": "Digitalzeit am Nachmittag auf der analogen Uhr einstellen",
+          "mode": "setDigital",
+          "minutes": [0, 15, 30, 45],
+          "afternoon": 1
+        }
+      }
     }
   }
 }

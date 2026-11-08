@@ -87,6 +87,12 @@ export type StoryPicture = { icon: string; groups: number[]; crossed?: number };
 /** Betrag in Euro oder Cent (ganzzahlig, Klasse 2) und die Münzen und Scheine dafür. */
 export type MoneyInfo = { amount: number; unit: 'euro' | 'cent'; denominations: number[] };
 
+/**
+ * Uhr zur Aufgabe. time: Minuten seit 0:00 (0 bis 1439). face: Uhr in der Aufgabe zeigen
+ * (Uhr lesen). set: das Kind stellt die Zeiger ein; Schrittweite des langen Zeigers in Minuten.
+ */
+export type ClockInfo = { time: number; face: boolean; set?: { step: number } };
+
 /** Typische falsche Antwort mit Fehlerart (für Antwortkarten und Rückmeldung). */
 export type TypicalError = { value: number; errorTag: string };
 
@@ -134,6 +140,10 @@ export type Task = {
   math?: MathInfo;
   /** Geld legen: Betrag und angebotene Münzen und Scheine (Werte in Cent) */
   money?: MoneyInfo;
+  /** Uhrzeit: angezeigte oder einzustellende Zeit */
+  clock?: ClockInfo;
+  /** typische falsche Antworten als Text (z. B. Uhrzeiten) mit Fehlerart */
+  errorAnswers?: Array<{ value: string; errorTag: string }>;
   /** typische Fehler, falls nicht aus `math` ableitbar */
   typicalErrors?: TypicalError[];
   /** Schlüssel zum Erkennen von Duplikaten; Tauschaufgaben haben denselben */

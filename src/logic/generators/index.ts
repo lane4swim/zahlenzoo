@@ -2,6 +2,7 @@ import { add100, ADD_100 } from './add100';
 import { multTable, MULT_TABLE } from './multTable';
 import { neighbors100, NEIGHBORS_100 } from './neighbors100';
 import { plusFacts20, PLUS_FACTS_20 } from './plusFacts20';
+import { CLOCK_FAMILIES, clockFor } from './clock';
 import { compareMoney, COMPARE_MONEY } from './compareMoney';
 import { moneyConvert, MONEY_CONVERT } from './moneyConvert';
 import { moneyLay, MONEY_LAY } from './moneyLay';
@@ -26,6 +27,7 @@ export const GENERATORS: Readonly<Record<string, Generator>> = {
   [COMPARE_MONEY]: compareMoney,
   [QUESTION_PICK]: questionPick,
   [EXACT_OR_ESTIMATE]: exactOrEstimate,
+  ...Object.fromEntries(CLOCK_FAMILIES.map((f) => [f, clockFor(f)])),
 };
 
 export const GENERATOR_IDS = Object.keys(GENERATORS);
