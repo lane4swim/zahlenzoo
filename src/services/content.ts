@@ -2,7 +2,7 @@ import { parseContent, type RawContent } from '../logic/content';
 import { GENERATOR_IDS } from '../logic/generators';
 import type { GameContent } from '../types/content';
 
-/** Hält die geprüften Inhalte aus public/assets/data (geladen in der BootScene). */
+/** Hält die geprüften Inhalte aus src/data (geprüft in der BootScene). */
 export class ContentStore {
   private data?: GameContent;
 

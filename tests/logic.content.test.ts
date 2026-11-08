@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any -- Testdaten werden gezielt verändert */
 import { describe, expect, it } from 'vitest';
-import hints from '../public/assets/data/hints.de.json';
-import strings from '../public/assets/data/strings.de.json';
+import hints from '../src/data/hints.de.json';
+import strings from '../src/data/strings.de.json';
 import { ContentError, familyParams, parseContent, type RawContent } from '../src/logic/content';
 import { GENERATOR_IDS, GENERATORS } from '../src/logic/generators';
 import { createRng } from '../src/logic/rng';

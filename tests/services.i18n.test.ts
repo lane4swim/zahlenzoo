@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import hints from '../public/assets/data/hints.de.json';
-import strings from '../public/assets/data/strings.de.json';
+import hints from '../src/data/hints.de.json';
+import strings from '../src/data/strings.de.json';
 import { add100 } from '../src/logic/generators/add100';
 import { multTable } from '../src/logic/generators/multTable';
 import { neighbors100 } from '../src/logic/generators/neighbors100';

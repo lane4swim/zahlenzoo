@@ -1,9 +1,9 @@
-import animals from '../../public/assets/data/animals.json';
-import areas from '../../public/assets/data/areas.json';
-import families from '../../public/assets/data/families.json';
-import legal from '../../public/assets/data/legal.json';
-import praise from '../../public/assets/data/praise.de.json';
-import rules from '../../public/assets/data/rules.json';
+import animals from '../../src/data/animals.json';
+import areas from '../../src/data/areas.json';
+import families from '../../src/data/families.json';
+import legal from '../../src/data/legal.json';
+import praise from '../../src/data/praise.de.json';
+import rules from '../../src/data/rules.json';
 import { familyParams, parseContent, type RawContent } from '../../src/logic/content';
 import { GENERATOR_IDS } from '../../src/logic/generators';
 import type { FamilyParams } from '../../src/types/content';
