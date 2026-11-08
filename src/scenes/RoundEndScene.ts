@@ -63,25 +63,37 @@ export class RoundEndScene extends BaseScene<RoundEndSceneData> {
       this.time.delayedCall(500, () => animal.cheer());
     }
 
-    const again: TaskSceneData = {
-      areaId: this.result.areaId,
-      family: this.result.family,
-      level: this.result.level,
-    };
-    this.addButton({
-      x: cx - 140,
-      y: 640,
-      width: 300,
-      label: this.t('roundEnd.again'),
-      onPress: () => this.scene.start(SceneKey.Task, again),
-    });
-    this.addButton({
-      x: cx + 220,
-      y: 640,
-      width: 300,
-      label: this.t('roundEnd.toMap'),
-      fill: Color.grasHell,
-      onPress: () => this.scene.start(SceneKey.Map),
+    const { areaId, family, level } = this.result;
+    const again: TaskSceneData = { areaId, family, level };
+    const buttons: Array<{ label: string; data?: TaskSceneData; primary?: boolean }> = [
+      { label: this.t('roundEnd.again'), data: again },
+    ];
+    // Neue Stufe freigeschaltet: direkt weiterspielen, ohne Umweg über Karte und Gehege.
+    if (this.reward.levelUnlocked) {
+      const next = this.reward.unlockedLevel;
+      buttons.push({
+        label: this.t('roundEnd.playLevel', { level: next }),
+        data: { areaId, family, level: next },
+        primary: true,
+      });
+    }
+    buttons.push({ label: this.t('roundEnd.toMap'), primary: !this.reward.levelUnlocked });
+
+    // Knöpfe rechts neben dem Tier verteilen.
+    const width = buttons.length === 3 ? 250 : 300;
+    const gap = buttons.length === 3 ? 24 : 60;
+    const total = buttons.length * width + (buttons.length - 1) * gap;
+    const left = cx + 70 - total / 2;
+    buttons.forEach((b, i) => {
+      this.addButton({
+        x: left + width / 2 + i * (width + gap),
+        y: 640,
+        width,
+        label: b.label,
+        fill: b.primary ? Color.grasHell : Color.papier,
+        onPress: () =>
+          b.data ? this.scene.start(SceneKey.Task, b.data) : this.scene.start(SceneKey.Map),
+      });
     });
   }
 

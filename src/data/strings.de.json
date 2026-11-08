@@ -119,5 +119,6 @@
   "strategy.sub_complement": "Ergänzen beim Minus",
   "strategy.facts_10": "Plus bis 10",
   "strategy.facts_decompose": "Zerlegen der 10",
-  "strategy.facts_20": "Plus bis 20"
+  "strategy.facts_20": "Plus bis 20",
+  "roundEnd.playLevel": "Stufe {level} spielen"
 }
