@@ -63,7 +63,11 @@ export class RoundEndScene extends BaseScene<RoundEndSceneData> {
       this.time.delayedCall(500, () => animal.cheer());
     }
 
-    const again: TaskSceneData = { areaId: this.result.areaId, level: this.result.level };
+    const again: TaskSceneData = {
+      areaId: this.result.areaId,
+      family: this.result.family,
+      level: this.result.level,
+    };
     this.addButton({
       x: cx - 140,
       y: 640,

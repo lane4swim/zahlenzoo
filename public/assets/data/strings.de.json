@@ -106,5 +106,18 @@
   "strategy.mult_derive_double": "Ableiten durch Verdoppeln",
   "strategy.mult_derive_minus": "Ableiten mit minus",
   "strategy.divide_share": "Verteilen",
-  "strategy.mult_inverse": "Umkehraufgaben"
+  "strategy.mult_inverse": "Umkehraufgaben",
+  "family.plus_facts_20": "Plus bis 20",
+  "family.add_100": "Plus bis 100",
+  "family.sub_100": "Minus bis 100",
+  "family.neighbors_100": "Nachbarzahlen",
+  "family.mult_table": "Einmaleins",
+  "strategy.sub_ones": "Einer abziehen",
+  "strategy.sub_tens": "Zehner abziehen",
+  "strategy.sub_bridge": "Minus über den Zehner",
+  "strategy.sub_stepwise": "Minus mit Zehnern und Einern",
+  "strategy.sub_complement": "Ergänzen beim Minus",
+  "strategy.facts_10": "Plus bis 10",
+  "strategy.facts_decompose": "Zerlegen der 10",
+  "strategy.facts_20": "Plus bis 20"
 }

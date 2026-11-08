@@ -17,5 +17,5 @@ export function areaState(
   const unlocked =
     area.requires === undefined || (starsByArea[area.requires] ?? 0) >= rules.areaUnlockStars;
   if (!unlocked) return 'locked';
-  return area.family ? 'open' : 'soon';
+  return area.families.length > 0 ? 'open' : 'soon';
 }

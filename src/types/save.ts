@@ -14,9 +14,9 @@ export type SkillState = {
 export type AreaProgress = {
   /** insgesamt gesammelte Sterne */
   stars: number;
-  /** höchste freigeschaltete Stufe */
-  unlockedLevel: TaskLevel;
   rounds: number;
+  /** höchste freigeschaltete Stufe je Aufgabenfamilie (fehlt: Stufe 1) */
+  levels: Record<string, TaskLevel>;
 };
 
 export type Settings = {

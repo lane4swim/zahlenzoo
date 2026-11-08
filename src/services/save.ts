@@ -6,9 +6,10 @@ import {
   type SaveData,
   type Settings,
 } from '../types/save';
+import type { TaskLevel } from '../types/task';
 
 /** Aktuelle Version des Spielstands; bei jeder Formatänderung erhöhen und Migration ergänzen. */
-export const SAVE_VERSION = 1;
+export const SAVE_VERSION = 2;
 export const STORAGE_KEY = 'zahlenzoo.save';
 export const BACKUP_KEY = 'zahlenzoo.save.backup';
 export const NICKNAME_MAX = 16;
@@ -16,11 +17,43 @@ export const NICKNAME_MAX = 16;
 /** Wandelt Version n in Version n + 1 um. */
 export type Migration = (data: Record<string, unknown>) => Record<string, unknown>;
 
+const isObject = (v: unknown): v is Record<string, unknown> =>
+  typeof v === 'object' && v !== null && !Array.isArray(v);
+
+/** Familie je Bereich in Version 1 (dort hatte jeder Bereich genau eine). */
+const V1_FAMILY: Readonly<Record<string, string>> = {
+  affenwald: 'neighbors_100',
+  pinguinfelsen: 'add_100',
+  elefantenwiese: 'mult_table',
+};
+
 /**
- * Migrationen je Versionssprung: MIGRATIONS[1] macht aus Version 1 die Version 2.
- * Noch leer, weil es erst Version 1 gibt.
+ * Version 1 → 2: Bereiche speichern die freigeschaltete Stufe je Familie
+ * (`levels`) statt einer Stufe je Bereich (`unlockedLevel`).
  */
-export const MIGRATIONS: Readonly<Record<number, Migration>> = {};
+export function migrateV1toV2(data: Record<string, unknown>): Record<string, unknown> {
+  const profiles = Array.isArray(data.profiles) ? data.profiles : [];
+  return {
+    ...data,
+    profiles: profiles.map((p) => {
+      if (!isObject(p) || !isObject(p.areas)) return p;
+      const areas = Object.fromEntries(
+        Object.entries(p.areas).map(([areaId, a]) => {
+          if (!isObject(a)) return [areaId, a];
+          const { unlockedLevel, ...rest } = a;
+          const family = V1_FAMILY[areaId];
+          const levels =
+            family && typeof unlockedLevel === 'number' ? { [family]: unlockedLevel } : {};
+          return [areaId, { ...rest, levels }];
+        }),
+      );
+      return { ...p, areas };
+    }),
+  };
+}
+
+/** Migrationen je Versionssprung: MIGRATIONS[1] macht aus Version 1 die Version 2. */
+export const MIGRATIONS: Readonly<Record<number, Migration>> = { 1: migrateV1toV2 };
 
 /** Speicher mit der Schnittstelle von localStorage (für Tests austauschbar). */
 export type KeyValueStore = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
@@ -52,9 +85,6 @@ export function migrate(
   }
   return current;
 }
-
-const isObject = (v: unknown): v is Record<string, unknown> =>
-  typeof v === 'object' && v !== null && !Array.isArray(v);
 
 function validate(data: Record<string, unknown>): SaveData {
   if (!Array.isArray(data.profiles)) throw new Error('Spielstand ohne Profilliste');
@@ -112,7 +142,12 @@ export function createProfile(nickname: string, avatar: Avatar, now = new Date()
 }
 
 export function areaProgress(profile: Profile, areaId: string): AreaProgress {
-  return profile.areas[areaId] ?? { stars: 0, unlockedLevel: 1, rounds: 0 };
+  return profile.areas[areaId] ?? { stars: 0, rounds: 0, levels: {} };
+}
+
+/** Höchste freigeschaltete Stufe einer Familie in einem Bereich. */
+export function familyLevel(progress: AreaProgress, family: string): TaskLevel {
+  return progress.levels[family] ?? 1;
 }
 
 /**

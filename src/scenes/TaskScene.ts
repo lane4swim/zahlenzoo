@@ -29,6 +29,7 @@ import { HintPanel } from '../ui/HintPanel';
 import { DotArray } from '../ui/math/DotArray';
 import { HundredBoard } from '../ui/math/HundredBoard';
 import { NumberLine } from '../ui/math/NumberLine';
+import { TenFrame } from '../ui/math/TenFrame';
 import { TensOnes } from '../ui/math/TensOnes';
 import { Numpad } from '../ui/Numpad';
 import { ProgressDots } from '../ui/ProgressDots';
@@ -89,9 +90,11 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     this.aid = undefined;
     const content = this.content;
     const area = findArea(content, data.areaId);
-    const generator = area?.family ? GENERATORS[area.family] : undefined;
-    if (!area?.family || !generator) throw new Error(`Bereich ${data.areaId} hat keine Aufgaben`);
-    const family = area.family;
+    const family = data.family;
+    const generator = GENERATORS[family];
+    if (!area || !area.families.includes(family) || !generator) {
+      throw new Error(`Bereich ${data.areaId} hat keine Aufgaben der Familie ${family}`);
+    }
     this.family = family;
     this.animalId = area.animal;
     // Startwert aus der Uhrzeit: jede Runde ist anders, im Test aber reproduzierbar.
@@ -360,6 +363,9 @@ export class TaskScene extends BaseScene<TaskSceneData> {
   private visualFor(visual: Visual): Phaser.GameObjects.GameObject {
     if (visual.type === 'hundred') {
       return new HundredBoard(this, PANEL.x, VISUAL_Y + 4, visual.marked);
+    }
+    if (visual.type === 'tenframe') {
+      return new TenFrame(this, PANEL.x, VISUAL_Y + 20, visual.first, visual.second, visual.op);
     }
     if (visual.type === 'dots') {
       return new DotArray(this, PANEL.x, VISUAL_Y + 4, visual.rows, visual.cols, visual.split);

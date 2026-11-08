@@ -22,7 +22,7 @@ describe('Inhaltsdateien', () => {
     expect(CONTENT.areas.length).toBeGreaterThan(0);
     for (const area of CONTENT.areas) {
       expect(CONTENT.animals[area.animal], area.id).toBeDefined();
-      if (area.family) expect(CONTENT.families[area.family], area.id).toBeDefined();
+      for (const f of area.families) expect(CONTENT.families[f], area.id).toBeDefined();
     }
     expect(CONTENT.praise.firstTry.length).toBeGreaterThan(1);
     expect(CONTENT.legal.privacy.length).toBeGreaterThan(0);
@@ -57,7 +57,7 @@ describe('Prüfung beim Laden', () => {
   it.each([
     ['Mischung ergibt nicht 1', (r: any) => (r.rules.round.mix.next = 0.5), /mix/],
     ['Rundengröße außerhalb', (r: any) => (r.rules.round.size = 20), /round.size/],
-    ['unbekannte Familie', (r: any) => (r.areas.areas[0].family = 'gibt_es_nicht'), /Familie/],
+    ['unbekannte Familie', (r: any) => (r.areas.areas[0].families = ['gibt_es_nicht']), /Familie/],
     [
       'unbekannter Vorgänger',
       (r: any) => (r.areas.areas[2].requires = 'mond'),

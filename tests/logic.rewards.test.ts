@@ -47,7 +47,7 @@ describe('applyRoundResult', () => {
     );
     expect(reward).toEqual({ stars: 3, unlockedLevel: 2, levelUnlocked: true });
     expect(after.stars).toBe(3);
-    expect(after.areas.pinguinfelsen).toEqual({ stars: 3, unlockedLevel: 2, rounds: 1 });
+    expect(after.areas.pinguinfelsen).toEqual({ stars: 3, rounds: 1, levels: { add_100: 2 } });
     expect(after.skills.add_100).toEqual({
       level: 1,
       last: [1, 0.5, 0],

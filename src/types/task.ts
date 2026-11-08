@@ -36,6 +36,16 @@ export type Visual =
       marked: number[];
     }
   | {
+      /**
+       * Zwei Zehnerfelder (bis 20): `first` Plättchen; bei „+“ kommen `second` als Ringe
+       * dazu, bei „−“ werden die letzten `second` durchgestrichen.
+       */
+      type: 'tenframe';
+      first: number;
+      second: number;
+      op: '+' | '-';
+    }
+  | {
       /** Punktefeld: rows Reihen mit je cols Punkten; die ersten `split` Reihen andersfarbig */
       type: 'dots';
       rows: number;

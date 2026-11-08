@@ -14,6 +14,7 @@ export function swapDigits(n: number): number | undefined {
 
 /** Typische falsche Antworten mit errorTag, wichtigste zuerst. */
 export function typicalErrors(m: MathInfo): TypicalError[] {
+  if (m.op === '-') return subtractionErrors(m);
   const answer = m.missing === 'b' ? m.b : m.result;
   const candidates: TypicalError[] = [];
   if (m.missing === 'result' && m.carry) {
@@ -29,6 +30,50 @@ export function typicalErrors(m: MathInfo): TypicalError[] {
     { value: answer - 1, errorTag: 'ones_off' },
   );
   return candidates;
+}
+
+/** Typische Fehler bei a − b: Übertrag vergessen, kleinere von größerer Ziffer, plus statt minus. */
+function subtractionErrors(m: MathInfo): TypicalError[] {
+  const { a, b, result } = m;
+  if (m.missing === 'b') {
+    return [
+      { value: result, errorTag: 'gave_total' },
+      { value: a + result, errorTag: 'added' },
+      { value: b + 1, errorTag: 'ones_off' },
+      { value: b - 1, errorTag: 'ones_off' },
+      { value: b + 10, errorTag: 'tens_off' },
+      { value: b - 10, errorTag: 'tens_off' },
+    ];
+  }
+  const errors: TypicalError[] = [];
+  if (m.carry) {
+    errors.push({ value: result + 10, errorTag: 'borrow_forgotten' });
+    // 43 − 7: Einer 7 − 3 statt 13 − 7 gerechnet
+    const flipped =
+      Math.floor(a / 10) * 10 - Math.floor(b / 10) * 10 + Math.abs((a % 10) - (b % 10));
+    errors.push({ value: flipped, errorTag: 'smaller_from_larger' });
+  }
+  errors.push({ value: a + b, errorTag: 'added' });
+  const swapped = swapDigits(result);
+  if (swapped !== undefined) errors.push({ value: swapped, errorTag: 'digits_swapped' });
+  errors.push(
+    { value: result + 10, errorTag: 'tens_off' },
+    { value: result - 10, errorTag: 'tens_off' },
+    { value: result + 1, errorTag: 'ones_off' },
+    { value: result - 1, errorTag: 'ones_off' },
+  );
+  return errors;
+}
+
+/** Je Wert nur der erste (wichtigste) Fehler, nur Werte im Zahlenraum und ungleich der Lösung. */
+export function uniqueErrors(errors: readonly TypicalError[], answer: number): TypicalError[] {
+  return errors.filter(
+    (e, i) =>
+      e.value >= MIN &&
+      e.value <= MAX &&
+      e.value !== answer &&
+      errors.findIndex((f) => f.value === e.value) === i,
+  );
 }
 
 /**
