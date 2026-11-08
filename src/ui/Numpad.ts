@@ -1,7 +1,6 @@
 import Phaser from 'phaser';
 import { Button } from './Button';
-import { drawBackspace } from './icons';
-import { Color, FontSize, Layout } from './theme';
+import { Color, FontSize, Layout, Tex } from './theme';
 
 export type NumpadOptions = {
   x: number;
@@ -41,7 +40,7 @@ export class Numpad extends Phaser.GameObjects.Container {
       const common = { x, y, width: KEY, height: KEY, onPress: () => this.press(key) };
       const button =
         key === 'del'
-          ? new Button(scene, { ...common, drawIcon: drawBackspace })
+          ? new Button(scene, { ...common, icon: Tex.backspace, iconScale: 0.8 })
           : key === 'ok'
             ? new Button(scene, { ...common, label: options.okLabel, fill: Color.grasHell })
             : new Button(scene, { ...common, label: key, fontSize: FontSize.digits });

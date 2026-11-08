@@ -112,8 +112,8 @@ describe('add_100', () => {
       const [h1, h2, h3] = task.hints;
       expect(h1.key).toMatch(/^hint\.add_\w+\.1$/);
       expect(h2.visual?.type).toBe('jumps');
-      expect(h2.visual?.hideResults).toBe(true);
-      expect(h3.visual?.hideResults).toBeFalsy();
+      expect(h2.visual?.type === 'jumps' && h2.visual.hideResults).toBe(true);
+      expect(h3.visual?.type === 'jumps' && h3.visual.hideResults).toBeFalsy();
     });
   });
 });

@@ -315,10 +315,8 @@ def background_pinguinfelsen():
 
 
 def background_pinguinfelsen_task():
-    # Ruhige Mitte für Rechnung und Hinweise; Leben an den Rändern.
+    # Ruhige Mitte für Rechnung und Hinweise (ohne Sonne und Wolken); Leben an den Rändern.
     b = [sky()]
-    b.append(circ(900, 200, 40, C["sonne"]))
-    b.append(ba.cloud(600, 214, 0.55) + ba.cloud(820, 300, 0.45))
     b.append(path("M 0 540 L 70 470 L 130 500 L 210 440 L 300 500 L 380 470 L 460 520 L 560 470 "
                   "L 650 520 L 760 460 L 850 510 L 940 470 L 1024 500 V 560 H 0 Z", C["weiss"], False,
                   extra='opacity="0.9"'))
@@ -340,8 +338,6 @@ def background_pinguinfelsen_task():
 
 def background_affenwald_task():
     b = [sky()]
-    b.append(circ(900, 200, 40, C["sonne"]))
-    b.append(ba.cloud(600, 214, 0.55) + ba.cloud(820, 300, 0.45))
     # ferne Baumkronen und Hügel ohne Kontur, über die ganze Breite
     for (x, y, r) in [(330, 520, 60), (420, 500, 74), (520, 524, 56), (700, 506, 70), (800, 520, 56),
                       (900, 498, 76), (1000, 520, 60)]:
@@ -357,9 +353,6 @@ def background_affenwald_task():
     b.append("".join(circ(x, y, r - SW / 2, C["laub"], False) for (x, y, r) in crown))
     b.append("".join(circ(x - r * 0.3, y - r * 0.3, r * 0.45, C["gras-dunkel"], False, 'opacity="0.55"')
                      for (x, y, r) in crown[:3]))
-    b.append(path("M 220 120 Q 250 200 226 280", sw=12, extra=f'stroke="{K}"') +
-             path("M 220 120 Q 250 200 226 280", sw=5, extra=f'stroke="{C["gras-dunkel"]}"'))
-    b.append(ba.banana(222, 282, 8, 0.7) + ba.banana(238, 278, -8, 0.7))
     # Ranke rechts, Busch und Blumen unten
     b.append(path("M 1000 120 Q 960 220 992 330", sw=12, extra=f'stroke="{K}"') +
              path("M 1000 120 Q 960 220 992 330", sw=5, extra=f'stroke="{C["gras-dunkel"]}"'))

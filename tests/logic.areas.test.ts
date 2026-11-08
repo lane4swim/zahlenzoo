@@ -12,7 +12,7 @@ describe('Bereiche', () => {
   it('öffnet zu Beginn Affenwald und Pinguinfelsen', () => {
     const states = Object.fromEntries(AREAS.map((a) => [a.id, areaState(a, {})]));
     expect(states).toEqual({
-      affenwald: 'soon',
+      affenwald: 'open',
       pinguinfelsen: 'open',
       elefantenwiese: 'locked',
       zookasse: 'locked',

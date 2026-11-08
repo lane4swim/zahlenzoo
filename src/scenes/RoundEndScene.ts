@@ -1,7 +1,10 @@
 import { BaseScene } from './BaseScene';
+import { findArea } from '../logic/areas';
 import { applyRoundResult, type RoundReward } from '../logic/progress';
 import type { Services } from '../services/services';
 import { SceneKey, type RoundEndSceneData, type TaskSceneData } from '../types/scenes';
+import { AnimalSprite } from '../ui/AnimalSprite';
+import { ANIMAL_ART } from '../ui/animals';
 import { StarMeter } from '../ui/StarMeter';
 import { Color } from '../ui/theme';
 
@@ -46,18 +49,29 @@ export class RoundEndScene extends BaseScene<RoundEndSceneData> {
     if (this.reward.levelUnlocked) {
       lines.push(this.t('roundEnd.levelUnlocked', { level: this.reward.unlockedLevel }));
     }
-    lines.forEach((line, i) => this.addText(cx, 390 + i * 44, line));
+    let y = 380;
+    for (const line of lines) {
+      const text = this.addText(cx, y, line).setWordWrapWidth(820).setOrigin(0.5, 0);
+      y += text.height + 10;
+    }
+
+    // Das Tier freut sich über die geschaffte Runde.
+    const animalId = findArea(this.result.areaId)?.animal;
+    if (animalId && ANIMAL_ART[animalId]) {
+      const animal = new AnimalSprite(this, 100, 744, animalId, 190);
+      this.time.delayedCall(500, () => animal.cheer());
+    }
 
     const again: TaskSceneData = { areaId: this.result.areaId, level: this.result.level };
     this.addButton({
-      x: cx - 180,
+      x: cx - 140,
       y: 640,
       width: 300,
       label: this.t('roundEnd.again'),
       onPress: () => this.scene.start(SceneKey.Task, again),
     });
     this.addButton({
-      x: cx + 180,
+      x: cx + 220,
       y: 640,
       width: 300,
       label: this.t('roundEnd.toMap'),
@@ -74,8 +88,15 @@ export class RoundEndScene extends BaseScene<RoundEndSceneData> {
       byStrategy.set(strategyId, allFirst && outcome === 'first_try');
     }
     const name = (id: string) => this.t(`strategy.${id}`);
-    const easy = [...byStrategy].filter(([, ok]) => ok).map(([id]) => name(id));
-    const practice = [...byStrategy].filter(([, ok]) => !ok).map(([id]) => name(id));
+    // Höchstens drei Einträge je Zeile, damit der Rückblick kurz bleibt.
+    const easy = [...byStrategy]
+      .filter(([, ok]) => ok)
+      .map(([id]) => name(id))
+      .slice(0, 3);
+    const practice = [...byStrategy]
+      .filter(([, ok]) => !ok)
+      .map(([id]) => name(id))
+      .slice(0, 3);
     return { easy, practice };
   }
 }
