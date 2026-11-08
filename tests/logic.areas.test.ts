@@ -26,7 +26,7 @@ describe('Bereiche', () => {
   it('öffnet den nächsten Bereich ab 6 Sternen im Vorgänger', () => {
     const elefant = findArea('elefantenwiese')!;
     expect(areaState(elefant, { pinguinfelsen: 5 })).toBe('locked');
-    expect(areaState(elefant, { pinguinfelsen: 6 })).toBe('soon');
+    expect(areaState(elefant, { pinguinfelsen: 6 })).toBe('open');
     expect(areaState(findArea('zookasse')!, { pinguinfelsen: 9 })).toBe('locked');
   });
 

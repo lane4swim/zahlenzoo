@@ -33,6 +33,13 @@ export type Visual =
       /** Hundertertafel mit markierten Zahlen */
       type: 'hundred';
       marked: number[];
+    }
+  | {
+      /** Punktefeld: rows Reihen mit je cols Punkten; die ersten `split` Reihen andersfarbig */
+      type: 'dots';
+      rows: number;
+      cols: number;
+      split?: number;
     };
 
 /**
@@ -50,7 +57,7 @@ export type TaskOption = { value: string; errorTag?: string };
 export type TaskAnswer = number | number[] | string;
 
 /** Bestandteil einer Rechnung oder Zahlenreihe: Zahl, Zeichen oder die gesuchte Stelle. */
-export type Term = number | '+' | '-' | '=' | '<' | ',' | '?';
+export type Term = number | '+' | '-' | '·' | ':' | '=' | '<' | ',' | '?';
 
 /** Typische falsche Antwort mit Fehlerart (für Antwortkarten und Rückmeldung). */
 export type TypicalError = { value: number; errorTag: string };

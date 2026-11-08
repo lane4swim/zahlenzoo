@@ -25,6 +25,7 @@ import { AnswerCards } from '../ui/AnswerCards';
 import { Button } from '../ui/Button';
 import { Expression } from '../ui/Expression';
 import { HintPanel } from '../ui/HintPanel';
+import { DotArray } from '../ui/math/DotArray';
 import { HundredBoard } from '../ui/math/HundredBoard';
 import { NumberLine } from '../ui/math/NumberLine';
 import { TensOnes } from '../ui/math/TensOnes';
@@ -42,10 +43,10 @@ const NEXT_DELAY = 1600;
 type Aid = 'tensOnes' | 'numberLine' | 'hundredBoard';
 
 // Aufteilung der Fläche 1024 × 768
-const PANEL = { x: 624, y: 300, width: 712 };
+const PANEL = { x: 624, y: 262, width: 712 };
 /** Eingabe etwas weiter links als die Tafel, damit vier Antwortkarten Platz haben. */
 const INPUT_X = 600;
-const VISUAL_Y = 440;
+const VISUAL_Y = 448;
 const INPUT_Y = 648;
 const ANIMAL_HEIGHT = 230;
 
@@ -272,8 +273,9 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     }
     this.hintStage = Math.max(this.hintStage, this.attempts);
     const hint = this.task.hints[this.hintStage - 1];
+    // Die Rückmeldung zum Fehler steht nur beim ersten Hinweis, damit der Text kurz bleibt.
     const prefix =
-      result.errorTag && this.services.i18n.has(`error.${result.errorTag}`)
+      this.hintStage === 1 && result.errorTag && this.services.i18n.has(`error.${result.errorTag}`)
         ? `${this.t(`error.${result.errorTag}`)} `
         : '';
     if (hint) this.showHint(hint, `${prefix}${this.hintText(hint)}`, Tex.tryAgain);
@@ -360,6 +362,9 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     if (visual.type === 'hundred') {
       return new HundredBoard(this, PANEL.x, VISUAL_Y + 4, visual.marked);
     }
+    if (visual.type === 'dots') {
+      return new DotArray(this, PANEL.x, VISUAL_Y + 4, visual.rows, visual.cols, visual.split);
+    }
     return new NumberLine(
       this,
       PANEL.x,
@@ -425,6 +430,8 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     const words: Record<string, string> = {
       '+': this.t('read.plus'),
       '-': this.t('read.minus'),
+      '·': this.t('read.times'),
+      ':': this.t('read.divided'),
       '=': this.t('read.equals'),
       '<': this.t('read.less'),
       ',': this.t('read.comma'),

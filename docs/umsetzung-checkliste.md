@@ -115,7 +115,7 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 
 - [ ] Affenwald: `count_steps_100`, `read_write_100`, `place_value_100`, `quick_count`, `order_100`, `compare_100`, `neighbors_100`, `number_sequences`; davon `neighbors_100` fertig (Stufe 1 Nachbarzahlen, Stufe 2 Nachbarzehner, Stufe 3 Zahlenfolgen in 2er-, 5er- und 10er-Schritten)
 - [ ] Pinguinfelsen: Stufe 0 `plus_facts_20`; `add_100`, `sub_100`, `decompose_10`, `complement_tens`, `tens_calc`, `estimate_100`, `smart_calc`, `path_choice`, `story_addsub`
-- [ ] Elefantenwiese: `double_half`, `mult_core`, `mult_derive`, Division als Verteilen und Aufteilen, `story_multdiv`
+- [ ] Elefantenwiese: `double_half`, `mult_core`, `mult_derive`, Division als Verteilen und Aufteilen, `story_multdiv`; davon `mult_table` fertig (Stufe 1 Kernaufgaben 1, 2, 5, 10 mit Verdoppeln und Halbieren, Stufe 2 Ableiten, Stufe 3 Umkehren und Verteilen), `story_multdiv` offen
 - [ ] Zoo-Kasse: `money_calc`, `money_convert`, `compare_money`, `question_pick`, `exact_or_estimate`
 - [ ] Futteruhr: `clock_full`, `clock_half`, `clock_quarter` (mit Dreiviertelstunde), `clock_digital`, `compare_duration`, `time_units`, `fraction_units`
 - [ ] Schmetterlingshaus: `shapes_basic`, `pattern_continue`, `shapes_compose`, `symmetry_check` (erkennen, nicht zeichnen), `grid_draw`

@@ -97,5 +97,21 @@
   "strategy.neighbor_tens_lower": "kleinerer Nachbarzehner",
   "strategy.neighbor_tens_upper": "größerer Nachbarzehner",
   "strategy.sequence_forward": "Zahlenfolgen vorwärts",
-  "strategy.sequence_backward": "Zahlenfolgen rückwärts"
+  "strategy.sequence_backward": "Zahlenfolgen rückwärts",
+  "read.times": "mal",
+  "read.divided": "geteilt durch",
+  "task.prompt.double": "Verdopple die Zahl.",
+  "task.prompt.half": "Halbiere die Zahl.",
+  "task.prompt.share": "Verteile gerecht. Wie viele bekommt jede Gruppe?",
+  "strategy.double": "Verdoppeln",
+  "strategy.half": "Halbieren",
+  "strategy.mult_core_1": "Einmaleins mit 1",
+  "strategy.mult_core_2": "Zweierreihe",
+  "strategy.mult_core_5": "Fünferreihe",
+  "strategy.mult_core_10": "Zehnerreihe",
+  "strategy.mult_derive_plus": "Ableiten mit plus",
+  "strategy.mult_derive_double": "Ableiten durch Verdoppeln",
+  "strategy.mult_derive_minus": "Ableiten mit minus",
+  "strategy.divide_share": "Verteilen",
+  "strategy.mult_inverse": "Umkehraufgaben"
 }

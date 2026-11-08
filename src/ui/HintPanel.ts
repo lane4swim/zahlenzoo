@@ -19,7 +19,7 @@ export class HintPanel extends Phaser.GameObjects.Container {
   ) {
     super(scene, x, y);
     this.icon = scene.add
-      .image(-panelWidth / 2 + 32, 0, '__DEFAULT')
+      .image(-panelWidth / 2 + 32, 18, '__DEFAULT')
       .setScale(0.6)
       .setVisible(false);
     this.text = scene.add
@@ -30,7 +30,7 @@ export class HintPanel extends Phaser.GameObjects.Container {
         wordWrap: { width: panelWidth - 80 },
         lineSpacing: 4,
       })
-      .setOrigin(0, 0.5);
+      .setOrigin(0, 0);
     this.add([this.icon, this.text]);
     scene.add.existing(this);
   }

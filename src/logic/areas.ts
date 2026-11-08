@@ -1,4 +1,5 @@
 import { add100, ADD_100 } from './generators/add100';
+import { multTable, MULT_TABLE } from './generators/multTable';
 import { neighbors100, NEIGHBORS_100 } from './generators/neighbors100';
 import { STARS_TO_UNLOCK_NEXT_AREA } from './rewards';
 import type { Generator } from '../types/task';
@@ -16,7 +17,12 @@ export type AreaDef = {
 export const AREAS: readonly AreaDef[] = [
   { id: 'affenwald', animal: 'monkey', family: { id: NEIGHBORS_100, generator: neighbors100 } },
   { id: 'pinguinfelsen', animal: 'penguin', family: { id: ADD_100, generator: add100 } },
-  { id: 'elefantenwiese', animal: 'elephant', requires: 'pinguinfelsen' },
+  {
+    id: 'elefantenwiese',
+    animal: 'elephant',
+    family: { id: MULT_TABLE, generator: multTable },
+    requires: 'pinguinfelsen',
+  },
   { id: 'zookasse', animal: 'parrot', requires: 'elefantenwiese' },
   { id: 'futteruhr', animal: 'owl', requires: 'zookasse' },
   { id: 'schmetterlingshaus', animal: 'butterfly', requires: 'futteruhr' },

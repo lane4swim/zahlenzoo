@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import hints from '../public/assets/data/hints.de.json';
 import strings from '../public/assets/data/strings.de.json';
 import { add100 } from '../src/logic/generators/add100';
+import { multTable } from '../src/logic/generators/multTable';
 import { neighbors100 } from '../src/logic/generators/neighbors100';
 import { typicalErrors } from '../src/logic/options';
 import { createRng } from '../src/logic/rng';
@@ -50,6 +51,7 @@ describe('Textdateien', () => {
         for (const task of [
           add100(level, createRng(seed), 'x'),
           neighbors100(level, createRng(seed), 'y'),
+          multTable(level, createRng(seed), 'z'),
         ]) {
           for (const hint of task.hints) {
             expect(i18n.has(hint.key), hint.key).toBe(true);
