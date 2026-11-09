@@ -77,11 +77,24 @@ describe('Textdateien', () => {
   });
 
   it('enthalten für alle Familien Fragen, Antworten, Hinweise und Fehler ohne offene Platzhalter', () => {
-    const resolved = (params: Record<string, string | number> | undefined, own: object = {}) =>
+    // „@schlüssel“ wird wie im Spiel mit denselben Werten gefüllt.
+    const resolved = (params: Readonly<Record<string, string | number>> | undefined) =>
       Object.fromEntries(
         Object.entries(params ?? {}).map(([k, v]) => [
           k,
-          typeof v === 'string' && v.startsWith('@') ? i18n.t(v.slice(1), own as never) : v,
+          typeof v === 'string' && v.startsWith('@')
+            ? i18n.t(
+                v.slice(1).split('|')[0]!,
+                v.includes('|')
+                  ? Object.fromEntries(
+                      v
+                        .split('|')
+                        .slice(1)
+                        .map((pair) => pair.split('=') as [string, string]),
+                    )
+                  : params,
+              )
+            : v,
         ]),
       );
     const open = /\{\w+\}/;
@@ -94,21 +107,21 @@ describe('Textdateien', () => {
           const own = task.prompt.textParams ?? {};
           if (task.prompt.textKey) {
             expect(i18n.has(task.prompt.textKey), where).toBe(true);
-            expect(i18n.t(task.prompt.textKey, own), where).not.toMatch(open);
+            expect(i18n.t(task.prompt.textKey, resolved(own)), where).not.toMatch(open);
           }
           if (task.prompt.instructionKey) {
             expect(i18n.has(task.prompt.instructionKey), where).toBe(true);
           }
           for (const hint of task.hints) {
             expect(i18n.has(hint.key), `${where} ${hint.key}`).toBe(true);
-            const text = i18n.t(hint.key, { unit: '€', ...resolved(hint.params, own) });
+            const text = i18n.t(hint.key, { unit: '€', ...resolved(hint.params) });
             expect(text, `${where} ${hint.key}`).not.toMatch(open);
             expect(text, `${where} ${hint.key}`).not.toMatch(/situation\./);
           }
           for (const o of task.options ?? []) {
             if (o.label) {
               expect(i18n.has(o.label.key), `${where} ${o.label.key}`).toBe(true);
-              expect(i18n.t(o.label.key, o.label.params), where).not.toMatch(open);
+              expect(i18n.t(o.label.key, resolved(o.label.params)), where).not.toMatch(open);
             }
             if (o.errorTag && o.errorTag !== 'other') {
               expect(i18n.has(`error.${o.errorTag}`), `${where} ${o.errorTag}`).toBe(true);
