@@ -6,9 +6,12 @@ import { findArea } from '../logic/content';
 import { areaProgress } from '../services/save';
 import type { Services } from '../services/services';
 import type { AreaConfig } from '../types/content';
-import { SceneKey, type AreaSceneData } from '../types/scenes';
+import { SceneKey, type AreaSceneData, type ZooSceneData } from '../types/scenes';
+import { isAreaDone } from '../logic/zoo';
 import { AreaMarker } from '../ui/AreaMarker';
-import { Color, CssColor, FontFamily, FontSize, Stroke, Tex } from '../ui/theme';
+import { decorTexture } from '../ui/rewards';
+import { StarCounter } from '../ui/StarCounter';
+import { Color, CssColor, FontFamily, FontSize, Layout, Stroke, Tex } from '../ui/theme';
 
 type Point = { x: number; y: number };
 const POSITIONS: Readonly<Record<string, Point>> = layout.areas;
@@ -36,8 +39,29 @@ export class MapScene extends BaseScene {
       return;
     }
     this.add.image(0, 0, Tex.map).setOrigin(0);
+    // Gekaufte Dekoration steht an ihrem festen Platz: Der Zoo wächst sichtbar.
+    for (const d of this.content.decor) {
+      if (!profile.zoo.decor.includes(d.id)) continue;
+      const image = this.add.image(d.x, d.y, decorTexture(d.id));
+      image.setScale(d.size / Math.max(image.width, image.height));
+    }
     this.addBackButton(() => this.scene.start(SceneKey.Menu));
     this.addTitle(this.t('map.title'), 62);
+    const zoo: ZooSceneData = { back: 'Map' };
+    this.addButton({
+      x: this.scale.width - Layout.margin - 95,
+      y: Layout.margin + Layout.minTouch / 2,
+      width: 190,
+      label: this.t('map.zoo'),
+      fill: Color.sonne,
+      onPress: () => this.scene.start(SceneKey.Zoo, zoo),
+    });
+    new StarCounter(
+      this,
+      this.scale.width - Layout.margin - 270,
+      Layout.margin + 48,
+      profile.stars,
+    );
 
     const starsByArea = Object.fromEntries(
       this.content.areas.map((a) => [a.id, areaProgress(profile, a.id).stars]),
@@ -46,7 +70,8 @@ export class MapScene extends BaseScene {
       const pos = POSITIONS[area.id];
       if (!pos) continue;
       const state = areaState(area, starsByArea, this.content.rules);
-      this.addMarker(area, pos, state, starsByArea[area.id] ?? 0);
+      const done = isAreaDone(area, profile.areas[area.id]);
+      this.addMarker(area, pos, state, starsByArea[area.id] ?? 0, done);
     }
 
     this.messagePlate = this.add.graphics();
@@ -61,7 +86,13 @@ export class MapScene extends BaseScene {
     this.showMessage(this.t('map.tapAnimal'));
   }
 
-  private addMarker(area: AreaConfig, pos: Point, state: string, stars: number): void {
+  private addMarker(
+    area: AreaConfig,
+    pos: Point,
+    state: string,
+    stars: number,
+    done: boolean,
+  ): void {
     const name = this.t(`area.${area.id}`);
     const icon = this.content.animals[area.animal]?.icon;
     if (state === 'open' && icon) {
@@ -72,6 +103,7 @@ export class MapScene extends BaseScene {
         icon,
         stars,
         inviting: true,
+        done,
         onPress: () => this.scene.start(SceneKey.Area, data),
       });
     } else if (state === 'locked') {

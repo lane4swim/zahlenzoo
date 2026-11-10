@@ -116,6 +116,41 @@ const SHEETS = {
       ],
     ],
   },
+  belohnungen: {
+    title: 'Belohnungen: Dekoration für die Karte und Abzeichen für das Sticker-Album',
+    tile: 130,
+    rows: [
+      [
+        'Dekoration (192 × 192)',
+        ['ballons', 'drachen', 'windrad', 'vogelhaus', 'sonnenblumen', 'fahne'].map(
+          (n) => `deko_${n}_192`,
+        ),
+      ],
+      [
+        '',
+        ['laterne', 'bank', 'wegweiser', 'blumenkuebel', 'brunnen', 'ententeich'].map(
+          (n) => `deko_${n}_192`,
+        ),
+      ],
+      [
+        'Abzeichen (256 × 256)',
+        [
+          'erste_runde',
+          'fuenf_ohne_hilfe',
+          'drei_sterne',
+          'sterne_25',
+          'sterne_100',
+          'stufe_3',
+        ].map((n) => `abzeichen_${n}_256`),
+      ],
+      [
+        '',
+        ['gehege_fertig', 'einmaleins', 'uhr', 'geld', 'drangeblieben', 'baby'].map(
+          (n) => `abzeichen_${n}_256`,
+        ),
+      ],
+    ],
+  },
   objekte_ui: {
     title: 'Futter und Symbole der Aufgabenansicht',
     tile: 130,

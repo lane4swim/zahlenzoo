@@ -1,0 +1,89 @@
+{
+  "_hinweis": "Dekoration für die Zoo-Karte: Preis in Sternen und fester Platz (Mitte, Größe in Pixeln der Basisauflösung 1024 × 768). Bild: public/assets/img/decor/deko_<id>_192.png.",
+  "decor": [
+    {
+      "id": "ballons",
+      "price": 4,
+      "x": 565,
+      "y": 140,
+      "size": 96
+    },
+    {
+      "id": "drachen",
+      "price": 4,
+      "x": 330,
+      "y": 100,
+      "size": 92
+    },
+    {
+      "id": "windrad",
+      "price": 3,
+      "x": 150,
+      "y": 132,
+      "size": 84
+    },
+    {
+      "id": "vogelhaus",
+      "price": 3,
+      "x": 395,
+      "y": 118,
+      "size": 84
+    },
+    {
+      "id": "sonnenblumen",
+      "price": 3,
+      "x": 640,
+      "y": 134,
+      "size": 84
+    },
+    {
+      "id": "fahne",
+      "price": 3,
+      "x": 880,
+      "y": 122,
+      "size": 84
+    },
+    {
+      "id": "laterne",
+      "price": 3,
+      "x": 272,
+      "y": 392,
+      "size": 80
+    },
+    {
+      "id": "bank",
+      "price": 4,
+      "x": 517,
+      "y": 404,
+      "size": 86
+    },
+    {
+      "id": "wegweiser",
+      "price": 4,
+      "x": 760,
+      "y": 392,
+      "size": 84
+    },
+    {
+      "id": "blumenkuebel",
+      "price": 3,
+      "x": 990,
+      "y": 398,
+      "size": 76
+    },
+    {
+      "id": "brunnen",
+      "price": 6,
+      "x": 150,
+      "y": 700,
+      "size": 110
+    },
+    {
+      "id": "ententeich",
+      "price": 6,
+      "x": 880,
+      "y": 700,
+      "size": 112
+    }
+  ]
+}

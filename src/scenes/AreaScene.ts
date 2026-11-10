@@ -6,11 +6,14 @@ import { SceneKey, type AreaSceneData, type TaskSceneData } from '../types/scene
 import type { TaskLevel } from '../types/task';
 import { AnimalSprite } from '../ui/AnimalSprite';
 import { areaBackground } from '../ui/animals';
-import { Color, Stroke } from '../ui/theme';
+import { babyTexture } from '../ui/rewards';
+import { Color, CssColor, FontFamily, FontSize, Stroke } from '../ui/theme';
 
 const BOARD = { x: 660, y: 150, w: 460, h: 520 };
 const TAB = { w: 140, gap: 10 };
 const MAX_TABS_PER_ROW = 4;
+/** Höhe des Baby-Tiers neben dem großen Tier */
+const BABY_HEIGHT = 130;
 /** Ab dieser Länge passt ein Themenname nicht mehr einzeilig in eine Registerkarte. */
 const LONG_TAB_LABEL = 12;
 
@@ -64,6 +67,9 @@ export class AreaScene extends BaseScene<AreaSceneData> {
       // Antippen lässt das Tier vor Freude springen.
       const animal = new AnimalSprite(this, art.areaSpot.x, art.areaSpot.y, art, 280);
       animal.setInteractive({ useHandCursor: true }).on('pointerup', () => animal.cheer());
+      // Das Baby-Tier aus dem Zoo-Laden steht mit seinem Namen neben dem großen Tier.
+      const baby = profile.zoo.babies.find((b) => b.animal === area.animal);
+      if (baby) this.addBaby(babyTexture(art), baby.name, art.areaSpot.x - 130, art.areaSpot.y);
     }
 
     let levelsTop = BOARD.y + 150;
@@ -106,6 +112,34 @@ export class AreaScene extends BaseScene<AreaSceneData> {
         onPress: () => this.scene.start(SceneKey.Task, data),
       }).setEnabled(open);
     });
+  }
+
+  private addBaby(texture: string, name: string, x: number, y: number): void {
+    const image = this.add.image(x, y, texture).setOrigin(0.5, 1);
+    image.setScale(BABY_HEIGHT / image.height);
+    image.setInteractive({ useHandCursor: true }).on('pointerup', () => {
+      this.tweens.add({
+        targets: image,
+        y: y - 24,
+        duration: 180,
+        yoyo: true,
+        ease: 'Sine.easeOut',
+      });
+    });
+    const label = this.add
+      .text(x, y + 6, name, {
+        fontFamily: FontFamily.text,
+        fontSize: `${FontSize.small - 2}px`,
+        color: CssColor.text,
+      })
+      .setOrigin(0.5, 0);
+    const plate = this.add.graphics();
+    plate.fillStyle(Color.papier, 0.95);
+    plate.lineStyle(Stroke.inner, Color.kontur, 1);
+    const w = label.width + 20;
+    plate.fillRoundedRect(x - w / 2, y + 2, w, label.height + 8, 10);
+    plate.strokeRoundedRect(x - w / 2, y + 2, w, label.height + 8, 10);
+    label.setDepth(1);
   }
 
   /** Bei vielen Themen oder langen Namen die zweizeilige Kurzform, damit nichts übersteht. */

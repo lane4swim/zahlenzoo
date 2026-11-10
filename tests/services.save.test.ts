@@ -138,10 +138,41 @@ describe('Migration', () => {
     const loaded = parseSave(JSON.stringify(v1));
     expect(loaded.version).toBe(SAVE_VERSION);
     expect(loaded.profiles[0]!.areas).toEqual({
-      pinguinfelsen: { stars: 7, rounds: 4, levels: { add_100: 3 } },
-      affenwald: { stars: 2, rounds: 1, levels: { neighbors_100: 2 } },
+      pinguinfelsen: { stars: 7, rounds: 4, levels: { add_100: 3 }, best: {} },
+      affenwald: { stars: 2, rounds: 1, levels: { neighbors_100: 2 }, best: {} },
     });
     expect(MIGRATIONS[1]).toBeDefined();
+  });
+
+  it('ergänzt in Version 3 Baby-Tiere, Abzeichen und Zähler, ohne Sterne zu ändern', () => {
+    const { badges: _b, stats: _s, ...base } = createProfile('Mia', 'owl');
+    const v2 = {
+      version: 2,
+      activeProfileId: 'p1',
+      profiles: [
+        {
+          ...base,
+          id: 'p1',
+          stars: 9,
+          zoo: { animals: ['monkey_baby_1'], decor: ['bank'] },
+          areas: {
+            pinguinfelsen: { stars: 7, rounds: 4, levels: { add_100: 3 } },
+            affenwald: { stars: 2, rounds: 1, levels: {} },
+          },
+        },
+      ],
+    };
+    const p = parseSave(JSON.stringify(v2)).profiles[0]!;
+    expect(p.stars).toBe(9);
+    expect(p.zoo).toEqual({ babies: [], decor: ['bank'] });
+    expect(p.badges).toEqual({});
+    expect(p.stats).toEqual({ rounds: 5, withHelp: 0, bestStreak: 0 });
+    expect(p.areas.pinguinfelsen).toEqual({
+      stars: 7,
+      rounds: 4,
+      levels: { add_100: 3 },
+      best: {},
+    });
   });
 
   it('führt Versionssprünge nacheinander aus', () => {

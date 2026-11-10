@@ -30,7 +30,14 @@ export class MenuScene extends BaseScene {
     });
     this.addButton({
       x: cx,
-      y: 520,
+      y: 510,
+      width: 320,
+      label: this.t('menu.zoo'),
+      onPress: () => this.scene.start(SceneKey.Zoo, { back: 'Menu' }),
+    });
+    this.addButton({
+      x: cx,
+      y: 620,
       width: 320,
       label: this.t('menu.settings'),
       onPress: () => this.scene.start(SceneKey.Settings),

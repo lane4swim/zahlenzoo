@@ -12,6 +12,7 @@ import { ProfileScene } from './scenes/ProfileScene';
 import { RoundEndScene } from './scenes/RoundEndScene';
 import { SettingsScene } from './scenes/SettingsScene';
 import { TaskScene } from './scenes/TaskScene';
+import { ZooScene } from './scenes/ZooScene';
 import { createServices } from './services/services';
 import { CssColor } from './ui/theme';
 
@@ -58,6 +59,7 @@ async function start(): Promise<void> {
       new RoundEndScene(services),
       new ParentScene(services),
       new SettingsScene(services),
+      new ZooScene(services),
     ],
   };
   new Phaser.Game(config);

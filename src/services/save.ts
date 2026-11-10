@@ -9,7 +9,7 @@ import {
 import type { TaskLevel } from '../types/task';
 
 /** Aktuelle Version des Spielstands; bei jeder Formatänderung erhöhen und Migration ergänzen. */
-export const SAVE_VERSION = 2;
+export const SAVE_VERSION = 3;
 export const STORAGE_KEY = 'zahlenzoo.save';
 export const BACKUP_KEY = 'zahlenzoo.save.backup';
 export const NICKNAME_MAX = 16;
@@ -52,8 +52,41 @@ export function migrateV1toV2(data: Record<string, unknown>): Record<string, unk
   };
 }
 
+/**
+ * Version 2 → 3: Belohnungen. Baby-Tiere mit Namen statt einer Liste von Kennungen
+ * (`zoo.babies`), Abzeichen, Zähler über alle Runden und beste Sterne je Stufe.
+ * Bisherige Runden zählen für die Zähler mit; Sterne bleiben unverändert.
+ */
+export function migrateV2toV3(data: Record<string, unknown>): Record<string, unknown> {
+  const profiles = Array.isArray(data.profiles) ? data.profiles : [];
+  return {
+    ...data,
+    profiles: profiles.map((p) => {
+      if (!isObject(p)) return p;
+      const zoo = isObject(p.zoo) ? p.zoo : {};
+      const areas = isObject(p.areas) ? p.areas : {};
+      const rounds = Object.values(areas).reduce<number>(
+        (sum, a) => sum + (isObject(a) && typeof a.rounds === 'number' ? a.rounds : 0),
+        0,
+      );
+      return {
+        ...p,
+        zoo: { babies: [], decor: Array.isArray(zoo.decor) ? zoo.decor : [] },
+        badges: {},
+        stats: { rounds, withHelp: 0, bestStreak: 0 },
+        areas: Object.fromEntries(
+          Object.entries(areas).map(([id, a]) => [id, isObject(a) ? { best: {}, ...a } : a]),
+        ),
+      };
+    }),
+  };
+}
+
 /** Migrationen je Versionssprung: MIGRATIONS[1] macht aus Version 1 die Version 2. */
-export const MIGRATIONS: Readonly<Record<number, Migration>> = { 1: migrateV1toV2 };
+export const MIGRATIONS: Readonly<Record<number, Migration>> = {
+  1: migrateV1toV2,
+  2: migrateV2toV3,
+};
 
 /** Speicher mit der Schnittstelle von localStorage (für Tests austauschbar). */
 export type KeyValueStore = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
@@ -134,7 +167,9 @@ export function createProfile(nickname: string, avatar: Avatar, now = new Date()
     avatar,
     createdAt: now.toISOString().slice(0, 10),
     stars: 0,
-    zoo: { animals: [], decor: [] },
+    zoo: { babies: [], decor: [] },
+    badges: {},
+    stats: { rounds: 0, withHelp: 0, bestStreak: 0 },
     areas: {},
     skills: {},
     settings: { ...DEFAULT_SETTINGS },
@@ -142,7 +177,7 @@ export function createProfile(nickname: string, avatar: Avatar, now = new Date()
 }
 
 export function areaProgress(profile: Profile, areaId: string): AreaProgress {
-  return profile.areas[areaId] ?? { stars: 0, rounds: 0, levels: {} };
+  return profile.areas[areaId] ?? { stars: 0, rounds: 0, levels: {}, best: {} };
 }
 
 /** Höchste freigeschaltete Stufe einer Familie in einem Bereich. */

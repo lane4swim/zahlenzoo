@@ -1,5 +1,7 @@
+import achievements from './achievements.json';
 import animals from './animals.json';
 import areas from './areas.json';
+import decor from './decor.json';
 import families from './families.json';
 import hints from './hints.de.json';
 import legal from './legal.json';
@@ -25,6 +27,8 @@ export const RAW_CONTENT: RawContent = {
   legal,
   stories,
   situations,
+  decor,
+  achievements,
 };
 
 /** Texte je Sprache: Oberfläche, Hinweise und Sachaufgaben. */

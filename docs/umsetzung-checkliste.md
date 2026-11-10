@@ -110,7 +110,7 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 - [x] `word-templates.de.json` (40 Sachaufgaben, davon 10 mit Geld, und 46 Sachsituationen in `situations.json`; Rechenart, Bild und Familie in `stories.json`)
 - [x] `strings.de.json` (vollständig; ein Test prüft jeden Schlüssel, den der Code nutzt)
 - [x] `praise.de.json` (mehrere Varianten je Anlass)
-- [ ] `achievements.json`; folgt mit dem Sticker-Album (#23)
+- [x] `achievements.json` (12 Abzeichen mit Bedingungen) und `decor.json` (12 Dekorationen mit Preis und Platz auf der Karte)
 - [x] `legal.json` (Gerüst; Daten folgen in Phase 4)
 
 **Bereiche und Familien** (Spez. 5, KE 2)
@@ -132,8 +132,8 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 
 - [ ] `drag-sort` mit Einrasten und sanftem Zurückschicken
 - [ ] `number-line`
-- [ ] `clock` (Zeiger einstellen, Uhrzeit wählen)
-- [ ] `money` (Münzen und Scheine ziehen)
+- [x] `clock` (Zeiger ziehen oder Tasten; Uhrzeit wählen über Antwortkarten)
+- [x] `money` (Münzen und Scheine antippen und auf den Zahlteller legen)
 - [ ] `pattern` (Raster antippen)
 - [x] `word` (Bild plus Text): Sachtext, Bild der Dinge aus der Geschichte, Antwort mit Einheit über Ziffernblock oder Antwortkarten
 - [ ] Typen mit geringem Aufwand: `true_false`, `compare_symbol`, `sequence`, `inverse`, `number_house`, `odd_one_out`, `time_order`
@@ -142,10 +142,10 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 
 **Weltkarte und Fortschritt** (Spez. 5)
 
-- [ ] Weltkarte mit 8 Bereichsmarkern (gesperrt, offen, fertig); gezeichnete Karte mit Schloss, Tier und Schild „bald“ fertig, Zustand „fertig“ offen
+- [x] Weltkarte mit 8 Bereichsmarkern (gesperrt, offen, fertig); fertig heißt: jedes Thema des Geheges in Stufe 3 mit mindestens 2 Sternen (grünes Schild und Rosette)
 - [x] Freischaltung: Start mit Affenwald und Pinguinfelsen, weitere Bereiche nach 6 Sternen im Vorgänger
-- [ ] Sterne einlösen für Baby-Tiere (benennbar) und Dekoration
-- [ ] Sticker-Album mit Mathe-Abzeichen
+- [x] Sterne einlösen für Baby-Tiere (benennbar, im Gehege neben dem großen Tier) und Dekoration (feste Plätze auf der Karte) in „Mein Zoo“; die Sterne der Gehege für die Freischaltung bleiben
+- [x] Sticker-Album mit 12 Mathe-Abzeichen; neue Sticker erscheinen am Rundenende; nichts verfällt, kein Sternverlust (Spielstand Version 3 mit Migration)
 
 **Kompetenzmodell** (Spez. 7)
 
@@ -168,7 +168,7 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 - [x] Weltkarte (2048 × 1536) und 8 Bereichshintergründe; Weltkarte und Hintergründe für Gehege und Aufgabenansicht aller 8 Bereiche fertig, dazu 4 Menü-Hintergründe (Quellen in `art/`, @2× mit `npm run art` erzeugbar); eingebaut sind bisher Pinguinfelsen und Affenwald
 - [x] 8 Tierarten × 4 Zustände plus 8 Baby-Varianten als Sprite-Sheets: alle 8 Tiere mit 5 Ausdrücken, Idle, Freude, Fütterung und Baby, dazu Kartensymbole; als Sprites eingebaut sind bisher Pinguin und Affe
 - [ ] Mathe-Darstellungen: Zehnerfeld, Hundertertafel, Rechenstrich, Zahlenstrahl, Zehnerstangen und Einerwürfel, Uhr, Münzen und Scheine (stilisiert), Muster-Kacheln, Formen, Körper
-- [ ] Rund 20 Aufgabenobjekte, 12 Dekorationen, 12 Abzeichen, 8 Profil-Avatare; 4 Futterobjekte fertig (Fisch, Eimer, Banane, Futternapf)
+- [ ] Rund 20 Aufgabenobjekte, 12 Dekorationen, 12 Abzeichen, 8 Profil-Avatare; fertig: 4 Futterobjekte (Fisch, Eimer, Banane, Futternapf), 12 Dekorationen und 12 Abzeichen (`art/build_rewards.py`)
 - [ ] UI-Atlas, Tier-Atlas, Objekt-Atlas; Sprite-Sheets je Animation mit Atlas-JSON fertig, Symbole der Aufgabenansicht als Einzelbilder
 - [ ] 15 Soundeffekte und 8 Tierlaute, 3 Musikstücke
 - [ ] `ATTRIBUTIONS.md` für jede fremde Datei; Lizenzen geprüft (CC0, CC-BY mit Namensnennung, kein NC)
@@ -193,7 +193,7 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 - [ ] Hoher-Kontrast-Modus und größere Schrift als Einstellung
 - [ ] Reduzierte Bewegung (auch nach Betriebssystem-Vorgabe)
 - [ ] Farbenblind-sichere Palette; Information nie nur durch Farbe
-- [ ] Tastaturbedienung für Laptops (Pfeiltasten, Eingabe, Leertaste)
+- [ ] Tastaturbedienung für Laptops (Pfeiltasten, Eingabe, Leertaste); vorhanden bei Ziffernblock, Geld legen und Uhr, offen bei Antwortkarten und Menüs
 - [ ] DOM-Overlay für Textmenüs prüfen (Risiko Bildschirmleser)
 
 **Erwachsenenbereich** (Spez. 7, 10)

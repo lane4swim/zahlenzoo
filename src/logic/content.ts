@@ -1,5 +1,8 @@
 import type {
+  Achievement,
+  AchievementCondition,
   AnimalConfig,
+  DecorConfig,
   AreaConfig,
   FamilyConfig,
   GameContent,
@@ -259,6 +262,71 @@ export function parseSituations(data: unknown): SituationTemplate[] {
   return list;
 }
 
+export function parseDecor(data: unknown): DecorConfig[] {
+  const d = obj(data, 'decor.json');
+  if (!Array.isArray(d.decor)) throw new ContentError('decor.json: Liste „decor“ fehlt');
+  const list = d.decor.map((v, i) => {
+    const o = obj(v, `decor[${i}]`);
+    return {
+      id: str(o.id, `decor[${i}].id`),
+      price: int(o.price, `decor[${i}].price`, 1, 100),
+      x: int(o.x, `decor[${i}].x`, 0, 1024),
+      y: int(o.y, `decor[${i}].y`, 0, 768),
+      size: int(o.size, `decor[${i}].size`, 32, 256),
+    };
+  });
+  if (new Set(list.map((x) => x.id)).size !== list.length) {
+    throw new ContentError('decor.json: doppelte IDs');
+  }
+  return list;
+}
+
+const SIMPLE_CONDITIONS = [
+  'rounds',
+  'streak',
+  'roundStars',
+  'totalStars',
+  'level',
+  'areasDone',
+  'withHelp',
+  'babies',
+] as const;
+
+function parseCondition(v: unknown, where: string): AchievementCondition {
+  const o = obj(v, where);
+  const type = str(o.type, `${where}.type`);
+  if (type === 'familyBest') {
+    return {
+      type,
+      families: strings(o.families, `${where}.families`),
+      level: int(o.level, `${where}.level`, 1, 3),
+      stars: int(o.stars, `${where}.stars`, 1, 3),
+    };
+  }
+  if (!(SIMPLE_CONDITIONS as readonly string[]).includes(type)) {
+    throw new ContentError(`${where}.type: unbekannte Bedingung ${type}`);
+  }
+  return { type: type as (typeof SIMPLE_CONDITIONS)[number], min: int(o.min, `${where}.min`, 1) };
+}
+
+export function parseAchievements(data: unknown): Achievement[] {
+  const d = obj(data, 'achievements.json');
+  if (!Array.isArray(d.achievements)) {
+    throw new ContentError('achievements.json: Liste „achievements“ fehlt');
+  }
+  const list = d.achievements.map((v, i) => {
+    const o = obj(v, `achievements[${i}]`);
+    return {
+      id: str(o.id, `achievements[${i}].id`),
+      condition: parseCondition(o.condition, `achievements[${i}].condition`),
+    };
+  });
+  if (new Set(list.map((x) => x.id)).size !== list.length) {
+    throw new ContentError('achievements.json: doppelte IDs');
+  }
+  return list;
+}
+
 export type RawContent = {
   rules: unknown;
   areas: unknown;
@@ -268,6 +336,8 @@ export type RawContent = {
   legal: unknown;
   stories: unknown;
   situations: unknown;
+  decor: unknown;
+  achievements: unknown;
 };
 
 /**
@@ -285,7 +355,17 @@ export function parseContent(raw: RawContent, generatorIds: readonly string[]): 
     legal: parseLegal(raw.legal),
     stories: parseStories(raw.stories),
     situations: parseSituations(raw.situations),
+    decor: parseDecor(raw.decor),
+    achievements: parseAchievements(raw.achievements),
   };
+  for (const a of content.achievements) {
+    if (a.condition.type !== 'familyBest') continue;
+    for (const f of a.condition.families) {
+      if (!content.families[f]) {
+        throw new ContentError(`achievements.json: ${a.id} nennt unbekannte Familie ${f}`);
+      }
+    }
+  }
   for (const s of content.situations) {
     if (!content.families[s.family]) {
       throw new ContentError(`situations.json: ${s.id} nennt unbekannte Familie ${s.family}`);
