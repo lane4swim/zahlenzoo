@@ -39,6 +39,10 @@ export class Expression extends Phaser.GameObjects.Container {
       cursor += part.width + GAP;
     }
     this.drawBox(Color.papier);
+    // Ohne Lücke (z. B. beim Überschlagen) gibt es kein Antwortkästchen.
+    const hasGap = terms.includes('?');
+    this.box.setVisible(hasGap);
+    this.boxText.setVisible(hasGap);
     this.add([...parts.map((p) => p.obj), this.boxText]);
     scene.add.existing(this);
   }

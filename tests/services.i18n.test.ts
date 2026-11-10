@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import hints from '../src/data/hints.de.json';
 import strings from '../src/data/strings.de.json';
+import numberWords from '../src/data/numbers.de.json';
 import templates from '../src/data/word-templates.de.json';
 import { add100 } from '../src/logic/generators/add100';
 import { multTable } from '../src/logic/generators/multTable';
@@ -49,7 +50,7 @@ describe('I18n', () => {
 
 describe('Textdateien', () => {
   const i18n = new I18n();
-  i18n.load('de', strings, hints, templates);
+  i18n.load('de', strings, hints, templates, numberWords);
 
   it('enthalten alle Hinweise, die der Generator verwendet, ohne offene Platzhalter', () => {
     for (let seed = 0; seed < 500; seed++) {

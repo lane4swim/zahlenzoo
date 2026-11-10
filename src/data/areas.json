@@ -4,12 +4,27 @@
     {
       "id": "affenwald",
       "animal": "monkey",
-      "families": ["neighbors_100"]
+      "families": [
+        "neighbors_100",
+        "count_steps_100",
+        "read_write_100",
+        "place_value_100",
+        "quick_count",
+        "compare_100"
+      ]
     },
     {
       "id": "pinguinfelsen",
       "animal": "penguin",
-      "families": ["plus_facts_20", "add_100", "sub_100", "story_addsub"]
+      "families": [
+        "plus_facts_20",
+        "add_100",
+        "sub_100",
+        "quick_tens",
+        "estimate_100",
+        "path_choice",
+        "story_addsub"
+      ]
     },
     {
       "id": "elefantenwiese",

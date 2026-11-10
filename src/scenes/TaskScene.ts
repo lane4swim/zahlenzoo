@@ -35,6 +35,7 @@ import { TensOnes } from '../ui/math/TensOnes';
 import { ClockInput } from '../ui/ClockInput';
 import { ClockFace } from '../ui/math/ClockFace';
 import { MoneyInput } from '../ui/MoneyInput';
+import { OrderInput } from '../ui/OrderInput';
 import { Numpad } from '../ui/Numpad';
 import { ProgressDots } from '../ui/ProgressDots';
 import { StoryPictureView } from '../ui/StoryPictureView';
@@ -56,6 +57,12 @@ const PLATE_Y = 428;
 const PLATE_H = 190;
 /** Uhr beim Lesen und Einstellen: unter dem Hinweistext, über den Antwortkarten */
 const CLOCK = { y: 432, radius: 105 };
+/** Zehnerfeld und Punktefeld groß genug für den Blick aus normalem Abstand */
+const displayScale = (visual: Visual): number =>
+  visual.type === 'tenframe' ? 1.5 : visual.type === 'dots' ? 2.4 : 1;
+
+/** Bild zur Aufgabe (Zehnerstangen, Zehnerfeld) */
+const DISPLAY_Y = 420;
 
 /**
  * Aufgabenansicht: Tier links, Rechnung oben, Hinweise in der Mitte, Eingabe unten.
@@ -84,12 +91,15 @@ export class TaskScene extends BaseScene<TaskSceneData> {
   private dots!: ProgressDots;
   private panel!: HintPanel;
   private expression?: Expression;
-  private answerInput?: Numpad | AnswerCards | MoneyInput | ClockInput;
+  private answerInput?: Numpad | AnswerCards | MoneyInput | ClockInput | OrderInput;
   private aidButtons: Button[] = [];
   private feedbackIcon?: Phaser.GameObjects.Image;
   /** Frage, Sachtext, Einheit und Bild (werden je Aufgabe neu angelegt) */
   private storyObjects: Phaser.GameObjects.GameObject[] = [];
   private picture?: StoryPictureView;
+  /** Bild zur Aufgabe (z. B. Zehnerstangen); beim Blitzblick nur kurz sichtbar */
+  private display?: Phaser.GameObjects.GameObject & { setVisible(v: boolean): unknown };
+  private displayHidden = false;
   private nextButton?: Button;
 
   constructor(services: Services) {
@@ -211,6 +221,8 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     for (const o of this.storyObjects) o.destroy();
     this.storyObjects = [];
     this.picture = undefined;
+    this.display = undefined;
+    this.displayHidden = false;
 
     const { done, total } = progress(this.round);
     this.dots.setProgress(done, total);
@@ -253,6 +265,13 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     }
     if (task.clock?.face) {
       this.storyObjects.push(new ClockFace(this, PANEL.x, CLOCK.y, CLOCK.radius, task.clock.time));
+    }
+    if (task.display) this.showDisplay(task.display.visual, task.display.flashMs);
+    if (task.kind === 'order' && task.options) {
+      this.answerInput = new OrderInput(this, INPUT_X, INPUT_Y, task.options, (value) =>
+        this.submit(value),
+      );
+      return;
     }
     if (task.options) {
       this.answerInput = new AnswerCards(
@@ -401,6 +420,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     this.animal?.think();
     if (this.answerInput instanceof AnswerCards) this.answerInput.markWrong(value);
     if (this.answerInput instanceof Numpad) this.answerInput.clear();
+    if (this.answerInput instanceof OrderInput) this.answerInput.clear();
     // Gelegtes Geld bleibt liegen, damit das Kind ergänzen oder zurücklegen kann.
 
     if (this.attempts >= this.content.rules.attempts) {
@@ -437,6 +457,10 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       // Ohne Antwortkästchen bleibt die richtige Karte stehen, darunter „Weiter“.
       this.answerInput.showSolution(String(this.task.answer), -110);
       nextY = INPUT_Y + 40;
+    } else if (this.answerInput instanceof OrderInput && Array.isArray(this.task.answer)) {
+      // Die Karten zeigen die richtige Reihenfolge; „Weiter“ steht darunter.
+      this.answerInput.showOrder(this.task.answer.map(String));
+      nextY = INPUT_Y + 100;
     } else if (this.answerInput instanceof ClockInput && this.task.clock) {
       // Die Uhr zeigt die richtige Zeit, die Tasten machen Platz für „Weiter“.
       this.answerInput.setTime(this.task.clock.time).setButtonsVisible(false);
@@ -558,7 +582,18 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       return new TenFrame(this, PANEL.x, VISUAL_Y + 20, visual.first, visual.second, visual.op);
     }
     if (visual.type === 'dots') {
-      return new DotArray(this, PANEL.x, VISUAL_Y + 4, visual.rows, visual.cols, visual.split);
+      return new DotArray(
+        this,
+        PANEL.x,
+        VISUAL_Y + 4,
+        visual.rows,
+        visual.cols,
+        visual.split,
+        !visual.noLabel,
+      );
+    }
+    if (visual.type === 'tensones') {
+      return TensOnes.blocks(this, PANEL.x, VISUAL_Y + 10, visual.tens, visual.ones);
     }
     return new NumberLine(
       this,
@@ -571,10 +606,42 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     );
   }
 
+  /**
+   * Bild zur Aufgabe zwischen Frage und Eingabe. Mit flashMs verschwindet es nach kurzer
+   * Zeit (Blitzblick: Anzahlen auf einen Blick erfassen statt zählen).
+   */
+  private showDisplay(visual: Visual, flashMs?: number): void {
+    const obj = this.visualFor(visual) as Phaser.GameObjects.Container;
+    obj.y = DISPLAY_Y;
+    // Zehnerfeld und Punktefeld groß genug für den Blick aus normalem Abstand
+    obj.setScale(displayScale(visual));
+    this.display = obj;
+    this.storyObjects.push(obj);
+    if (!flashMs) return;
+    this.time.delayedCall(flashMs, () => {
+      if (this.display !== obj) return;
+      this.displayHidden = true;
+      if (reducedMotion()) obj.setVisible(false);
+      else
+        this.tweens.add({
+          targets: obj,
+          alpha: 0,
+          duration: 250,
+          onComplete: () => obj.setVisible(false),
+        });
+    });
+  }
+
   private showHint(hint: Hint, text: string, icon: string): void {
     this.aid = undefined;
     this.picture?.setVisible(true);
+    // Ein Hinweisbild ersetzt das Aufgabenbild; ohne Bild bleibt es (außer nach dem Blitzblick).
+    this.display?.setVisible(!hint.visual && !this.displayHidden);
     const visual = hint.visual ? this.visualFor(hint.visual) : undefined;
+    // Beim Blitzblick zeigt der Hinweis das Bild so groß wie in der Aufgabe.
+    if (visual && hint.visual && this.task.display) {
+      (visual as Phaser.GameObjects.Container).setScale(displayScale(hint.visual));
+    }
     this.panel.show(text, icon, visual);
     if (visual) this.fitBelowText(visual);
   }
@@ -651,6 +718,9 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       ':': this.t('read.divided'),
       '=': this.t('read.equals'),
       '<': this.t('read.less'),
+      '>': this.t('read.greater'),
+      Z: this.t('read.tens'),
+      E: this.t('read.ones'),
       ',': this.t('read.comma'),
       '?': this.t('read.unknown'),
       '€': this.t('read.euro'),

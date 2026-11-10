@@ -5,6 +5,7 @@ import decor from './decor.json';
 import families from './families.json';
 import hints from './hints.de.json';
 import legal from './legal.json';
+import numberWords from './numbers.de.json';
 import praise from './praise.de.json';
 import rules from './rules.json';
 import situations from './situations.json';
@@ -31,5 +32,5 @@ export const RAW_CONTENT: RawContent = {
   achievements,
 };
 
-/** Texte je Sprache: Oberfläche, Hinweise und Sachaufgaben. */
-export const TEXTS_DE: readonly unknown[] = [strings, hints, wordTemplates];
+/** Texte je Sprache: Oberfläche, Hinweise, Sachaufgaben und Zahlwörter (num.0 bis num.100). */
+export const TEXTS_DE: readonly unknown[] = [strings, hints, wordTemplates, numberWords];

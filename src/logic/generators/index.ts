@@ -1,9 +1,29 @@
 import { add100, ADD_100 } from './add100';
 import { multTable, MULT_TABLE } from './multTable';
 import { neighbors100, NEIGHBORS_100 } from './neighbors100';
+import {
+  COMPARE_100,
+  compare100,
+  COUNT_STEPS_100,
+  countSteps,
+  PLACE_VALUE_100,
+  placeValue,
+  QUICK_COUNT,
+  quickCount,
+  READ_WRITE_100,
+  readWrite,
+} from './numbers100';
 import { plusFacts20, PLUS_FACTS_20 } from './plusFacts20';
 import { CLOCK_FAMILIES, clockFor } from './clock';
 import { compareMoney, COMPARE_MONEY } from './compareMoney';
+import {
+  ESTIMATE_100,
+  estimate100,
+  PATH_CHOICE,
+  pathChoice,
+  QUICK_TENS,
+  quickTens,
+} from './mental';
 import { moneyConvert, MONEY_CONVERT } from './moneyConvert';
 import { moneyLay, MONEY_LAY } from './moneyLay';
 import { EXACT_OR_ESTIMATE, exactOrEstimate, QUESTION_PICK, questionPick } from './situations';
@@ -31,6 +51,14 @@ export const GENERATORS: Readonly<Record<string, Generator>> = {
   ...Object.fromEntries(CLOCK_FAMILIES.map((f) => [f, clockFor(f)])),
   [COMPARE_DURATION]: compareDuration,
   [TIME_UNITS]: timeUnits,
+  [COUNT_STEPS_100]: countSteps,
+  [READ_WRITE_100]: readWrite,
+  [PLACE_VALUE_100]: placeValue,
+  [QUICK_COUNT]: quickCount,
+  [COMPARE_100]: compare100,
+  [QUICK_TENS]: quickTens,
+  [ESTIMATE_100]: estimate100,
+  [PATH_CHOICE]: pathChoice,
 };
 
 export const GENERATOR_IDS = Object.keys(GENERATORS);

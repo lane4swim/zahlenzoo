@@ -443,6 +443,183 @@
           "stage": 3
         }
       }
+    },
+    "count_steps_100": {
+      "title": "Zählen",
+      "kinds": {
+        "choice": 0.3
+      },
+      "levels": {
+        "1": {
+          "description": "Vorwärts in Einerschritten über den Zehner (57, 58, 59, 60)",
+          "steps": [1],
+          "forwardShare": 1
+        },
+        "2": {
+          "description": "Rückwärts in Einerschritten über den Zehner (62, 61, 60, 59)",
+          "steps": [1],
+          "forwardShare": 0
+        },
+        "3": {
+          "description": "In Schritten (3, 4, 10) vorwärts und rückwärts mit beliebiger Startzahl",
+          "steps": [3, 4, 10],
+          "forwardShare": 0.5
+        }
+      }
+    },
+    "read_write_100": {
+      "title": "Zahlen lesen und schreiben",
+      "kinds": {
+        "choice": 0.25
+      },
+      "levels": {
+        "1": {
+          "description": "Zahlwort bis 20 und volle Zehner als Zahl schreiben",
+          "mode": "write",
+          "small": 1
+        },
+        "2": {
+          "description": "Zahlwort 21 bis 99 als Zahl schreiben (Zahlendreher)",
+          "mode": "write",
+          "small": 0
+        },
+        "3": {
+          "description": "Zur Zahl das richtige Zahlwort wählen",
+          "mode": "pick",
+          "small": 0
+        }
+      }
+    },
+    "place_value_100": {
+      "title": "Zehner und Einer",
+      "kinds": {
+        "choice": 0.3
+      },
+      "levels": {
+        "1": {
+          "description": "Zehnerstangen und Einerwürfel zählen",
+          "mode": "picture"
+        },
+        "2": {
+          "description": "Zerlegen und zusammensetzen (47 = 4 Z 7 E)",
+          "mode": "split"
+        },
+        "3": {
+          "description": "Umbündeln (3 Z 14 E = 44)",
+          "mode": "bundle"
+        }
+      }
+    },
+    "quick_count": {
+      "title": "Blitzblick",
+      "kinds": {
+        "choice": 0.3
+      },
+      "levels": {
+        "1": {
+          "description": "Zehnerfeld und Punktefelder bis 10, kurz gezeigt",
+          "shape": "tenframe",
+          "min": 3,
+          "max": 10,
+          "flashMs": 2000,
+          "dots": 1
+        },
+        "2": {
+          "description": "Zwei Zehnerfelder bis 20",
+          "shape": "tenframe",
+          "min": 11,
+          "max": 20,
+          "flashMs": 2500
+        },
+        "3": {
+          "description": "Zehnerstangen und Einerwürfel bis 99",
+          "shape": "tensones",
+          "min": 21,
+          "max": 99,
+          "flashMs": 3000
+        }
+      }
+    },
+    "compare_100": {
+      "title": "Vergleichen und ordnen",
+      "kinds": {
+        "choice": 1
+      },
+      "levels": {
+        "1": {
+          "description": "Zwei Zahlen vergleichen (<, >), oft Zahlendreher",
+          "mode": "symbol"
+        },
+        "2": {
+          "description": "Zahl mit Zehnern und Einern oder Summe vergleichen (auch =)",
+          "mode": "mixed"
+        },
+        "3": {
+          "description": "Vier Zahlen der Größe nach ordnen",
+          "mode": "order",
+          "count": 4
+        }
+      }
+    },
+    "quick_tens": {
+      "title": "Blitzrechnen",
+      "kinds": {
+        "choice": 0.3
+      },
+      "levels": {
+        "1": {
+          "description": "Zahlen bis 10 zerlegen (10 = 7 + 3)",
+          "stage": "decompose"
+        },
+        "2": {
+          "description": "Mit Zehnerzahlen rechnen (40 + 30, 90 − 60)",
+          "stage": "tens"
+        },
+        "3": {
+          "description": "Auf Zehner und 100 ergänzen (47 + 3 = 50, 38 + 62 = 100)",
+          "stage": "complement"
+        }
+      }
+    },
+    "estimate_100": {
+      "title": "Überschlagen",
+      "kinds": {
+        "choice": 1
+      },
+      "levels": {
+        "1": {
+          "description": "Plus mit Zahlen nahe am Zehner: ungefähres Ergebnis wählen",
+          "mode": "near"
+        },
+        "2": {
+          "description": "Plus und Minus: ungefähres Ergebnis wählen",
+          "mode": "any"
+        },
+        "3": {
+          "description": "Kann das Ergebnis stimmen? Mit Überschlag prüfen",
+          "mode": "check"
+        }
+      }
+    },
+    "path_choice": {
+      "title": "Rechenweg",
+      "kinds": {
+        "choice": 1
+      },
+      "levels": {
+        "1": {
+          "description": "Plus ohne Zehnerübergang: richtigen Rechenweg erkennen",
+          "mode": "add"
+        },
+        "2": {
+          "description": "Plus mit Zehnerübergang",
+          "mode": "addCarry"
+        },
+        "3": {
+          "description": "Minus",
+          "mode": "sub"
+        }
+      }
     }
   }
 }

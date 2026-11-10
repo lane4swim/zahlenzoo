@@ -115,8 +115,8 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 
 **Bereiche und Familien** (Spez. 5, KE 2)
 
-- [ ] Affenwald: `count_steps_100`, `read_write_100`, `place_value_100`, `quick_count`, `order_100`, `compare_100`, `neighbors_100`, `number_sequences`; davon `neighbors_100` fertig (Stufe 1 Nachbarzahlen, Stufe 2 Nachbarzehner, Stufe 3 Zahlenfolgen in 2er-, 5er- und 10er-Schritten)
-- [ ] Pinguinfelsen: Stufe 0 `plus_facts_20`; `add_100`, `sub_100`, `decompose_10`, `complement_tens`, `tens_calc`, `estimate_100`, `smart_calc`, `path_choice`, `story_addsub`; davon fertig: `add_100`, `plus_facts_20` (Stufe 0: Plus bis 10 mit Zerlegen der 10, Plus bis 20, Zehnerübergang und Umkehraufgaben), `sub_100`; Themenwahl im Gehege
+- [x] Affenwald: `neighbors_100` (mit `number_sequences`), `count_steps_100` (vorwärts, rückwärts, in Schritten 3, 4, 10), `read_write_100` (Zahlwort lesen und schreiben, Zahlwort zur Zahl wählen), `place_value_100` (Zehnerstangen zählen, zerlegen, umbündeln), `quick_count` (Blitzblick auf Zehnerfeld, Punktefeld und Zehnerstangen), `compare_100` (Vergleichszeichen, Stufe 3 `order_100`: Zahlen durch Antippen ordnen); sechs Themen im Gehege
+- [ ] Pinguinfelsen: Stufe 0 `plus_facts_20`; `add_100`, `sub_100`, `decompose_10`, `complement_tens`, `tens_calc`, `estimate_100`, `smart_calc`, `path_choice`, `story_addsub`; fertig bis auf `smart_calc` (wartet auf #7): `decompose_10`, `tens_calc` und `complement_tens` als Thema „Blitzrechnen“ (Stufen 1 bis 3), `estimate_100` (Überschlag wählen, Stufe 3 Ergebnis auf Plausibilität prüfen), `path_choice` (richtigen Rechenweg erkennen); sieben Themen im Gehege
 - [ ] Elefantenwiese: `double_half`, `mult_core`, `mult_derive`, Division als Verteilen und Aufteilen, `story_multdiv`; davon `mult_table` fertig (Stufe 1 Kernaufgaben 1, 2, 5, 10 mit Verdoppeln und Halbieren, Stufe 2 Ableiten, Stufe 3 Umkehren und Verteilen), `story_multdiv` offen
 - [x] Zoo-Kasse: `money_lay` (Münzen und Scheine auf den Zahlteller legen; Stufe 1 Euro bis 20, Stufe 2 Euro bis 100, Stufe 3 Cent bis 100), `money_calc` (Sachaufgaben mit Geld), `money_convert` (ct und €: volle Euro, Zehner-Cent, beliebige Cent mit Null an der Zehnerstelle), `compare_money` (gleiche Einheit, verschiedene Schreibweisen, drei Beträge oder „gleich viel“), `question_pick` (passende Frage wählen; falsche Fragen: passt nicht, fehlende Angabe, steht schon im Text; Stufe 3 mit überflüssigen Angaben), `exact_or_estimate` (Stufe 1 und 2 genau oder ungefähr, Stufe 3 Überschlag „Reicht das Geld?“); Papagei, sechs Themen in zwei Reihen im Gehege
 - [x] Futteruhr: `clock_full`, `clock_half`, `clock_quarter` (mit Dreiviertelstunde), `clock_digital` (je Stufe 1 Uhr lesen, Stufe 2 Zeiger einstellen, Stufe 3 eine Stunde, halbe Stunde oder Viertelstunde später oder früher; Digitaluhr vormittags, nachmittags und abends, Digitalzeit einstellen), `compare_duration` (gleiche Einheit, Bruchteile der Stunde gegen Minuten, drei Zeitspannen), `time_units` (Stufe 1 Stunden und Minuten, Stufe 2 `fraction_units` mit ¼, ½ und ¾ Stunde, Stufe 3 Tag, Woche, Monat, Jahr); Eingabeform `clock` (Zeiger ziehen oder Tasten), Eule, sechs Themen im Gehege
@@ -130,7 +130,7 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 
 **Weitere Aufgabentypen und Eingabeformen** (Spez. 6, KE 6)
 
-- [ ] `drag-sort` mit Einrasten und sanftem Zurückschicken
+- [ ] `drag-sort` mit Einrasten und sanftem Zurückschicken; als Ersatz ohne Ziehen gibt es `order` (Zahlen der Reihe nach antippen)
 - [ ] `number-line`
 - [x] `clock` (Zeiger ziehen oder Tasten; Uhrzeit wählen über Antwortkarten)
 - [x] `money` (Münzen und Scheine antippen und auf den Zahlteller legen)
