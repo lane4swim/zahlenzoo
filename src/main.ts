@@ -62,7 +62,9 @@ async function start(): Promise<void> {
       new ZooScene(services),
     ],
   };
-  new Phaser.Game(config);
+  const game = new Phaser.Game(config);
+  // Nur in der Entwicklung: Zugriff für Browser-Tests (nicht im veröffentlichten Build).
+  if (import.meta.env.DEV) (window as unknown as { zahlenzoo: Phaser.Game }).zahlenzoo = game;
 }
 
 void start();
