@@ -224,9 +224,6 @@
   "task.prompt.units.monthsYears": "{n} Monate sind wie viele Jahre?",
   "read.hours": "Stunden",
   "read.minutes": "Minuten",
-  "read.quarter": "ein Viertel",
-  "read.half": "ein halb",
-  "read.threeQuarters": "drei Viertel",
   "decor.ballons": "Luftballons",
   "decor.drachen": "Drachen",
   "decor.windrad": "Windrad",
@@ -345,5 +342,6 @@
   "option.plausible.no": "Nein, das kann nicht stimmen.",
   "read.greater": "ist größer als",
   "read.tens": "Zehner",
-  "read.ones": "Einer"
+  "read.ones": "Einer",
+  "task.prompt.units.span": "Von {start} Uhr bis {end} Uhr. Wie viele Minuten sind das?"
 }

@@ -727,9 +727,6 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       ct: this.t('read.cent'),
       h: this.t('read.hours'),
       min: this.t('read.minutes'),
-      '¼': this.t('read.quarter'),
-      '½': this.t('read.half'),
-      '¾': this.t('read.threeQuarters'),
     };
     const story = this.task.prompt.story;
     if (story) {

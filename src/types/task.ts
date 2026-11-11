@@ -100,9 +100,6 @@ export type Term =
   | 'ct'
   | 'h'
   | 'min'
-  | '¼'
-  | '½'
-  | '¾'
   /** Zehner und Einer (Stellenwert) */
   | 'Z'
   | 'E'

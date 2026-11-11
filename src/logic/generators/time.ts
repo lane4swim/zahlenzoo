@@ -4,7 +4,7 @@ import type { Generator, Hint, Task, TaskOption, Term, TextParams } from '../../
 
 /**
  * Futteruhr: Zeitspannen vergleichen (KE: compare_duration) und Zeiteinheiten umwandeln
- * (KE: time_units, mit ¼, ½ und ¾ Stunde nach KE fraction_units).
+ * (KE: time_units; Stufe 2 Zeitspannen zwischen zwei Uhrzeiten).
  *
  * Texte für Zeitspannen stehen in den Sprachdateien (`duration.*`). Ein Hinweis verweist
  * mit „@schlüssel|n=40“ auf eine Zeitspanne; das Spiel setzt den Text mit diesen Werten ein.
@@ -138,8 +138,6 @@ type Unit = {
   /** Frage statt Rechnung (Stufe 3) */
   textKey?: string;
   textParams?: TextParams;
-  /** Antwortkarten mit festen Werten (z. B. ¼, ½, ¾, 1) */
-  choices?: string[];
 };
 
 /** Stufe 1: Stunden und Minuten (2 h = 120 min, 1 h 15 min = 75 min, 180 min = 3 h). */
@@ -187,45 +185,63 @@ function hoursMinutes(rng: Rng, maxHours: number): Unit {
   };
 }
 
-const FRACTION_TERMS: Array<{ term: Term; minutes: number }> = [
-  { term: '¼', minutes: 15 },
-  { term: '½', minutes: 30 },
-  { term: '¾', minutes: 45 },
-];
-
-/** Stufe 2: Bruchteile einer Stunde (½ h = 30 min, 1 ½ h = 90 min, 45 min = ¾ h). */
-function fractions(rng: Rng): Unit {
-  const f = rng.pick(FRACTION_TERMS);
-  const one: Hint = { key: 'hint.time_units.fraction.1' };
-  if (rng.chance(0.3)) {
-    // Rückweg mit Antwortkarten: 45 min = ? h
-    const p = { min: f.minutes, answer: String(f.term) };
+/**
+ * Stufe 2: Zeitspannen zwischen zwei Uhrzeiten in Minuten (Von 7:30 bis 8:15 sind es
+ * 45 Minuten). Meist über die volle Stunde; Brüche wie ½ h gehören nach Klärung mit der
+ * Lehrkraft nicht zu Klasse 2.
+ */
+function spans(rng: Rng): Unit {
+  for (;;) {
+    const hour = rng.int(7, 17);
+    const sm = 5 * rng.int(0, 11);
+    const span = 5 * rng.int(2, 12);
+    const start = hour * 60 + sm;
+    const end = start + span;
+    const crossing = Math.floor(end / 60) > hour;
+    // Zwei Drittel der Aufgaben gehen über die volle Stunde, die Endzeit ist keine volle Stunde.
+    if (crossing !== rng.chance(0.67) || end % 60 === 0 || end > 18 * 60) continue;
+    const clock = (t: number) => `${Math.floor(t / 60)}:${String(t % 60).padStart(2, '0')}`;
+    const full = (hour + 1) * 60;
+    const m1 = full - start;
+    const m2 = end - full;
+    const p = {
+      start: clock(start),
+      end: clock(end),
+      full: clock(full),
+      m1,
+      m2,
+      sm,
+      em: end % 60,
+      answer: span,
+    };
+    // Typischer Fehler: Uhrzeiten wie Zahlen abgezogen (8:15 − 7:30 → 815 − 730 = 85)
+    const asNumbers = Number(clock(end).replace(':', '')) - Number(clock(start).replace(':', ''));
+    const errors = [
+      ...(crossing && asNumbers !== span
+        ? [{ value: asNumbers, errorTag: 'hundred_minutes' }]
+        : []),
+      ...(crossing && m1 !== span ? [{ value: m1, errorTag: 'span_part' }] : []),
+    ];
     return {
-      key: `minToFrac:${f.minutes}`,
-      terms: [f.minutes, 'min', '=', '?', 'h'],
-      answer: String(f.term),
-      choices: ['¼', '½', '¾', '1'],
-      hints: [
-        one,
-        { key: 'hint.time_units.minToFrac.2', params: p },
-        { key: 'hint.time_units.minToFrac.3', params: p },
-      ],
+      key: `span:${start}:${end}`,
+      terms: ['?'],
+      answer: span,
+      textKey: 'task.prompt.units.span',
+      textParams: { start: p.start, end: p.end },
+      errors,
+      hints: crossing
+        ? [
+            { key: 'hint.time_units.span.1' },
+            { key: 'hint.time_units.span.2', params: p },
+            { key: 'hint.time_units.span.3', params: p },
+          ]
+        : [
+            { key: 'hint.time_units.span.1.same' },
+            { key: 'hint.time_units.span.2.same', params: p },
+            { key: 'hint.time_units.span.3.same', params: p },
+          ],
     };
   }
-  const h = rng.int(0, 2);
-  const answer = 60 * h + f.minutes;
-  const p = { frac: String(f.term), fracMin: f.minutes, h, hm: 60 * h, answer };
-  const whole = h > 0 ? 'fracWhole' : 'frac';
-  return {
-    key: `fracToMin:${h}:${f.minutes}`,
-    terms: h > 0 ? [h, f.term, 'h', '=', '?', 'min'] : [f.term, 'h', '=', '?', 'min'],
-    answer,
-    hints: [
-      one,
-      { key: `hint.time_units.${whole}.2`, params: p },
-      { key: `hint.time_units.${whole}.3`, params: p },
-    ],
-  };
 }
 
 /** Stufe 3: Tag, Woche, Monat, Jahr (als Frage mit Antwortkästchen). */
@@ -276,9 +292,6 @@ function unitErrors(
     const h = typeof terms[0] === 'number' && terms[1] !== 'min' ? terms[0] : 0;
     const rest = answer - 60 * h;
     errors.push({ value: 100 * h + rest, errorTag: 'hundred_minutes' });
-    if (terms.includes('½')) errors.push({ value: 100 * h + 50, errorTag: 'hundred_minutes' });
-    if (terms.includes('¼')) errors.push({ value: 100 * h + 25, errorTag: 'hundred_minutes' });
-    if (terms.includes('¾')) errors.push({ value: 100 * h + 75, errorTag: 'hundred_minutes' });
   }
   return errors.filter(
     (e, i) => e.value !== answer && errors.findIndex((f) => f.value === e.value) === i,
@@ -291,7 +304,7 @@ export const timeUnits: Generator = (level, rng, id, params): Task => {
     stage === 1
       ? hoursMinutes(rng, num(params, 'maxHours'))
       : stage === 2
-        ? fractions(rng)
+        ? spans(rng)
         : calendar(rng);
   const prompt: Task['prompt'] = unit.textKey
     ? {
@@ -300,22 +313,16 @@ export const timeUnits: Generator = (level, rng, id, params): Task => {
         ...(unit.textParams ? { textParams: unit.textParams } : {}),
       }
     : { terms: unit.terms };
-  const choices = unit.choices;
   const answer = unit.answer;
   const errors = [
     ...(unit.errors ?? []),
     ...(typeof answer === 'number' ? unitErrors(unit.terms, answer) : []),
   ];
-  // Antwortkarten nur, wo sie passen: beim Rückweg zu ¼, ½, ¾ immer, sonst nach Anteil
+  // Antwortkarten nach Anteil, wenn es typische Fehler als falsche Karten gibt
   const asCards =
-    choices !== undefined ||
-    (typeof answer === 'number' && errors.length > 0 && rng.chance(kindShare(params, 'choice')));
+    typeof answer === 'number' && errors.length > 0 && rng.chance(kindShare(params, 'choice'));
   let options: TaskOption[] | undefined;
-  if (choices) {
-    options = rng.shuffle(
-      choices.map((v) => (v === answer ? { value: v } : { value: v, errorTag: 'fraction_hour' })),
-    );
-  } else if (asCards) {
+  if (asCards) {
     const a = answer as number;
     const wrong = [...errors.map((e) => ({ value: String(e.value), errorTag: e.errorTag }))];
     for (const d of [15, -15, 30, 60]) {

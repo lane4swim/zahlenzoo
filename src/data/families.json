@@ -435,7 +435,7 @@
           "maxHours": 4
         },
         "2": {
-          "description": "Bruchteile einer Stunde (½ h = 30 min, 1 ½ h = 90 min, 45 min = ¾ h)",
+          "description": "Zeitspannen zwischen zwei Uhrzeiten in Minuten (Von 7:30 bis 8:15 sind es 45 Minuten)",
           "stage": 2
         },
         "3": {

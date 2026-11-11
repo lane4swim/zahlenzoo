@@ -10,19 +10,19 @@ Die Checkliste folgt der Roadmap (Spez. Abschnitt 13): fünf Phasen mit je einem
 
 - [x] Aktuelle stabile Phaser-Hauptversion prüfen und festlegen (Spez. 3): Phaser 4 (4.2.1)
 - [ ] Lehrkraft für die inhaltliche Prüfung gewinnen (Spez. 12, KE 5)
-- [ ] Die zehn unsicheren Zuordnungen mit der Lehrkraft am Lehrplan-Original klären (KE 5)
-  - [ ] 1 Verteilung der Inhalte auf Klasse 1 und 2, Startstufen
-  - [ ] 2 Flächeninhalt und Umfang
-  - [ ] 3 Brüche ¼, ½, ¾ bei Größen
-  - [ ] 4 Kombinatorik und Wahrscheinlichkeit
-  - [ ] 5 Division als Verteilen und Aufteilen
-  - [ ] 6 Reihen der Kernaufgaben im Einmaleins (1, 2, 5, 10)
-  - [ ] 7 Rechengesetze in `smart_calc`
-  - [ ] 8 Kraft der 5 und der 10
-  - [ ] 9 Obergrenzen bei Geld und Größen
-  - [ ] 10 Familiennamen, Stufenzuschnitt, Zuordnung zu Bereichen
+- [x] Die zehn unsicheren Zuordnungen mit der Lehrkraft am Lehrplan-Original klären (KE 5); Antworten vom 11.11.2026 in [`ausarbeitung-offene-familien.md`](ausarbeitung-offene-familien.md)
+  - [x] 1 Verteilung der Inhalte auf Klasse 1 und 2, Startstufen: stimmt
+  - [x] 2 Flächeninhalt und Umfang: gehören zu Klasse 2, Thema `area_count` im Schmetterlingshaus geplant
+  - [x] 3 Brüche ¼, ½, ¾ bei Größen: nicht in Klasse 2; Zeiteinheiten Stufe 2 umgebaut (Zeitspannen)
+  - [x] 4 Kombinatorik und Wahrscheinlichkeit: Kombinatorik in Klasse 2 (Anordnungen, z. B. 3 Eiskugeln), Wahrscheinlichkeit Klasse 4
+  - [x] 5 Division als Verteilen und Aufteilen: stimmt, auch mit Rest (Ergänzung in der Elefantenwiese offen)
+  - [x] 6 Reihen der Kernaufgaben im Einmaleins (1, 2, 5, 10): bestätigt
+  - [x] 7 Rechengesetze in `smart_calc`: stimmt
+  - [x] 8 Kraft der 5 und der 10: stimmt
+  - [x] 9 Obergrenzen bei Geld und Größen: stimmt
+  - [x] 10 Familiennamen, Stufenzuschnitt, Zuordnung zu Bereichen: stimmt
 - [ ] Ergebnis der Klärung in `families.json` sowie in Spez. Abschnitt 2 und 6 nachtragen (KE 5)
-- [ ] Offene Familien ausarbeiten (KE 5): `smart_calc`, `strategy_pick`, `shapes_compose`, `solids_basic`, `cube_buildings`, Raumorientierung (Lagebegriffe, Raster 5 × 5); Vorschlag mit Stufen, Eingabeformen und Fragen an die Lehrkraft in [`ausarbeitung-offene-familien.md`](ausarbeitung-offene-familien.md), Prüfung offen
+- [x] Offene Familien ausarbeiten (KE 5): `smart_calc`, `strategy_pick`, `shapes_compose`, `solids_basic`, `cube_buildings`, Raumorientierung (Lagebegriffe, Raster 5 × 5); Vorschlag mit Stufen, Eingabeformen und Fragen an die Lehrkraft in [`ausarbeitung-offene-familien.md`](ausarbeitung-offene-familien.md), von der Lehrkraft am 11.11.2026 beantwortet
 - [ ] Illustrationsstil für Tiere und Karte festlegen (Spez. 11, Risiken); Stand: Stilvorgabe 0.1 in [`stilprobe/style-guide.md`](../stilprobe/style-guide.md), offene Punkte dort unter „Noch festzulegen“
 - [ ] Schrift wählen (Andika oder Atkinson Hyperlegible), Probedruck `1 l I` und `0 O` (Spez. 11); Andika laut Stilvorgabe gewählt und eingebunden, Probedruck offen
 - [ ] Testgeräte bereitstellen: iPad mit Safari, Android-Tablet mit Chrome, Chromebook, Laptop mit Maus (Spez. 12)
@@ -117,11 +117,11 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 
 - [x] Affenwald: `neighbors_100` (mit `number_sequences`), `count_steps_100` (vorwärts, rückwärts, in Schritten 3, 4, 10), `read_write_100` (Zahlwort lesen und schreiben, Zahlwort zur Zahl wählen), `place_value_100` (Zehnerstangen zählen, zerlegen, umbündeln), `quick_count` (Blitzblick auf Zehnerfeld, Punktefeld und Zehnerstangen), `compare_100` (Vergleichszeichen, Stufe 3 `order_100`: Zahlen durch Antippen ordnen); sechs Themen im Gehege
 - [ ] Pinguinfelsen: Stufe 0 `plus_facts_20`; `add_100`, `sub_100`, `decompose_10`, `complement_tens`, `tens_calc`, `estimate_100`, `smart_calc`, `path_choice`, `story_addsub`; fertig bis auf `smart_calc` (wartet auf #7): `decompose_10`, `tens_calc` und `complement_tens` als Thema „Blitzrechnen“ (Stufen 1 bis 3), `estimate_100` (Überschlag wählen, Stufe 3 Ergebnis auf Plausibilität prüfen), `path_choice` (richtigen Rechenweg erkennen); sieben Themen im Gehege
-- [ ] Elefantenwiese: `double_half`, `mult_core`, `mult_derive`, Division als Verteilen und Aufteilen, `story_multdiv`; davon `mult_table` fertig (Stufe 1 Kernaufgaben 1, 2, 5, 10 mit Verdoppeln und Halbieren, Stufe 2 Ableiten, Stufe 3 Umkehren und Verteilen), `story_multdiv` offen
+- [ ] Elefantenwiese (offen: Division mit Rest im kleinen Einmaleins, Klärung 5): `double_half`, `mult_core`, `mult_derive`, Division als Verteilen und Aufteilen, `story_multdiv`; davon `mult_table` fertig (Stufe 1 Kernaufgaben 1, 2, 5, 10 mit Verdoppeln und Halbieren, Stufe 2 Ableiten, Stufe 3 Umkehren und Verteilen), `story_multdiv` offen
 - [x] Zoo-Kasse: `money_lay` (Münzen und Scheine auf den Zahlteller legen; Stufe 1 Euro bis 20, Stufe 2 Euro bis 100, Stufe 3 Cent bis 100), `money_calc` (Sachaufgaben mit Geld), `money_convert` (ct und €: volle Euro, Zehner-Cent, beliebige Cent mit Null an der Zehnerstelle), `compare_money` (gleiche Einheit, verschiedene Schreibweisen, drei Beträge oder „gleich viel“), `question_pick` (passende Frage wählen; falsche Fragen: passt nicht, fehlende Angabe, steht schon im Text; Stufe 3 mit überflüssigen Angaben), `exact_or_estimate` (Stufe 1 und 2 genau oder ungefähr, Stufe 3 Überschlag „Reicht das Geld?“); Papagei, sechs Themen in zwei Reihen im Gehege
-- [x] Futteruhr: `clock_full`, `clock_half`, `clock_quarter` (mit Dreiviertelstunde), `clock_digital` (je Stufe 1 Uhr lesen, Stufe 2 Zeiger einstellen, Stufe 3 eine Stunde, halbe Stunde oder Viertelstunde später oder früher; Digitaluhr vormittags, nachmittags und abends, Digitalzeit einstellen), `compare_duration` (gleiche Einheit, Bruchteile der Stunde gegen Minuten, drei Zeitspannen), `time_units` (Stufe 1 Stunden und Minuten, Stufe 2 `fraction_units` mit ¼, ½ und ¾ Stunde, Stufe 3 Tag, Woche, Monat, Jahr); Eingabeform `clock` (Zeiger ziehen oder Tasten), Eule, sechs Themen im Gehege
-- [ ] Schmetterlingshaus: `shapes_basic`, `pattern_continue`, `shapes_compose`, `symmetry_check` (erkennen, nicht zeichnen), `grid_draw`
-- [ ] Giraffenhof: `measure_length`, `compare_length`, `anchor_sizes`, `length_convert`, `fraction_units`
+- [x] Futteruhr: `clock_full`, `clock_half`, `clock_quarter` (mit Dreiviertelstunde), `clock_digital` (je Stufe 1 Uhr lesen, Stufe 2 Zeiger einstellen, Stufe 3 eine Stunde, halbe Stunde oder Viertelstunde später oder früher; Digitaluhr vormittags, nachmittags und abends, Digitalzeit einstellen), `compare_duration` (gleiche Einheit, Bruchteile der Stunde gegen Minuten, drei Zeitspannen), `time_units` (Stufe 1 Stunden und Minuten, Stufe 2 Zeitspannen zwischen zwei Uhrzeiten, Stufe 3 Tag, Woche, Monat, Jahr; `fraction_units` entfällt, Brüche gehören laut Lehrkraft nicht zu Klasse 2); Eingabeform `clock` (Zeiger ziehen oder Tasten), Eule, sechs Themen im Gehege
+- [ ] Schmetterlingshaus: `shapes_basic`, `pattern_continue`, `shapes_compose`, `symmetry_check` (erkennen, nicht zeichnen), `grid_draw`, `space_orientation`, `area_count` (Flächen auslegen und vergleichen, Umfang; Klärung 2)
+- [ ] Giraffenhof: `measure_length`, `compare_length`, `anchor_sizes`, `length_convert` (`fraction_units` entfällt, siehe Klärung 3)
 - [ ] Zoo-Zählung: `tally_chart`, `read_table`, `read_chart`, `read_calendar`, `combinatorics`
 - [ ] Raumorientierung: `route_instructions`, `position_words` auf Weltkarte und im Gehege
 - [ ] Baumodus aus dem Gehege: `solids_basic`, `cube_buildings`

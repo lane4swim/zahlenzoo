@@ -14,18 +14,14 @@ function tasks(family: string, gen: Generator, level: TaskLevel): Task[] {
   return Array.from({ length: SEEDS }, (_, s) => gen(level, createRng(s), `t${s}`, P(level)));
 }
 
-/** Minuten einer Seite der Rechnung (Zahlen mit h, min, ¼, ½, ¾). */
+/** Minuten einer Seite der Rechnung (Zahlen mit h und min). */
 function minutesOf(terms: readonly Term[]): number {
-  const frac: Record<string, number> = { '¼': 15, '½': 30, '¾': 45 };
   let sum = 0;
   let pending = 0;
   for (const t of terms) {
     if (typeof t === 'number') pending = t;
-    else if (t in frac) {
-      sum += 60 * pending + frac[t]!;
-      pending = -1;
-    } else if (t === 'h') {
-      if (pending >= 0) sum += 60 * pending;
+    else if (t === 'h') {
+      sum += 60 * pending;
       pending = 0;
     } else if (t === 'min') {
       sum += pending;
@@ -34,6 +30,12 @@ function minutesOf(terms: readonly Term[]): number {
   }
   return sum;
 }
+
+/** Minuten seit 0:00 aus „7:30“. */
+const clock = (text: string) => {
+  const [h, m] = text.split(':').map(Number);
+  return h! * 60 + m!;
+};
 
 describe('Zeitspannen vergleichen', () => {
   it.each([
@@ -64,33 +66,54 @@ describe('Zeitspannen vergleichen', () => {
 });
 
 describe('Zeiteinheiten', () => {
-  it.each([1, 2] as const)('Stufe %i: beide Seiten sind gleich lang', (level) => {
+  it('Stufe 1: beide Seiten sind gleich lang', () => {
     const kinds = new Set<string>();
-    for (const t of tasks('time_units', timeUnits, level)) {
+    for (const t of tasks('time_units', timeUnits, 1)) {
       const eq = t.prompt.terms.indexOf('=');
-      const filled = t.prompt.terms.map((x) =>
-        x === '?' ? (typeof t.answer === 'number' ? t.answer : (t.answer as Term)) : x,
+      const filled = t.prompt.terms.map((x) => (x === '?' ? (t.answer as number) : x));
+      expect(minutesOf(filled.slice(eq + 1)), JSON.stringify(filled)).toBe(
+        minutesOf(filled.slice(0, eq)),
       );
-      const left = minutesOf(filled.slice(0, eq));
-      let right = minutesOf(filled.slice(eq + 1));
-      // Rückweg „45 min = ? h“: die Antwort 1 steht für eine ganze Stunde
-      if (t.answer === '1') right = 60;
-      expect(right, JSON.stringify(filled)).toBe(left);
       kinds.add(t.dedupeKey.split(':')[1]!);
       expect(check(t, String(t.answer)).correct).toBe(true);
       if (t.options) expect(new Set(t.options.map((o) => o.value)).size).toBe(t.options.length);
     }
-    expect(kinds.size).toBeGreaterThanOrEqual(level === 1 ? 3 : 2);
+    expect(kinds.size).toBe(3);
   });
 
-  it('erkennt 100 statt 60 Minuten', () => {
-    const t = tasks('time_units', timeUnits, 2).find(
-      (u) => u.dedupeKey === 'units:fracToMin:0:30',
-    )!;
-    expect(t.answer).toBe(30);
-    expect(check(t, '50').errorTag).toBe('hundred_minutes');
+  it('Stufe 2: Zeitspannen zwischen zwei Uhrzeiten, meist über die volle Stunde', () => {
+    let crossing = 0;
+    for (const t of tasks('time_units', timeUnits, 2)) {
+      expect(t.prompt.textKey).toBe('task.prompt.units.span');
+      const start = clock(String(t.prompt.textParams!.start));
+      const end = clock(String(t.prompt.textParams!.end));
+      expect(t.answer).toBe(end - start);
+      expect(t.answer as number).toBeGreaterThanOrEqual(10);
+      expect(t.answer as number).toBeLessThanOrEqual(60);
+      expect(end % 5).toBe(0);
+      if (Math.floor(end / 60) > Math.floor(start / 60)) crossing++;
+      // keine Brüche mehr (Entscheidung der Lehrkraft: ¼, ½, ¾ nicht in Klasse 2)
+      expect(JSON.stringify(t)).not.toMatch(/[¼½¾]/);
+    }
+    expect(crossing).toBeGreaterThan(SEEDS / 2);
+  });
+
+  it('erkennt 100 statt 60 Minuten und halb gezählte Zeitspannen', () => {
     const h = tasks('time_units', timeUnits, 1).find((u) => u.dedupeKey === 'units:hToMin:2')!;
     expect(check(h, '200').errorTag).toBe('hundred_minutes');
+    const t = tasks('time_units', timeUnits, 2).find(
+      (u) => u.prompt.textParams!.start === '7:30' && u.prompt.textParams!.end === '8:15',
+    );
+    if (t) {
+      expect(check(t, '85').errorTag).toBe('hundred_minutes');
+      expect(check(t, '30').errorTag).toBe('span_part');
+    }
+    const any = tasks('time_units', timeUnits, 2).find(
+      (u) => (u.typicalErrors ?? []).length === 2,
+    )!;
+    const [numbers, part] = any.typicalErrors!;
+    expect(check(any, String(numbers!.value)).errorTag).toBe('hundred_minutes');
+    expect(check(any, String(part!.value)).errorTag).toBe('span_part');
   });
 
   it('Stufe 3: Tag, Woche, Monat und Jahr', () => {

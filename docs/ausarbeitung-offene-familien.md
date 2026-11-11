@@ -1,6 +1,6 @@
 # Ausarbeitung der offenen Aufgabenfamilien (Issue #7)
 
-Vorschlag zur fachlichen Prüfung, Stand 11.11.2026. Als Seite zum Teilen: https://claude.ai/artifact/9tjWZzEEzEgpRJ3fp7FtBU Für jede Familie aus Issue #7 stehen hier Ziel, Ort im Spiel, Eingabeform, drei Stufen mit Beispielen, typische Fehler und Hinweise. Am Ende jedes Abschnitts stehen die Fragen, die eine Lehrkraft entscheiden sollte. Die Familien `time_units` und `exact_or_estimate` sind bereits umgesetzt; ihr Stand ist zum Abgleich beschrieben.
+Vorschlag zur fachlichen Prüfung, Stand 11.11.2026. Die Lehrkraft hat am 11.11.2026 alle Fragen beantwortet (über die Seite https://claude.ai/artifact/9tjWZzEEzEgpRJ3fp7FtBU); die Entscheidungen stehen im nächsten Abschnitt und gelten vor den Vorschlägen weiter unten. Für jede Familie aus Issue #7 stehen hier Ziel, Ort im Spiel, Eingabeform, drei Stufen mit Beispielen, typische Fehler und Hinweise.
 
 Grundsätze wie im übrigen Spiel (Spezifikation, Abschnitt 6 und 8):
 
@@ -8,6 +8,44 @@ Grundsätze wie im übrigen Spiel (Spezifikation, Abschnitt 6 und 8):
 - Jede falsche Antwort führt zu einer Hilfe; nach drei Versuchen erscheint der Lösungsweg.
 - Die drei Hinweisstufen sind: ein lenkender Satz, ein Bild der Strategie, die Lösung mit Weg.
 - Fehlerarten mit eigener Rückmeldung werden nur dort angelegt, wo ein typischer Denkfehler erkennbar ist.
+
+## Entscheidungen der Lehrkraft (11.11.2026)
+
+Einige Antworten waren kurz („Ja“ auf eine Frage mit zwei Möglichkeiten). Sie sind hier so gedeutet, wie es in der Spalte „Gilt jetzt“ steht. Wo die Deutung unsicher ist, ist sie markiert.
+
+**Zu den Familien**
+
+| Familie | Frage | Antwort | Gilt jetzt |
+| --- | --- | --- | --- |
+| `smart_calc` | Tausch- und Nachbaraufgaben, Hilfsaufgaben in Klasse 2? | Ja | Alle drei Stufen wie vorgeschlagen, Hilfsaufgaben mit Ausgleich gehören dazu |
+| `smart_calc` | Verdopplungen als Startaufgaben? | Ja | Verdopplungen (25 + 25) dienen als Startaufgaben der Nachbaraufgaben (Deutung) |
+| `strategy_pick` | Bezeichnungen der Rechenwege passend? | Ja | stellenweise, schrittweise, Hilfsaufgabe, anders |
+| `strategy_pick` | Häufigkeit angemessen? | soll einstellbar sein | Häufigkeit als Startwert in `rules.json` und als Einstellung im Erwachsenenbereich (#30) |
+| `shapes_compose` | Dreieck und Halbkreis passend? | Ja | Quadrat, Rechteck, rechtwinkliges Dreieck und Halbkreis (Deutung) |
+| `shapes_compose` | Flächen auslegen und vergleichen in Stufe 3? | Ja | Stufe 3 enthält auch Flächen auslegen und vergleichen (siehe Lehrplanfrage 2) |
+| `space_orientation` | „neben“ und „zwischen“? | Ja | gehören dazu |
+| `space_orientation` | nur „von dir aus gesehen“? | reicht | kein Perspektivwechsel |
+| `space_orientation` | Pfeile oder Wörter? | beides | Wege mit Pfeilen und als Text („2 nach rechts“) |
+| `solids_basic` | welche Körper? | alles | Würfel, Quader, Kugel, Zylinder, Kegel und Pyramide |
+| `cube_buildings` | Bauplan als Draufsicht oder Ansichten? | auch Draufsicht | Ansichten von vorn und von der Seite und Draufsicht mit Zahlen |
+| `cube_buildings` | Grundfläche 3 × 3, höchstens 3 hoch? | Ja | wie vorgeschlagen |
+| `time_units` | Tage, Wochen, Monate umrechnen? | Ja | Stufe 3 bleibt |
+| `exact_or_estimate` | eigenes Thema mit drei Stufen? | Ja | bleibt |
+
+**Zum Lehrplan**
+
+| Nr. | Frage | Antwort | Folge |
+| --- | --- | --- | --- |
+| 1 | Schuleingangsphase, Stufe 0 | stimmt | keine Änderung |
+| 2 | Flächeninhalt und Umfang erst in Klasse 4 | stimmt nicht | gehört zu Klasse 2: neues Thema `area_count` im Schmetterlingshaus (Flächen auslegen und vergleichen, Umfang durch Kästchen zählen) |
+| 3 | Brüche ¼, ½, ¾ bei Größen in Klasse 2 | stimmt nicht | **umgesetzt:** Stufe 2 der Zeiteinheiten fragt jetzt Zeitspannen zwischen zwei Uhrzeiten („Von 7:30 bis 8:15 sind es ? Minuten“) statt ½ h = 30 min; im Giraffenhof kein ½ m. Die Uhrzeitwörter „halb“, „Viertel nach“, „Viertelstunde“ bleiben, sie gehören zur Uhrzeit |
+| 4 | Kombinatorik in Klasse 2, Wahrscheinlichkeit in Klasse 4 | Kombinatorik ja, mit Beispiel „Wie viele Möglichkeiten gibt es, Erdbeere, Schoko und Vanille als 3 Kugeln auf einem Eis anzuordnen?“ | Kombinatorik in der Zoo-Zählung mit Anordnungen (3 Kugeln: 6 Möglichkeiten); Wahrscheinlichkeit blieb unbeantwortet und bleibt Klasse 4 |
+| 5 | Division als Verteilen und Aufteilen | stimmt, „Divisionsaufgaben des kleinen Einmaleins auch mit Rest“ | Division mit Rest in der Elefantenwiese ergänzen (z. B. 17 : 5 = 3 Rest 2) |
+| 6 | Kernaufgaben des Einmaleins | 1er-, 2er-, 5er- und 10er-Reihe | bestätigt, keine Änderung |
+| 7 | Rechengesetze: Tausch- und Nachbaraufgaben | stimmt | keine Änderung |
+| 8 | Kraft der 5 und der 10 als Darstellung | stimmt | keine Änderung |
+| 9 | Geld bis 100 €, Längen in cm und m | stimmt | keine Änderung |
+| 10 | Namen und Stufenzuschnitt der Themen | stimmt | keine Änderung |
 
 ## Übersicht
 
@@ -224,6 +262,6 @@ Unabhängig von den Familien oben sind zehn Zuordnungen zum Lehrplan unsicher (K
 
 ## Nächste Schritte
 
-1. Die Fragen dieses Dokuments mit der Lehrkraft klären: die Fragen zu den einzelnen Familien und die zehn Fragen zum Lehrplan (#6).
-2. Entscheidungen hier und in `families.json` nachtragen; Issue #7 abhaken.
-3. Umsetzung in der empfohlenen Reihenfolge: `smart_calc` und `strategy_pick` (Pinguinfelsen, #13), dann `space_orientation` und `shapes_compose` mit dem Schmetterlingshaus (#17), zuletzt der Baumodus.
+1. Division mit Rest in der Elefantenwiese ergänzen (Lehrplanfrage 5).
+2. Umsetzung in der empfohlenen Reihenfolge: `smart_calc` und `strategy_pick` (Pinguinfelsen, #13), dann `space_orientation`, `shapes_compose` und `area_count` mit dem Schmetterlingshaus (#17), Kombinatorik mit der Zoo-Zählung (#19), zuletzt der Baumodus.
+3. Die Häufigkeit von `strategy_pick` im Erwachsenenbereich einstellbar machen (#30).
