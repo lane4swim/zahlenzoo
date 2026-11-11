@@ -1,6 +1,6 @@
 # Ausarbeitung der offenen Aufgabenfamilien (Issue #7)
 
-Vorschlag zur fachlichen Prüfung, Stand 11.11.2026. Für jede Familie aus Issue #7 stehen hier Ziel, Ort im Spiel, Eingabeform, drei Stufen mit Beispielen, typische Fehler und Hinweise. Am Ende jedes Abschnitts stehen die Fragen, die eine Lehrkraft entscheiden sollte. Die Familien `time_units` und `exact_or_estimate` sind bereits umgesetzt; ihr Stand ist zum Abgleich beschrieben.
+Vorschlag zur fachlichen Prüfung, Stand 11.11.2026. Als Seite zum Teilen: https://claude.ai/artifact/9tjWZzEEzEgpRJ3fp7FtBU Für jede Familie aus Issue #7 stehen hier Ziel, Ort im Spiel, Eingabeform, drei Stufen mit Beispielen, typische Fehler und Hinweise. Am Ende jedes Abschnitts stehen die Fragen, die eine Lehrkraft entscheiden sollte. Die Familien `time_units` und `exact_or_estimate` sind bereits umgesetzt; ihr Stand ist zum Abgleich beschrieben.
 
 Grundsätze wie im übrigen Spiel (Spezifikation, Abschnitt 6 und 8):
 
@@ -200,8 +200,30 @@ Typische Fehler mit Rückmeldung: 100 statt 60 Minuten je Stunde, 12 statt 24 St
 
 **Für die Lehrkraft:** Die KE ordnet „Näherungswert genügt“ der Stufe 3 zu. Im Spiel ist es ein eigenes Thema mit drei Stufen. Passt das, oder soll nur Stufe 3 bleiben?
 
+## Offene Fragen zum Lehrplan
+
+Unabhängig von den Familien oben sind zehn Zuordnungen zum Lehrplan unsicher (KE Abschnitt 5, Issue #6). Sie wurden beim Entwurf angenommen und sollten am Original des Lehrplans geprüft werden. Die Tabelle zeigt, wie die Annahme heute im Spiel umgesetzt ist, und was sich ändern müsste, wenn sie nicht stimmt.
+
+| Nr. | Frage | Annahme und Stand im Spiel | Folge, wenn die Annahme nicht stimmt |
+| --- | --- | --- | --- |
+| 1 | Welche Inhalte der Schuleingangsphase liegen vor Klasse 2? Der Lehrplan nennt nur das Ende von Klasse 2. | Das Spiel beginnt bei Klasse 2; das Einspluseins bis 20 ist als Stufe 0 im Pinguinfelsen eingebaut (`plus_facts_20`). | Startstufen verschieben, Stufe 0 erweitern oder weglassen |
+| 2 | Gehören Flächeninhalt und Umfang zu Klasse 2? | Nein, zu Klasse 4; im Spiel gibt es dazu keine Aufgaben. | Thema `area_count` im Schmetterlingshaus ergänzen |
+| 3 | Gehören die Brüche ¼, ½, ¾ bei Größen zu Klasse 2? | Ja; eingebaut in der Futteruhr (`time_units` Stufe 2), im Giraffenhof geplant. | Bei Klasse 4: Stufe 2 von `time_units` umbauen, im Giraffenhof weglassen |
+| 4 | Kombinatorik und Wahrscheinlichkeit: was gehört zu Klasse 2? | Kombinatorik in Klasse 2 (geplant in der Zoo-Zählung); „sicher, möglich, unmöglich“ in Klasse 4. | Bei Klasse 2: Thema `chance_words` in der Zoo-Zählung |
+| 5 | Wie weit geht die Division in Klasse 2? | Verteilen und Aufteilen als Verständnis, ohne Automatisieren; eingebaut in der Elefantenwiese (`mult_table` Stufe 3, `story_multdiv`). | Bei Klasse 3: Division aus der Elefantenwiese streichen |
+| 6 | Welche Reihen sind die Kernaufgaben des Einmaleins? | Die Reihen 1, 2, 5 und 10 mit Verdoppeln und Halbieren (`mult_table` Stufe 1). | Reihen anpassen |
+| 7 | Welche Rechengesetze gehören zu Klasse 2? | Nur Tausch- und Nachbaraufgaben (siehe `smart_calc`). | Weitere Stufen in `smart_calc` |
+| 8 | Kraft der 5 und der 10 schon in Klasse 2? | Als Darstellung ja: Zehnerfeld in Hinweisen und beim Blitzblick (`quick_count`). | Keine Folge für die Aufgaben |
+| 9 | Welche Obergrenzen gelten bei Geld und Größen? | Geld bis 100 € (Zoo-Kasse), Längen in cm und m (Giraffenhof, geplant). | Stufen anpassen |
+| 10 | Passen Namen, Stufenzuschnitt und Zuordnung der Themen zu den Bereichen? | Eigene Vorschläge; inzwischen 27 Themen in fünf spielbaren Bereichen mit je drei Stufen. | Abgleich in `families.json`; Stufen lassen sich dort ohne Programmänderung anpassen |
+
+**Für die Lehrkraft:**
+
+- Bitte die zehn Annahmen am Original prüfen und je Zeile vermerken: stimmt, stimmt nicht, oder Schule entscheidet.
+- Zu Frage 10: Gibt es Themen, deren Stufen zu leicht oder zu schwer zugeschnitten sind?
+
 ## Nächste Schritte
 
-1. Die Fragen dieses Dokuments mit der Lehrkraft klären, zusammen mit den zehn unsicheren Zuordnungen aus KE Abschnitt 5 (#6).
+1. Die Fragen dieses Dokuments mit der Lehrkraft klären: die Fragen zu den einzelnen Familien und die zehn Fragen zum Lehrplan (#6).
 2. Entscheidungen hier und in `families.json` nachtragen; Issue #7 abhaken.
 3. Umsetzung in der empfohlenen Reihenfolge: `smart_calc` und `strategy_pick` (Pinguinfelsen, #13), dann `space_orientation` und `shapes_compose` mit dem Schmetterlingshaus (#17), zuletzt der Baumodus.
