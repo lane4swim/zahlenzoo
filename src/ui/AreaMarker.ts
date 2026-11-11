@@ -13,8 +13,13 @@ export type AreaMarkerOptions = {
   /** offen: wippt leicht und lädt zum Antippen ein */
   inviting?: boolean;
   dimmed?: boolean;
+  /** Gehege fertig: grünes Namensschild und Rosette neben dem Tier */
+  done?: boolean;
   onPress: () => void;
 };
+
+/** Rosette für fertige Gehege (Bild des Abzeichens „Gehege geschafft“). */
+export const DONE_TEXTURE = 'abzeichen_gehege_fertig';
 
 const HIT_W = 170;
 const HIT_H = 190;
@@ -53,7 +58,7 @@ export class AreaMarker extends Phaser.GameObjects.Container {
     const plateY = 66;
     label.setPosition(-plateW / 2 + 14, plateY);
     const plate = scene.add.graphics();
-    plate.fillStyle(Color.papier, 1);
+    plate.fillStyle(options.done ? Color.grasHell : Color.papier, 1);
     plate.lineStyle(Stroke.inner + 0.5, Color.kontur, 1);
     plate.fillRoundedRect(-plateW / 2, plateY - 20, plateW, 40, 14);
     plate.strokeRoundedRect(-plateW / 2, plateY - 20, plateW, 40, 14);
@@ -73,6 +78,9 @@ export class AreaMarker extends Phaser.GameObjects.Container {
     }
 
     this.add([this.figure, ...plateParts]);
+    if (options.done && scene.textures.exists(DONE_TEXTURE)) {
+      this.add(scene.add.image(58, -62, DONE_TEXTURE).setScale(0.24));
+    }
     if (options.dimmed) this.setAlpha(0.8);
     this.setSize(HIT_W, HIT_H);
     this.setInteractive({ useHandCursor: true });

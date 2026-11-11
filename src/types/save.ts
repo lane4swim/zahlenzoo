@@ -17,6 +17,20 @@ export type AreaProgress = {
   rounds: number;
   /** höchste freigeschaltete Stufe je Aufgabenfamilie (fehlt: Stufe 1) */
   levels: Record<string, TaskLevel>;
+  /** beste Sterne einer Runde je Familie und Stufe, z. B. { add_100: { "3": 2 } } */
+  best: Record<string, Record<string, number>>;
+};
+
+/** Baby-Tier im Zoo: Tierart (Schlüssel in animals.json) und vom Kind gewählter Name. */
+export type Baby = { animal: string; name: string };
+
+/** Zähler über alle Runden (für Abzeichen; nichts davon geht verloren). */
+export type ProfileStats = {
+  rounds: number;
+  /** Aufgaben, die mit Hilfe gelöst wurden (Durchhalten) */
+  withHelp: number;
+  /** längste Folge von Aufgaben im ersten Versuch innerhalb einer Runde */
+  bestStreak: number;
 };
 
 export type Settings = {
@@ -43,9 +57,12 @@ export type Profile = {
   nickname: string;
   avatar: Avatar;
   createdAt: string;
-  /** Sterne zum Einlösen */
+  /** Sterne zum Einlösen (die Sterne der Bereiche für die Freischaltung bleiben erhalten) */
   stars: number;
-  zoo: { animals: string[]; decor: string[] };
+  zoo: { babies: Baby[]; decor: string[] };
+  /** verdiente Abzeichen mit Datum (JJJJ-MM-TT) */
+  badges: Record<string, string>;
+  stats: ProfileStats;
   areas: Record<string, AreaProgress>;
   skills: Record<string, SkillState>;
   settings: Settings;

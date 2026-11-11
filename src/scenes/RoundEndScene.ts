@@ -1,16 +1,20 @@
 import { BaseScene } from './BaseScene';
 import { findArea } from '../logic/content';
-import { applyRoundResult, type RoundReward } from '../logic/progress';
+import { applyRoundResult, firstTryStreak, type RoundReward } from '../logic/progress';
+import { awardBadges } from '../logic/zoo';
 import type { Services } from '../services/services';
 import { SceneKey, type RoundEndSceneData, type TaskSceneData } from '../types/scenes';
 import { AnimalSprite } from '../ui/AnimalSprite';
 import { StarMeter } from '../ui/StarMeter';
-import { Color, Tex } from '../ui/theme';
+import { badgeTexture } from '../ui/rewards';
+import { Color, CssColor, FontFamily, FontSize, reducedMotion, Tex } from '../ui/theme';
 
 /** Rundenabschluss: Sterne, kurzer Rückblick, freigeschaltete Stufe. */
 export class RoundEndScene extends BaseScene<RoundEndSceneData> {
   private result!: RoundEndSceneData;
   private reward!: RoundReward;
+  /** in dieser Runde neu verdiente Abzeichen */
+  private badges: string[] = [];
 
   constructor(services: Services) {
     super(SceneKey.RoundEnd, services);
@@ -21,13 +25,19 @@ export class RoundEndScene extends BaseScene<RoundEndSceneData> {
     const { save } = this.services;
     const profile = save.activeProfile;
     const date = new Date().toISOString().slice(0, 10);
+    this.badges = [];
     if (!profile) {
       this.reward = { stars: 1, unlockedLevel: data.level, levelUnlocked: false };
       return;
     }
     const applied = applyRoundResult(profile, { ...data, date }, this.content.rules);
-    save.updateProfile(applied.profile);
+    const awarded = awardBadges(this.content, applied.profile, date, {
+      stars: applied.reward.stars,
+      streak: firstTryStreak(data.outcomes),
+    });
+    save.updateProfile(awarded.profile);
     this.reward = applied.reward;
+    this.badges = awarded.earned;
   }
 
   create(): void {
@@ -54,6 +64,7 @@ export class RoundEndScene extends BaseScene<RoundEndSceneData> {
       const text = this.addText(cx, y, line).setWordWrapWidth(820).setOrigin(0.5, 0);
       y += text.height + 10;
     }
+    if (this.badges.length > 0) this.showBadges(cx + 70, Math.max(y + 46, 540));
 
     // Das Tier freut sich über die geschaffte Runde.
     const animalId = findArea(this.content, this.result.areaId)?.animal;
@@ -95,6 +106,41 @@ export class RoundEndScene extends BaseScene<RoundEndSceneData> {
           b.data ? this.scene.start(SceneKey.Task, b.data) : this.scene.start(SceneKey.Map),
       });
     });
+  }
+
+  /** Neue Sticker: Bilder nebeneinander, dahinter die Namen. */
+  private showBadges(cx: number, y: number): void {
+    const names = this.badges.map((id) => this.t(`badge.${id}`));
+    const label = this.add
+      .text(
+        0,
+        y,
+        this.t(names.length === 1 ? 'roundEnd.newBadge' : 'roundEnd.newBadges', {
+          name: names[0] ?? '',
+        }) + (names.length > 1 ? ` ${names.join(', ')}` : ''),
+        {
+          fontFamily: FontFamily.text,
+          fontSize: `${FontSize.text}px`,
+          color: CssColor.text,
+          wordWrap: { width: 520 },
+        },
+      )
+      .setOrigin(0, 0.5);
+    const size = 84;
+    const shown = this.badges.slice(0, 4);
+    const total = shown.length * (size + 8) + 12 + label.width;
+    let x = cx - total / 2;
+    for (const id of shown) {
+      const image = this.add.image(x + size / 2, y, badgeTexture(id));
+      image.setScale(size / image.width);
+      if (!reducedMotion()) {
+        const scale = image.scale;
+        image.setScale(0);
+        this.tweens.add({ targets: image, scale, duration: 400, ease: 'Back.easeOut', delay: 600 });
+      }
+      x += size + 8;
+    }
+    label.x = x + 4;
   }
 
   /** Was war leicht (immer im ersten Versuch), was üben wir wieder? */

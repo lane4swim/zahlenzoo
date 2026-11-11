@@ -17,6 +17,8 @@ export class DotArray extends Phaser.GameObjects.Container {
     rows: number,
     cols: number,
     split?: number,
+    /** Beschriftung „Reihen · Spalten“ (beim Blitzblick weggelassen, sie verriete die Anzahl) */
+    label = true,
   ) {
     super(scene, x, y);
     const g = scene.add.graphics();
@@ -45,15 +47,18 @@ export class DotArray extends Phaser.GameObjects.Container {
       }
     }
     this.add(g);
-    this.add(
-      scene.add
-        .text(w / 2 + 18, 0, `${rows} · ${cols}`, {
-          fontFamily: FontFamily.text,
-          fontSize: '22px',
-          color: CssColor.kontur,
-        })
-        .setOrigin(0, 0.5),
-    );
+    // Fläche für getBounds (Grafiken allein haben keine verlässliche Größe)
+    this.add(scene.add.zone(0, 0, w + 20, h + 20));
+    if (label)
+      this.add(
+        scene.add
+          .text(w / 2 + 18, 0, `${rows} · ${cols}`, {
+            fontFamily: FontFamily.text,
+            fontSize: '22px',
+            color: CssColor.kontur,
+          })
+          .setOrigin(0, 0.5),
+      );
     scene.add.existing(this);
   }
 }

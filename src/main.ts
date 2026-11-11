@@ -12,6 +12,7 @@ import { ProfileScene } from './scenes/ProfileScene';
 import { RoundEndScene } from './scenes/RoundEndScene';
 import { SettingsScene } from './scenes/SettingsScene';
 import { TaskScene } from './scenes/TaskScene';
+import { ZooScene } from './scenes/ZooScene';
 import { createServices } from './services/services';
 import { CssColor } from './ui/theme';
 
@@ -58,9 +59,12 @@ async function start(): Promise<void> {
       new RoundEndScene(services),
       new ParentScene(services),
       new SettingsScene(services),
+      new ZooScene(services),
     ],
   };
-  new Phaser.Game(config);
+  const game = new Phaser.Game(config);
+  // Nur in der Entwicklung: Zugriff für Browser-Tests (nicht im veröffentlichten Build).
+  if (import.meta.env.DEV) (window as unknown as { zahlenzoo: Phaser.Game }).zahlenzoo = game;
 }
 
 void start();

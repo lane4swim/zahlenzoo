@@ -13,7 +13,12 @@ export const SceneKey = {
   RoundEnd: 'RoundEnd',
   Parent: 'Parent',
   Settings: 'Settings',
+  Zoo: 'Zoo',
 } as const;
+
+/** Zoo-Laden: gewählter Reiter; back: Szene, zu der „Zurück“ führt */
+export type ZooTab = 'babies' | 'decor' | 'badges';
+export type ZooSceneData = { tab?: ZooTab; back?: 'Menu' | 'Map'; message?: string };
 
 /** family: zuletzt gewähltes Thema im Gehege (bei mehreren Aufgabenfamilien) */
 export type AreaSceneData = { areaId: string; family?: string };

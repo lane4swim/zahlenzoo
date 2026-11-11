@@ -12,6 +12,7 @@ import {
   playableAreas,
   taskBackground,
 } from '../ui/animals';
+import { babyTexture, badgeTexture, decorTexture } from '../ui/rewards';
 import { Tex } from '../ui/theme';
 
 /** Hängt die Build-Kennung an, damit nach einem Update keine alten Grafiken aus dem Cache kommen. */
@@ -104,6 +105,14 @@ export class BootScene extends BaseScene {
   private queueContentAssets(content: GameContent): void {
     for (const animal of Object.values(content.animals)) {
       this.load.image(animal.icon, versioned(`img/map/${animal.icon}_128.png`));
+      // Baby-Tiere aller Bereiche: Sie stehen im Zoo-Laden, auch bevor ihr Gehege spielbar ist.
+      this.load.image(babyTexture(animal), versioned(`img/animals/${animal.prefix}_baby_512.png`));
+    }
+    for (const d of content.decor) {
+      this.load.image(decorTexture(d.id), versioned(`img/decor/deko_${d.id}_192.png`));
+    }
+    for (const a of content.achievements) {
+      this.load.image(badgeTexture(a.id), versioned(`img/badges/abzeichen_${a.id}_256.png`));
     }
     for (const area of playableAreas(content)) {
       for (const key of [areaBackground(area.id), taskBackground(area.id)]) {

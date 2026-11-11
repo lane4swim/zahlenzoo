@@ -11,7 +11,9 @@ export type TaskKind =
   | 'clock'
   | 'money'
   | 'pattern'
-  | 'word';
+  | 'word'
+  /** Zahlen in einer Reihenfolge antippen (Ordnen) */
+  | 'order';
 
 /**
  * Stufe einer Aufgabenfamilie. Stufe 0 gibt es nur für das Einspluseins bis 20
@@ -46,11 +48,19 @@ export type Visual =
       op: '+' | '-';
     }
   | {
+      /** Zehnerstangen und Einerwürfel; ones darf über 9 liegen (Umbündeln) */
+      type: 'tensones';
+      tens: number;
+      ones: number;
+    }
+  | {
       /** Punktefeld: rows Reihen mit je cols Punkten; die ersten `split` Reihen andersfarbig */
       type: 'dots';
       rows: number;
       cols: number;
       split?: number;
+      /** ohne Beschriftung „Reihen · Spalten“ */
+      noLabel?: boolean;
     };
 
 /**
@@ -92,7 +102,11 @@ export type Term =
   | 'min'
   | '¼'
   | '½'
-  | '¾';
+  | '¾'
+  /** Zehner und Einer (Stellenwert) */
+  | 'Z'
+  | 'E'
+  | '>';
 
 /**
  * Bild zu einer Sachaufgabe: Gruppen gleicher Dinge (Texturschlüssel `icon`).
@@ -156,6 +170,11 @@ export type Task = {
   math?: MathInfo;
   /** Geld legen: Betrag und angebotene Münzen und Scheine (Werte in Cent) */
   money?: MoneyInfo;
+  /**
+   * Bild zur Aufgabe unter der Frage (z. B. Zehnerstangen zum Zählen). flashMs: nur so lange
+   * sichtbar (Blitzblick); der zweite Hinweis zeigt es wieder.
+   */
+  display?: { visual: Visual; flashMs?: number };
   /** Uhrzeit: angezeigte oder einzustellende Zeit */
   clock?: ClockInfo;
   /** typische falsche Antworten als Text (z. B. Uhrzeiten) mit Fehlerart */

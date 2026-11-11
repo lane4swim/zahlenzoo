@@ -1,0 +1,95 @@
+{
+  "_hinweis": "Abzeichen für das Sticker-Album (Spezifikation, Abschnitt 8). Bild: public/assets/img/badges/abzeichen_<id>_256.png; Name und Bedingung in strings.de.json (badge.<id>, badge.<id>.how). Bedingungen: rounds, streak (Aufgaben im ersten Versuch hintereinander in einer Runde), roundStars, totalStars, level, areasDone, familyBest (eine der Familien in Stufe level mit mindestens stars Sternen), withHelp, babies.",
+  "achievements": [
+    {
+      "id": "erste_runde",
+      "condition": {
+        "type": "rounds",
+        "min": 1
+      }
+    },
+    {
+      "id": "fuenf_ohne_hilfe",
+      "condition": {
+        "type": "streak",
+        "min": 5
+      }
+    },
+    {
+      "id": "drei_sterne",
+      "condition": {
+        "type": "roundStars",
+        "min": 3
+      }
+    },
+    {
+      "id": "sterne_25",
+      "condition": {
+        "type": "totalStars",
+        "min": 25
+      }
+    },
+    {
+      "id": "sterne_100",
+      "condition": {
+        "type": "totalStars",
+        "min": 100
+      }
+    },
+    {
+      "id": "stufe_3",
+      "condition": {
+        "type": "level",
+        "min": 3
+      }
+    },
+    {
+      "id": "gehege_fertig",
+      "condition": {
+        "type": "areasDone",
+        "min": 1
+      }
+    },
+    {
+      "id": "einmaleins",
+      "condition": {
+        "type": "familyBest",
+        "families": ["mult_table"],
+        "level": 3,
+        "stars": 2
+      }
+    },
+    {
+      "id": "uhr",
+      "condition": {
+        "type": "familyBest",
+        "families": ["clock_full", "clock_half", "clock_quarter", "clock_digital"],
+        "level": 3,
+        "stars": 2
+      }
+    },
+    {
+      "id": "geld",
+      "condition": {
+        "type": "familyBest",
+        "families": ["money_lay", "money_calc", "money_convert", "compare_money"],
+        "level": 3,
+        "stars": 2
+      }
+    },
+    {
+      "id": "drangeblieben",
+      "condition": {
+        "type": "withHelp",
+        "min": 10
+      }
+    },
+    {
+      "id": "baby",
+      "condition": {
+        "type": "babies",
+        "min": 1
+      }
+    }
+  ]
+}

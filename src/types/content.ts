@@ -87,6 +87,17 @@ export type Legal = {
   privacy: string[];
 };
 
+/** Dekoration für die Zoo-Karte (decor.json): Preis in Sternen, fester Platz und Größe. */
+export type DecorConfig = { id: string; price: number; x: number; y: number; size: number };
+
+/** Bedingung eines Abzeichens (achievements.json). */
+export type AchievementCondition =
+  | { type: 'rounds' | 'streak' | 'roundStars' | 'totalStars' | 'level' | 'areasDone'; min: number }
+  | { type: 'withHelp' | 'babies'; min: number }
+  | { type: 'familyBest'; families: string[]; level: number; stars: number };
+
+export type Achievement = { id: string; condition: AchievementCondition };
+
 export type GameContent = {
   rules: Rules;
   areas: AreaConfig[];
@@ -96,4 +107,6 @@ export type GameContent = {
   legal: Legal;
   stories: StoryTemplate[];
   situations: SituationTemplate[];
+  decor: DecorConfig[];
+  achievements: Achievement[];
 };

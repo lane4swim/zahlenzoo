@@ -1,5 +1,7 @@
+import achievements from '../../src/data/achievements.json';
 import animals from '../../src/data/animals.json';
 import areas from '../../src/data/areas.json';
+import decor from '../../src/data/decor.json';
 import families from '../../src/data/families.json';
 import legal from '../../src/data/legal.json';
 import praise from '../../src/data/praise.de.json';
@@ -20,6 +22,8 @@ export const RAW: RawContent = {
   legal,
   stories,
   situations,
+  decor,
+  achievements,
 };
 
 export const CONTENT = parseContent(RAW, GENERATOR_IDS);

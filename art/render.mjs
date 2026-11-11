@@ -28,6 +28,8 @@ function target(name) {
   if (name.startsWith('karte_')) return 'map';
   if (name.startsWith('menue_')) return 'menus';
   if (name.startsWith('geld_')) return 'money';
+  if (name.startsWith('deko_')) return 'decor';
+  if (name.startsWith('abzeichen_')) return 'badges';
   if (/_(hintergrund|aufgabe)_\d+x\d+$/.test(name)) return 'areas';
   if (name.startsWith('objekt_')) return 'objects';
   if (name.startsWith('ui_')) return 'ui';
@@ -45,7 +47,11 @@ const browser = await chromium.launch();
 let count = 0;
 const animations = new Map();
 
-for (const file of readdirSync(svgDir).filter((f) => f.endsWith('.svg'))) {
+// Optional: nur Dateien mit diesen Anfängen rendern, z. B. node art/render.mjs deko_ abzeichen_
+const only = process.argv.slice(2);
+for (const file of readdirSync(svgDir).filter(
+  (f) => f.endsWith('.svg') && (only.length === 0 || only.some((p) => f.startsWith(p))),
+)) {
   const name = file.replace('.svg', '');
   const svg = readFileSync(join(svgDir, file), 'utf8');
   const [width, height] = size(svg);

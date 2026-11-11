@@ -110,13 +110,13 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 - [x] `word-templates.de.json` (40 Sachaufgaben, davon 10 mit Geld, und 46 Sachsituationen in `situations.json`; Rechenart, Bild und Familie in `stories.json`)
 - [x] `strings.de.json` (vollständig; ein Test prüft jeden Schlüssel, den der Code nutzt)
 - [x] `praise.de.json` (mehrere Varianten je Anlass)
-- [ ] `achievements.json`; folgt mit dem Sticker-Album (#23)
+- [x] `achievements.json` (12 Abzeichen mit Bedingungen) und `decor.json` (12 Dekorationen mit Preis und Platz auf der Karte)
 - [x] `legal.json` (Gerüst; Daten folgen in Phase 4)
 
 **Bereiche und Familien** (Spez. 5, KE 2)
 
-- [ ] Affenwald: `count_steps_100`, `read_write_100`, `place_value_100`, `quick_count`, `order_100`, `compare_100`, `neighbors_100`, `number_sequences`; davon `neighbors_100` fertig (Stufe 1 Nachbarzahlen, Stufe 2 Nachbarzehner, Stufe 3 Zahlenfolgen in 2er-, 5er- und 10er-Schritten)
-- [ ] Pinguinfelsen: Stufe 0 `plus_facts_20`; `add_100`, `sub_100`, `decompose_10`, `complement_tens`, `tens_calc`, `estimate_100`, `smart_calc`, `path_choice`, `story_addsub`; davon fertig: `add_100`, `plus_facts_20` (Stufe 0: Plus bis 10 mit Zerlegen der 10, Plus bis 20, Zehnerübergang und Umkehraufgaben), `sub_100`; Themenwahl im Gehege
+- [x] Affenwald: `neighbors_100` (mit `number_sequences`), `count_steps_100` (vorwärts, rückwärts, in Schritten 3, 4, 10), `read_write_100` (Zahlwort lesen und schreiben, Zahlwort zur Zahl wählen), `place_value_100` (Zehnerstangen zählen, zerlegen, umbündeln), `quick_count` (Blitzblick auf Zehnerfeld, Punktefeld und Zehnerstangen), `compare_100` (Vergleichszeichen, Stufe 3 `order_100`: Zahlen durch Antippen ordnen); sechs Themen im Gehege
+- [ ] Pinguinfelsen: Stufe 0 `plus_facts_20`; `add_100`, `sub_100`, `decompose_10`, `complement_tens`, `tens_calc`, `estimate_100`, `smart_calc`, `path_choice`, `story_addsub`; fertig bis auf `smart_calc` (wartet auf #7): `decompose_10`, `tens_calc` und `complement_tens` als Thema „Blitzrechnen“ (Stufen 1 bis 3), `estimate_100` (Überschlag wählen, Stufe 3 Ergebnis auf Plausibilität prüfen), `path_choice` (richtigen Rechenweg erkennen); sieben Themen im Gehege
 - [ ] Elefantenwiese: `double_half`, `mult_core`, `mult_derive`, Division als Verteilen und Aufteilen, `story_multdiv`; davon `mult_table` fertig (Stufe 1 Kernaufgaben 1, 2, 5, 10 mit Verdoppeln und Halbieren, Stufe 2 Ableiten, Stufe 3 Umkehren und Verteilen), `story_multdiv` offen
 - [x] Zoo-Kasse: `money_lay` (Münzen und Scheine auf den Zahlteller legen; Stufe 1 Euro bis 20, Stufe 2 Euro bis 100, Stufe 3 Cent bis 100), `money_calc` (Sachaufgaben mit Geld), `money_convert` (ct und €: volle Euro, Zehner-Cent, beliebige Cent mit Null an der Zehnerstelle), `compare_money` (gleiche Einheit, verschiedene Schreibweisen, drei Beträge oder „gleich viel“), `question_pick` (passende Frage wählen; falsche Fragen: passt nicht, fehlende Angabe, steht schon im Text; Stufe 3 mit überflüssigen Angaben), `exact_or_estimate` (Stufe 1 und 2 genau oder ungefähr, Stufe 3 Überschlag „Reicht das Geld?“); Papagei, sechs Themen in zwei Reihen im Gehege
 - [x] Futteruhr: `clock_full`, `clock_half`, `clock_quarter` (mit Dreiviertelstunde), `clock_digital` (je Stufe 1 Uhr lesen, Stufe 2 Zeiger einstellen, Stufe 3 eine Stunde, halbe Stunde oder Viertelstunde später oder früher; Digitaluhr vormittags, nachmittags und abends, Digitalzeit einstellen), `compare_duration` (gleiche Einheit, Bruchteile der Stunde gegen Minuten, drei Zeitspannen), `time_units` (Stufe 1 Stunden und Minuten, Stufe 2 `fraction_units` mit ¼, ½ und ¾ Stunde, Stufe 3 Tag, Woche, Monat, Jahr); Eingabeform `clock` (Zeiger ziehen oder Tasten), Eule, sechs Themen im Gehege
@@ -130,10 +130,10 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 
 **Weitere Aufgabentypen und Eingabeformen** (Spez. 6, KE 6)
 
-- [ ] `drag-sort` mit Einrasten und sanftem Zurückschicken
+- [ ] `drag-sort` mit Einrasten und sanftem Zurückschicken; als Ersatz ohne Ziehen gibt es `order` (Zahlen der Reihe nach antippen)
 - [ ] `number-line`
-- [ ] `clock` (Zeiger einstellen, Uhrzeit wählen)
-- [ ] `money` (Münzen und Scheine ziehen)
+- [x] `clock` (Zeiger ziehen oder Tasten; Uhrzeit wählen über Antwortkarten)
+- [x] `money` (Münzen und Scheine antippen und auf den Zahlteller legen)
 - [ ] `pattern` (Raster antippen)
 - [x] `word` (Bild plus Text): Sachtext, Bild der Dinge aus der Geschichte, Antwort mit Einheit über Ziffernblock oder Antwortkarten
 - [ ] Typen mit geringem Aufwand: `true_false`, `compare_symbol`, `sequence`, `inverse`, `number_house`, `odd_one_out`, `time_order`
@@ -142,10 +142,10 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 
 **Weltkarte und Fortschritt** (Spez. 5)
 
-- [ ] Weltkarte mit 8 Bereichsmarkern (gesperrt, offen, fertig); gezeichnete Karte mit Schloss, Tier und Schild „bald“ fertig, Zustand „fertig“ offen
+- [x] Weltkarte mit 8 Bereichsmarkern (gesperrt, offen, fertig); fertig heißt: jedes Thema des Geheges in Stufe 3 mit mindestens 2 Sternen (grünes Schild und Rosette)
 - [x] Freischaltung: Start mit Affenwald und Pinguinfelsen, weitere Bereiche nach 6 Sternen im Vorgänger
-- [ ] Sterne einlösen für Baby-Tiere (benennbar) und Dekoration
-- [ ] Sticker-Album mit Mathe-Abzeichen
+- [x] Sterne einlösen für Baby-Tiere (benennbar, im Gehege neben dem großen Tier) und Dekoration (feste Plätze auf der Karte) in „Mein Zoo“; die Sterne der Gehege für die Freischaltung bleiben
+- [x] Sticker-Album mit 12 Mathe-Abzeichen; neue Sticker erscheinen am Rundenende; nichts verfällt, kein Sternverlust (Spielstand Version 3 mit Migration)
 
 **Kompetenzmodell** (Spez. 7)
 
@@ -168,7 +168,7 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 - [x] Weltkarte (2048 × 1536) und 8 Bereichshintergründe; Weltkarte und Hintergründe für Gehege und Aufgabenansicht aller 8 Bereiche fertig, dazu 4 Menü-Hintergründe (Quellen in `art/`, @2× mit `npm run art` erzeugbar); eingebaut sind bisher Pinguinfelsen und Affenwald
 - [x] 8 Tierarten × 4 Zustände plus 8 Baby-Varianten als Sprite-Sheets: alle 8 Tiere mit 5 Ausdrücken, Idle, Freude, Fütterung und Baby, dazu Kartensymbole; als Sprites eingebaut sind bisher Pinguin und Affe
 - [ ] Mathe-Darstellungen: Zehnerfeld, Hundertertafel, Rechenstrich, Zahlenstrahl, Zehnerstangen und Einerwürfel, Uhr, Münzen und Scheine (stilisiert), Muster-Kacheln, Formen, Körper
-- [ ] Rund 20 Aufgabenobjekte, 12 Dekorationen, 12 Abzeichen, 8 Profil-Avatare; 4 Futterobjekte fertig (Fisch, Eimer, Banane, Futternapf)
+- [ ] Rund 20 Aufgabenobjekte, 12 Dekorationen, 12 Abzeichen, 8 Profil-Avatare; fertig: 4 Futterobjekte (Fisch, Eimer, Banane, Futternapf), 12 Dekorationen und 12 Abzeichen (`art/build_rewards.py`)
 - [ ] UI-Atlas, Tier-Atlas, Objekt-Atlas; Sprite-Sheets je Animation mit Atlas-JSON fertig, Symbole der Aufgabenansicht als Einzelbilder
 - [ ] 15 Soundeffekte und 8 Tierlaute, 3 Musikstücke
 - [ ] `ATTRIBUTIONS.md` für jede fremde Datei; Lizenzen geprüft (CC0, CC-BY mit Namensnennung, kein NC)
@@ -193,7 +193,7 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 - [ ] Hoher-Kontrast-Modus und größere Schrift als Einstellung
 - [ ] Reduzierte Bewegung (auch nach Betriebssystem-Vorgabe)
 - [ ] Farbenblind-sichere Palette; Information nie nur durch Farbe
-- [ ] Tastaturbedienung für Laptops (Pfeiltasten, Eingabe, Leertaste)
+- [ ] Tastaturbedienung für Laptops (Pfeiltasten, Eingabe, Leertaste); vorhanden bei Ziffernblock, Geld legen und Uhr, offen bei Antwortkarten und Menüs
 - [ ] DOM-Overlay für Textmenüs prüfen (Risiko Bildschirmleser)
 
 **Erwachsenenbereich** (Spez. 7, 10)
