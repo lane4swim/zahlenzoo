@@ -185,7 +185,7 @@ Auch nach den Entscheidungen bleiben Erwartungen ohne vollständige Zuordnung im
 - **2:** Flächeninhalt und Umfang gehören zu Klasse 2: Thema `area_count` im Schmetterlingshaus.
 - **3:** Brüche ¼, ½, ¾ bei Größen gehören nicht zu Klasse 2: In der Futteruhr fragt Stufe 2 der Zeiteinheiten jetzt Zeitspannen zwischen zwei Uhrzeiten; im Giraffenhof entfällt ½ m = 50 cm.
 - **4:** Kombinatorik gehört zu Klasse 2, etwa „Wie viele Möglichkeiten gibt es, Erdbeere, Schoko und Vanille als 3 Kugeln auf einem Eis anzuordnen?“; zur Wahrscheinlichkeit gab es keine Antwort, sie bleibt bei Klasse 4.
-- **5:** Division gehört zu Klasse 2, im kleinen Einmaleins auch mit Rest.
+- **5:** Division gehört zu Klasse 2, im kleinen Einmaleins auch mit Rest: Thema „Teilen mit Rest“ (`divide_rest`) in der Elefantenwiese.
 
 ## 6. Weitere Aufgabentypen mit geringem Aufwand
 

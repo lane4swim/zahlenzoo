@@ -40,7 +40,7 @@ Einige Antworten waren kurz („Ja“ auf eine Frage mit zwei Möglichkeiten). S
 | 2 | Flächeninhalt und Umfang erst in Klasse 4 | stimmt nicht | gehört zu Klasse 2: neues Thema `area_count` im Schmetterlingshaus (Flächen auslegen und vergleichen, Umfang durch Kästchen zählen) |
 | 3 | Brüche ¼, ½, ¾ bei Größen in Klasse 2 | stimmt nicht | **umgesetzt:** Stufe 2 der Zeiteinheiten fragt jetzt Zeitspannen zwischen zwei Uhrzeiten („Von 7:30 bis 8:15 sind es ? Minuten“) statt ½ h = 30 min; im Giraffenhof kein ½ m. Die Uhrzeitwörter „halb“, „Viertel nach“, „Viertelstunde“ bleiben, sie gehören zur Uhrzeit |
 | 4 | Kombinatorik in Klasse 2, Wahrscheinlichkeit in Klasse 4 | Kombinatorik ja, mit Beispiel „Wie viele Möglichkeiten gibt es, Erdbeere, Schoko und Vanille als 3 Kugeln auf einem Eis anzuordnen?“ | Kombinatorik in der Zoo-Zählung mit Anordnungen (3 Kugeln: 6 Möglichkeiten); Wahrscheinlichkeit blieb unbeantwortet und bleibt Klasse 4 |
-| 5 | Division als Verteilen und Aufteilen | stimmt, „Divisionsaufgaben des kleinen Einmaleins auch mit Rest“ | Division mit Rest in der Elefantenwiese ergänzen (z. B. 17 : 5 = 3 Rest 2) |
+| 5 | Division als Verteilen und Aufteilen | stimmt, „Divisionsaufgaben des kleinen Einmaleins auch mit Rest“ | **umgesetzt:** Thema „Teilen mit Rest“ (`divide_rest`) in der Elefantenwiese: Stufe 1 Antwortkarten (17 : 5 = 3 Rest 2), Stufe 2 Quotient oder Rest eintippen, Stufe 3 Sachaufgaben, die den Rest deuten (voll, übrig, aufrunden) |
 | 6 | Kernaufgaben des Einmaleins | 1er-, 2er-, 5er- und 10er-Reihe | bestätigt, keine Änderung |
 | 7 | Rechengesetze: Tausch- und Nachbaraufgaben | stimmt | keine Änderung |
 | 8 | Kraft der 5 und der 10 als Darstellung | stimmt | keine Änderung |
@@ -262,6 +262,5 @@ Unabhängig von den Familien oben sind zehn Zuordnungen zum Lehrplan unsicher (K
 
 ## Nächste Schritte
 
-1. Division mit Rest in der Elefantenwiese ergänzen (Lehrplanfrage 5).
-2. Umsetzung in der empfohlenen Reihenfolge: `smart_calc` und `strategy_pick` (Pinguinfelsen, #13), dann `space_orientation`, `shapes_compose` und `area_count` mit dem Schmetterlingshaus (#17), Kombinatorik mit der Zoo-Zählung (#19), zuletzt der Baumodus.
-3. Die Häufigkeit von `strategy_pick` im Erwachsenenbereich einstellbar machen (#30).
+1. Umsetzung in der empfohlenen Reihenfolge: `smart_calc` und `strategy_pick` (Pinguinfelsen, #13), dann `space_orientation`, `shapes_compose` und `area_count` mit dem Schmetterlingshaus (#17), Kombinatorik mit der Zoo-Zählung (#19), zuletzt der Baumodus.
+2. Die Häufigkeit von `strategy_pick` im Erwachsenenbereich einstellbar machen (#30).
