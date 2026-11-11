@@ -10,6 +10,7 @@ const GAP = 18;
 export class Expression extends Phaser.GameObjects.Container {
   private readonly box: Phaser.GameObjects.Graphics;
   private readonly boxText: Phaser.GameObjects.Text;
+  private boxLeft = 0;
 
   constructor(scene: Phaser.Scene, x: number, y: number, terms: readonly Term[]) {
     super(scene, x, y);
@@ -38,6 +39,7 @@ export class Expression extends Phaser.GameObjects.Container {
       else part.obj.x = cursor + part.width / 2;
       cursor += part.width + GAP;
     }
+    this.boxLeft = this.boxText.x - BOX_W / 2;
     this.drawBox(Color.papier);
     // Ohne Lücke (z. B. beim Überschlagen) gibt es kein Antwortkästchen.
     const hasGap = terms.includes('?');
@@ -48,12 +50,16 @@ export class Expression extends Phaser.GameObjects.Container {
   }
 
   private drawBox(fill: number): void {
-    const x = this.boxText.x - BOX_W / 2;
+    // Längere Antworten (z. B. „6 Rest 5“) verbreitern das Kästchen nach rechts;
+    // die linke Kante bleibt, damit nichts davor überdeckt wird.
+    const width = Math.max(BOX_W, this.boxText.width + 28);
+    const x = this.boxLeft;
+    this.boxText.x = x + width / 2;
     this.box.clear();
     this.box.fillStyle(fill, 1);
     this.box.lineStyle(Stroke.outline, Color.kontur, 1);
-    this.box.fillRoundedRect(x, -BOX_H / 2, BOX_W, BOX_H, 14);
-    this.box.strokeRoundedRect(x, -BOX_H / 2, BOX_W, BOX_H, 14);
+    this.box.fillRoundedRect(x, -BOX_H / 2, width, BOX_H, 14);
+    this.box.strokeRoundedRect(x, -BOX_H / 2, width, BOX_H, 14);
   }
 
   setAnswer(value: string, state: 'input' | 'correct' | 'solution' = 'input'): void {

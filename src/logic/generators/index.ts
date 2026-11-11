@@ -16,6 +16,7 @@ import {
 import { plusFacts20, PLUS_FACTS_20 } from './plusFacts20';
 import { CLOCK_FAMILIES, clockFor } from './clock';
 import { compareMoney, COMPARE_MONEY } from './compareMoney';
+import { DIVIDE_REST, divideRest } from './divideRest';
 import {
   ESTIMATE_100,
   estimate100,
@@ -59,6 +60,7 @@ export const GENERATORS: Readonly<Record<string, Generator>> = {
   [QUICK_TENS]: quickTens,
   [ESTIMATE_100]: estimate100,
   [PATH_CHOICE]: pathChoice,
+  [DIVIDE_REST]: divideRest,
 };
 
 export const GENERATOR_IDS = Object.keys(GENERATORS);

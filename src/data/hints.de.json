@@ -244,5 +244,18 @@
   "hint.time_units.span.1.same": "Die Stunde bleibt gleich. Schau nur auf die Minuten.",
   "hint.time_units.span.2.same": "Der lange Zeiger geht von {sm} bis {em} Minuten. Zähle in 5er-Schritten.",
   "hint.time_units.span.3.same": "{em} − {sm} = {answer} Minuten.",
-  "error.span_part": "Du hast nur bis zur vollen Stunde gezählt. Zähle noch weiter."
+  "error.span_part": "Du hast nur bis zur vollen Stunde gezählt. Zähle noch weiter.",
+  "hint.divrest.1": "Wie oft passt {d} in {n}? Denk an die Reihe der {d}.",
+  "hint.divrest.2": "{q} · {d} = {qd}. Wie viele fehlen von {qd} bis {n}?",
+  "hint.divrest.3": "{n} : {d} = {q} Rest {r}, denn {q} · {d} + {r} = {n}.",
+  "hint.divrest.3.none": "{n} : {d} = {q} Rest 0, denn {q} · {d} = {n}. Es bleibt nichts übrig.",
+  "hint.divrest.3.full": "{n} : {d} = {q} Rest {r}. Voll werden {q}, {r} bleiben übrig.",
+  "hint.divrest.3.left": "{n} : {d} = {q} Rest {r}. Übrig bleiben {r}.",
+  "hint.divrest.3.need": "{n} : {d} = {q} Rest {r}. Für die {r} übrigen braucht man noch einen mehr: {answer}.",
+  "error.rest_too_big": "Der Rest ist zu groß. Dann passt noch eine Gruppe hinein.",
+  "error.rest_missing": "Schau genau: Es bleibt noch etwas übrig.",
+  "error.rest_swapped": "Du hast vertauscht, was voll wird und was übrig bleibt.",
+  "error.rest_counted_wrong": "Zähle noch einmal, wie viele nach der letzten vollen Gruppe übrig sind.",
+  "error.rest_rounded": "Die letzte Gruppe ist nicht voll.",
+  "error.rest_need_more": "Für die übrigen braucht man noch einen mehr."
 }

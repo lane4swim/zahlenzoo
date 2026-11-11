@@ -94,6 +94,8 @@ describe('Gehege fertig', () => {
     let p = round(profileWith(), 'elefantenwiese', 'mult_table', 3, 10);
     expect(isAreaDone(area, p.areas.elefantenwiese)).toBe(false);
     p = round(p, 'elefantenwiese', 'story_multdiv', 3, 2);
+    expect(isAreaDone(area, p.areas.elefantenwiese)).toBe(false);
+    p = round(p, 'elefantenwiese', 'divide_rest', 3, 8);
     expect(isAreaDone(area, p.areas.elefantenwiese)).toBe(true);
     // Eine schwächere Runde danach nimmt nichts weg.
     p = round(p, 'elefantenwiese', 'mult_table', 3, 0);

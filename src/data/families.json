@@ -620,6 +620,32 @@
           "mode": "sub"
         }
       }
+    },
+    "divide_rest": {
+      "title": "Teilen mit Rest",
+      "kinds": {
+        "choice": 0.3
+      },
+      "levels": {
+        "1": {
+          "description": "17 : 5 = 3 Rest 2 mit Antwortkarten; Teiler 2, 5 und 10",
+          "mode": "cards",
+          "divisors": [2, 5, 10],
+          "noRestShare": 0.15
+        },
+        "2": {
+          "description": "Quotient oder Rest eintippen (17 : 5 = 3 R ?); alle Reihen",
+          "mode": "gap",
+          "divisors": [2, 3, 4, 5, 6, 7, 8, 9, 10],
+          "noRestShare": 0.1
+        },
+        "3": {
+          "description": "Sachaufgaben: Wie viele werden voll, wie viele bleiben übrig, wie viele braucht man?",
+          "mode": "story",
+          "divisors": [2, 3, 4, 5, 6, 8, 10],
+          "noRestShare": 0
+        }
+      }
     }
   }
 }
