@@ -42,7 +42,10 @@ export function check(task: Task, input: TaskInput): CheckResult {
     const a = task.unordered ? [...values].sort((x, y) => x - y) : values;
     const b = task.unordered ? [...answer].sort((x, y) => x - y) : answer;
     const correct = a.length === b.length && a.every((v, i) => v === b[i]);
-    return { correct };
+    if (correct || Array.isArray(input)) return { correct };
+    // Antwortkarten mit mehreren Zahlen (z. B. „3 Rest 2“): Fehlerart der gewählten Karte
+    const option = task.options?.find((o) => normalize(o.value) === normalize(String(input)));
+    return option?.errorTag ? { correct, errorTag: option.errorTag } : { correct };
   }
 
   if (Array.isArray(input)) return { correct: false, invalid: true };

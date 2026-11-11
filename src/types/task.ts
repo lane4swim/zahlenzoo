@@ -100,12 +100,11 @@ export type Term =
   | 'ct'
   | 'h'
   | 'min'
-  | '¼'
-  | '½'
-  | '¾'
   /** Zehner und Einer (Stellenwert) */
   | 'Z'
   | 'E'
+  /** Rest beim Teilen (17 : 5 = 3 R 2) */
+  | 'R'
   | '>';
 
 /**

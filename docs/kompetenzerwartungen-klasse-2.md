@@ -177,8 +177,15 @@ Auch nach den Entscheidungen bleiben Erwartungen ohne vollständige Zuordnung im
 | 9 | Obergrenzen bei Geld und Größen | Geld bis 100 € als Annahme; der Lehrplan nennt keine Grenze | Stufen der Zoo-Kasse ändern |
 | 10 | Familiennamen, Stufenzuschnitt und Zuordnung zu Bereichen | eigene Vorschläge, keine Lehrplanvorgaben | Abgleich beim Anlegen von `families.json` |
 
-- [ ] Die zehn Fragen mit einer Lehrkraft am Original klären
-- [ ] Ergebnis in `families.json` und in den Abschnitten 2 und 6 der Hauptspezifikation nachtragen
+- [x] Die zehn Fragen mit einer Lehrkraft am Original klären (11.11.2026)
+- [ ] Ergebnis in `families.json` und in den Abschnitten 2 und 6 der Hauptspezifikation nachtragen; nachgetragen in `families.json` und in [`ausarbeitung-offene-familien.md`](ausarbeitung-offene-familien.md), Spezifikation offen
+
+**Ergebnis der Klärung (11.11.2026):** Die Annahmen 1, 6, 7, 8, 9 und 10 stimmen. Abweichend gilt:
+
+- **2:** Flächeninhalt und Umfang gehören zu Klasse 2: Thema `area_count` im Schmetterlingshaus.
+- **3:** Brüche ¼, ½, ¾ bei Größen gehören nicht zu Klasse 2: In der Futteruhr fragt Stufe 2 der Zeiteinheiten jetzt Zeitspannen zwischen zwei Uhrzeiten; im Giraffenhof entfällt ½ m = 50 cm.
+- **4:** Kombinatorik gehört zu Klasse 2, etwa „Wie viele Möglichkeiten gibt es, Erdbeere, Schoko und Vanille als 3 Kugeln auf einem Eis anzuordnen?“; zur Wahrscheinlichkeit gab es keine Antwort, sie bleibt bei Klasse 4.
+- **5:** Division gehört zu Klasse 2, im kleinen Einmaleins auch mit Rest: Thema „Teilen mit Rest“ (`divide_rest`) in der Elefantenwiese.
 
 ## 6. Weitere Aufgabentypen mit geringem Aufwand
 

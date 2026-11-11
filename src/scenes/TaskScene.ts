@@ -374,6 +374,12 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     return key ? this.text(key, this.task.prompt.textParams) : '';
   }
 
+  /** Text einer Antwortkarte (Beschriftung, falls vorhanden, sonst der Wert). */
+  private cardText(value: unknown): string {
+    const option = this.task.options?.find((o) => o.value === String(value));
+    return option?.label ? this.text(option.label.key, option.label.params) : String(value);
+  }
+
   /** Lob abwechselnd verwenden, damit es nicht leer klingt (Spezifikation, Abschnitt 8). */
   private pick(list: readonly string[]): string {
     return list[this.praiseIndex++ % list.length] ?? '';
@@ -391,7 +397,8 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     if (this.locked || payload.taskId !== this.task.id) return;
     const result = check(this.task, payload.input);
     if (result.invalid) return;
-    if (this.answerInput instanceof AnswerCards) this.expression?.setAnswer(String(payload.input));
+    if (this.answerInput instanceof AnswerCards)
+      this.expression?.setAnswer(this.cardText(payload.input));
     if (result.correct) this.onCorrect(String(payload.input));
     else this.onWrong(String(payload.input), result);
   }
@@ -401,7 +408,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     this.answerInput?.setLocked(true);
     const outcome: AnswerOutcome =
       this.attempts === 0 && !this.usedHelp ? 'first_try' : 'with_help';
-    this.expression?.setAnswer(value, 'correct');
+    this.expression?.setAnswer(this.task.options ? this.cardText(value) : value, 'correct');
     if (this.answerInput instanceof AnswerCards) this.answerInput.markCorrect(value);
     this.showFeedbackIcon(Tex.correct);
     // Jede richtige Antwort versorgt das Tier sichtbar (Spezifikation, Abschnitt 5).
@@ -443,7 +450,10 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     this.hintStage = 3;
     const hint = this.task.hints[2];
     let nextY = INPUT_Y;
-    this.expression?.setAnswer(String(this.task.answer), 'solution');
+    const solution = Array.isArray(this.task.answer)
+      ? this.task.answer.join(',')
+      : String(this.task.answer);
+    this.expression?.setAnswer(this.task.options ? this.cardText(solution) : solution, 'solution');
     this.showHint(hint, `${this.hintText(hint)} ${this.t('task.solutionShown')}`, Tex.hint);
     this.finishTask('wrong');
     if (this.repeats < this.content.rules.maxRepeats) {
@@ -721,15 +731,13 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       '>': this.t('read.greater'),
       Z: this.t('read.tens'),
       E: this.t('read.ones'),
+      R: this.t('read.rest'),
       ',': this.t('read.comma'),
       '?': this.t('read.unknown'),
       '€': this.t('read.euro'),
       ct: this.t('read.cent'),
       h: this.t('read.hours'),
       min: this.t('read.minutes'),
-      '¼': this.t('read.quarter'),
-      '½': this.t('read.half'),
-      '¾': this.t('read.threeQuarters'),
     };
     const story = this.task.prompt.story;
     if (story) {
