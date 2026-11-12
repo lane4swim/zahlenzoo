@@ -10,6 +10,7 @@ import type {
   LevelParams,
   Praise,
   Rules,
+  SkillRules,
   SituationTemplate,
   StoryOp,
   StoryTemplate,
@@ -66,6 +67,51 @@ function parseStrategyPick(v: unknown): Rules['strategyPick'] {
   };
 }
 
+/** Fehlt der Eintrag, gelten die Startwerte der Spezifikation (Abschnitt 7). */
+function parseSkillRules(v: unknown): SkillRules {
+  const o = v === undefined ? {} : obj(v, 'rules.json skill');
+  const def: SkillRules = {
+    upConfidence: 0.85,
+    upMin: 8,
+    downConfidence: 0.5,
+    downWindow: 6,
+    explainAfterErrors: 3,
+    dailyTasks: 5,
+    dailyPauseDays: 7,
+    tempoMinLevel: 2,
+    tempoConfidence: 0.85,
+  };
+  return {
+    upConfidence:
+      o.upConfidence === undefined ? def.upConfidence : frac(o.upConfidence, 'skill.upConfidence'),
+    upMin: o.upMin === undefined ? def.upMin : int(o.upMin, 'skill.upMin', 1, 100),
+    downConfidence:
+      o.downConfidence === undefined
+        ? def.downConfidence
+        : frac(o.downConfidence, 'skill.downConfidence'),
+    downWindow:
+      o.downWindow === undefined ? def.downWindow : int(o.downWindow, 'skill.downWindow', 1, 100),
+    explainAfterErrors:
+      o.explainAfterErrors === undefined
+        ? def.explainAfterErrors
+        : int(o.explainAfterErrors, 'skill.explainAfterErrors', 1, 50),
+    dailyTasks:
+      o.dailyTasks === undefined ? def.dailyTasks : int(o.dailyTasks, 'skill.dailyTasks', 1, 20),
+    dailyPauseDays:
+      o.dailyPauseDays === undefined
+        ? def.dailyPauseDays
+        : int(o.dailyPauseDays, 'skill.dailyPauseDays', 1, 365),
+    tempoMinLevel:
+      o.tempoMinLevel === undefined
+        ? def.tempoMinLevel
+        : int(o.tempoMinLevel, 'skill.tempoMinLevel', 1, 3),
+    tempoConfidence:
+      o.tempoConfidence === undefined
+        ? def.tempoConfidence
+        : frac(o.tempoConfidence, 'skill.tempoConfidence'),
+  };
+}
+
 export function parseRules(data: unknown): Rules {
   const d = obj(data, 'rules.json');
   const round = obj(d.round, 'rules.json round');
@@ -90,6 +136,7 @@ export function parseRules(data: unknown): Rules {
     areaUnlockStars: int(d.areaUnlockStars, 'areaUnlockStars', 0, 1000),
     skillHistory: int(d.skillHistory, 'skillHistory', 1, 100),
     strategyPick: parseStrategyPick(d.strategyPick),
+    skill: parseSkillRules(d.skill),
   };
   const { size, minSize, maxSize, mix: m } = rules.round;
   if (size < minSize || size > maxSize) {

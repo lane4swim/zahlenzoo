@@ -9,6 +9,14 @@ export type SkillState = {
   last: AnswerScore[];
   /** Datum der letzten Übung, JJJJ-MM-TT */
   lastPlayed: string;
+  /** nach einem Stufenabstieg: mehr Bilder und Hilfen, bis es wieder sicher klappt */
+  support?: boolean;
+  /** Fehlerarten mit Anzahl (für die Übersicht der Erwachsenen) */
+  errors?: Record<string, number>;
+  /** Antwortzeiten in ms der letzten im ersten Versuch richtigen Antworten */
+  times?: number[];
+  /** beste Zeit einer Tempo-Runde in ms */
+  tempoBest?: number;
 };
 
 export type AreaProgress = {
@@ -38,6 +46,8 @@ export type Settings = {
   sfx: number;
   readAloud: boolean;
   largeText: boolean;
+  /** „Wie hast du gerechnet?“: aus, manchmal (Startwert aus rules.json) oder oft */
+  strategyAsk?: 'off' | 'sometimes' | 'often';
 };
 
 export const AVATARS = [
@@ -71,6 +81,8 @@ export type Profile = {
   stats: ProfileStats;
   areas: Record<string, AreaProgress>;
   skills: Record<string, SkillState>;
+  /** Datum (JJJJ-MM-TT) des letzten Tagesfutters */
+  dailyDone?: string;
   settings: Settings;
 };
 

@@ -1,6 +1,8 @@
 import Phaser from 'phaser';
 import { BaseScene } from './BaseScene';
 import { areaFamilies, familyParams, findArea } from '../logic/content';
+import { dailyPlan } from '../logic/daily';
+import { explainDue, formatTime } from '../logic/skills';
 import { fewestCoins } from '../logic/generators/moneyLay';
 import { GENERATORS } from '../logic/generators';
 import { check } from '../logic/check';
@@ -14,6 +16,7 @@ import {
 import {
   appendTask,
   composeRound,
+  createRound,
   currentTask,
   isFinished,
   progress,
@@ -153,6 +156,20 @@ export class TaskScene extends BaseScene<TaskSceneData> {
   private display?: Phaser.GameObjects.GameObject & { setVisible(v: boolean): unknown };
   private displayHidden = false;
   private nextButton?: Button;
+  /** Tagesfutter: gemischte Runde aus mehreren Themen, ohne Wiederholungen */
+  private daily = false;
+  /** Tempo-Runde: Stoppuhr läuft mit (ohne Druck: keine Zeitgrenze) */
+  private tempo = false;
+  private tempoStart = 0;
+  private tempoText?: Phaser.GameObjects.Text;
+  /** Kompetenzmodell: nach einem Stufenabstieg Rechenhilfe gleich anzeigen */
+  private support = false;
+  private taskStart = 0;
+  /** Fehlerarten und Zeiten je Aufgabe (Aufgaben-ID) für Kompetenzmodell und Übersicht */
+  private errorLog: Array<{ taskId: string; family: string; tag: string }> = [];
+  private timeLog: Array<{ taskId: string; family: string; ms: number }> = [];
+  /** Fehlerart, deren Strategie die nächste Aufgabe erklärt */
+  private explainNext?: string;
 
   constructor(services: Services) {
     super(SceneKey.Task, services);
@@ -164,11 +181,16 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     this.repeats = 0;
     this.strategies = [];
     this.aid = undefined;
+    this.daily = data.daily === true;
+    this.tempo = data.tempo === true;
+    this.errorLog = [];
+    this.timeLog = [];
+    this.explainNext = undefined;
     const content = this.content;
     const area = findArea(content, data.areaId);
     const family = data.family;
     const generator = GENERATORS[family];
-    if (!area || !areaFamilies(area).includes(family) || !generator) {
+    if (!area || (!this.daily && (!areaFamilies(area).includes(family) || !generator))) {
       throw new Error(`Bereich ${data.areaId} hat keine Aufgaben der Familie ${family}`);
     }
     this.family = family;
@@ -179,9 +201,26 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     this.strategyAsked = 0;
     this.strategyPanel = undefined;
     this.praiseIndex = rng.int(0, content.praise.firstTry.length - 1);
+    const profile = this.services.save.activeProfile;
+    this.support = !this.daily && profile?.skills[family]?.support === true;
+    if (this.daily && profile) {
+      // Tagesfutter: je Thema eine Aufgabe auf der Stufe des Kindes
+      const plan = dailyPlan(content, profile, new Date().toISOString().slice(0, 10));
+      const tasks = plan.map((item, i) =>
+        GENERATORS[item.family]!(
+          item.level,
+          rng,
+          `d${i}`,
+          familyParams(content, item.family, item.level),
+        ),
+      );
+      this.round = createRound(tasks);
+      this.factory = { next: () => tasks[0]! } as unknown as TaskFactory;
+      return;
+    }
     const composed = composeRound({
       family,
-      generator,
+      generator: generator!,
       params: (level) => familyParams(content, family, level),
       level: data.level,
       rng,
@@ -211,6 +250,21 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       onPress: () => this.scene.start(SceneKey.Map),
     });
     this.dots = new ProgressDots(this, width / 2 - 20, top);
+    if (this.tempo) {
+      this.tempoStart = this.time.now;
+      this.tempoText = this.add
+        .text(width / 2 - 20, top + 40, '0:00', {
+          fontFamily: FontFamily.text,
+          fontSize: `${FontSize.small}px`,
+          color: CssColor.text,
+        })
+        .setOrigin(0.5, 0);
+      this.time.addEvent({
+        delay: 500,
+        loop: true,
+        callback: () => this.tempoText?.setText(formatTime(this.time.now - this.tempoStart)),
+      });
+    }
     this.addButton({
       x: width - Layout.margin - 48 - 112,
       y: top,
@@ -283,6 +337,8 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     this.picture = undefined;
     this.display = undefined;
     this.displayHidden = false;
+    this.taskStart = this.time.now;
+    if (this.support) this.aid = 'tensOnes';
 
     const { done, total } = progress(this.round);
     this.dots.setProgress(done, total);
@@ -440,6 +496,19 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       });
     }
     if (this.aid) this.showAid(this.aid);
+    this.explainIfDue();
+  }
+
+  /**
+   * Kompetenzmodell: Kam dieselbe Fehlerart mehrmals vor, erklärt die nächste Aufgabe den Weg
+   * mit Bild (Hinweis 2), ohne dass das als Hilfe zählt.
+   */
+  private explainIfDue(): void {
+    if (!this.explainNext) return;
+    this.explainNext = undefined;
+    const hint = this.task.hints[1];
+    if (!hint) return;
+    this.showHint(hint, `${this.t('task.explain')} ${this.hintText(hint)}`, Tex.hint);
   }
 
   /**
@@ -555,6 +624,13 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     this.answerInput?.setLocked(true);
     const outcome: AnswerOutcome =
       this.attempts === 0 && !this.usedHelp ? 'first_try' : 'with_help';
+    if (outcome === 'first_try') {
+      this.timeLog.push({
+        taskId: this.task.id,
+        family: this.task.family,
+        ms: Math.round(this.time.now - this.taskStart),
+      });
+    }
     this.expression?.setAnswer(this.task.options ? this.cardText(value) : value, 'correct');
     if (this.answerInput instanceof AnswerCards) this.answerInput.markCorrect(value);
     this.showFeedbackIcon(Tex.correct);
@@ -566,12 +642,23 @@ export class TaskScene extends BaseScene<TaskSceneData> {
         : this.pick(this.content.praise.withHelp);
     this.panel.show(praise, Tex.correct);
     this.finishTask(outcome);
-    if (shouldAskStrategy(this.task, this.content.rules, this.strategyAsked, this.flowRng)) {
+    if (shouldAskStrategy(this.task, this.strategyRules(), this.strategyAsked, this.flowRng)) {
       this.strategyAsked++;
       this.time.delayedCall(NEXT_DELAY * 0.6, () => this.askStrategy());
       return;
     }
     this.time.delayedCall(NEXT_DELAY, () => this.advance());
+  }
+
+  /** Häufigkeit von „Wie hast du gerechnet?“ aus dem Erwachsenenbereich (aus, manchmal, oft). */
+  private strategyRules() {
+    const rules = this.content.rules;
+    const ask = this.services.save.activeProfile?.settings.strategyAsk ?? 'sometimes';
+    if (ask === 'sometimes' || this.daily) {
+      return this.daily ? { strategyPick: { ...rules.strategyPick, chance: 0 } } : rules;
+    }
+    const chance = ask === 'off' ? 0 : Math.max(rules.strategyPick.chance, 0.7);
+    return { strategyPick: { ...rules.strategyPick, chance } };
   }
 
   /** „Wie hast du gerechnet?“ – ohne Wertung; die Wahl wird je Familie gezählt. */
@@ -609,6 +696,13 @@ export class TaskScene extends BaseScene<TaskSceneData> {
 
   private onWrong(value: string, result: CheckResult): void {
     this.attempts++;
+    if (result.errorTag) {
+      this.errorLog.push({ taskId: this.task.id, family: this.task.family, tag: result.errorTag });
+      const tags = this.errorLog.map((e) => e.tag);
+      if (explainDue(tags, result.errorTag, this.content.rules.skill.explainAfterErrors)) {
+        this.explainNext = result.errorTag;
+      }
+    }
     this.animal?.think();
     if (this.answerInput instanceof AnswerCards) this.answerInput.markWrong(value);
     if (this.answerInput instanceof Numpad) this.answerInput.clear();
@@ -643,7 +737,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     this.expression?.setAnswer(this.task.options ? this.cardText(solution) : solution, 'solution');
     this.showHint(hint, `${this.hintText(hint)} ${this.t('task.solutionShown')}`, Tex.hint);
     this.finishTask('wrong');
-    if (this.repeats < this.content.rules.maxRepeats) {
+    if (!this.daily && this.repeats < this.content.rules.maxRepeats) {
       this.repeats++;
       this.round = appendTask(this.round, this.factory.next(this.task.level));
     }
@@ -709,6 +803,24 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       summary: summarize(this.round),
       outcomes: [...this.round.outcomes],
       strategies: this.strategies,
+      errors: this.errorLog.map((e) => e.tag),
+      times: this.timeLog.map((t) => t.ms),
+      ...(this.tempo ? { tempoMs: Math.round(this.time.now - this.tempoStart) } : {}),
+      ...(this.daily
+        ? {
+            daily: this.round.tasks.map((t, i) => {
+              const error = this.errorLog.find((e) => e.taskId === t.id)?.tag;
+              const time = this.timeLog.find((e) => e.taskId === t.id)?.ms;
+              return {
+                family: t.family,
+                level: t.level,
+                outcome: this.round.outcomes[i] ?? 'wrong',
+                ...(error ? { error } : {}),
+                ...(time !== undefined ? { time } : {}),
+              };
+            }),
+          }
+        : {}),
     };
     this.events.emit(GameEvent.RoundFinished, payload);
   }

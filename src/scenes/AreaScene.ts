@@ -1,5 +1,6 @@
 import { BaseScene } from './BaseScene';
 import { findArea } from '../logic/content';
+import { tempoOffered } from '../logic/skills';
 import { areaProgress, familyLevel } from '../services/save';
 import type { Services } from '../services/services';
 import {
@@ -132,6 +133,10 @@ export class AreaScene extends BaseScene<AreaSceneData> {
     }
 
     const unlocked = familyLevel(progress, family);
+    // Kompetenzmodell: Die empfohlene Stufe ist grün (nach einem Abstieg auch eine niedrigere).
+    const skill = profile.skills[family];
+    const recommended = Math.min(skill?.level ?? unlocked, unlocked) as TaskLevel;
+    const tempo = tempoOffered(skill, this.content.rules);
     const levels = Array.from(
       { length: this.content.rules.maxLevel },
       (_, i) => (i + 1) as TaskLevel,
@@ -139,14 +144,28 @@ export class AreaScene extends BaseScene<AreaSceneData> {
     levels.forEach((level, i) => {
       const open = level <= unlocked;
       const data: TaskSceneData = { areaId: area.id, family, level };
+      const y = levelsTop + i * levelStep;
+      const withTempo = tempo && level === recommended;
       this.addButton({
-        x: BOARD.x,
-        y: levelsTop + i * levelStep,
-        width: 360,
+        x: withTempo ? BOARD.x - 70 : BOARD.x,
+        y,
+        width: withTempo ? 260 : 360,
         label: open ? this.t('area.level', { level }) : this.t('area.locked', { level }),
-        fill: level === unlocked ? Color.grasHell : Color.papier,
+        fill: level === recommended ? Color.grasHell : Color.papier,
         onPress: () => this.scene.start(SceneKey.Task, data),
       }).setEnabled(open);
+      if (withTempo) {
+        const tempoData: TaskSceneData = { ...data, tempo: true };
+        this.addButton({
+          x: BOARD.x + 140,
+          y,
+          width: 128,
+          label: this.t('area.tempo'),
+          fontSize: FontSize.small,
+          fill: Color.sonne,
+          onPress: () => this.scene.start(SceneKey.Task, tempoData),
+        });
+      }
     });
   }
 

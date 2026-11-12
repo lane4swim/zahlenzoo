@@ -6,7 +6,12 @@ import { findArea } from '../logic/content';
 import { areaProgress } from '../services/save';
 import type { Services } from '../services/services';
 import type { AreaConfig } from '../types/content';
-import { SceneKey, type AreaSceneData, type ZooSceneData } from '../types/scenes';
+import {
+  SceneKey,
+  type AreaSceneData,
+  type TaskSceneData,
+  type ZooSceneData,
+} from '../types/scenes';
 import { isAreaDone } from '../logic/zoo';
 import { AreaMarker } from '../ui/AreaMarker';
 import { decorTexture } from '../ui/rewards';
@@ -87,6 +92,22 @@ export class MapScene extends BaseScene {
         fontSize: FontSize.small,
         fill: Color.sonne,
         onPress: () => this.scene.start(SceneKey.Area, data),
+      });
+    }
+
+    // Tagesfutter: je ein Aufgabe aus den Themen, die Übung brauchen (Spezifikation 7)
+    if (tour) {
+      const today = new Date().toISOString().slice(0, 10);
+      const fed = profile.dailyDone === today;
+      const daily: TaskSceneData = { areaId: tour.id, family: 'daily', level: 1, daily: true };
+      this.addButton({
+        x: Layout.margin + 110,
+        y: this.scale.height - Layout.margin - Layout.minTouch / 2,
+        width: 220,
+        label: this.t(fed ? 'map.dailyDone' : 'map.daily'),
+        fontSize: FontSize.small,
+        fill: fed ? Color.papier : Color.grasHell,
+        onPress: () => this.scene.start(SceneKey.Task, daily),
       });
     }
 

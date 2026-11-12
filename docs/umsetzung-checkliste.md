@@ -151,12 +151,12 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 
 **Kompetenzmodell** (Spez. 7)
 
-- [ ] Letzte 10 Antworten je Familie, gewichtete Sicherheit, neuere Antworten stärker
-- [ ] Stufe steigt (≥ 0,85, mindestens 8 Antworten) und sinkt (< 0,5 über 6 Antworten)
-- [ ] Dreimal derselbe `errorTag` in einer Runde: Strategieerklärung mit Bild
-- [ ] Tagesfutter: 5 Aufgaben aus den Familien mit niedrigster Sicherheit oder längster Pause (7 Tage)
-- [ ] Tempo-Runde angelegt: Auswahl im Menü ab Stufe 2, Zeitmessung, Feld für Zeitbonus (Ausgestaltung V2)
-- [ ] Tests: vorgegebene Antwortfolgen führen zu erwarteten Stufenwechseln und Wiederholungen
+- [x] Letzte 10 Antworten je Familie, gewichtete Sicherheit, neuere Antworten stärker (`logic/skills.ts`, Schwellen in `rules.json` → `skill`)
+- [x] Stufe steigt (≥ 0,85, mindestens 8 Antworten) und sinkt (< 0,5 über 6 Antworten); Anzeige am Rundenende, empfohlene Stufe grün im Gehege, nach einem Abstieg Rechenhilfe gleich offen
+- [x] Dreimal derselbe `errorTag` in einer Runde: Strategieerklärung mit Bild (Hinweis 2 zu Beginn der nächsten Aufgabe, zählt nicht als Hilfe)
+- [x] Tagesfutter: 5 Aufgaben aus den Familien mit niedrigster Sicherheit oder längster Pause (7 Tage); Knopf unten links auf der Zoo-Karte, danach „Heute gefüttert“
+- [x] Tempo-Runde angelegt: Knopf „Tempo“ im Gehege ab Stufe 2 bei hoher Sicherheit und gewohnter Geschwindigkeit, Stoppuhr ohne Zeitgrenze, Bestzeit je Familie (`tempoBest`); Zeitbonus bleibt V2
+- [x] Tests: vorgegebene Antwortfolgen führen zu erwarteten Stufenwechseln und Wiederholungen (`tests/logic.skills.test.ts`)
 
 **Audio** (Spez. 9, 11)
 
@@ -200,11 +200,11 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 
 **Erwachsenenbereich** (Spez. 7, 10)
 
-- [ ] Zugang über Erwachsenen-Knopf mit Rechenaufgabe
-- [ ] Übersicht je Familie: Sicherheit und häufigste Fehlerart
-- [ ] Export und Import des Spielstands als JSON
-- [ ] Knopf „Alle lokalen Daten löschen“
-- [ ] Tests: Export, Import und Migration älterer Versionen
+- [x] Zugang über Erwachsenen-Knopf mit Rechenaufgabe (z. B. 8 · 12, gilt bis zum Neuladen)
+- [x] Übersicht je Profil und Familie: Stufe, Sicherheit (Balken), häufigste Fehlerart; dazu Einstellung „Wie hast du gerechnet?“ (nie, manchmal, oft)
+- [x] Export und Import des Spielstands als JSON-Datei (ungültige Dateien ändern nichts)
+- [x] Knopf „Alle lokalen Daten löschen“ (zweimal tippen)
+- [x] Tests: Export, Import und Migration älterer Versionen (`tests/services.save.test.ts`; Oberfläche im Browser geprüft)
 
 **Rechtliches und Datenschutz** (Spez. 10)
 

@@ -21,6 +21,26 @@ export type Rules = {
    * chance 0 schaltet sie ab.
    */
   strategyPick: { families: string[]; chance: number; maxPerRound: number };
+  /** Kompetenzmodell (Spezifikation 7): Schwellen für Stufenwechsel, Erklärung, Tagesfutter, Tempo */
+  skill: SkillRules;
+};
+
+export type SkillRules = {
+  /** Stufe steigt ab dieser Sicherheit … */
+  upConfidence: number;
+  /** … und mindestens so vielen Antworten in der Stufe */
+  upMin: number;
+  /** Stufe sinkt, wenn die Sicherheit der letzten downWindow Antworten darunter liegt */
+  downConfidence: number;
+  downWindow: number;
+  /** so oft derselbe Fehler in einer Runde: nächste Aufgabe erklärt die Strategie */
+  explainAfterErrors: number;
+  /** Tagesfutter: Anzahl Aufgaben und Pause in Tagen, ab der ein Thema wiederholt wird */
+  dailyTasks: number;
+  dailyPauseDays: number;
+  /** Tempo-Runde: ab Stufe und Sicherheit */
+  tempoMinLevel: number;
+  tempoConfidence: number;
 };
 
 /** Bereich der Weltkarte (areas.json). */
