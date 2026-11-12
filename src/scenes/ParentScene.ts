@@ -288,16 +288,18 @@ export class ParentScene extends BaseScene<ParentSceneData> {
     });
     this.small(60, 350, this.t('parent.profiles'), undefined, 22);
     save.profiles.slice(0, 4).forEach((profile, i) => {
-      const y = 404 + i * 62;
-      drawAvatar(this, 90, y, profile.avatar, this.t(`avatar.${profile.avatar}`), 22);
+      // zwei Spalten, damit die Löschen-Knöpfe (mindestens 96 px hoch) Platz haben
+      const x = 60 + (i % 2) * 460;
+      const y = 430 + Math.floor(i / 2) * 110;
+      drawAvatar(this, x + 30, y, profile.avatar, this.t(`avatar.${profile.avatar}`), 22);
       this.small(
-        130,
+        x + 70,
         y,
         this.t('parent.profileLine', { name: profile.nickname, stars: profile.stars }),
         undefined,
         22,
       ).setOrigin(0, 0.5);
-      this.confirmButton(cx + 160, y, 240, this.t('common.delete'), () => {
+      this.confirmButton(x + 330, y, 170, this.t('common.delete'), () => {
         save.deleteProfile(profile.id);
         this.go({ tab: 'data', message: this.t('parent.deleted', { name: profile.nickname }) });
       });
