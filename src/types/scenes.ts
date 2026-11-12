@@ -25,7 +25,14 @@ export type ZooSceneData = { tab?: ZooTab; back?: 'Menu' | 'Map'; message?: stri
 export type AreaSceneData = { areaId: string; family?: string };
 /** Muster erfinden: Bereich, in dessen Gehege „Zurück“ führt */
 export type PatternSceneData = { areaId: string };
-export type TaskSceneData = { areaId: string; family: string; level: TaskLevel };
+/** daily: Tagesfutter (gemischte Runde); tempo: Tempo-Runde mit Stoppuhr */
+export type TaskSceneData = {
+  areaId: string;
+  family: string;
+  level: TaskLevel;
+  daily?: boolean;
+  tempo?: boolean;
+};
 export type RoundEndSceneData = {
   areaId: string;
   family: string;
@@ -34,4 +41,17 @@ export type RoundEndSceneData = {
   outcomes: AnswerOutcome[];
   /** Strategie und Ergebnis je Aufgabe für den Rückblick */
   strategies: Array<{ strategyId: string; outcome: AnswerOutcome }>;
+  /** Fehlerarten und Antwortzeiten (ms, im ersten Versuch richtig) der Runde */
+  errors?: string[];
+  times?: number[];
+  /** Tempo-Runde: Dauer in ms */
+  tempoMs?: number;
+  /** Tagesfutter: Ergebnis je Aufgabe */
+  daily?: Array<{
+    family: string;
+    level: TaskLevel;
+    outcome: AnswerOutcome;
+    error?: string;
+    time?: number;
+  }>;
 };

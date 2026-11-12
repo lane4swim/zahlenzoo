@@ -45,7 +45,7 @@ describe('applyRoundResult', () => {
       },
       RULES,
     );
-    expect(reward).toEqual({ stars: 3, unlockedLevel: 2, levelUnlocked: true });
+    expect(reward).toEqual({ stars: 3, unlockedLevel: 2, levelUnlocked: true, skillLevel: 1 });
     expect(after.stars).toBe(3);
     expect(after.areas.pinguinfelsen).toEqual({
       stars: 3,
@@ -72,7 +72,8 @@ describe('applyRoundResult', () => {
           family: 'add_100',
           level: 1,
           summary: summary(4, 4, 0),
-          outcomes: ['first_try', 'first_try', 'first_try', i === 2 ? 'wrong' : 'first_try'],
+          // gemischt, damit die Stufe nicht wechselt (sonst beginnt die Liste neu)
+          outcomes: ['first_try', 'with_help', 'first_try', i === 2 ? 'wrong' : 'with_help'],
           date: '2026-11-07',
         },
         RULES,

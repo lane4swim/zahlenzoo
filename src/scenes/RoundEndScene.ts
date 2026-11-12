@@ -1,6 +1,12 @@
 import { BaseScene } from './BaseScene';
 import { findArea } from '../logic/content';
-import { applyRoundResult, firstTryStreak, type RoundReward } from '../logic/progress';
+import {
+  applyDailyResult,
+  applyRoundResult,
+  firstTryStreak,
+  type RoundReward,
+} from '../logic/progress';
+import { formatTime } from '../logic/skills';
 import { awardBadges } from '../logic/zoo';
 import type { Services } from '../services/services';
 import { SceneKey, type RoundEndSceneData, type TaskSceneData } from '../types/scenes';
@@ -27,16 +33,48 @@ export class RoundEndScene extends BaseScene<RoundEndSceneData> {
     const date = new Date().toISOString().slice(0, 10);
     this.badges = [];
     if (!profile) {
-      this.reward = { stars: 1, unlockedLevel: data.level, levelUnlocked: false };
+      this.reward = {
+        stars: 1,
+        unlockedLevel: data.level,
+        levelUnlocked: false,
+        skillLevel: data.level,
+      };
       return;
     }
-    const applied = applyRoundResult(profile, { ...data, date }, this.content.rules);
-    const awarded = awardBadges(this.content, applied.profile, date, {
-      stars: applied.reward.stars,
+    let after: typeof profile;
+    if (data.daily) {
+      const applied = applyDailyResult(
+        profile,
+        { items: data.daily, summary: data.summary, date },
+        this.content.rules,
+      );
+      after = applied.profile;
+      this.reward = {
+        stars: applied.stars,
+        unlockedLevel: data.level,
+        levelUnlocked: false,
+        skillLevel: data.level,
+      };
+    } else {
+      const applied = applyRoundResult(
+        profile,
+        {
+          ...data,
+          date,
+          ...(data.errors ? { errors: data.errors } : {}),
+          ...(data.times ? { times: data.times } : {}),
+          ...(data.tempoMs !== undefined ? { tempoMs: data.tempoMs } : {}),
+        },
+        this.content.rules,
+      );
+      after = applied.profile;
+      this.reward = applied.reward;
+    }
+    const awarded = awardBadges(this.content, after, date, {
+      stars: this.reward.stars,
       streak: firstTryStreak(data.outcomes),
     });
     save.updateProfile(awarded.profile);
-    this.reward = applied.reward;
     this.badges = awarded.earned;
   }
 
@@ -44,7 +82,7 @@ export class RoundEndScene extends BaseScene<RoundEndSceneData> {
     const cx = this.scale.width / 2;
     const { summary } = this.result;
     this.addBackground(Tex.menuRoundEnd);
-    this.addTitle(this.t('roundEnd.title'), 104);
+    this.addTitle(this.t(this.result.daily ? 'roundEnd.dailyTitle' : 'roundEnd.title'), 104);
     new StarMeter(this, cx, 230, this.reward.stars);
     this.addText(
       cx,
@@ -58,6 +96,18 @@ export class RoundEndScene extends BaseScene<RoundEndSceneData> {
     if (practice.length > 0) lines.push(this.t('roundEnd.practice', { list: practice.join(', ') }));
     if (this.reward.levelUnlocked) {
       lines.push(this.t('roundEnd.levelUnlocked', { level: this.reward.unlockedLevel }));
+    }
+    // Kompetenzmodell: Stufenwechsel freundlich ankündigen (Spezifikation 7)
+    if (this.reward.skillChange === 'up' && !this.reward.levelUnlocked) {
+      lines.push(this.t('roundEnd.skillUp', { level: this.reward.skillLevel }));
+    } else if (this.reward.skillChange === 'down') {
+      lines.push(this.t('roundEnd.skillDown', { level: this.reward.skillLevel }));
+    }
+    if (this.result.tempoMs !== undefined) {
+      const time = formatTime(this.result.tempoMs);
+      lines.push(
+        this.t(this.reward.tempoRecord ? 'roundEnd.tempoRecord' : 'roundEnd.tempo', { time }),
+      );
     }
     let y = 380;
     for (const line of lines) {
@@ -75,12 +125,17 @@ export class RoundEndScene extends BaseScene<RoundEndSceneData> {
     }
 
     const { areaId, family, level } = this.result;
-    const again: TaskSceneData = { areaId, family, level };
+    const again: TaskSceneData = {
+      areaId,
+      family,
+      level,
+      ...(this.result.tempoMs !== undefined ? { tempo: true } : {}),
+    };
     const buttons: Array<{ label: string; data?: TaskSceneData; primary?: boolean }> = [
-      { label: this.t('roundEnd.again'), data: again },
+      ...(this.result.daily ? [] : [{ label: this.t('roundEnd.again'), data: again }]),
     ];
     // Neue Stufe freigeschaltet: direkt weiterspielen, ohne Umweg über Karte und Gehege.
-    if (this.reward.levelUnlocked) {
+    if (this.reward.levelUnlocked && !this.result.daily) {
       const next = this.reward.unlockedLevel;
       buttons.push({
         label: this.t('roundEnd.playLevel', { level: next }),

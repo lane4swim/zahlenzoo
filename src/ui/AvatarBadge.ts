@@ -2,7 +2,19 @@ import Phaser from 'phaser';
 import { Color, CssColor, FontFamily, Stroke } from './theme';
 import type { Avatar } from '../types/save';
 
-/** Platzhalter für die Profil-Tierbilder: Kreis in Tierfarbe mit Anfangsbuchstaben. */
+/** Profilbild: das runde Tierbild der Zoo-Karte (gleiches Tier wie im Gehege). */
+const AVATAR_ICON: Record<Avatar, string> = {
+  monkey: 'karte_affe',
+  penguin: 'karte_pinguin',
+  elephant: 'karte_elefant',
+  parrot: 'karte_papagei',
+  owl: 'karte_eule',
+  butterfly: 'karte_schmetterling',
+  giraffe: 'karte_giraffe',
+  meerkat: 'karte_erdmaennchen',
+};
+
+/** Ersatz, falls das Bild fehlt: Kreis in Tierfarbe mit Anfangsbuchstaben. */
 const AVATAR_COLOR: Record<Avatar, number> = {
   monkey: 0xb9794a,
   penguin: Color.wasser,
@@ -22,6 +34,11 @@ export function drawAvatar(
   name: string,
   radius = 36,
 ): Phaser.GameObjects.Container {
+  const icon = AVATAR_ICON[avatar];
+  if (scene.textures.exists(icon)) {
+    const image = scene.add.image(0, 0, icon).setDisplaySize(radius * 2.3, radius * 2.3);
+    return scene.add.container(x, y, [image]);
+  }
   const g = scene.add.graphics();
   g.fillStyle(AVATAR_COLOR[avatar], 1);
   g.lineStyle(Stroke.outline, Color.kontur, 1);
