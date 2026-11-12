@@ -1,4 +1,4 @@
-import { frontView, heightsKey, hiddenCubes, mirror, sideView, total, tuckedCubes } from '../cubes';
+import { allVisible, frontView, heightsKey, mirror, sideView, total } from '../cubes';
 import { choice } from '../params';
 import type { Rng } from '../rng';
 import type {
@@ -204,7 +204,7 @@ export const cubeBuildings: Generator = (level, rng, id, params): Task => {
   if (mode === 'count') {
     let h: Heights;
     do h = building(rng, rng.int(3, 5), 2);
-    while (hiddenCubes(h) > 0 || tuckedCubes(h) > 0 || total(h) < 4 || total(h) > 8);
+    while (!allVisible(h) || total(h) < 4 || total(h) > 8);
     const n = total(h);
     const towers = h.filter((v) => v > 0).length;
     return {
@@ -230,33 +230,35 @@ export const cubeBuildings: Generator = (level, rng, id, params): Task => {
 
   if (mode === 'hidden') {
     if (rng.chance(0.5)) {
+      // größere Gebäude mit Türmen bis 3 hoch, aber jeder Würfel bleibt sichtbar
       let h: Heights;
       do h = building(rng, rng.int(4, 6), 3);
-      while (tuckedCubes(h) === 0 || total(h) < 6 || total(h) > 13);
+      while (!allVisible(h) || Math.max(...h) < 3 || total(h) < 6 || total(h) > 12);
       const n = total(h);
-      const tops = h.filter((v) => v > 0).length;
+      const towers = h.filter((v) => v > 0).length;
       return {
         ...base,
         kind: 'number-input',
-        strategyId: 'cubes_hidden',
+        strategyId: 'cubes_count',
         prompt: { terms: ['?'], textKey: 'task.prompt.cubes.count' },
         display: { visual: { type: 'building', heights: h } },
         answer: n,
         typicalErrors: errors(n, [
-          [n - hiddenCubes(h), 'cube_hidden'],
-          [tops, 'cube_tops'],
+          [towers, 'cube_tops'],
+          [n - 1, 'ones_off'],
+          [n + 1, 'ones_off'],
         ]),
         hints: [
-          { key: 'hint.cubes.hidden.1' },
-          { key: 'hint.cubes.hidden.2' },
-          { key: 'hint.cubes.hidden.3', params: { n } },
+          { key: 'hint.cubes.count.1' },
+          { key: 'hint.cubes.count.2', params: { towers } },
+          { key: 'hint.cubes.count.3', params: { n } },
         ],
-        dedupeKey: `cubes:hidden:${heightsKey(h)}`,
+        dedupeKey: `cubes:count:${heightsKey(h)}`,
       };
     }
     let h: Heights;
     do h = building(rng, rng.int(3, 5), 3);
-    while (heightsKey(mirror(h)) === heightsKey(h) || total(h) < 5);
+    while (!allVisible(h) || heightsKey(mirror(h)) === heightsKey(h) || total(h) < 5);
     return {
       ...base,
       kind: 'choice',
@@ -315,8 +317,9 @@ export const cubeBuildings: Generator = (level, rng, id, params): Task => {
     };
   }
   let h: Heights;
+  // Bauplan schreiben: Das Kind liest jeden Turm am Bild ab, also muss jeder Würfel sichtbar sein.
   do h = building(rng, rng.int(3, 6), 3);
-  while (total(h) < 5 || total(h) > 14);
+  while (total(h) < 5 || total(h) > 14 || (kind === 'write' && !allVisible(h)));
   const m = mirror(h);
   return {
     ...base,

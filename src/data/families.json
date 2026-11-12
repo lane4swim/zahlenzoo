@@ -1017,11 +1017,11 @@
       },
       "levels": {
         "1": {
-          "description": "Würfel zählen, alle sichtbar (höchstens 2 hoch)",
+          "description": "Würfel zählen, höchstens 2 hoch (alle Würfel sichtbar)",
           "mode": "count"
         },
         "2": {
-          "description": "Verdeckte Würfel mitzählen; welcher Bauplan passt?",
+          "description": "Größere Gebäude bis 3 hoch zählen (alle Würfel sichtbar); welcher Bauplan passt?",
           "mode": "hidden"
         },
         "3": {
