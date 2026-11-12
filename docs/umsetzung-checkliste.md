@@ -9,7 +9,7 @@ Die Checkliste folgt der Roadmap (Spez. Abschnitt 13): fünf Phasen mit je einem
 ## 0. Klärungen vor und während der Umsetzung
 
 - [x] Aktuelle stabile Phaser-Hauptversion prüfen und festlegen (Spez. 3): Phaser 4 (4.2.1)
-- [ ] Lehrkraft für die inhaltliche Prüfung gewinnen (Spez. 12, KE 5)
+- [x] Lehrkraft für die inhaltliche Prüfung gewinnen (Spez. 12, KE 5)
 - [x] Die zehn unsicheren Zuordnungen mit der Lehrkraft am Lehrplan-Original klären (KE 5); Antworten vom 11.11.2026 in [`ausarbeitung-offene-familien.md`](ausarbeitung-offene-familien.md)
   - [x] 1 Verteilung der Inhalte auf Klasse 1 und 2, Startstufen: stimmt
   - [x] 2 Flächeninhalt und Umfang: gehören zu Klasse 2, Thema `area_count` im Schmetterlingshaus geplant
@@ -21,7 +21,7 @@ Die Checkliste folgt der Roadmap (Spez. Abschnitt 13): fünf Phasen mit je einem
   - [x] 8 Kraft der 5 und der 10: stimmt
   - [x] 9 Obergrenzen bei Geld und Größen: stimmt
   - [x] 10 Familiennamen, Stufenzuschnitt, Zuordnung zu Bereichen: stimmt
-- [ ] Ergebnis der Klärung in `families.json` sowie in Spez. Abschnitt 2 und 6 nachtragen (KE 5)
+- [x] Ergebnis der Klärung in `families.json` sowie in Spez. Abschnitt 2 und 6 nachtragen (KE 5)
 - [x] Offene Familien ausarbeiten (KE 5): `smart_calc`, `strategy_pick`, `shapes_compose`, `solids_basic`, `cube_buildings`, Raumorientierung (Lagebegriffe, Raster 5 × 5); Vorschlag mit Stufen, Eingabeformen und Fragen an die Lehrkraft in [`ausarbeitung-offene-familien.md`](ausarbeitung-offene-familien.md), von der Lehrkraft am 11.11.2026 beantwortet
 - [ ] Illustrationsstil für Tiere und Karte festlegen (Spez. 11, Risiken); Stand: Stilvorgabe 0.1 in [`stilprobe/style-guide.md`](../stilprobe/style-guide.md), offene Punkte dort unter „Noch festzulegen“
 - [ ] Schrift wählen (Andika oder Atkinson Hyperlegible), Probedruck `1 l I` und `0 O` (Spez. 11); Andika laut Stilvorgabe gewählt und eingebunden, Probedruck offen

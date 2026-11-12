@@ -178,7 +178,7 @@ Auch nach den Entscheidungen bleiben Erwartungen ohne vollständige Zuordnung im
 | 10 | Familiennamen, Stufenzuschnitt und Zuordnung zu Bereichen | eigene Vorschläge, keine Lehrplanvorgaben | Abgleich beim Anlegen von `families.json` |
 
 - [x] Die zehn Fragen mit einer Lehrkraft am Original klären (11.11.2026)
-- [ ] Ergebnis in `families.json` und in den Abschnitten 2 und 6 der Hauptspezifikation nachtragen; nachgetragen in `families.json` und in [`ausarbeitung-offene-familien.md`](ausarbeitung-offene-familien.md), Spezifikation offen
+- [x] Ergebnis in `families.json` und in den Abschnitten 2 und 6 der Hauptspezifikation nachtragen (12.11.2026; auch Abschnitt 5 der Spezifikation und [`ausarbeitung-offene-familien.md`](ausarbeitung-offene-familien.md))
 
 **Ergebnis der Klärung (11.11.2026):** Die Annahmen 1, 6, 7, 8, 9 und 10 stimmen. Abweichend gilt:
 
