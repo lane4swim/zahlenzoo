@@ -98,7 +98,11 @@ const displayScale = (visual: Visual): number =>
         ? 2.4
         : visual.type === 'position'
           ? 1.3
-          : 1;
+          : visual.type === 'building'
+            ? 0.85
+            : 1;
+/** Hohe Würfelgebäude ragen nach oben: tiefer setzen, damit das Antwortkästchen frei bleibt. */
+const displayOffset = (visual: Visual): number => (visual.type === 'building' ? 30 : 0);
 
 /** Bild zur Aufgabe (Zehnerstangen, Zehnerfeld) */
 const DISPLAY_Y = 420;
@@ -1005,7 +1009,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
    */
   private showDisplay(visual: Visual, flashMs?: number): void {
     const obj = this.visualFor(visual) as Phaser.GameObjects.Container;
-    obj.y = DISPLAY_Y;
+    obj.y = DISPLAY_Y + displayOffset(visual);
     // Zehnerfeld und Punktefeld groß genug für den Blick aus normalem Abstand
     obj.setScale(displayScale(visual));
     this.display = obj;

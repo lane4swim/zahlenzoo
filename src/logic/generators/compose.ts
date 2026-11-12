@@ -168,7 +168,7 @@ export const shapesCompose: Generator = (level, rng, id, params): Task => {
     ...base,
     kind: 'number-input',
     strategyId: 'compose_count',
-    prompt: { terms: [], textKey: `task.prompt.compose.count.${kind}` },
+    prompt: { terms: ['?'], textKey: `task.prompt.compose.count.${kind}` },
     display: { visual: { type: 'pieces', cols: fig.cols, rows: fig.rows, slots: fig.slots } },
     answer: n,
     ...(fig.slots.length !== n
