@@ -1,7 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import { check } from '../src/logic/check';
 import { areaFamilies, findArea } from '../src/logic/content';
-import { frontView, hiddenCubes, mirror, sideView, total, tuckedCubes } from '../src/logic/cubes';
+import {
+  allVisible,
+  frontView,
+  hiddenCubes,
+  mirror,
+  sideView,
+  total,
+  tuckedCubes,
+} from '../src/logic/cubes';
 import { cubeBuildings, solidsBasic } from '../src/logic/generators/solids';
 import { createRng } from '../src/logic/rng';
 import type { Generator, Task, TaskLevel } from '../src/types/task';
@@ -23,6 +31,25 @@ describe('Würfelgebäude', () => {
     expect(frontView(h)).toEqual([3, 1, 1]);
     expect(sideView(h)).toEqual([3, 2, 1]);
     expect(mirror(h)).toEqual([0, 0, 1, 0, 1, 2, 1, 0, 3]);
+  });
+
+  it('alle Würfel sichtbar: kein Turm davor ragt darüber, untere Würfel zeigen eine Seite', () => {
+    // einzelner Turm, frei stehend
+    expect(allVisible([0, 0, 0, 0, 3, 0, 0, 0, 0])).toBe(true);
+    // flache Reihe nebeneinander
+    expect(allVisible([1, 1, 1, 0, 0, 0, 0, 0, 0])).toBe(true);
+    // hinten hoch, vorn niedriger: hinten bleibt rechts sichtbar
+    expect(allVisible([3, 0, 0, 2, 0, 0, 1, 0, 0])).toBe(true);
+    // hoher Turm davor, rechts aber frei: die rechte Seite bleibt sichtbar
+    expect(allVisible([1, 0, 0, 3, 0, 0, 0, 0, 0])).toBe(true);
+    // hoher Turm davor und rechts daneben ein Würfel: oben und rechts verdeckt
+    expect(allVisible([1, 1, 0, 3, 0, 0, 0, 0, 0])).toBe(false);
+    // Würfel unter einem anderen, vorn und rechts zugebaut: unsichtbar
+    expect(allVisible([0, 0, 0, 0, 2, 1, 0, 1, 0])).toBe(false);
+    // schräg davor ein höherer Turm: genau davor
+    expect(allVisible([1, 0, 0, 0, 2, 0, 0, 0, 0])).toBe(false);
+    // schräg davor ein niedriger Würfel: vom unteren Turmwürfel sieht man nur halbe Flächen
+    expect(allVisible([2, 0, 0, 0, 1, 0, 0, 0, 0])).toBe(false);
   });
 
   it('verdeckte Würfel', () => {
@@ -68,8 +95,28 @@ describe('Würfelbauten', () => {
       if (v.type !== 'building') throw new Error('Gebäude erwartet');
       expect(t.answer).toBe(total(v.heights));
       expect(Math.max(...v.heights)).toBeLessThanOrEqual(2);
-      expect(hiddenCubes(v.heights) + tuckedCubes(v.heights)).toBe(0);
+      expect(allVisible(v.heights)).toBe(true);
     }
+  });
+
+  it('Stufe 2 und Bauplan schreiben: jeder gezeigte Würfel ist sichtbar', () => {
+    let count = 0;
+    for (const level of [2, 3] as TaskLevel[]) {
+      for (const t of tasks('cube_buildings', cubeBuildings, level)) {
+        const v = t.display?.visual;
+        const shown =
+          v?.type === 'building' && !t.prompt.textKey!.includes('view')
+            ? v.heights
+            : t.build?.mode === 'plan'
+              ? t.build.target
+              : undefined;
+        if (!shown) continue;
+        count++;
+        expect(allVisible(shown)).toBe(true);
+        if (t.kind === 'number-input') expect(Math.max(...shown)).toBe(3);
+      }
+    }
+    expect(count).toBeGreaterThan(200);
   });
 
   it('Stufe 2: Bauplankarten – nur der richtige Plan passt, Spiegelbild wird erkannt', () => {

@@ -203,7 +203,7 @@ Die Themenwahl dort hat damit keine weiteren Reiter.
 | Stufe | Inhalt | Beispiele | Typische Fehler (Rückmeldung) |
 | --- | --- | --- | --- |
 | 1 | Würfel zählen, alle Würfel sichtbar | Gebäude aus 4 bis 8 Würfeln, höchstens 2 hoch | ein Würfel doppelt oder gar nicht gezählt: „Zähle Reihe für Reihe.“ |
-| 2 | Gebäude und Bauplan zuordnen; Würfel zählen mit verdeckten Würfeln | „Welcher Bauplan passt?“ mit 3 Karten; Turm, unter dem Würfel verdeckt sind | verdeckte Würfel vergessen: „Unter jedem Würfel oben steht noch einer.“ |
+| 2 | Gebäude und Bauplan zuordnen; größere Gebäude bis 3 hoch zählen | „Welcher Bauplan passt?“ mit 3 Karten; Gebäude mit Türmen bis 3 Würfel | nur die Türme gezählt: „Zähle Turm für Turm.“ (**geändert 12.11.2026:** keine verdeckten Würfel mehr; jeder Würfel zeigt mindestens eine ganze Fläche, weil verdeckte Würfel im Spieltest frustriert haben) |
 | 3 | Nach Plan bauen | Bauplan gegeben, Kind baut auf dem Raster, OK prüft | ein Feld falsch: das Feld blinkt, Hinweis „Vergleiche die Zahl im Plan mit deinem Turm.“ |
 
 **Grafiken:** isometrischer Würfel in Token-Farben, Körper und 8 bis 10 Alltagsgegenstände, Bauplan als Raster.
