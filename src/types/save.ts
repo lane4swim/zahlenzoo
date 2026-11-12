@@ -46,6 +46,10 @@ export type Settings = {
   sfx: number;
   readAloud: boolean;
   largeText: boolean;
+  /** hoher Kontrast: Schwarz auf Weiß, dickere Konturen, ruhigere Hintergründe */
+  highContrast?: boolean;
+  /** weniger Bewegung (zusätzlich zur Vorgabe des Betriebssystems) */
+  reducedMotion?: boolean;
   /** „Wie hast du gerechnet?“: aus, manchmal (Startwert aus rules.json) oder oft */
   strategyAsk?: 'off' | 'sometimes' | 'often';
 };

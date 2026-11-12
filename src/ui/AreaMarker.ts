@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { drawFocusRing, registerFocusable, shownInScene, type Focusable } from './focus';
 import { Color, CssColor, FontFamily, reducedMotion, Stroke, Tex } from './theme';
 
 export type AreaMarkerOptions = {
@@ -25,8 +26,10 @@ const HIT_W = 170;
 const HIT_H = 190;
 
 /** Gehege-Markierung auf der Zoo-Karte: Symbol, Namensschild, Sterne. */
-export class AreaMarker extends Phaser.GameObjects.Container {
+export class AreaMarker extends Phaser.GameObjects.Container implements Focusable {
   private readonly figure: Phaser.GameObjects.Container;
+  private ring?: Phaser.GameObjects.Graphics;
+  private readonly onPress: () => void;
 
   constructor(scene: Phaser.Scene, options: AreaMarkerOptions) {
     super(scene, options.x, options.y);
@@ -102,6 +105,34 @@ export class AreaMarker extends Phaser.GameObjects.Container {
         delay: (options.x * 7) % 600,
       });
     }
+    this.onPress = options.onPress;
+    // Tastaturbedienung: Gehege lassen sich wie Knöpfe mit Tab und Pfeiltasten wählen.
+    this.once(Phaser.GameObjects.Events.DESTROY, registerFocusable(scene, this));
     scene.add.existing(this);
+  }
+
+  canFocus(): boolean {
+    return this.input?.enabled === true && shownInScene(this);
+  }
+
+  activate(): void {
+    this.onPress();
+  }
+
+  setFocused(focused: boolean): void {
+    if (focused) {
+      this.ring ??= this.scene.add.graphics();
+      drawFocusRing(this.ring, HIT_W - 20, HIT_H - 10, 30);
+      this.ring.setPosition(0, 4);
+      this.add(this.ring);
+      this.ring.setVisible(true);
+    } else {
+      this.ring?.setVisible(false);
+    }
+  }
+
+  focusPoint(): { x: number; y: number } {
+    const m = this.getWorldTransformMatrix();
+    return { x: m.tx, y: m.ty };
   }
 }

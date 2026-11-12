@@ -30,6 +30,7 @@ import { GameEvent, type AnswerSubmittedPayload, type RoundFinishedPayload } fro
 import type { AnswerOutcome } from '../types/round';
 import { SceneKey, type TaskSceneData } from '../types/scenes';
 import type { CheckResult, Hint, Task, TaskLevel, TextParams, Visual } from '../types/task';
+import { announce } from '../ui/a11y';
 import { AnimalSprite } from '../ui/AnimalSprite';
 import { taskBackground } from '../ui/animals';
 import { AnswerCards } from '../ui/AnswerCards';
@@ -269,15 +270,18 @@ export class TaskScene extends BaseScene<TaskSceneData> {
         callback: () => this.tempoText?.setText(formatTime(this.time.now - this.tempoStart)),
       });
     }
-    this.addButton({
-      x: width - Layout.margin - 48 - 112,
-      y: top,
-      width: 96,
-      label: this.t('task.readAloud'),
-      icon: Tex.speaker,
-      iconScale: 0.5,
-      onPress: () => this.readAloud(),
-    });
+    // Vorlesen lässt sich in den Einstellungen abschalten; dann gibt es den Knopf nicht.
+    if (this.services.save.activeProfile?.settings.readAloud !== false) {
+      this.addButton({
+        x: width - Layout.margin - 48 - 112,
+        y: top,
+        width: 96,
+        label: this.t('task.readAloud'),
+        icon: Tex.speaker,
+        iconScale: 0.5,
+        onPress: () => this.readAloud(),
+      });
+    }
     this.addButton({
       x: width - Layout.margin - 48,
       y: top,
@@ -501,6 +505,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     }
     if (this.aid) this.showAid(this.aid);
     this.explainIfDue();
+    announce(this.spokenText());
   }
 
   /**
@@ -645,6 +650,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
         ? this.pick(this.content.praise.firstTry)
         : this.pick(this.content.praise.withHelp);
     this.panel.show(praise, Tex.correct);
+    announce(praise);
     this.finishTask(outcome);
     if (shouldAskStrategy(this.task, this.strategyRules(), this.strategyAsked, this.flowRng)) {
       this.strategyAsked++;
@@ -1030,6 +1036,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
   }
 
   private showHint(hint: Hint, text: string, icon: string): void {
+    announce(text);
     this.aid = undefined;
     this.picture?.setVisible(true);
     // Ein Hinweisbild ersetzt das Aufgabenbild; ohne Bild bleibt es (außer nach dem Blitzblick).
@@ -1108,6 +1115,11 @@ export class TaskScene extends BaseScene<TaskSceneData> {
   }
 
   private readAloud(): void {
+    this.services.audio.speak(this.spokenText());
+  }
+
+  /** Aufgabe als Satz: zum Vorlesen und für Bildschirmleser. */
+  private spokenText(): string {
     const words: Record<string, string> = {
       '+': this.t('read.plus'),
       '-': this.t('read.minus'),
@@ -1131,8 +1143,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     const story = this.task.prompt.story;
     if (story) {
       const extra = this.panel.message ? ` ${this.panel.message}` : '';
-      this.services.audio.speak(`${this.t(`story.${story.id}`, story.params)}${extra}`);
-      return;
+      return `${this.t(`story.${story.id}`, story.params)}${extra}`;
     }
     const terms = this.task.prompt.terms
       .map((term) => (typeof term === 'number' ? String(term) : (words[term] ?? term)))
@@ -1145,6 +1156,6 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       .filter((o) => o.label)
       .map((o) => this.text(o.label!.key, o.label!.params));
     const choices = sentences.length > 0 ? ` ${sentences.join(' ')}` : '';
-    this.services.audio.speak(`${question ? `${question} ` : ''}${terms}${extra}${choices}`);
+    return `${question ? `${question} ` : ''}${terms}${extra}${choices}`;
   }
 }

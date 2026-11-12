@@ -192,11 +192,12 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 
 **Barrierefreiheit** (Spez. 9)
 
-- [ ] Hoher-Kontrast-Modus und größere Schrift als Einstellung
-- [ ] Reduzierte Bewegung (auch nach Betriebssystem-Vorgabe)
-- [ ] Farbenblind-sichere Palette; Information nie nur durch Farbe
-- [ ] Tastaturbedienung für Laptops (Pfeiltasten, Eingabe, Leertaste); vorhanden bei Ziffernblock, Geld legen und Uhr, offen bei Antwortkarten und Menüs
-- [ ] DOM-Overlay für Textmenüs prüfen (Risiko Bildschirmleser)
+- [x] Hoher-Kontrast-Modus und größere Schrift als Einstellung (je Profil; Seite „Einstellungen“ mit Musik, Geräuschen, Vorlese-Knopf, größerer Schrift, hohem Kontrast, weniger Bewegung)
+- [x] Reduzierte Bewegung (auch nach Betriebssystem-Vorgabe)
+- [x] Farbenblind-sichere Palette; Information nie nur durch Farbe (Muster ohne Rot neben Grün, Eissorten mit Zeichen; Test)
+- [x] Tastaturbedienung für Laptops: Tab/Umschalt+Tab, Pfeiltasten, Leertaste/Eingabe für alle Knöpfe, Antwortkarten und Gehege; Ziffernblock, Uhr, Geld und Pfeil-Weg behalten ihre Tasten. Offen: Rasterkästchen und Formen-Teile nur per Maus/Touch
+- [x] Bildschirmleser: verstecktes `aria-live`-Feld liest Titel, Aufgabe, Tipps und Lob vor; ein volles DOM-Overlay für Menüs ist nicht nötig
+- [ ] Prüfung mit VoiceOver/TalkBack auf echten Geräten (Tor 4, #32)
 
 **Erwachsenenbereich** (Spez. 7, 10)
 

@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { claimKeys } from './focus';
 import { Button } from './Button';
 import { CellFigures } from './math/Shapes';
 import { drawArrow, GridBoard } from './math/GridBoard';
@@ -138,6 +139,8 @@ export class GridInput extends Phaser.GameObjects.Container {
         }),
       );
       scene.input.keyboard?.on('keydown', this.onKey);
+      // Diese Tasten gehören der Eingabe, nicht der allgemeinen Tastaturbedienung.
+      this.once(Phaser.GameObjects.Events.DESTROY, claimKeys(scene, ['arrows', 'enter']));
       this.once(Phaser.GameObjects.Events.DESTROY, () =>
         scene.input.keyboard?.off('keydown', this.onKey),
       );

@@ -175,6 +175,11 @@ const shapeValue = (s: ShapeSpec) => `${s.kind}-${s.color}`;
 
 export const patternContinue: Generator = (level, rng, id, params): Task => {
   const mode = choice(params, 'mode', ['ab', 'abc', 'two'] as const);
+  // Farbenblind-sicher: Rot und Grün kommen nie zusammen in einem Muster vor (auch nicht auf
+  // den Karten), weil sie bei Rot-Grün-Schwäche gleich aussehen können.
+  const COLORS: ShapeColor[] = rng.chance(0.5)
+    ? ['red', 'blue', 'yellow']
+    : ['green', 'blue', 'yellow'];
   let unit: ShapeSpec[];
   if (mode === 'two') {
     // zwei Merkmale: Form wiederholt sich nach 2, Farbe nach 3 → Muster nach 6

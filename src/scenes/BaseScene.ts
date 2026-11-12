@@ -2,7 +2,17 @@ import Phaser from 'phaser';
 import type { Services } from '../services/services';
 import type { GameContent } from '../types/content';
 import { Button, type ButtonOptions } from '../ui/Button';
-import { CssColor, FontFamily, FontSize, Layout } from '../ui/theme';
+import { announce } from '../ui/a11y';
+import { FocusManager } from '../ui/focus';
+import {
+  applyDisplay,
+  Color,
+  CssColor,
+  displaySettings,
+  FontFamily,
+  FontSize,
+  Layout,
+} from '../ui/theme';
 
 type Listener = (...args: never[]) => void;
 
@@ -24,6 +34,10 @@ export abstract class BaseScene<TData extends object = object> extends Phaser.Sc
 
   init(data: TData): void {
     this.cleanups = [];
+    // Anzeige-Einstellungen des aktiven Profils (Schrift, Kontrast, Bewegung) gelten ab hier.
+    applyDisplay(this.services.save.activeProfile?.settings);
+    // Tastaturbedienung: Tab, Pfeiltasten, Leertaste und Eingabe für alle Knöpfe der Szene.
+    new FocusManager(this);
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, this.cleanup, this);
     this.onInit(data);
   }
@@ -51,7 +65,12 @@ export abstract class BaseScene<TData extends object = object> extends Phaser.Sc
 
   /** Hintergrundbild über die ganze Fläche (1024 × 768). */
   protected addBackground(key: string): Phaser.GameObjects.Image {
-    return this.add.image(0, 0, key).setOrigin(0);
+    const image = this.add.image(0, 0, key).setOrigin(0);
+    // Hoher Kontrast: Hintergrund aufhellen, damit Text und Knöpfe klar hervortreten.
+    if (displaySettings().highContrast) {
+      this.add.rectangle(0, 0, this.scale.width, this.scale.height, Color.weiss, 0.45).setOrigin(0);
+    }
+    return image;
   }
 
   protected addButton(options: ButtonOptions): Button {
@@ -59,6 +78,8 @@ export abstract class BaseScene<TData extends object = object> extends Phaser.Sc
   }
 
   protected addTitle(text: string, y = 120): Phaser.GameObjects.Text {
+    // Bildschirmleser erfahren, auf welcher Seite das Spiel gerade ist.
+    announce(text);
     return this.add
       .text(this.scale.width / 2, y, text, {
         fontFamily: FontFamily.title,
