@@ -1029,6 +1029,28 @@
           "mode": "plan"
         }
       }
+    },
+    "zoo_routes": {
+      "title": "Wege im Zoo",
+      "kinds": {
+        "grid": 0.7,
+        "choice": 0.15,
+        "path": 0.15
+      },
+      "levels": {
+        "1": {
+          "description": "Gehege auf dem Zooplan: links, rechts, über, unter, zwischen",
+          "mode": "positions"
+        },
+        "2": {
+          "description": "Einer Wegbeschreibung folgen: Wo kommst du an?",
+          "mode": "walk"
+        },
+        "3": {
+          "description": "Wege vom einen zum anderen Gehege wählen oder mit Pfeilen legen",
+          "mode": "route"
+        }
+      }
     }
   }
 }

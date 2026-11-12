@@ -1,4 +1,4 @@
-import type { TaskLevel } from './task';
+import type { ShapeSpec, TaskLevel } from './task';
 
 /** 1 = richtig im ersten Versuch, 0.5 = richtig mit Hilfe, 0 = falsch. */
 export type AnswerScore = 1 | 0.5 | 0;
@@ -52,6 +52,9 @@ export const AVATARS = [
 ] as const;
 export type Avatar = (typeof AVATARS)[number];
 
+/** Selbst erfundenes Muster (Schmetterlingshaus), ausgestellt im Zoo. */
+export type SavedPattern = { items: ShapeSpec[]; at: string };
+
 export type Profile = {
   id: string;
   nickname: string;
@@ -59,7 +62,8 @@ export type Profile = {
   createdAt: string;
   /** Sterne zum Einlösen (die Sterne der Bereiche für die Freischaltung bleiben erhalten) */
   stars: number;
-  zoo: { babies: Baby[]; decor: string[] };
+  /** patterns: im Zoo ausgestellte, selbst erfundene Muster (neuestes zuerst) */
+  zoo: { babies: Baby[]; decor: string[]; patterns?: SavedPattern[] };
   /** gewählte Rechenwege je Familie („Wie hast du gerechnet?“), für den Erwachsenenbereich */
   strategyUse?: Record<string, Record<string, number>>;
   /** verdiente Abzeichen mit Datum (JJJJ-MM-TT) */

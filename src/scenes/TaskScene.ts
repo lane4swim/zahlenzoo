@@ -193,7 +193,12 @@ export class TaskScene extends BaseScene<TaskSceneData> {
 
   create(): void {
     const { width } = this.scale;
-    this.addBackground(taskBackground(this.areaId));
+    const backdrop = findArea(this.content, this.areaId)?.backdrop;
+    this.addBackground(backdrop ?? taskBackground(this.areaId));
+    if (backdrop) {
+      // Heller Schleier: Die Zoo-Karte als Hintergrund bleibt erkennbar, Text bleibt lesbar.
+      this.add.rectangle(0, 0, this.scale.width, this.scale.height, Color.papier, 0.6).setOrigin(0);
+    }
 
     const top = Layout.margin + Layout.minTouch / 2;
     this.addButton({

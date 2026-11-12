@@ -31,7 +31,14 @@ import {
   tallyChart,
 } from './data';
 import { SHAPES_COMPOSE, shapesCompose } from './compose';
-import { GRID_DRAW, gridDraw, SPACE_ORIENTATION, spaceOrientation } from './space';
+import {
+  GRID_DRAW,
+  gridDraw,
+  SPACE_ORIENTATION,
+  spaceOrientation,
+  ZOO_ROUTES,
+  zooRoutes,
+} from './space';
 import {
   AREA_COUNT,
   areaCount,
@@ -106,6 +113,7 @@ export const GENERATORS: Readonly<Record<string, Generator>> = {
   [PATTERN_CONTINUE]: patternContinue,
   [SYMMETRY_CHECK]: symmetryCheck,
   [AREA_COUNT]: areaCount,
+  [ZOO_ROUTES]: zooRoutes,
   [SOLIDS_BASIC]: solidsBasic,
   [CUBE_BUILDINGS]: cubeBuildings,
   [TALLY_CHART]: tallyChart,

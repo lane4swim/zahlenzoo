@@ -13,7 +13,7 @@ import {
   measureLength,
 } from '../src/logic/generators/lengths';
 import { shapesCompose } from '../src/logic/generators/compose';
-import { gridDraw, spaceOrientation } from '../src/logic/generators/space';
+import { gridDraw, spaceOrientation, zooRoutes } from '../src/logic/generators/space';
 import {
   combinatorics,
   readCalendar,
@@ -48,6 +48,7 @@ const FAMILIES: Array<[string, Generator]> = [
   ['combinatorics', combinatorics],
   ['solids_basic', solidsBasic],
   ['cube_buildings', cubeBuildings],
+  ['zoo_routes', zooRoutes],
 ];
 
 function tasks(family: string, gen: Generator, level: TaskLevel): Task[] {

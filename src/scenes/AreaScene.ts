@@ -2,7 +2,12 @@ import { BaseScene } from './BaseScene';
 import { findArea } from '../logic/content';
 import { areaProgress, familyLevel } from '../services/save';
 import type { Services } from '../services/services';
-import { SceneKey, type AreaSceneData, type TaskSceneData } from '../types/scenes';
+import {
+  SceneKey,
+  type AreaSceneData,
+  type PatternSceneData,
+  type TaskSceneData,
+} from '../types/scenes';
 import type { TaskLevel } from '../types/task';
 import { AnimalSprite } from '../ui/AnimalSprite';
 import { areaBackground } from '../ui/animals';
@@ -47,9 +52,22 @@ export class AreaScene extends BaseScene<AreaSceneData> {
     const families = onSite ? site : area.families;
     const family = this.family && families.includes(this.family) ? this.family : families[0]!;
     const progress = areaProgress(profile, area.id);
-    this.addBackground(areaBackground(area.id));
+    this.addBackground(area.backdrop ?? areaBackground(area.id));
+    if (area.backdrop) this.veil();
     this.addBackButton(() => this.scene.start(SceneKey.Map));
     this.addTitle(onSite ? this.t('area.site') : this.t(`area.${area.id}`));
+    if (area.free === 'pattern' && !onSite) {
+      const data: PatternSceneData = { areaId: area.id };
+      this.addButton({
+        x: 140,
+        y: 176,
+        width: 220,
+        label: this.t('pattern.title'),
+        fontSize: FontSize.small,
+        fill: Color.grasHell,
+        onPress: () => this.scene.start(SceneKey.Pattern, data),
+      });
+    }
     if (site.length > 0) {
       const target: AreaSceneData = {
         areaId: area.id,
@@ -130,6 +148,11 @@ export class AreaScene extends BaseScene<AreaSceneData> {
         onPress: () => this.scene.start(SceneKey.Task, data),
       }).setEnabled(open);
     });
+  }
+
+  /** Heller Schleier über einem fremden Hintergrund (z. B. der Zoo-Karte), damit die Tafel ruhig wirkt. */
+  private veil(): void {
+    this.add.rectangle(0, 0, this.scale.width, this.scale.height, Color.papier, 0.45).setOrigin(0);
   }
 
   private addBaby(texture: string, name: string, x: number, y: number): void {

@@ -1,4 +1,5 @@
 import { areaState } from './areas';
+import { enclosures } from './content';
 import type { Achievement, AreaConfig, GameContent } from '../types/content';
 import type { AreaProgress, Profile } from '../types/save';
 
@@ -38,7 +39,7 @@ export type ShopState = 'owned' | 'buyable' | 'tooExpensive' | 'locked';
 /** Baby-Tier eines Bereichs: erst wenn der Bereich erreicht ist, je Tierart einmal. */
 export function babyState(content: GameContent, profile: Profile, animal: string): ShopState {
   if (profile.zoo.babies.some((b) => b.animal === animal)) return 'owned';
-  const area = content.areas.find((a) => a.animal === animal);
+  const area = enclosures(content).find((a) => a.animal === animal);
   if (!area || !reachedAreas(content, profile).has(area.id)) return 'locked';
   const price = content.animals[animal]?.babyPrice ?? Infinity;
   return profile.stars >= price ? 'buyable' : 'tooExpensive';

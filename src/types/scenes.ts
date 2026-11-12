@@ -14,14 +14,17 @@ export const SceneKey = {
   Parent: 'Parent',
   Settings: 'Settings',
   Zoo: 'Zoo',
+  Pattern: 'Pattern',
 } as const;
 
 /** Zoo-Laden: gewählter Reiter; back: Szene, zu der „Zurück“ führt */
-export type ZooTab = 'babies' | 'decor' | 'badges';
+export type ZooTab = 'babies' | 'decor' | 'badges' | 'patterns';
 export type ZooSceneData = { tab?: ZooTab; back?: 'Menu' | 'Map'; message?: string };
 
 /** family: zuletzt gewähltes Thema im Gehege (bei mehreren Aufgabenfamilien) */
 export type AreaSceneData = { areaId: string; family?: string };
+/** Muster erfinden: Bereich, in dessen Gehege „Zurück“ führt */
+export type PatternSceneData = { areaId: string };
 export type TaskSceneData = { areaId: string; family: string; level: TaskLevel };
 export type RoundEndSceneData = {
   areaId: string;

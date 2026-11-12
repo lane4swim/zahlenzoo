@@ -103,6 +103,11 @@ export function parseRules(data: unknown): Rules {
   return rules;
 }
 
+/** Gehege der Karte (ohne Zusatzbereiche wie „Wege im Zoo“). */
+export function enclosures(content: { areas: readonly AreaConfig[] }): AreaConfig[] {
+  return content.areas.filter((a) => !a.extra);
+}
+
 /** Alle Themen eines Bereichs: Gehege und Baustelle. */
 export function areaFamilies(area: AreaConfig): string[] {
   return [...area.families, ...(area.site ?? [])];
@@ -126,6 +131,17 @@ export function parseAreas(data: unknown): AreaConfig[] {
       families,
     };
     if (o.requires !== undefined) area.requires = str(o.requires, `areas[${i}].requires`);
+    if (o.extra !== undefined) {
+      if (typeof o.extra !== 'boolean')
+        throw new ContentError(`areas.json areas[${i}].extra: ja/nein erwartet`);
+      area.extra = o.extra;
+    }
+    if (o.free !== undefined) {
+      if (o.free !== 'pattern')
+        throw new ContentError(`areas.json areas[${i}].free: 'pattern' erwartet`);
+      area.free = o.free;
+    }
+    if (o.backdrop !== undefined) area.backdrop = str(o.backdrop, `areas[${i}].backdrop`);
     if (o.site !== undefined) {
       if (!Array.isArray(o.site))
         throw new ContentError(`areas.json areas[${i}].site: Liste erwartet`);
