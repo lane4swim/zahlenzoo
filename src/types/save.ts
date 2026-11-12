@@ -60,6 +60,8 @@ export type Profile = {
   /** Sterne zum Einlösen (die Sterne der Bereiche für die Freischaltung bleiben erhalten) */
   stars: number;
   zoo: { babies: Baby[]; decor: string[] };
+  /** gewählte Rechenwege je Familie („Wie hast du gerechnet?“), für den Erwachsenenbereich */
+  strategyUse?: Record<string, Record<string, number>>;
   /** verdiente Abzeichen mit Datum (JJJJ-MM-TT) */
   badges: Record<string, string>;
   stats: ProfileStats;

@@ -21,6 +21,7 @@
         "add_100",
         "sub_100",
         "quick_tens",
+        "smart_calc",
         "estimate_100",
         "path_choice",
         "story_addsub"
@@ -61,12 +62,22 @@
     {
       "id": "schmetterlingshaus",
       "animal": "butterfly",
-      "requires": "futteruhr"
+      "requires": "futteruhr",
+      "families": [
+        "shapes_basic",
+        "pattern_continue",
+        "shapes_compose",
+        "symmetry_check",
+        "grid_draw",
+        "space_orientation",
+        "area_count"
+      ]
     },
     {
       "id": "giraffenhof",
       "animal": "giraffe",
-      "requires": "schmetterlingshaus"
+      "requires": "schmetterlingshaus",
+      "families": ["measure_length", "compare_length", "anchor_sizes", "length_convert"]
     },
     {
       "id": "zoozaehlung",

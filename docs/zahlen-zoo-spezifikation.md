@@ -25,17 +25,17 @@ Querformat und die Basisauflösung 1024 × 768 sind bestätigt.
 
 Das Spiel übt Rechenstrategien statt reinem Auswendiglernen und lässt Kinder Fehler ohne Strafe erkennen. Die Inhalte folgen dem üblichen Stoff der Grundschule; Referenz ist der Lehrplan Mathematik für die Grundschulen in Nordrhein-Westfalen; der Abgleich der Inhalte mit seinen Kompetenzerwartungen steht noch aus.
 
-Die Kompetenzerwartungen für Klasse 2 und ihre Abdeckung im Spiel stehen in der Datei `kompetenzerwartungen-klasse-2.md`.
+Die Kompetenzerwartungen für Klasse 2 und ihre Abdeckung im Spiel stehen in der Datei `kompetenzerwartungen-klasse-2.md`. Die Tabelle berücksichtigt die Klärung mit einer Lehrkraft vom 11.11.2026 (`ausarbeitung-offene-familien.md`).
 
 | Bereich | Klasse 2 (V1) | Klasse 3 (V2) |
 | --- | --- | --- |
 | Zahlenraum | bis 100: Nachbarzahlen, Zehner und Einer, Vergleichen, Ordnen | bis 1000: Hunderter, Zehner, Einer, Runden |
 | Addition und Subtraktion | bis 100, mit und ohne Zehnerübergang, Ergänzen | bis 1000, halbschriftlich, Rechenwege |
-| Multiplikation und Division | Verdoppeln, Halbieren, Kernaufgaben des Einmaleins (1, 2, 5, 10) und Ableiten, Division als Verteilen | Einmaleins sicher, Division als Umkehrung, Rest |
+| Multiplikation und Division | Verdoppeln, Halbieren, Kernaufgaben des Einmaleins (1, 2, 5, 10) und Ableiten, Division als Verteilen und Aufteilen, im kleinen Einmaleins auch mit Rest | Einmaleins sicher, Division als Umkehrung |
 | Sachaufgaben | einschrittige Textaufgaben mit Bild | zweischrittige Textaufgaben |
-| Größen | Geld bis 100 €, Uhrzeit (volle, halbe, Viertel- und Dreiviertelstunde; analog und digital), Längen in cm und m, Brüche ¼, ½, ¾ bei Größen | Uhrzeit auf die Minute, Gewicht, Rauminhalt |
-| Geometrie und Muster | Formen erkennen, Muster fortsetzen, Achsensymmetrie erkennen, Wege beschreiben, Körper erkennen | Flächen auslegen, Brüche (Hälfte, Viertel), Umfang |
-| Daten und Kombinatorik | Strichlisten, Tabellen und Kalender lesen, einfache Kombinatorik | noch festzulegen (Abgleich mit einer Lehrkraft) |
+| Größen | Geld bis 100 €, Uhrzeit (volle, halbe, Viertel- und Dreiviertelstunde; analog und digital), Zeitspannen in Minuten, Zeiteinheiten von der Minute bis zum Jahr, Längen in cm und m; keine Brüche bei Größen | Uhrzeit auf die Minute, Gewicht, Rauminhalt; Brüche bei Größen (mit einer Lehrkraft festlegen) |
+| Geometrie und Muster | Formen erkennen und legen, Muster fortsetzen, Achsensymmetrie erkennen, Flächen auslegen und vergleichen, Umfang, Lagebeziehungen und Wege beschreiben, Körper (Würfel, Quader, Kugel, Zylinder, Kegel, Pyramide) und Würfelbauten | Brüche (Hälfte, Viertel) |
+| Daten und Kombinatorik | Strichlisten, Tabellen und Kalender lesen, einfache Kombinatorik (z. B. 3 Eiskugeln anordnen) | noch festzulegen; Wahrscheinlichkeit („sicher, möglich, unmöglich“) erst in Klasse 4 |
 
 **Didaktische Leitlinien**
 
@@ -148,12 +148,12 @@ Das Kind baut einen Zoo auf: Auf einer Karte wählt es einen Bereich, versorgt d
 | --- | --- | --- | --- |
 | Affenwald | Affe | Zahlenraum bis 100: Nachbarzahlen, Ordnen, Zehner und Einer | 2 |
 | Pinguinfelsen | Pinguin | Einspluseins bis 20 (Stufe 0), Addition und Subtraktion bis 100, Zehnerübergang, Überschlag | 2 |
-| Elefantenwiese | Elefant | Verdoppeln, Halbieren, Kernaufgaben des Einmaleins (1er, 2er, 5er, 10er), Ableiten, Division als Verteilen | 2, 3 |
+| Elefantenwiese | Elefant | Verdoppeln, Halbieren, Kernaufgaben des Einmaleins (1er, 2er, 5er, 10er), Ableiten, Division als Verteilen und Aufteilen, Teilen mit Rest | 2, 3 |
 | Zoo-Kasse | Papagei | Geld, Wechselgeld, Sachaufgaben | 2, 3 |
-| Futteruhr | Eule | Uhrzeit: volle, halbe, Viertel- und Dreiviertelstunde, analog und digital; Brüche bei Größen | 2, 3 |
-| Schmetterlingshaus | Schmetterling | Muster, Achsensymmetrie erkennen, Formen | 2, 3 |
-| Giraffenhof | Giraffe | Längen messen und vergleichen, Stützpunkte für 1 cm und 1 m, Brüche bei Größen; später Hunderterraum bis 1000 und Runden | 2, 3 |
-| Zoo-Zählung | Erdmännchen | Strichlisten, Tabellen und Kalender lesen, einfache Kombinatorik | 2, 3 |
+| Futteruhr | Eule | Uhrzeit: volle, halbe, Viertel- und Dreiviertelstunde, analog und digital; Zeitspannen und Zeiteinheiten | 2, 3 |
+| Schmetterlingshaus | Schmetterling | Muster, Achsensymmetrie erkennen, Formen erkennen und legen, Flächen und Umfang, Lage und Wege | 2, 3 |
+| Giraffenhof | Giraffe | Längen messen und vergleichen, Stützpunkte für 1 cm und 1 m, cm und m umwandeln; später Hunderterraum bis 1000 und Runden | 2, 3 |
+| Zoo-Zählung | Erdmännchen | Strichlisten, Tabellen und Kalender lesen, einfache Kombinatorik mit Anordnungen | 2, 3 |
 
 **Freischaltung (Startwerte, im Test anzupassen)**
 
@@ -167,7 +167,7 @@ Das Kind baut einen Zoo auf: Auf einer Karte wählt es einen Bereich, versorgt d
 - **Pflegerunde (Standard):** ohne Zeitlimit, mit Hilfen.
 - **Tempo-Runde (optional, ab Stufe 2 eines Bereichs):** Zeitbonus statt Zeitstrafe; Fehler kosten keine Sterne. In V1 ist der Modus nur angelegt (Auswahl im Menü, Zeitmessung, Feld für den Zeitbonus im Spielstand); die Ausgestaltung folgt in V2.
 - **Tagesfutter:** 5 gemischte Aufgaben aus bereits geübten Bereichen, die das Kompetenzmodell zur Wiederholung auswählt.
-- **Baumodus (klein):** Würfelgebäude nach Plan bauen sowie Würfel, Quader und Kugel erkennen und sortieren; kein eigener Bereich, erreichbar aus dem Gehege.
+- **Baumodus (klein):** Würfelgebäude nach Plan bauen (Ansichten von vorn und von der Seite, Draufsicht mit Zahlen) sowie Würfel, Quader, Kugel, Zylinder, Kegel und Pyramide erkennen und sortieren; kein eigener Bereich, als „Baustelle“ erreichbar aus dem Gehege des Schmetterlingshauses.
 
 ## 6. Spiellogik: Aufgaben
 
@@ -201,9 +201,10 @@ type CheckResult = { correct: boolean; errorTag?: string };
 | `choice` | 3 bis 4 Antwortkarten antippen | Welche Zahl liegt zwischen 59 und 61? |
 | `gap` | Lücke füllen | \_\_ + 30 = 70; Zahlenmauer |
 | `drag-sort` | Karten ziehen und ordnen | Zahlen der Größe nach ordnen |
+| `order` | Karten der Reihe nach antippen (umgesetzt statt Ziehen) | Zahlen der Größe nach ordnen |
 | `number-line` | Marker auf Zahlenstrahl setzen | Wo liegt 65? |
-| `clock` | Zeiger einstellen oder Uhrzeit wählen | Stelle 7:30 Uhr ein |
-| `money` | Münzen und Scheine ziehen | Lege 3,40 € |
+| `clock` | Zeiger ziehen oder mit Tasten einstellen; Uhrzeit über Antwortkarten wählen | Stelle die Uhr auf halb 8 |
+| `money` | Münzen und Scheine antippen und auf den Zahlteller legen | Lege 37 € |
 | `pattern` | Felder im Raster anklicken | Wo liegt die Spiegelachse? |
 | `word` | Bild plus Text, Eingabe oder Auswahl | 4 Elefanten brauchen je 3 Eimer ... |
 
@@ -212,8 +213,11 @@ type CheckResult = { correct: boolean; errorTag?: string };
 | Familie | Stufe 1 | Stufe 2 | Stufe 3 |
 | --- | --- | --- | --- |
 | `add_100` | Zehner plus Einer, ohne Übergang (34 + 5, 40 + 20) | zweistellig plus einstellig mit Übergang (38 + 7) | zweistellig plus zweistellig (47 + 26) |
-| `mult_table` | Kernaufgaben: Reihen 1, 2, 5, 10 | Ableiten (3 × 4 aus 2 × 4 + 4) | Umkehren und Ergänzen (\_\_ × 5 = 35) |
-| `clock_half` | volle und halbe Stunden | Viertel- und Dreiviertelstunde | analog und digital, ½ Stunde = 30 Minuten |
+| `mult_table` | Kernaufgaben: Reihen 1, 2, 5, 10, Verdoppeln und Halbieren | Ableiten (3 × 4 aus 2 × 4 + 4) | Umkehren und Verteilen (\_\_ × 5 = 35, 20 : 5) |
+| `divide_rest` | 17 : 5 = 3 Rest 2 mit Antwortkarten | Quotient oder Rest eintippen | Sachaufgaben, die den Rest deuten (voll, übrig, aufrunden) |
+| `clock_half` | halbe Stunden lesen (halb 8) | halbe und volle Stunden einstellen | eine halbe Stunde später oder früher |
+
+Alle Familien mit ihren Stufen stehen in `src/data/families.json`; die Stufen lassen sich dort ohne Programmänderung anpassen.
 
 **Regeln für die Erzeugung**
 

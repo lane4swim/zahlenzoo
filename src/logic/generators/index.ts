@@ -17,6 +17,28 @@ import { plusFacts20, PLUS_FACTS_20 } from './plusFacts20';
 import { CLOCK_FAMILIES, clockFor } from './clock';
 import { compareMoney, COMPARE_MONEY } from './compareMoney';
 import { DIVIDE_REST, divideRest } from './divideRest';
+import { SHAPES_COMPOSE, shapesCompose } from './compose';
+import { GRID_DRAW, gridDraw, SPACE_ORIENTATION, spaceOrientation } from './space';
+import {
+  AREA_COUNT,
+  areaCount,
+  PATTERN_CONTINUE,
+  patternContinue,
+  SHAPES_BASIC,
+  shapesBasic,
+  SYMMETRY_CHECK,
+  symmetryCheck,
+} from './geometry';
+import {
+  ANCHOR_SIZES,
+  anchorSizes,
+  COMPARE_LENGTH,
+  compareLength,
+  LENGTH_CONVERT,
+  lengthConvert,
+  MEASURE_LENGTH,
+  measureLength,
+} from './lengths';
 import {
   ESTIMATE_100,
   estimate100,
@@ -28,6 +50,7 @@ import {
 import { moneyConvert, MONEY_CONVERT } from './moneyConvert';
 import { moneyLay, MONEY_LAY } from './moneyLay';
 import { EXACT_OR_ESTIMATE, exactOrEstimate, QUESTION_PICK, questionPick } from './situations';
+import { SMART_CALC, smartCalc } from './smartCalc';
 import { storyAddSub, STORY_ADDSUB, storyAddSubFor } from './storyAddSub';
 import { storyMultDiv, STORY_MULTDIV } from './storyMultDiv';
 import { sub100, SUB_100 } from './sub100';
@@ -61,6 +84,18 @@ export const GENERATORS: Readonly<Record<string, Generator>> = {
   [ESTIMATE_100]: estimate100,
   [PATH_CHOICE]: pathChoice,
   [DIVIDE_REST]: divideRest,
+  [SMART_CALC]: smartCalc,
+  [MEASURE_LENGTH]: measureLength,
+  [COMPARE_LENGTH]: compareLength,
+  [ANCHOR_SIZES]: anchorSizes,
+  [LENGTH_CONVERT]: lengthConvert,
+  [SHAPES_BASIC]: shapesBasic,
+  [PATTERN_CONTINUE]: patternContinue,
+  [SYMMETRY_CHECK]: symmetryCheck,
+  [AREA_COUNT]: areaCount,
+  [SHAPES_COMPOSE]: shapesCompose,
+  [GRID_DRAW]: gridDraw,
+  [SPACE_ORIENTATION]: spaceOrientation,
 };
 
 export const GENERATOR_IDS = Object.keys(GENERATORS);
