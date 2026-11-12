@@ -185,10 +185,10 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 
 **Offline und Installation** (Spez. 3, 12)
 
-- [ ] vite-plugin-pwa: alle Dateien beim ersten Besuch ablegen
-- [ ] PWA-Icons (192, 512, maskierbar), Logo, Favicon
-- [ ] Update-Knopf „Neue Version laden“ statt Neuladen mitten in der Runde
-- [ ] Schrift lokal als WOFF2, keine Fremdserver
+- [x] vite-plugin-pwa: alle Dateien beim ersten Besuch ablegen (202 Dateien, 6,8 MB; Bilder mit `?v=` werden über `ignoreURLParametersMatching` gefunden)
+- [x] PWA-Icons (192, 512, maskierbar), Startbildschirm-Symbol (180) und Favicon aus dem Affen des Affenwalds (`art/build_icons.py`)
+- [x] Update-Knopf „Neue Version laden“ statt Neuladen mitten in der Runde (nur im Menü oben rechts; `registerType: 'prompt'`)
+- [x] Schrift lokal als WOFF2, keine Fremdserver (im Browser geprüft: alle Anfragen an den eigenen Server)
 
 **Barrierefreiheit** (Spez. 9)
 

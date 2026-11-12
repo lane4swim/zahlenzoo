@@ -15,7 +15,7 @@
     "test:watch": "vitest",
     "lint": "eslint . && prettier --check .",
     "format": "prettier --write .",
-    "art": "python3 art/build_map.py && python3 art/build_scenes.py && python3 art/build_backgrounds.py && python3 art/build_animals.py && python3 art/build_money.py && python3 art/build_rewards.py && node art/render.mjs && node art/contact.mjs"
+    "art": "python3 art/build_map.py && python3 art/build_scenes.py && python3 art/build_backgrounds.py && python3 art/build_animals.py && python3 art/build_money.py && python3 art/build_rewards.py && node art/render.mjs && python3 art/build_icons.py && node art/contact.mjs"
   },
   "dependencies": {
     "@fontsource/andika": "5.3.0",

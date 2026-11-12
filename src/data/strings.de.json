@@ -838,5 +838,7 @@
   "parent.imported": "Der Spielstand wurde geladen.",
   "parent.importFailed": "Diese Datei ist kein gültiger Spielstand. Es wurde nichts geändert.",
   "parent.deleted": "Das Profil {name} wurde gelöscht.",
-  "parent.clearAll": "Alle lokalen Daten löschen"
+  "parent.clearAll": "Alle lokalen Daten löschen",
+  "menu.update": "Neue Version laden",
+  "menu.offlineReady": "Jetzt auch ohne Internet spielbar."
 }

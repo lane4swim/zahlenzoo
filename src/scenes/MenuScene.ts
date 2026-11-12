@@ -2,7 +2,8 @@ import { BaseScene } from './BaseScene';
 import type { Services } from '../services/services';
 import { SceneKey } from '../types/scenes';
 import { drawAvatar } from '../ui/AvatarBadge';
-import { Layout, Tex } from '../ui/theme';
+import { updates } from '../services/update';
+import { Color, FontSize, Layout, Tex } from '../ui/theme';
 
 export class MenuScene extends BaseScene {
   constructor(services: Services) {
@@ -56,5 +57,34 @@ export class MenuScene extends BaseScene {
       label: this.t('menu.parents'),
       onPress: () => this.scene.start(SceneKey.Parent),
     });
+    this.showUpdate();
+    // Kommt die Meldung, während das Menü offen ist, sofort anzeigen.
+    const off = updates.subscribe(() => this.scene.isActive() && this.scene.restart());
+    this.events.once('shutdown', off);
+  }
+
+  /**
+   * Neue Version: Knopf nur hier im Menü, nie mitten in einer Runde (Spezifikation 12).
+   * Erstes Ablegen aller Dateien: kurzer Hinweis, dass das Spiel jetzt offline geht.
+   */
+  private showUpdate(): void {
+    const cx = this.scale.width / 2;
+    const y = this.scale.height - Layout.margin - 48;
+    if (updates.available) {
+      // oben rechts, frei neben dem Schild über dem Eingang
+      this.addButton({
+        x: this.scale.width - Layout.margin - 150,
+        y: Layout.margin + 48,
+        width: 300,
+        label: this.t('menu.update'),
+        fontSize: FontSize.small,
+        fill: Color.sonne,
+        onPress: () => void updates.apply(),
+      });
+    } else if (updates.offlineReady && !this.registry.get('offlineShown')) {
+      this.registry.set('offlineShown', true);
+      const text = this.addText(cx, y + 18, this.t('menu.offlineReady')).setWordWrapWidth(500);
+      this.time.delayedCall(6000, () => text.destroy());
+    }
   }
 }
