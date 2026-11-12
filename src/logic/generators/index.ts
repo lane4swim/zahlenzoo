@@ -17,6 +17,8 @@ import { plusFacts20, PLUS_FACTS_20 } from './plusFacts20';
 import { CLOCK_FAMILIES, clockFor } from './clock';
 import { compareMoney, COMPARE_MONEY } from './compareMoney';
 import { DIVIDE_REST, divideRest } from './divideRest';
+import { SHAPES_COMPOSE, shapesCompose } from './compose';
+import { GRID_DRAW, gridDraw, SPACE_ORIENTATION, spaceOrientation } from './space';
 import {
   AREA_COUNT,
   areaCount,
@@ -91,6 +93,9 @@ export const GENERATORS: Readonly<Record<string, Generator>> = {
   [PATTERN_CONTINUE]: patternContinue,
   [SYMMETRY_CHECK]: symmetryCheck,
   [AREA_COUNT]: areaCount,
+  [SHAPES_COMPOSE]: shapesCompose,
+  [GRID_DRAW]: gridDraw,
+  [SPACE_ORIENTATION]: spaceOrientation,
 };
 
 export const GENERATOR_IDS = Object.keys(GENERATORS);

@@ -1,3 +1,4 @@
+import { checkGrid } from './grid';
 import { typicalErrors } from './options';
 import type { CheckResult, Task, TaskInput } from '../types/task';
 
@@ -28,6 +29,7 @@ function toNumberList(input: TaskInput): number[] | undefined {
  */
 export function check(task: Task, input: TaskInput): CheckResult {
   const { answer } = task;
+  if (task.grid) return checkGrid(task, input);
 
   if (typeof answer === 'number') {
     const value = toNumber(input);

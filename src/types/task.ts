@@ -13,7 +13,13 @@ export type TaskKind =
   | 'pattern'
   | 'word'
   /** Zahlen in einer Reihenfolge antippen (Ordnen) */
-  | 'order';
+  | 'order'
+  /** Felder auf einem Raster antippen (Kästchen malen, Feld wählen) */
+  | 'grid'
+  /** Weg mit Pfeiltasten legen */
+  | 'path'
+  /** Formteile in einen Umriss legen */
+  | 'compose';
 
 /**
  * Stufe einer Aufgabenfamilie. Stufe 0 gibt es nur für das Einspluseins bis 20
@@ -36,8 +42,62 @@ export type ShapeSpec = {
 /** Figur aus Kästchen auf einem Raster (Spalte, Zeile ab 0). */
 export type CellFigure = { cols: number; rows: number; cells: Array<[number, number]> };
 
+/** Feld auf einem Raster: Spalte, Zeile ab 0 (oben links). */
+export type Cell = [number, number];
+
+/**
+ * Spielfeld mit Kästchen: feste grüne Kästchen (given), Bilder auf Feldern (icon: Textur oder
+ * 'stone'), Spiegelachse in der Mitte, Startfigur für Wege.
+ */
+export type BoardSpec = {
+  cols: number;
+  rows: number;
+  given?: Cell[];
+  items?: Array<{ cell: Cell; icon: string }>;
+  axis?: 'v' | 'h';
+  start?: { cell: Cell; icon: string };
+};
+
+/**
+ * Raster als Eingabe. cells: Kästchen an- und abtippen, dann OK; pick: ein Feld antippen;
+ * path: Weg mit Pfeilen legen (Buchstaben r, l, u, d). model: Vorlage links daneben.
+ * rule: wie die Eingabe geprüft wird (ohne rule: genau die Antwort).
+ */
+export type GridInfo = {
+  mode: 'cells' | 'pick' | 'path';
+  board: BoardSpec;
+  model?: CellFigure;
+  rule?:
+    | { type: 'shape'; cells: Cell[] }
+    | { type: 'rect'; area: number; square?: boolean }
+    | { type: 'path'; goal: Cell };
+};
+
+/** Formteil: Quadrat, Rechteck (2 × 1), rechtwinkliges Dreieck, Halbkreis; rot in 90°-Schritten. */
+export type PieceKind = 'square' | 'rect' | 'tri' | 'semi';
+export type Piece = { kind: PieceKind; rot: number };
+/** Platz eines Teils in einer Figur (Feld oben links). */
+export type PieceSlot = Piece & { c: number; r: number };
+
+/** Formen legen: Umriss aus Plätzen, Teile in der Ablage (in der Startlage). */
+export type ComposeInfo = { cols: number; rows: number; slots: PieceSlot[]; pieces: Piece[] };
+
 /** Darstellungen für Hinweise und einblendbare Hilfen. */
 export type Visual =
+  | ({ type: 'board' } & BoardSpec)
+  | {
+      /** Figur aus Formteilen; hidden: Plätze, die nur als Umriss erscheinen (Lücke) */
+      type: 'pieces';
+      cols: number;
+      rows: number;
+      slots: PieceSlot[];
+      hidden?: number[];
+    }
+  | {
+      /** Lagewörter: Schmetterling über, unter, vor, hinter oder neben dem Tisch */
+      type: 'position';
+      place: 'over' | 'under' | 'front' | 'behind' | 'next';
+    }
   | {
       /** Lineal (0 bis max cm) mit Gegenständen von from bis to; ticks: Zahlen zeigen */
       type: 'ruler';
@@ -115,6 +175,10 @@ export type TaskOption = {
   label?: { key: string; params?: TextParams };
   /** Form auf der Karte statt Text (Muster fortsetzen) */
   shape?: ShapeSpec;
+  /** Formteil auf der Karte (Welches Teil fehlt?) */
+  piece?: Piece;
+  /** Weg als Pfeile auf der Karte (Buchstaben r, l, u, d) */
+  moves?: string;
 };
 
 export type TaskAnswer = number | number[] | string;
@@ -211,6 +275,10 @@ export type Task = {
    * sichtbar (Blitzblick); der zweite Hinweis zeigt es wieder.
    */
   display?: { visual: Visual; flashMs?: number };
+  /** Raster zum Antippen (Kästchen malen, Feld wählen, Weg legen) */
+  grid?: GridInfo;
+  /** Formteile in einen Umriss legen */
+  compose?: ComposeInfo;
   /** Uhrzeit: angezeigte oder einzustellende Zeit */
   clock?: ClockInfo;
   /** typische falsche Antworten als Text (z. B. Uhrzeiten) mit Fehlerart */

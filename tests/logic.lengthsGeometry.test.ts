@@ -12,6 +12,8 @@ import {
   lengthConvert,
   measureLength,
 } from '../src/logic/generators/lengths';
+import { shapesCompose } from '../src/logic/generators/compose';
+import { gridDraw, spaceOrientation } from '../src/logic/generators/space';
 import { createRng } from '../src/logic/rng';
 import { composeRound } from '../src/logic/rounds';
 import type { Generator, Task, TaskLevel } from '../src/types/task';
@@ -28,6 +30,9 @@ const FAMILIES: Array<[string, Generator]> = [
   ['pattern_continue', patternContinue],
   ['symmetry_check', symmetryCheck],
   ['area_count', areaCount],
+  ['shapes_compose', shapesCompose],
+  ['grid_draw', gridDraw],
+  ['space_orientation', spaceOrientation],
 ];
 
 function tasks(family: string, gen: Generator, level: TaskLevel): Task[] {

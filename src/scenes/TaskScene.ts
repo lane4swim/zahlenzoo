@@ -44,6 +44,11 @@ import { ClockInput } from '../ui/ClockInput';
 import { ClockFace } from '../ui/math/ClockFace';
 import { MoneyInput } from '../ui/MoneyInput';
 import { OrderInput } from '../ui/OrderInput';
+import { GridInput } from '../ui/GridInput';
+import { ComposeInput } from '../ui/ComposeInput';
+import { drawArrow, GridBoard } from '../ui/math/GridBoard';
+import { drawPiece, PiecesView } from '../ui/math/Pieces';
+import { PositionScene } from '../ui/math/PositionScene';
 import { Numpad } from '../ui/Numpad';
 import { ProgressDots } from '../ui/ProgressDots';
 import { StoryPictureView } from '../ui/StoryPictureView';
@@ -72,6 +77,9 @@ const displayScale = (visual: Visual): number =>
 
 /** Bild zur Aufgabe (Zehnerstangen, Zehnerfeld) */
 const DISPLAY_Y = 420;
+/** Raster zum Antippen und Umriss beim Formenlegen (zwischen Hinweis und Tasten) */
+const GRID_Y = 452;
+const COMPOSE_Y = 430;
 
 /**
  * Aufgabenansicht: Tier links, Rechnung oben, Hinweise in der Mitte, Eingabe unten.
@@ -104,7 +112,8 @@ export class TaskScene extends BaseScene<TaskSceneData> {
   private dots!: ProgressDots;
   private panel!: HintPanel;
   private expression?: Expression;
-  private answerInput?: Numpad | AnswerCards | MoneyInput | ClockInput | OrderInput;
+  private answerInput?:
+    Numpad | AnswerCards | MoneyInput | ClockInput | OrderInput | GridInput | ComposeInput;
   private aidButtons: Button[] = [];
   private feedbackIcon?: Phaser.GameObjects.Image;
   /** Frage, Sachtext, Einheit und Bild (werden je Aufgabe neu angelegt) */
@@ -283,6 +292,27 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       this.storyObjects.push(new ClockFace(this, PANEL.x, CLOCK.y, CLOCK.radius, task.clock.time));
     }
     if (task.display) this.showDisplay(task.display.visual, task.display.flashMs);
+    if (task.grid) {
+      this.answerInput = new GridInput(this, {
+        info: task.grid,
+        board: { x: PANEL.x, y: GRID_Y },
+        keys: { x: INPUT_X, y: INPUT_Y },
+        okLabel: this.t('common.ok'),
+        clearLabel: this.t('grid.clear'),
+        onSubmit: (value) => this.submit(value),
+      });
+      return;
+    }
+    if (task.compose) {
+      this.answerInput = new ComposeInput(this, {
+        info: task.compose,
+        outline: { x: PANEL.x, y: COMPOSE_Y },
+        tray: { x: INPUT_X, y: INPUT_Y },
+        onWrong: (value) => this.submit(value),
+        onDone: () => this.submit('done'),
+      });
+      return;
+    }
     if (task.kind === 'order' && task.options) {
       this.answerInput = new OrderInput(this, INPUT_X, INPUT_Y, task.options, (value) =>
         this.submit(value),
@@ -297,16 +327,28 @@ export class TaskScene extends BaseScene<TaskSceneData> {
         task.options,
         (value) => this.submit(value),
         (option) =>
-          option.shape
+          option.shape || option.piece || option.moves
             ? ''
             : option.label
               ? this.text(option.label.key, option.label.params)
               : option.value,
         (option, card) => {
-          // Formkarten: die Form statt Text (Muster fortsetzen)
-          if (!option.shape) return;
+          // Karten mit Bild statt Text: Form (Muster), Formteil (Welches Teil fehlt?), Weg
           const g = this.add.graphics({ x: 0, y: -4 });
-          drawShape(g, option.shape, 56);
+          if (option.shape) drawShape(g, option.shape, 56);
+          else if (option.piece) drawPiece(g, option.piece, 52);
+          else if (option.moves) {
+            const n = option.moves.length;
+            const step = Math.min(34, 150 / n);
+            [...option.moves].forEach((m, i) => {
+              const a = this.add.graphics({ x: (i - (n - 1) / 2) * step, y: -4 });
+              drawArrow(a, m as 'r' | 'l' | 'u' | 'd', step - 4);
+              card.add(a);
+            });
+          } else {
+            g.destroy();
+            return;
+          }
           card.add(g);
         },
       );
@@ -493,6 +535,8 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     if (this.answerInput instanceof AnswerCards) this.answerInput.markWrong(value);
     if (this.answerInput instanceof Numpad) this.answerInput.clear();
     if (this.answerInput instanceof OrderInput) this.answerInput.clear();
+    if (this.answerInput instanceof GridInput && this.task.grid?.mode === 'pick')
+      this.answerInput.clear();
     // Gelegtes Geld bleibt liegen, damit das Kind ergänzen oder zurücklegen kann.
 
     if (this.attempts >= this.content.rules.attempts) {
@@ -536,6 +580,11 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       // Die Karten zeigen die richtige Reihenfolge; „Weiter“ steht darunter.
       this.answerInput.showOrder(this.task.answer.map(String));
       nextY = INPUT_Y + 100;
+    } else if (this.answerInput instanceof GridInput) {
+      // Das Raster zeigt die Lösung; die Tasten machen Platz für „Weiter“.
+      this.answerInput.showSolution(String(this.task.answer)).setButtonsVisible(false);
+    } else if (this.answerInput instanceof ComposeInput) {
+      this.answerInput.placeAll();
     } else if (this.answerInput instanceof ClockInput && this.task.clock) {
       // Die Uhr zeigt die richtige Zeit, die Tasten machen Platz für „Weiter“.
       this.answerInput.setTime(this.task.clock.time).setButtonsVisible(false);
@@ -650,6 +699,23 @@ export class TaskScene extends BaseScene<TaskSceneData> {
   }
 
   private visualFor(visual: Visual): Phaser.GameObjects.GameObject {
+    if (visual.type === 'board') {
+      return new GridBoard(this, PANEL.x, VISUAL_Y, visual);
+    }
+    if (visual.type === 'pieces') {
+      return new PiecesView(
+        this,
+        PANEL.x,
+        VISUAL_Y,
+        visual.cols,
+        visual.rows,
+        visual.slots,
+        visual.hidden,
+      );
+    }
+    if (visual.type === 'position') {
+      return new PositionScene(this, PANEL.x, VISUAL_Y, visual.place);
+    }
     if (visual.type === 'hundred') {
       return new HundredBoard(this, PANEL.x, VISUAL_Y + 4, visual.marked);
     }

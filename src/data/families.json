@@ -826,6 +826,67 @@
           "mode": "perimeter"
         }
       }
+    },
+    "shapes_compose": {
+      "title": "Formen legen",
+      "kinds": {
+        "compose": 1
+      },
+      "levels": {
+        "1": {
+          "description": "Teile in einen Umriss legen (Teile liegen richtig)",
+          "mode": "lay"
+        },
+        "2": {
+          "description": "Teile drehen und legen",
+          "mode": "rotate"
+        },
+        "3": {
+          "description": "Welches Teil fehlt? Aus wie vielen Teilen besteht die Figur?",
+          "mode": "complete"
+        }
+      }
+    },
+    "grid_draw": {
+      "title": "Kästchen malen",
+      "kinds": {
+        "grid": 1
+      },
+      "levels": {
+        "1": {
+          "description": "Figur nach Vorlage abmalen",
+          "mode": "copy"
+        },
+        "2": {
+          "description": "Figur an der Spiegelachse ergänzen",
+          "mode": "mirror"
+        },
+        "3": {
+          "description": "Rechteck oder Quadrat mit n Kästchen malen",
+          "mode": "rect"
+        }
+      }
+    },
+    "space_orientation": {
+      "title": "Lage und Wege",
+      "kinds": {
+        "grid": 0.5,
+        "choice": 0.5
+      },
+      "levels": {
+        "1": {
+          "description": "Lagewörter: über, unter, vor, hinter, neben, zwischen",
+          "mode": "positions"
+        },
+        "2": {
+          "description": "Rechts und links; einem Weg folgen",
+          "mode": "leftright"
+        },
+        "3": {
+          "description": "Wege mit Pfeilen beschreiben und legen, mit Steinen",
+          "mode": "routes"
+        }
+      }
     }
   }
 }
