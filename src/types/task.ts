@@ -19,7 +19,11 @@ export type TaskKind =
   /** Weg mit Pfeiltasten legen */
   | 'path'
   /** Formteile in einen Umriss legen */
-  | 'compose';
+  | 'compose'
+  /** mehrere Dinge antippen, dann OK (Körper sortieren) */
+  | 'select'
+  /** Würfelgebäude bauen oder Bauplan schreiben (Feld antippen: ein Würfel mehr) */
+  | 'build';
 
 /**
  * Stufe einer Aufgabenfamilie. Stufe 0 gibt es nur für das Einspluseins bis 20
@@ -88,9 +92,35 @@ export type IceBase = 'cone' | 'cup';
 /** Ein Eis: Kugeln von unten nach oben, Waffel oder Becher. */
 export type Ice = { scoops: Flavor[]; base: IceBase };
 
+/** Körper: Würfel, Quader, Kugel, Zylinder, Kegel, Pyramide; look: Körper oder Gegenstand. */
+export type SolidKind = 'cube' | 'cuboid' | 'sphere' | 'cylinder' | 'cone' | 'pyramid';
+export type SolidSpec = { kind: SolidKind; look: 'plain' | 'object' };
+
+/** Würfelgebäude auf 3 × 3 Feldern: Höhen zeilenweise von hinten nach vorn, links nach rechts. */
+export type Heights = number[];
+
+/** Würfelgebäude: Bauplan (Draufsicht) zum Nachbauen oder Gebäude zum Aufschreiben. */
+export type BuildInfo = { mode: 'build' | 'plan'; target: Heights };
+
 /** Darstellungen für Hinweise und einblendbare Hilfen. */
 export type Visual =
   | ({ type: 'board' } & BoardSpec)
+  | {
+      /** Körper oder Gegenstände nebeneinander */
+      type: 'solids';
+      items: SolidSpec[];
+    }
+  | {
+      /** Würfelgebäude von schräg oben; marks: Seiten „vorn“ und „rechts“ beschriften */
+      type: 'building';
+      heights: Heights;
+      marks?: boolean;
+    }
+  | {
+      /** Bauplan: Draufsicht mit der Anzahl der Würfel je Feld */
+      type: 'plan';
+      heights: Heights;
+    }
   | {
       /** Strichliste: je Zeile ein Bild und n Striche (Fünferbündel) */
       type: 'tally';
@@ -222,6 +252,12 @@ export type TaskOption = {
   tally?: { n: number; bundled: boolean };
   /** Eis auf der Karte (Welches Eis fehlt?) */
   ice?: Ice;
+  /** Körper auf der Karte */
+  solid?: SolidSpec;
+  /** Bauplan auf der Karte */
+  plan?: Heights;
+  /** Ansicht auf der Karte: Höhen der Säulen von links nach rechts */
+  view?: number[];
 };
 
 export type TaskAnswer = number | number[] | string;
@@ -322,6 +358,10 @@ export type Task = {
   grid?: GridInfo;
   /** Formteile in einen Umriss legen */
   compose?: ComposeInfo;
+  /** Mehrfachauswahl: Dinge zum Antippen (Antwort: Nummern der richtigen Dinge) */
+  select?: SolidSpec[];
+  /** Würfelgebäude bauen oder Bauplan schreiben */
+  build?: BuildInfo;
   /** Uhrzeit: angezeigte oder einzustellende Zeit */
   clock?: ClockInfo;
   /** typische falsche Antworten als Text (z. B. Uhrzeiten) mit Fehlerart */

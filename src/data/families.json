@@ -987,6 +987,48 @@
           "mode": "stacks"
         }
       }
+    },
+    "solids_basic": {
+      "title": "Körper",
+      "kinds": {
+        "choice": 0.6,
+        "select": 0.2
+      },
+      "levels": {
+        "1": {
+          "description": "Körper und Gegenstände benennen (Würfel, Quader, Kugel, Zylinder, Kegel, Pyramide)",
+          "mode": "name"
+        },
+        "2": {
+          "description": "Sortieren: alle Körper einer Art antippen",
+          "mode": "sort"
+        },
+        "3": {
+          "description": "Eigenschaften: rollen, Spitze, nur Quadrate; Ecken, Flächen, Kanten zählen",
+          "mode": "props"
+        }
+      }
+    },
+    "cube_buildings": {
+      "title": "Würfelbauten",
+      "kinds": {
+        "build": 0.3,
+        "choice": 0.3
+      },
+      "levels": {
+        "1": {
+          "description": "Würfel zählen, alle sichtbar (höchstens 2 hoch)",
+          "mode": "count"
+        },
+        "2": {
+          "description": "Verdeckte Würfel mitzählen; welcher Bauplan passt?",
+          "mode": "hidden"
+        },
+        "3": {
+          "description": "Nach Plan bauen, Bauplan schreiben, Ansicht von vorn oder der Seite",
+          "mode": "plan"
+        }
+      }
     }
   }
 }

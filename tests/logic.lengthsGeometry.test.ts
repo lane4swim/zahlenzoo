@@ -21,6 +21,7 @@ import {
   readTable,
   tallyChart,
 } from '../src/logic/generators/data';
+import { cubeBuildings, solidsBasic } from '../src/logic/generators/solids';
 import { createRng } from '../src/logic/rng';
 import { composeRound } from '../src/logic/rounds';
 import type { Generator, Task, TaskLevel } from '../src/types/task';
@@ -45,6 +46,8 @@ const FAMILIES: Array<[string, Generator]> = [
   ['read_chart', readChart],
   ['read_calendar', readCalendar],
   ['combinatorics', combinatorics],
+  ['solids_basic', solidsBasic],
+  ['cube_buildings', cubeBuildings],
 ];
 
 function tasks(family: string, gen: Generator, level: TaskLevel): Task[] {

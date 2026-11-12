@@ -71,7 +71,8 @@
         "grid_draw",
         "space_orientation",
         "area_count"
-      ]
+      ],
+      "site": ["solids_basic", "cube_buildings"]
     },
     {
       "id": "giraffenhof",

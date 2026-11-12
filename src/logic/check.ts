@@ -45,6 +45,25 @@ export function check(task: Task, input: TaskInput): CheckResult {
     const b = task.unordered ? [...answer].sort((x, y) => x - y) : answer;
     const correct = a.length === b.length && a.every((v, i) => v === b[i]);
     if (correct || Array.isArray(input)) return { correct };
+    const known = task.errorAnswers?.find((e) => e.value === values.join(','));
+    if (known) return { correct, errorTag: known.errorTag };
+    if (task.kind === 'select') {
+      const missing = b.some((v) => !a.includes(v));
+      const extra = a.some((v) => !b.includes(v));
+      return {
+        correct,
+        errorTag:
+          missing && !extra
+            ? 'select_missing'
+            : !missing && extra
+              ? 'select_extra'
+              : 'select_wrong',
+      };
+    }
+    if (task.kind === 'build') {
+      const sum = (l: number[]) => l.reduce((x, y) => x + y, 0);
+      return { correct, errorTag: sum(a) !== sum(b) ? 'cube_count' : 'build_wrong' };
+    }
     // Antwortkarten mit mehreren Zahlen (z. B. „3 Rest 2“): Fehlerart der gewählten Karte
     const option = task.options?.find((o) => normalize(o.value) === normalize(String(input)));
     return option?.errorTag ? { correct, errorTag: option.errorTag } : { correct };

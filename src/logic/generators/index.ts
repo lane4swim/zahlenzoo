@@ -17,6 +17,7 @@ import { plusFacts20, PLUS_FACTS_20 } from './plusFacts20';
 import { CLOCK_FAMILIES, clockFor } from './clock';
 import { compareMoney, COMPARE_MONEY } from './compareMoney';
 import { DIVIDE_REST, divideRest } from './divideRest';
+import { CUBE_BUILDINGS, cubeBuildings, SOLIDS_BASIC, solidsBasic } from './solids';
 import {
   COMBINATORICS,
   combinatorics,
@@ -105,6 +106,8 @@ export const GENERATORS: Readonly<Record<string, Generator>> = {
   [PATTERN_CONTINUE]: patternContinue,
   [SYMMETRY_CHECK]: symmetryCheck,
   [AREA_COUNT]: areaCount,
+  [SOLIDS_BASIC]: solidsBasic,
+  [CUBE_BUILDINGS]: cubeBuildings,
   [TALLY_CHART]: tallyChart,
   [READ_TABLE]: readTable,
   [READ_CHART]: readChart,
