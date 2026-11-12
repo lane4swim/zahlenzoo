@@ -23,8 +23,40 @@ export type TaskLevel = 0 | 1 | 2 | 3;
 
 export type TextParams = Readonly<Record<string, string | number>>;
 
+/** Form für Muster und Formenaufgaben (Farben aus der Stilvorgabe). */
+export type ShapeKind = 'circle' | 'square' | 'rect' | 'triangle';
+export type ShapeColor = 'red' | 'blue' | 'yellow' | 'green';
+export type ShapeSpec = {
+  kind: ShapeKind;
+  color: ShapeColor;
+  size?: 's' | 'm' | 'l';
+  rot?: number;
+};
+
+/** Figur aus Kästchen auf einem Raster (Spalte, Zeile ab 0). */
+export type CellFigure = { cols: number; rows: number; cells: Array<[number, number]> };
+
 /** Darstellungen für Hinweise und einblendbare Hilfen. */
 export type Visual =
+  | {
+      /** Lineal (0 bis max cm) mit Gegenständen von from bis to; ticks: Zahlen zeigen */
+      type: 'ruler';
+      max: number;
+      items: Array<{ from: number; to: number; look: 'pencil' | 'worm' | 'feather' }>;
+    }
+  | {
+      /** Formen in einer Reihe; null ist die Lücke (Muster fortsetzen) */
+      type: 'shapes';
+      items: Array<ShapeSpec | null>;
+    }
+  | {
+      /** Kästchenfiguren nebeneinander; axis: Spiegelachse in der Mitte der ersten Figur */
+      type: 'cells';
+      figures: CellFigure[];
+      axis?: 'v' | 'h';
+      /** Rand der Figur betonen (Umfang) */
+      outline?: boolean;
+    }
   | {
       /** Rechenstrich: Start, Sprünge; Zwischenwerte auf Wunsch verdeckt. */
       type: 'jumps';
@@ -81,6 +113,8 @@ export type TaskOption = {
   value: string;
   errorTag?: string;
   label?: { key: string; params?: TextParams };
+  /** Form auf der Karte statt Text (Muster fortsetzen) */
+  shape?: ShapeSpec;
 };
 
 export type TaskAnswer = number | number[] | string;
@@ -105,6 +139,9 @@ export type Term =
   | 'E'
   /** Rest beim Teilen (17 : 5 = 3 R 2) */
   | 'R'
+  /** Längen */
+  | 'm'
+  | 'cm'
   | '>';
 
 /**

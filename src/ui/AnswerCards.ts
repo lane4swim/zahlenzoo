@@ -30,6 +30,7 @@ export class AnswerCards extends Phaser.GameObjects.Container {
     options: readonly TaskOption[],
     onPick: (value: string) => void,
     labelOf: (option: TaskOption) => string = (o) => o.value,
+    decorate?: (option: TaskOption, card: Button) => void,
   ) {
     super(scene, x, y);
     const labels = options.map(labelOf);
@@ -49,6 +50,7 @@ export class AnswerCards extends Phaser.GameObjects.Container {
         ...(this.sentences ? { wrapWidth: LIST_W - 40 } : {}),
         onPress: () => onPick(option.value),
       });
+      decorate?.(option, card);
       this.cards.set(option.value, card);
       this.add(card);
     });

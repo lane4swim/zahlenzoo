@@ -18,6 +18,26 @@ import { CLOCK_FAMILIES, clockFor } from './clock';
 import { compareMoney, COMPARE_MONEY } from './compareMoney';
 import { DIVIDE_REST, divideRest } from './divideRest';
 import {
+  AREA_COUNT,
+  areaCount,
+  PATTERN_CONTINUE,
+  patternContinue,
+  SHAPES_BASIC,
+  shapesBasic,
+  SYMMETRY_CHECK,
+  symmetryCheck,
+} from './geometry';
+import {
+  ANCHOR_SIZES,
+  anchorSizes,
+  COMPARE_LENGTH,
+  compareLength,
+  LENGTH_CONVERT,
+  lengthConvert,
+  MEASURE_LENGTH,
+  measureLength,
+} from './lengths';
+import {
   ESTIMATE_100,
   estimate100,
   PATH_CHOICE,
@@ -63,6 +83,14 @@ export const GENERATORS: Readonly<Record<string, Generator>> = {
   [PATH_CHOICE]: pathChoice,
   [DIVIDE_REST]: divideRest,
   [SMART_CALC]: smartCalc,
+  [MEASURE_LENGTH]: measureLength,
+  [COMPARE_LENGTH]: compareLength,
+  [ANCHOR_SIZES]: anchorSizes,
+  [LENGTH_CONVERT]: lengthConvert,
+  [SHAPES_BASIC]: shapesBasic,
+  [PATTERN_CONTINUE]: patternContinue,
+  [SYMMETRY_CHECK]: symmetryCheck,
+  [AREA_COUNT]: areaCount,
 };
 
 export const GENERATOR_IDS = Object.keys(GENERATORS);

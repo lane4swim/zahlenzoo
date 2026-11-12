@@ -37,6 +37,8 @@ import { DotArray } from '../ui/math/DotArray';
 import { HundredBoard } from '../ui/math/HundredBoard';
 import { NumberLine } from '../ui/math/NumberLine';
 import { TenFrame } from '../ui/math/TenFrame';
+import { Ruler } from '../ui/math/Ruler';
+import { CellFigures, drawShape, ShapeRow } from '../ui/math/Shapes';
 import { TensOnes } from '../ui/math/TensOnes';
 import { ClockInput } from '../ui/ClockInput';
 import { ClockFace } from '../ui/math/ClockFace';
@@ -295,7 +297,18 @@ export class TaskScene extends BaseScene<TaskSceneData> {
         task.options,
         (value) => this.submit(value),
         (option) =>
-          option.label ? this.text(option.label.key, option.label.params) : option.value,
+          option.shape
+            ? ''
+            : option.label
+              ? this.text(option.label.key, option.label.params)
+              : option.value,
+        (option, card) => {
+          // Formkarten: die Form statt Text (Muster fortsetzen)
+          if (!option.shape) return;
+          const g = this.add.graphics({ x: 0, y: -4 });
+          drawShape(g, option.shape, 56);
+          card.add(g);
+        },
       );
     } else {
       this.answerInput = new Numpad(this, {
@@ -657,6 +670,15 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     if (visual.type === 'tensones') {
       return TensOnes.blocks(this, PANEL.x, VISUAL_Y + 10, visual.tens, visual.ones);
     }
+    if (visual.type === 'ruler') {
+      return new Ruler(this, PANEL.x, VISUAL_Y, visual.max, visual.items);
+    }
+    if (visual.type === 'shapes') {
+      return new ShapeRow(this, PANEL.x, VISUAL_Y, visual.items);
+    }
+    if (visual.type === 'cells') {
+      return new CellFigures(this, PANEL.x, VISUAL_Y, visual.figures, visual.axis, visual.outline);
+    }
     return new NumberLine(
       this,
       PANEL.x,
@@ -784,6 +806,8 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       Z: this.t('read.tens'),
       E: this.t('read.ones'),
       R: this.t('read.rest'),
+      m: this.t('read.meters'),
+      cm: this.t('read.centimeters'),
       ',': this.t('read.comma'),
       '?': this.t('read.unknown'),
       '€': this.t('read.euro'),

@@ -62,12 +62,14 @@
     {
       "id": "schmetterlingshaus",
       "animal": "butterfly",
-      "requires": "futteruhr"
+      "requires": "futteruhr",
+      "families": ["shapes_basic", "pattern_continue", "symmetry_check", "area_count"]
     },
     {
       "id": "giraffenhof",
       "animal": "giraffe",
-      "requires": "schmetterlingshaus"
+      "requires": "schmetterlingshaus",
+      "families": ["measure_length", "compare_length", "anchor_sizes", "length_convert"]
     },
     {
       "id": "zoozaehlung",

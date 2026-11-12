@@ -666,6 +666,166 @@
           "stage": "helper"
         }
       }
+    },
+    "measure_length": {
+      "title": "Messen",
+      "kinds": {
+        "choice": 0.25
+      },
+      "levels": {
+        "1": {
+          "description": "Am Lineal ablesen, der Gegenstand beginnt bei 0",
+          "mode": "zero"
+        },
+        "2": {
+          "description": "Der Gegenstand beginnt nicht bei 0",
+          "mode": "offset"
+        },
+        "3": {
+          "description": "Unterschied zweier Längen am Lineal",
+          "mode": "difference"
+        }
+      }
+    },
+    "compare_length": {
+      "title": "Längen vergleichen",
+      "kinds": {
+        "choice": 1
+      },
+      "levels": {
+        "1": {
+          "description": "Zwei Längen in cm, oft mit vertauschten Ziffern",
+          "mode": "same"
+        },
+        "2": {
+          "description": "m gegen cm (1 m oder 90 cm)",
+          "mode": "mixed"
+        },
+        "3": {
+          "description": "Drei Längen in cm und m: am längsten oder am kürzesten",
+          "mode": "three"
+        }
+      }
+    },
+    "anchor_sizes": {
+      "title": "Wie lang ist das?",
+      "kinds": {
+        "choice": 1
+      },
+      "levels": {
+        "1": {
+          "description": "Passende Einheit wählen (Bleistift 15 cm, Tür 2 m)",
+          "mode": "unit"
+        },
+        "2": {
+          "description": "Passende Länge wählen (etwa 2 m, 20 m oder 2 cm)",
+          "mode": "value"
+        },
+        "3": {
+          "description": "Was ist länger als 1 m?",
+          "mode": "longer"
+        }
+      }
+    },
+    "length_convert": {
+      "title": "Umwandeln",
+      "kinds": {
+        "choice": 0.3
+      },
+      "levels": {
+        "1": {
+          "description": "Volle Meter in cm und zurück (3 m = 300 cm)",
+          "mode": "whole"
+        },
+        "2": {
+          "description": "Meter und Zentimeter (1 m 20 cm = 120 cm)",
+          "mode": "mixed"
+        },
+        "3": {
+          "description": "Mit Längen rechnen (1 m − 40 cm, 60 cm + 70 cm = 1 m 30 cm)",
+          "mode": "calc"
+        }
+      }
+    },
+    "shapes_basic": {
+      "title": "Formen",
+      "kinds": {
+        "choice": 0.3
+      },
+      "levels": {
+        "1": {
+          "description": "Kreis, Dreieck, Quadrat und Rechteck benennen",
+          "mode": "name"
+        },
+        "2": {
+          "description": "Ecken und Seiten zählen",
+          "mode": "corners"
+        },
+        "3": {
+          "description": "Formen im Bild zählen und Formenrätsel",
+          "mode": "count"
+        }
+      }
+    },
+    "pattern_continue": {
+      "title": "Muster",
+      "kinds": {
+        "choice": 1
+      },
+      "levels": {
+        "1": {
+          "description": "AB-Muster fortsetzen",
+          "mode": "ab"
+        },
+        "2": {
+          "description": "ABC- und AAB-Muster, Lücke auch in der Mitte",
+          "mode": "abc"
+        },
+        "3": {
+          "description": "Muster mit zwei Merkmalen (Form und Farbe)",
+          "mode": "two"
+        }
+      }
+    },
+    "symmetry_check": {
+      "title": "Symmetrie",
+      "kinds": {
+        "choice": 1
+      },
+      "levels": {
+        "1": {
+          "description": "Ist die Figur symmetrisch zur senkrechten Linie?",
+          "mode": "yesno"
+        },
+        "2": {
+          "description": "Knappe Fälle, senkrechte und waagerechte Linie",
+          "mode": "near"
+        },
+        "3": {
+          "description": "Wo liegt eine Spiegelachse?",
+          "mode": "axis"
+        }
+      }
+    },
+    "area_count": {
+      "title": "Flächen und Umfang",
+      "kinds": {
+        "choice": 0.3
+      },
+      "levels": {
+        "1": {
+          "description": "Kästchen einer Fläche zählen",
+          "mode": "count"
+        },
+        "2": {
+          "description": "Zwei Flächen vergleichen",
+          "mode": "compare"
+        },
+        "3": {
+          "description": "Umfang als Kästchenseiten zählen",
+          "mode": "perimeter"
+        }
+      }
     }
   }
 }
