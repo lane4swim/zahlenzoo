@@ -21,7 +21,13 @@ import { Color, CssColor, FontFamily, FontSize, Layout, Stroke, Tex } from '../u
 type Point = { x: number; y: number };
 const POSITIONS: Readonly<Record<string, Point>> = layout.areas;
 
-const MESSAGE_Y = 722;
+/**
+ * Leiste am unteren Rand, deutlich von der Karte abgesetzt (die Namensschilder der unteren
+ * Gehege enden bei etwa y = 660): links „Tagesfutter“, in der Mitte der Hinweis, rechts
+ * „Wege im Zoo“. Die Knöpfe sind 96 px hoch und füllen die Leiste ganz aus.
+ */
+const BAR = { top: 668, y: 720, side: 140, width: 232 };
+const MESSAGE_Y = BAR.y;
 
 /**
  * Zoo-Karte: gezeichneter Hintergrund mit acht Gehegen. Freigeschaltete Bereiche
@@ -80,14 +86,21 @@ export class MapScene extends BaseScene {
       this.addMarker(area, pos, state, starsByArea[area.id] ?? 0, done);
     }
 
+    // Untere Leiste: hell hinterlegt, damit Knöpfe und Hinweis nicht in die Gehege laufen
+    const bar = this.add.graphics();
+    bar.fillStyle(Color.papier, 0.88);
+    bar.fillRect(0, BAR.top, this.scale.width, this.scale.height - BAR.top);
+    bar.lineStyle(Stroke.inner, Color.kontur, 0.6);
+    bar.lineBetween(0, BAR.top, this.scale.width, BAR.top);
+
     // Wege im Zoo: Lage und Wege auf dem Zooplan (Zusatzbereich ohne Gehege auf der Karte)
     const tour = this.content.areas.find((a) => a.extra && a.families.length > 0);
     if (tour) {
       const data: AreaSceneData = { areaId: tour.id };
       this.addButton({
-        x: this.scale.width - Layout.margin - 110,
-        y: this.scale.height - Layout.margin - Layout.minTouch / 2,
-        width: 220,
+        x: this.scale.width - BAR.side,
+        y: BAR.y,
+        width: BAR.width,
         label: this.t(`area.${tour.id}`),
         fontSize: FontSize.small,
         fill: Color.sonne,
@@ -101,9 +114,9 @@ export class MapScene extends BaseScene {
       const fed = profile.dailyDone === today;
       const daily: TaskSceneData = { areaId: tour.id, family: 'daily', level: 1, daily: true };
       this.addButton({
-        x: Layout.margin + 110,
-        y: this.scale.height - Layout.margin - Layout.minTouch / 2,
-        width: 220,
+        x: BAR.side,
+        y: BAR.y,
+        width: BAR.width,
         label: this.t(fed ? 'map.dailyDone' : 'map.daily'),
         fontSize: FontSize.small,
         fill: fed ? Color.papier : Color.grasHell,
