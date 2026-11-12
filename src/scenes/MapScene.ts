@@ -67,11 +67,27 @@ export class MapScene extends BaseScene {
       this.content.areas.map((a) => [a.id, areaProgress(profile, a.id).stars]),
     );
     for (const area of this.content.areas) {
+      if (area.extra) continue;
       const pos = POSITIONS[area.id];
       if (!pos) continue;
       const state = areaState(area, starsByArea, this.content.rules);
       const done = isAreaDone(area, profile.areas[area.id]);
       this.addMarker(area, pos, state, starsByArea[area.id] ?? 0, done);
+    }
+
+    // Wege im Zoo: Lage und Wege auf dem Zooplan (Zusatzbereich ohne Gehege auf der Karte)
+    const tour = this.content.areas.find((a) => a.extra && a.families.length > 0);
+    if (tour) {
+      const data: AreaSceneData = { areaId: tour.id };
+      this.addButton({
+        x: this.scale.width - Layout.margin - 110,
+        y: this.scale.height - Layout.margin - Layout.minTouch / 2,
+        width: 220,
+        label: this.t(`area.${tour.id}`),
+        fontSize: FontSize.small,
+        fill: Color.sonne,
+        onPress: () => this.scene.start(SceneKey.Area, data),
+      });
     }
 
     this.messagePlate = this.add.graphics();

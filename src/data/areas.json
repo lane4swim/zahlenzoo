@@ -72,7 +72,8 @@
         "space_orientation",
         "area_count"
       ],
-      "site": ["solids_basic", "cube_buildings"]
+      "site": ["solids_basic", "cube_buildings"],
+      "free": "pattern"
     },
     {
       "id": "giraffenhof",
@@ -85,6 +86,13 @@
       "animal": "meerkat",
       "requires": "giraffenhof",
       "families": ["tally_chart", "read_table", "read_chart", "read_calendar", "combinatorics"]
+    },
+    {
+      "id": "zooplan",
+      "animal": "penguin",
+      "families": ["zoo_routes"],
+      "extra": true,
+      "backdrop": "karte_hintergrund"
     }
   ]
 }

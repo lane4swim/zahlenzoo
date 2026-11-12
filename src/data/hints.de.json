@@ -584,5 +584,12 @@
   "error.plan_mirrored": "Links und rechts vertauscht. Unten im Plan ist vorn.",
   "error.plan_count": "Ein Feld hat die falsche Zahl. Vergleiche Turm für Turm.",
   "error.view_side": "Das ist die Ansicht von der anderen Seite.",
-  "error.view_mirrored": "Links und rechts vertauscht."
+  "error.view_mirrored": "Links und rechts vertauscht.",
+  "hint.zoo.find.one": "Suche zuerst das Gehege bei {ref}.",
+  "hint.zoo.find.two": "Suche zuerst die Gehege bei {a} und {b}.",
+  "hint.zoo.3": "Es ist das Gehege {name}.",
+  "hint.zoo.walk.1": "Der Eimer zeigt, wo du stehst. Gehe mit dem Finger Gehege für Gehege.",
+  "hint.zoo.walk.2": "Zähle {a} Gehege zur Seite. Das Gehege, bei dem du stehst, zählt nicht mit.",
+  "hint.zoo.route.2": "Der Eimer steht {at}. Wo liegt das Ziel: rechts oder links, oben oder unten?",
+  "error.counted_start": "Fast! Das Gehege, bei dem du stehst, zählt nicht mit."
 }

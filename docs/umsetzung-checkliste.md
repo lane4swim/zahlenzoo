@@ -125,9 +125,9 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
   - [x] Teil 2: `shapes_compose` (Teile ziehen, einrasten, durch Antippen drehen; fehlendes Teil, Teile zählen), `grid_draw` (abmalen, Spiegelbild ergänzen, Rechteck/Quadrat mit n Kästchen), `space_orientation` (Lagewörter am Tisch, über/unter/zwischen/links/rechts antippen, einem Weg folgen, Wege mit Pfeilen wählen und legen); neue Eingaben Raster, Pfeiltasten (auch Tastatur), Formen legen (auch ohne Ziehen)
 - [x] Giraffenhof: `measure_length`, `compare_length`, `anchor_sizes`, `length_convert` (`fraction_units` entfällt, siehe Klärung 3); Lineal mit Gegenständen, Stützpunktgrößen, m/cm umwandeln und rechnen
 - [x] Zoo-Zählung: `tally_chart`, `read_table`, `read_chart`, `read_calendar`, `combinatorics` (Strichlisten mit Fünferbündeln, Tabellen, Säulendiagramme mit Skala 1/2/5/10, Kalenderblatt, Eis-Kombinatorik mit Paaren und Anordnungen)
-- [ ] Raumorientierung: `route_instructions`, `position_words` auf Weltkarte und im Gehege
+- [x] Raumorientierung: `route_instructions`, `position_words` auf Weltkarte und im Gehege (im Gehege: `space_orientation` im Schmetterlingshaus; auf der Weltkarte: Knopf „Wege im Zoo“ mit `zoo_routes` auf dem Zooplan der acht Gehege)
 - [x] Baumodus aus dem Gehege: `solids_basic`, `cube_buildings` (Baustelle im Schmetterlingshaus; sechs Körper als Körper und Gegenstand, Mehrfachauswahl; Würfelgebäude 3 × 3 bis 3 hoch: zählen, verdeckte Würfel, Bauplan wählen, nach Plan bauen, Bauplan schreiben, Ansicht von vorn und von rechts)
-- [ ] Freier Modus „Muster erfinden“ ohne Sterne, Ergebnis im Zoo ausgestellt (KE 5)
+- [x] Freier Modus „Muster erfinden“ ohne Sterne, Ergebnis im Zoo ausgestellt (KE 5): Knopf im Gehege des Schmetterlingshauses, Rückmeldung „wiederholt sich nach n Formen“, Reiter „Muster“ in „Mein Zoo“ (höchstens 6)
 - [ ] Übergreifend: `match_repr`, `strategy_pick`, Erklärfrage an eine erwachsene Person nach der Runde; fertig: `strategy_pick` („Wie hast du gerechnet?“ nach Plus- und Minusaufgaben mit Zehnerübergang, Häufigkeit in `rules.json`, Wahl je Familie im Spielstand gezählt)
 
 **Weitere Aufgabentypen und Eingabeformen** (Spez. 6, KE 6)

@@ -15,16 +15,21 @@ export class GridBoard extends Phaser.GameObjects.Container {
   private readonly fills: Phaser.GameObjects.Graphics;
   private readonly marks: Phaser.GameObjects.Graphics;
   private figure?: Phaser.GameObjects.Image;
+  private figureOffset = 0;
 
   constructor(
     scene: Phaser.Scene,
     x: number,
     y: number,
     readonly spec: BoardSpec,
-    maxSize = 280,
+    /** flache Felder (z. B. Zooplan 4 × 2) dürfen breiter werden */
+    maxSize = spec.rows <= 2 ? 420 : 280,
   ) {
     super(scene, x, y);
-    this.cell = Math.min(72, Math.floor(maxSize / Math.max(spec.cols, spec.rows)));
+    this.cell = Math.min(
+      spec.rows <= 2 ? 104 : 72,
+      Math.floor(maxSize / Math.max(spec.cols, spec.rows)),
+    );
     const w = spec.cols * this.cell;
     const h = spec.rows * this.cell;
     this.left = -w / 2;
@@ -86,9 +91,15 @@ export class GridBoard extends Phaser.GameObjects.Container {
     this.marks = scene.add.graphics();
     this.add(this.marks);
     if (spec.start) {
+      // Steht auf dem Startfeld ein Bild (Zooplan), läuft eine kleine Figur in der Ecke mit.
+      const [sc, sr] = spec.start.cell;
+      const onItem = spec.items?.some((i) => i.cell[0] === sc && i.cell[1] === sr);
+      this.figureOffset = onItem ? this.cell * 0.27 : 0;
       const [cx, cy] = this.center(spec.start.cell);
-      const size = this.cell * 0.86;
-      this.figure = scene.add.image(cx, cy, spec.start.icon).setDisplaySize(size, size);
+      const size = this.cell * (this.figureOffset ? 0.5 : 0.86);
+      this.figure = scene.add
+        .image(cx + this.figureOffset, cy + this.figureOffset, spec.start.icon)
+        .setDisplaySize(size, size);
       this.add(this.figure);
     }
     this.add(scene.add.zone(0, 0, w + 30, h + 30));
@@ -167,7 +178,7 @@ export class GridBoard extends Phaser.GameObjects.Container {
     const end = cells[cells.length - 1];
     if (this.figure && end) {
       const [x, y] = this.center(end);
-      this.figure.setPosition(x, y);
+      this.figure.setPosition(x + this.figureOffset, y + this.figureOffset);
       this.bringToTop(this.figure);
     }
     return this;

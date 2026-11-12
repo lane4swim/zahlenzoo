@@ -7,6 +7,7 @@ import { BootScene } from './scenes/BootScene';
 import { MapScene } from './scenes/MapScene';
 import { MenuScene } from './scenes/MenuScene';
 import { ParentScene } from './scenes/ParentScene';
+import { PatternScene } from './scenes/PatternScene';
 import { ProfileCreateScene } from './scenes/ProfileCreateScene';
 import { ProfileScene } from './scenes/ProfileScene';
 import { RoundEndScene } from './scenes/RoundEndScene';
@@ -60,6 +61,7 @@ async function start(): Promise<void> {
       new ParentScene(services),
       new SettingsScene(services),
       new ZooScene(services),
+      new PatternScene(services),
     ],
   };
   const game = new Phaser.Game(config);

@@ -63,7 +63,7 @@ export class GridInput extends Phaser.GameObjects.Container {
       bx,
       options.board.y,
       info.board,
-      options.board.maxSize ?? (info.model ? 220 : 280),
+      options.board.maxSize ?? (info.model ? 220 : undefined),
     );
     this.add(this.board);
 

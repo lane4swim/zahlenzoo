@@ -31,6 +31,12 @@ export type AreaConfig = {
   families: string[];
   /** Themen der Baustelle (Baumodus), erreichbar aus dem Gehege; Sterne zählen für den Bereich */
   site?: string[];
+  /** Zusatzbereich ohne Gehege auf der Karte (z. B. „Wege im Zoo“): zählt nicht als Gehege */
+  extra?: boolean;
+  /** Hintergrundbild (Texturschlüssel) statt der Bilder des Bereichs */
+  backdrop?: string;
+  /** freier Modus ohne Sterne, erreichbar aus dem Gehege (z. B. 'pattern': Muster erfinden) */
+  free?: 'pattern';
   /** Vorgängerbereich; fehlt bei Startbereichen */
   requires?: string;
 };

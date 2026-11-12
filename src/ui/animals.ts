@@ -11,5 +11,5 @@ export const taskBackground = (areaId: string) => `${areaId}_aufgabe`;
 
 /** Spielbare Bereiche (mit Aufgabenfamilie): nur deren Tiere und Hintergründe werden geladen. */
 export function playableAreas(content: GameContent) {
-  return content.areas.filter((a) => a.families.length > 0);
+  return content.areas.filter((a) => a.families.length > 0 && !a.extra);
 }

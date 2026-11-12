@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { BaseScene } from './BaseScene';
+import { enclosures } from '../logic/content';
 import {
   awardBadges,
   babyState,
@@ -14,10 +15,11 @@ import type { Profile } from '../types/save';
 import { SceneKey, type ZooSceneData, type ZooTab } from '../types/scenes';
 import { Button } from '../ui/Button';
 import { babyTexture, badgeTexture, decorTexture } from '../ui/rewards';
+import { ShapeRow } from '../ui/math/Shapes';
 import { StarCounter } from '../ui/StarCounter';
 import { Color, CssColor, FontFamily, FontSize, Layout, Stroke, Tex } from '../ui/theme';
 
-const TABS: ZooTab[] = ['babies', 'decor', 'badges'];
+const TABS: ZooTab[] = ['babies', 'decor', 'badges', 'patterns'];
 const MESSAGE_Y = 722;
 const ROW_Y = [338, 574];
 
@@ -63,7 +65,7 @@ export class ZooScene extends BaseScene<ZooSceneData> {
 
     TABS.forEach((tab, i) => {
       this.addButton({
-        x: width / 2 + (i - 1) * 230,
+        x: width / 2 + (i - (TABS.length - 1) / 2) * 226,
         y: 166,
         width: 210,
         label: this.t(`zoo.tab.${tab}`),
@@ -91,6 +93,7 @@ export class ZooScene extends BaseScene<ZooSceneData> {
 
     if (this.tab === 'babies') this.showBabies(profile);
     else if (this.tab === 'decor') this.showDecor(profile);
+    else if (this.tab === 'patterns') this.showPatterns(profile);
     else this.showBadges(profile);
     if (this.notice) this.showMessage(this.notice);
   }
@@ -147,7 +150,7 @@ export class ZooScene extends BaseScene<ZooSceneData> {
   }
 
   private showBabies(profile: Profile): void {
-    const animals = this.content.areas.map((a) => a.animal);
+    const animals = enclosures(this.content).map((a) => a.animal);
     animals.forEach((animal, i) => {
       const art = this.content.animals[animal];
       if (!art) return;
@@ -214,6 +217,18 @@ export class ZooScene extends BaseScene<ZooSceneData> {
       const earned = this.save(buyDecor(this.content, profile, id));
       this.restartWith('decor', [this.t('zoo.bought', { name }), ...this.badgeLines(earned)]);
     }
+  }
+
+  /** Selbst erfundene Muster aus dem Schmetterlingshaus, neuestes oben. */
+  private showPatterns(profile: Profile): void {
+    const patterns = profile.zoo.patterns ?? [];
+    if (patterns.length === 0) {
+      this.showMessage(this.t('zoo.patterns.empty'));
+      return;
+    }
+    patterns.forEach((p, i) => {
+      new ShapeRow(this, this.scale.width / 2, 266 + i * 72, p.items, 560);
+    });
   }
 
   private showBadges(profile: Profile): void {

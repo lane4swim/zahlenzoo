@@ -1,16 +1,20 @@
 import { describe, expect, it } from 'vitest';
 import layout from '../src/data/map-layout.json';
 import { areaState } from '../src/logic/areas';
-import { findArea } from '../src/logic/content';
+import { enclosures, findArea } from '../src/logic/content';
 import { CONTENT, RULES } from './helpers/content';
 
 const area = (id: string) => findArea(CONTENT, id)!;
 
 describe('Bereiche', () => {
-  it('hat acht Bereiche mit Lage auf der Karte', () => {
-    expect(CONTENT.areas).toHaveLength(8);
-    for (const a of CONTENT.areas) expect(layout.areas).toHaveProperty(a.id);
+  it('hat acht Gehege mit Lage auf der Karte und „Wege im Zoo“ als Zusatzbereich', () => {
+    const gehege = enclosures(CONTENT);
+    expect(gehege).toHaveLength(8);
+    for (const a of gehege) expect(layout.areas).toHaveProperty(a.id);
     expect(Object.keys(layout.areas)).toHaveLength(8);
+    const extra = CONTENT.areas.filter((a) => a.extra);
+    expect(extra.map((a) => a.id)).toEqual(['zooplan']);
+    expect(layout.areas).not.toHaveProperty('zooplan');
   });
 
   it('öffnet zu Beginn Affenwald und Pinguinfelsen', () => {
@@ -24,6 +28,7 @@ describe('Bereiche', () => {
       schmetterlingshaus: 'locked',
       giraffenhof: 'locked',
       zoozaehlung: 'locked',
+      zooplan: 'open',
     });
   });
 

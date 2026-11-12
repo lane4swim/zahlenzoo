@@ -55,9 +55,15 @@ export function drawShape(g: Phaser.GameObjects.Graphics, spec: ShapeSpec, base:
 
 /** Formen in einer Reihe; eine Lücke (null) ist ein Kästchen mit Fragezeichen. */
 export class ShapeRow extends Phaser.GameObjects.Container {
-  constructor(scene: Phaser.Scene, x: number, y: number, items: ReadonlyArray<ShapeSpec | null>) {
+  constructor(
+    scene: Phaser.Scene,
+    x: number,
+    y: number,
+    items: ReadonlyArray<ShapeSpec | null>,
+    maxWidth = 640,
+  ) {
     super(scene, x, y);
-    const step = Math.min(96, 640 / Math.max(1, items.length));
+    const step = Math.min(96, maxWidth / Math.max(1, items.length));
     const base = items.length === 1 ? 120 : step * 0.62;
     items.forEach((spec, i) => {
       const cx = (i - (items.length - 1) / 2) * step;

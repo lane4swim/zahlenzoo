@@ -465,3 +465,217 @@ export const spaceOrientation: Generator = (level, rng, id, params): Task => {
   }
   return rng.chance(0.5) ? routeCards(level, rng, id) : arrowPath(level, rng, id);
 };
+
+// ---------------------------------------------------------------------------
+// Wege im Zoo: Zooplan mit den acht Gehegen wie auf der Karte (4 nebeneinander, 2 Reihen)
+
+export const ZOO_ROUTES = 'zoo_routes';
+
+/** Gehege des Zooplans zeilenweise wie auf der Zoo-Karte, mit Kartensymbol. */
+export const ZOO_PLAN = [
+  ['affenwald', 'karte_affe'],
+  ['pinguinfelsen', 'karte_pinguin'],
+  ['elefantenwiese', 'karte_elefant'],
+  ['zookasse', 'karte_papagei'],
+  ['zoozaehlung', 'karte_erdmaennchen'],
+  ['giraffenhof', 'karte_giraffe'],
+  ['schmetterlingshaus', 'karte_schmetterling'],
+  ['futteruhr', 'karte_eule'],
+] as const;
+
+const PLAN_COLS = 4;
+const PLAN_ROWS = 2;
+const planItems = ZOO_PLAN.map(([, icon], i) => ({
+  cell: [i % PLAN_COLS, Math.floor(i / PLAN_COLS)] as Cell,
+  icon,
+}));
+const areaAt = ([c, r]: Cell) => ZOO_PLAN[r * PLAN_COLS + c]![0];
+const datOf = (cell: Cell) => `@area.${areaAt(cell)}.dat`;
+const inPlan = ([c, r]: Cell) => c >= 0 && r >= 0 && c < PLAN_COLS && r < PLAN_ROWS;
+const BUCKET = 'objekt_eimer';
+
+function zooPositions(level: Task['level'], rng: Rng, id: string): Task {
+  const rel = rng.pick(['left', 'right', 'over', 'under', 'between'] as const);
+  let target: Cell;
+  let textParams: Record<string, string>;
+  const errorAnswers: Array<{ value: string; errorTag: string }> = [];
+  if (rel === 'between') {
+    const c = rng.int(1, 2);
+    const r = rng.int(0, 1);
+    target = [c, r];
+    textParams = { a: datOf([c - 1, r]), b: datOf([c + 1, r]) };
+  } else if (rel === 'over' || rel === 'under') {
+    const c = rng.int(0, 3);
+    const ref: Cell = [c, rel === 'over' ? 1 : 0];
+    target = [c, rel === 'over' ? 0 : 1];
+    textParams = { ref: datOf(ref) };
+    errorAnswers.push({ value: cellsKey([ref]), errorTag: 'position_ref' });
+  } else {
+    // beide Nachbarn vorhanden, damit rechts/links vertauscht erkennbar ist
+    const c = rng.int(1, 2);
+    const r = rng.int(0, 1);
+    const dc = rel === 'left' ? -1 : 1;
+    target = [c + dc, r];
+    textParams = { ref: datOf([c, r]) };
+    errorAnswers.push({ value: cellsKey([[c - dc, r]]), errorTag: 'left_right' });
+    errorAnswers.push({ value: cellsKey([[c, r]]), errorTag: 'position_ref' });
+  }
+  return {
+    id,
+    family: ZOO_ROUTES,
+    level,
+    kind: 'grid',
+    strategyId: 'zoo_positions',
+    prompt: { terms: [], textKey: `task.prompt.zoo.${rel}`, textParams },
+    grid: { mode: 'pick', board: { cols: PLAN_COLS, rows: PLAN_ROWS, items: planItems } },
+    answer: cellsKey([target]),
+    errorAnswers,
+    hints: [
+      {
+        key:
+          rel === 'left' || rel === 'right'
+            ? 'hint.leftright.1'
+            : `hint.zoo.find.${rel === 'between' ? 'two' : 'one'}`,
+        params: textParams,
+      },
+      { key: `hint.grid.${rel}.2` },
+      { key: 'hint.zoo.3', params: { name: `@area.${areaAt(target)}` } },
+    ],
+    dedupeKey: `zoo:${rel}:${k(target)}`,
+  };
+}
+
+function zooWalk(level: Task['level'], rng: Rng, id: string): Task {
+  for (;;) {
+    const start: Cell = [rng.int(0, 3), rng.int(0, 1)];
+    const a = rng.int(1, 3);
+    const h = rng.pick(['r', 'l'] as const);
+    const vertical = rng.chance(0.6);
+    const dc = h === 'r' ? a : -a;
+    const dr = vertical ? (start[1] === 0 ? 1 : -1) : 0;
+    const end: Cell = [start[0] + dc, start[1] + dr];
+    if (!inPlan(end)) continue;
+    const v = dr > 0 ? 'd' : 'u';
+    const errorAnswers: Array<{ value: string; errorTag: string }> = [];
+    const mirrored: Cell = [start[0] - dc, start[1] + dr];
+    if (inPlan(mirrored))
+      errorAnswers.push({ value: cellsKey([mirrored]), errorTag: 'left_right' });
+    const short: Cell = [start[0] + dc - Math.sign(dc), start[1] + dr];
+    if (inPlan(short) && cellsKey([short]) !== cellsKey([start]))
+      errorAnswers.push({ value: cellsKey([short]), errorTag: 'counted_start' });
+    return {
+      id,
+      family: ZOO_ROUTES,
+      level,
+      kind: 'grid',
+      strategyId: 'zoo_walk',
+      prompt: {
+        terms: [],
+        textKey: vertical ? `task.prompt.zoo.walk.${h}${v}` : `task.prompt.zoo.walk.${h}`,
+        textParams: { start: `@area.${areaAt(start)}.at`, a },
+      },
+      grid: {
+        mode: 'pick',
+        board: {
+          cols: PLAN_COLS,
+          rows: PLAN_ROWS,
+          items: planItems,
+          start: { cell: start, icon: BUCKET },
+        },
+      },
+      answer: cellsKey([end]),
+      errorAnswers,
+      hints: [
+        { key: 'hint.zoo.walk.1' },
+        { key: 'hint.zoo.walk.2', params: { a } },
+        { key: 'hint.zoo.3', params: { name: `@area.${areaAt(end)}` } },
+      ],
+      dedupeKey: `zoo:walk:${k(start)}:${h}${a}:${dr}`,
+    };
+  }
+}
+
+function zooRoute(level: Task['level'], rng: Rng, id: string): Task {
+  let start: Cell;
+  let goal: Cell;
+  do {
+    start = [rng.int(0, 3), rng.int(0, 1)];
+    goal = [rng.int(0, 3), rng.int(0, 1)];
+  } while (Math.abs(start[0] - goal[0]) + Math.abs(start[1] - goal[1]) < 2);
+  const dc = goal[0] - start[0];
+  const dr = goal[1] - start[1];
+  const hMoves = (dc > 0 ? 'r' : 'l').repeat(Math.abs(dc));
+  const vMoves = (dr > 0 ? 'd' : 'u').repeat(Math.abs(dr));
+  const path = hMoves + vMoves;
+  const board = {
+    cols: PLAN_COLS,
+    rows: PLAN_ROWS,
+    items: planItems,
+    start: { cell: start, icon: BUCKET },
+  };
+  const textParams = { from: `@area.${areaAt(start)}.from`, to: `@area.${areaAt(goal)}.to` };
+  const reaches = (moves: string) => {
+    const run = walk(start, moves, PLAN_COLS, PLAN_ROWS);
+    return !run.blocked && run.end[0] === goal[0] && run.end[1] === goal[1];
+  };
+  if (rng.chance(0.5)) {
+    const flip: Record<Move, Move> = { r: 'l', l: 'r', u: 'd', d: 'u' };
+    const candidates: Array<[string, string]> = [
+      [[...path].map((m) => (m === 'r' || m === 'l' ? flip[m] : m)).join(''), 'left_right'],
+      [hMoves.slice(1) + vMoves, 'path_end'],
+      [hMoves + hMoves[0] + vMoves, 'path_end'],
+      [[...path].map((m) => (m === 'u' || m === 'd' ? flip[m] : m)).join(''), 'up_down'],
+    ];
+    const wrong: TaskOption[] = [];
+    for (const [moves, tag] of candidates) {
+      if (!moves || moves === path || reaches(moves) || wrong.some((o) => o.value === moves))
+        continue;
+      wrong.push({
+        value: moves,
+        moves,
+        errorTag: walk(start, moves, PLAN_COLS, PLAN_ROWS).blocked ? 'path_blocked' : tag,
+      });
+      if (wrong.length === 2) break;
+    }
+    return {
+      id,
+      family: ZOO_ROUTES,
+      level,
+      kind: 'choice',
+      strategyId: 'zoo_route',
+      prompt: { terms: [], textKey: 'task.prompt.zoo.which', textParams },
+      display: { visual: { type: 'board', ...board } },
+      answer: path,
+      options: rng.shuffle([{ value: path, moves: path }, ...wrong]),
+      hints: [
+        { key: 'hint.route.1' },
+        { key: 'hint.zoo.route.2', params: { at: `@area.${areaAt(start)}.at` } },
+        wayHint(path),
+      ],
+      dedupeKey: `zoo:which:${k(start)}:${k(goal)}`,
+    };
+  }
+  return {
+    id,
+    family: ZOO_ROUTES,
+    level,
+    kind: 'path',
+    strategyId: 'zoo_route',
+    prompt: { terms: [], textKey: 'task.prompt.zoo.lay', textParams },
+    grid: { mode: 'path', board, rule: { type: 'path', goal } },
+    answer: path,
+    hints: [
+      { key: 'hint.route.lay.1' },
+      { key: 'hint.zoo.route.2', params: { at: `@area.${areaAt(start)}.at` } },
+      wayHint(path),
+    ],
+    dedupeKey: `zoo:lay:${k(start)}:${k(goal)}`,
+  };
+}
+
+export const zooRoutes: Generator = (level, rng, id, params): Task => {
+  const mode = choice(params, 'mode', ['positions', 'walk', 'route'] as const);
+  if (mode === 'positions') return zooPositions(level, rng, id);
+  if (mode === 'walk') return zooWalk(level, rng, id);
+  return zooRoute(level, rng, id);
+};
