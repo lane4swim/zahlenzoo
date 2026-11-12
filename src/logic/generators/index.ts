@@ -28,6 +28,7 @@ import {
 import { moneyConvert, MONEY_CONVERT } from './moneyConvert';
 import { moneyLay, MONEY_LAY } from './moneyLay';
 import { EXACT_OR_ESTIMATE, exactOrEstimate, QUESTION_PICK, questionPick } from './situations';
+import { SMART_CALC, smartCalc } from './smartCalc';
 import { storyAddSub, STORY_ADDSUB, storyAddSubFor } from './storyAddSub';
 import { storyMultDiv, STORY_MULTDIV } from './storyMultDiv';
 import { sub100, SUB_100 } from './sub100';
@@ -61,6 +62,7 @@ export const GENERATORS: Readonly<Record<string, Generator>> = {
   [ESTIMATE_100]: estimate100,
   [PATH_CHOICE]: pathChoice,
   [DIVIDE_REST]: divideRest,
+  [SMART_CALC]: smartCalc,
 };
 
 export const GENERATOR_IDS = Object.keys(GENERATORS);

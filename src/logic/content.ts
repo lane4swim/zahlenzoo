@@ -55,6 +55,17 @@ function strings(v: unknown, where: string): string[] {
   return v.map((s, i) => str(s, `${where}[${i}]`));
 }
 
+/** Fehlt der Eintrag, ist die Frage „Wie hast du gerechnet?“ abgeschaltet. */
+function parseStrategyPick(v: unknown): Rules['strategyPick'] {
+  if (v === undefined) return { families: [], chance: 0, maxPerRound: 0 };
+  const o = obj(v, 'rules.json strategyPick');
+  return {
+    families: strings(o.families, 'strategyPick.families'),
+    chance: frac(o.chance, 'strategyPick.chance'),
+    maxPerRound: int(o.maxPerRound, 'strategyPick.maxPerRound', 0, 50),
+  };
+}
+
 export function parseRules(data: unknown): Rules {
   const d = obj(data, 'rules.json');
   const round = obj(d.round, 'rules.json round');
@@ -78,6 +89,7 @@ export function parseRules(data: unknown): Rules {
     levelUnlockStars: int(d.levelUnlockStars, 'levelUnlockStars', 1, 3),
     areaUnlockStars: int(d.areaUnlockStars, 'areaUnlockStars', 0, 1000),
     skillHistory: int(d.skillHistory, 'skillHistory', 1, 100),
+    strategyPick: parseStrategyPick(d.strategyPick),
   };
   const { size, minSize, maxSize, mix: m } = rules.round;
   if (size < minSize || size > maxSize) {

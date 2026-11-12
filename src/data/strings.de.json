@@ -367,5 +367,22 @@
   "divrest.ei.need": "Im Vogelhaus liegen {n} Eier. In einen Karton passen {d} Eier. Wie viele Kartons braucht man für alle Eier?",
   "divrest.apfel.full": "{n} Äpfel werden auf Körbe verteilt. In jeden Korb kommen {d} Äpfel. Wie viele Körbe werden voll?",
   "divrest.apfel.left": "{n} Äpfel werden auf Körbe verteilt. In jeden Korb kommen {d} Äpfel. Wie viele Äpfel bleiben übrig?",
-  "divrest.apfel.need": "{n} Äpfel sollen alle in Körbe. In jeden Korb passen {d} Äpfel. Wie viele Körbe braucht man?"
+  "divrest.apfel.need": "{n} Äpfel sollen alle in Körbe. In jeden Korb passen {d} Äpfel. Wie viele Körbe braucht man?",
+  "family.smart_calc": "Geschickt rechnen",
+  "family.smart_calc.short": "Geschickt\nrechnen",
+  "strategy.smart_swap": "Tauschaufgaben",
+  "strategy.smart_neighbor": "Nachbaraufgaben",
+  "strategy.smart_neighbor_double": "Nachbaraufgaben von Verdopplungen",
+  "strategy.smart_helper": "Hilfsaufgaben",
+  "task.prompt.smart.same": "Welche Aufgabe hat dasselbe Ergebnis wie {task}?",
+  "task.prompt.smart.allowed": "Bei welcher Aufgabe darfst du tauschen?",
+  "task.prompt.smart.neighbor": "Du weißt: {known}. Rechne die Nachbaraufgabe.",
+  "task.prompt.smart.helper": "Welche Hilfsaufgabe passt zu {task}?",
+  "strategy.ask": "Wie hast du gerechnet?",
+  "strategy.way.places": "Zehner extra, Einer extra",
+  "strategy.way.steps": "Schrittweise",
+  "strategy.way.helper": "Mit Hilfsaufgabe",
+  "strategy.way.other": "Anders oder im Kopf",
+  "strategy.thanks": "Danke! So kann man es machen.",
+  "strategy.showOther": "Anderen Weg ansehen"
 }

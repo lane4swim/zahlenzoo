@@ -4,7 +4,13 @@ import { familyParams, findArea } from '../logic/content';
 import { fewestCoins } from '../logic/generators/moneyLay';
 import { GENERATORS } from '../logic/generators';
 import { check } from '../logic/check';
-import { createRng } from '../logic/rng';
+import { createRng, type Rng } from '../logic/rng';
+import {
+  recordStrategy,
+  shouldAskStrategy,
+  STRATEGY_WAYS,
+  strategyPaths,
+} from '../logic/strategies';
 import {
   appendTask,
   composeRound,
@@ -39,6 +45,7 @@ import { OrderInput } from '../ui/OrderInput';
 import { Numpad } from '../ui/Numpad';
 import { ProgressDots } from '../ui/ProgressDots';
 import { StoryPictureView } from '../ui/StoryPictureView';
+import { StrategyPanel } from '../ui/StrategyPanel';
 import { Color, CssColor, FontFamily, FontSize, Layout, reducedMotion, Tex } from '../ui/theme';
 
 const NEXT_DELAY = 1600;
@@ -83,6 +90,10 @@ export class TaskScene extends BaseScene<TaskSceneData> {
   private usedHelp = false;
   private locked = false;
   private repeats = 0;
+  /** Zufall für Spielablauf (z. B. ob „Wie hast du gerechnet?“ kommt) */
+  private flowRng!: Rng;
+  private strategyAsked = 0;
+  private strategyPanel?: StrategyPanel;
   private praiseIndex = 0;
   private aid: Aid | undefined;
   private strategies: Array<{ strategyId: string; outcome: AnswerOutcome }> = [];
@@ -123,6 +134,9 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     this.animalId = area.animal;
     // Startwert aus der Uhrzeit: jede Runde ist anders, im Test aber reproduzierbar.
     const rng = createRng(Date.now() >>> 0);
+    this.flowRng = createRng((Date.now() >>> 0) ^ 0x5bd1e995);
+    this.strategyAsked = 0;
+    this.strategyPanel = undefined;
     this.praiseIndex = rng.int(0, content.praise.firstTry.length - 1);
     const composed = composeRound({
       family,
@@ -419,7 +433,45 @@ export class TaskScene extends BaseScene<TaskSceneData> {
         : this.pick(this.content.praise.withHelp);
     this.panel.show(praise, Tex.correct);
     this.finishTask(outcome);
+    if (shouldAskStrategy(this.task, this.content.rules, this.strategyAsked, this.flowRng)) {
+      this.strategyAsked++;
+      this.time.delayedCall(NEXT_DELAY * 0.6, () => this.askStrategy());
+      return;
+    }
     this.time.delayedCall(NEXT_DELAY, () => this.advance());
+  }
+
+  /** „Wie hast du gerechnet?“ – ohne Wertung; die Wahl wird je Familie gezählt. */
+  private askStrategy(): void {
+    const m = this.task.math;
+    if (!m) {
+      this.advance();
+      return;
+    }
+    const paths = strategyPaths(m);
+    const ways = STRATEGY_WAYS.filter((w) => w === 'other' || paths[w]).map((w) => ({
+      way: w,
+      name: this.t(`strategy.way.${w}`),
+      ...(paths[w] ? { path: paths[w] } : {}),
+    }));
+    const family = this.task.family;
+    this.strategyPanel = new StrategyPanel(this, {
+      title: this.t('strategy.ask'),
+      ways,
+      thanks: this.t('strategy.thanks'),
+      showOtherLabel: this.t('strategy.showOther'),
+      nextLabel: this.t('common.next'),
+      onPick: (way) => {
+        this.animal?.cheer();
+        const profile = this.services.save.activeProfile;
+        if (profile) this.services.save.updateProfile(recordStrategy(profile, family, way));
+      },
+      onDone: () => {
+        this.strategyPanel?.destroy();
+        this.strategyPanel = undefined;
+        this.advance();
+      },
+    });
   }
 
   private onWrong(value: string, result: CheckResult): void {

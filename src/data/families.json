@@ -646,6 +646,26 @@
           "noRestShare": 0
         }
       }
+    },
+    "smart_calc": {
+      "title": "Geschickt rechnen",
+      "kinds": {
+        "choice": 0.3
+      },
+      "levels": {
+        "1": {
+          "description": "Tauschaufgaben: mit der größeren Zahl anfangen (4 + 57 → 57 + 4); tauschen nur bei Plus",
+          "stage": "swap"
+        },
+        "2": {
+          "description": "Nachbaraufgaben aus einer bekannten Aufgabe (25 + 25 = 50 → 25 + 26), auch mit Zehnerzahlen und Minus",
+          "stage": "neighbor"
+        },
+        "3": {
+          "description": "Hilfsaufgaben mit glatten Zehnern (47 + 9 über 47 + 10 − 1, 63 − 19 über 63 − 20 + 1)",
+          "stage": "helper"
+        }
+      }
     }
   }
 }

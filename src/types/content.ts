@@ -15,6 +15,12 @@ export type Rules = {
   levelUnlockStars: number;
   areaUnlockStars: number;
   skillHistory: number;
+  /**
+   * Frage „Wie hast du gerechnet?“ nach richtig gelösten Aufgaben dieser Familien mit
+   * Zehnerübergang (Spezifikation 6; Häufigkeit laut Lehrkraft einstellbar).
+   * chance 0 schaltet sie ab.
+   */
+  strategyPick: { families: string[]; chance: number; maxPerRound: number };
 };
 
 /** Bereich der Weltkarte (areas.json). */
