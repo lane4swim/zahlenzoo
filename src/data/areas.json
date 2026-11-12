@@ -71,7 +71,8 @@
         "grid_draw",
         "space_orientation",
         "area_count"
-      ]
+      ],
+      "site": ["solids_basic", "cube_buildings"]
     },
     {
       "id": "giraffenhof",
@@ -82,7 +83,8 @@
     {
       "id": "zoozaehlung",
       "animal": "meerkat",
-      "requires": "giraffenhof"
+      "requires": "giraffenhof",
+      "families": ["tally_chart", "read_table", "read_chart", "read_calendar", "combinatorics"]
     }
   ]
 }

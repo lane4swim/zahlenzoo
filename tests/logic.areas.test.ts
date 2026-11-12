@@ -36,7 +36,7 @@ describe('Bereiche', () => {
     expect(areaState(area('futteruhr'), { zookasse: needed }, RULES)).toBe('open');
     expect(areaState(area('schmetterlingshaus'), { futteruhr: needed }, RULES)).toBe('open');
     expect(areaState(area('giraffenhof'), { schmetterlingshaus: needed }, RULES)).toBe('open');
-    expect(areaState(area('zoozaehlung'), { giraffenhof: needed }, RULES)).toBe('soon');
+    expect(areaState(area('zoozaehlung'), { giraffenhof: needed }, RULES)).toBe('open');
   });
 
   it('nutzt die Schwelle aus den Regeln', () => {

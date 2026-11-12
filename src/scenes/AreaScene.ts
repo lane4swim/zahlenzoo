@@ -41,15 +41,33 @@ export class AreaScene extends BaseScene<AreaSceneData> {
       this.scene.start(SceneKey.Map);
       return;
     }
-    const family =
-      this.family && area.families.includes(this.family) ? this.family : area.families[0]!;
+    // Die Baustelle (Baumodus) zeigt ihre eigenen Themen; Sterne zählen für den Bereich.
+    const site = area.site ?? [];
+    const onSite = this.family !== undefined && site.includes(this.family);
+    const families = onSite ? site : area.families;
+    const family = this.family && families.includes(this.family) ? this.family : families[0]!;
     const progress = areaProgress(profile, area.id);
     this.addBackground(areaBackground(area.id));
     this.addBackButton(() => this.scene.start(SceneKey.Map));
-    this.addTitle(this.t(`area.${area.id}`));
+    this.addTitle(onSite ? this.t('area.site') : this.t(`area.${area.id}`));
+    if (site.length > 0) {
+      const target: AreaSceneData = {
+        areaId: area.id,
+        family: onSite ? area.families[0]! : site[0]!,
+      };
+      this.addButton({
+        x: 905,
+        y: 62,
+        width: 190,
+        label: onSite ? this.t('area.siteBack') : this.t('area.site'),
+        fontSize: FontSize.small,
+        fill: onSite ? Color.papier : Color.sonne,
+        onPress: () => this.scene.restart(target),
+      });
+    }
 
     // Mehr als vier Themen stehen in zwei Reihen; die Tafel wird dann länger.
-    const n = area.families.length;
+    const n = families.length;
     const tabRows = n > MAX_TABS_PER_ROW ? 2 : 1;
     const boardH = tabRows === 2 ? BOARD.h + 80 : BOARD.h;
     const levelStep = tabRows === 2 ? 100 : 110;
@@ -77,7 +95,7 @@ export class AreaScene extends BaseScene<AreaSceneData> {
       // Bis zu vier Themen in einer Reihe; Beschriftungen zweizeilig, wenn es eng wird.
       const perRow = Math.ceil(n / tabRows);
       const tabW = Math.min(TAB.w, Math.floor((BOARD.w - 24 - (perRow - 1) * TAB.gap) / perRow));
-      area.families.forEach((f, i) => {
+      families.forEach((f, i) => {
         const data: AreaSceneData = { areaId: area.id, family: f };
         const row = Math.floor(i / perRow);
         const inRow = Math.min(perRow, n - row * perRow);

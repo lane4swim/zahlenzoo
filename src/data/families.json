@@ -887,6 +887,148 @@
           "mode": "routes"
         }
       }
+    },
+    "tally_chart": {
+      "title": "Strichlisten",
+      "kinds": {
+        "choice": 0.3
+      },
+      "levels": {
+        "1": {
+          "description": "Strichliste lesen (bis 19)",
+          "mode": "read"
+        },
+        "2": {
+          "description": "Welche Strichliste passt? Fünferbündel",
+          "mode": "write"
+        },
+        "3": {
+          "description": "Strichlisten vergleichen: mehr, zusammen, am meisten",
+          "mode": "compare"
+        }
+      }
+    },
+    "read_table": {
+      "title": "Tabellen",
+      "kinds": {
+        "choice": 0.2
+      },
+      "levels": {
+        "1": {
+          "description": "Einen Wert aus der Tabelle lesen",
+          "mode": "cell"
+        },
+        "2": {
+          "description": "Vergleichen: an welchem Tag am meisten, wie viele mehr",
+          "mode": "compare"
+        },
+        "3": {
+          "description": "Zeile oder Spalte zusammenzählen",
+          "mode": "sum"
+        }
+      }
+    },
+    "read_chart": {
+      "title": "Säulendiagramme",
+      "kinds": {
+        "choice": 0.3
+      },
+      "levels": {
+        "1": {
+          "description": "Skala in Einerschritten",
+          "mode": "ones"
+        },
+        "2": {
+          "description": "Skala in Zweierschritten",
+          "mode": "twos"
+        },
+        "3": {
+          "description": "Skala in Fünfer- oder Zehnerschritten",
+          "mode": "tens"
+        }
+      }
+    },
+    "read_calendar": {
+      "title": "Kalender",
+      "kinds": {
+        "choice": 0.3
+      },
+      "levels": {
+        "1": {
+          "description": "Wochentag zu einem Datum, Tage im Monat",
+          "mode": "weekday"
+        },
+        "2": {
+          "description": "Eine Woche später, wie viele Montage",
+          "mode": "week"
+        },
+        "3": {
+          "description": "Zeitspannen in Tagen, zwei Wochen später",
+          "mode": "span"
+        }
+      }
+    },
+    "combinatorics": {
+      "title": "Möglichkeiten",
+      "kinds": {
+        "choice": 0.2
+      },
+      "levels": {
+        "1": {
+          "description": "Eis: Sorte und Waffel oder Becher (bis 6)",
+          "mode": "pairs"
+        },
+        "2": {
+          "description": "Mehr Sorten; welches Eis fehlt noch?",
+          "mode": "pairsMore"
+        },
+        "3": {
+          "description": "Kugeln anordnen (3 Kugeln: 6 Möglichkeiten)",
+          "mode": "stacks"
+        }
+      }
+    },
+    "solids_basic": {
+      "title": "Körper",
+      "kinds": {
+        "choice": 0.6,
+        "select": 0.2
+      },
+      "levels": {
+        "1": {
+          "description": "Körper und Gegenstände benennen (Würfel, Quader, Kugel, Zylinder, Kegel, Pyramide)",
+          "mode": "name"
+        },
+        "2": {
+          "description": "Sortieren: alle Körper einer Art antippen",
+          "mode": "sort"
+        },
+        "3": {
+          "description": "Eigenschaften: rollen, Spitze, nur Quadrate; Ecken, Flächen, Kanten zählen",
+          "mode": "props"
+        }
+      }
+    },
+    "cube_buildings": {
+      "title": "Würfelbauten",
+      "kinds": {
+        "build": 0.3,
+        "choice": 0.3
+      },
+      "levels": {
+        "1": {
+          "description": "Würfel zählen, alle sichtbar (höchstens 2 hoch)",
+          "mode": "count"
+        },
+        "2": {
+          "description": "Verdeckte Würfel mitzählen; welcher Bauplan passt?",
+          "mode": "hidden"
+        },
+        "3": {
+          "description": "Nach Plan bauen, Bauplan schreiben, Ansicht von vorn oder der Seite",
+          "mode": "plan"
+        }
+      }
     }
   }
 }

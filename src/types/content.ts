@@ -29,6 +29,8 @@ export type AreaConfig = {
   animal: string;
   /** Aufgabenfamilien in der Reihenfolge im Gehege; leer, solange der Bereich keine Aufgaben hat */
   families: string[];
+  /** Themen der Baustelle (Baumodus), erreichbar aus dem Gehege; Sterne zählen für den Bereich */
+  site?: string[];
   /** Vorgängerbereich; fehlt bei Startbereichen */
   requires?: string;
 };

@@ -14,6 +14,14 @@ import {
 } from '../src/logic/generators/lengths';
 import { shapesCompose } from '../src/logic/generators/compose';
 import { gridDraw, spaceOrientation } from '../src/logic/generators/space';
+import {
+  combinatorics,
+  readCalendar,
+  readChart,
+  readTable,
+  tallyChart,
+} from '../src/logic/generators/data';
+import { cubeBuildings, solidsBasic } from '../src/logic/generators/solids';
 import { createRng } from '../src/logic/rng';
 import { composeRound } from '../src/logic/rounds';
 import type { Generator, Task, TaskLevel } from '../src/types/task';
@@ -33,6 +41,13 @@ const FAMILIES: Array<[string, Generator]> = [
   ['shapes_compose', shapesCompose],
   ['grid_draw', gridDraw],
   ['space_orientation', spaceOrientation],
+  ['tally_chart', tallyChart],
+  ['read_table', readTable],
+  ['read_chart', readChart],
+  ['read_calendar', readCalendar],
+  ['combinatorics', combinatorics],
+  ['solids_basic', solidsBasic],
+  ['cube_buildings', cubeBuildings],
 ];
 
 function tasks(family: string, gen: Generator, level: TaskLevel): Task[] {

@@ -124,9 +124,9 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
   - [x] Teil 1: `shapes_basic` (Namen, Ecken/Seiten, zählen, Rätsel), `pattern_continue` (Formkarten, Lücke), `symmetry_check` (ja/nein, Spiegelachse), `area_count` (Kästchen zählen, vergleichen, Umfang); Darstellung Formen und Kästchenfiguren
   - [x] Teil 2: `shapes_compose` (Teile ziehen, einrasten, durch Antippen drehen; fehlendes Teil, Teile zählen), `grid_draw` (abmalen, Spiegelbild ergänzen, Rechteck/Quadrat mit n Kästchen), `space_orientation` (Lagewörter am Tisch, über/unter/zwischen/links/rechts antippen, einem Weg folgen, Wege mit Pfeilen wählen und legen); neue Eingaben Raster, Pfeiltasten (auch Tastatur), Formen legen (auch ohne Ziehen)
 - [x] Giraffenhof: `measure_length`, `compare_length`, `anchor_sizes`, `length_convert` (`fraction_units` entfällt, siehe Klärung 3); Lineal mit Gegenständen, Stützpunktgrößen, m/cm umwandeln und rechnen
-- [ ] Zoo-Zählung: `tally_chart`, `read_table`, `read_chart`, `read_calendar`, `combinatorics`
+- [x] Zoo-Zählung: `tally_chart`, `read_table`, `read_chart`, `read_calendar`, `combinatorics` (Strichlisten mit Fünferbündeln, Tabellen, Säulendiagramme mit Skala 1/2/5/10, Kalenderblatt, Eis-Kombinatorik mit Paaren und Anordnungen)
 - [ ] Raumorientierung: `route_instructions`, `position_words` auf Weltkarte und im Gehege
-- [ ] Baumodus aus dem Gehege: `solids_basic`, `cube_buildings`
+- [x] Baumodus aus dem Gehege: `solids_basic`, `cube_buildings` (Baustelle im Schmetterlingshaus; sechs Körper als Körper und Gegenstand, Mehrfachauswahl; Würfelgebäude 3 × 3 bis 3 hoch: zählen, verdeckte Würfel, Bauplan wählen, nach Plan bauen, Bauplan schreiben, Ansicht von vorn und von rechts)
 - [ ] Freier Modus „Muster erfinden“ ohne Sterne, Ergebnis im Zoo ausgestellt (KE 5)
 - [ ] Übergreifend: `match_repr`, `strategy_pick`, Erklärfrage an eine erwachsene Person nach der Runde; fertig: `strategy_pick` („Wie hast du gerechnet?“ nach Plus- und Minusaufgaben mit Zehnerübergang, Häufigkeit in `rules.json`, Wahl je Familie im Spielstand gezählt)
 
@@ -140,7 +140,7 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 - [x] `word` (Bild plus Text): Sachtext, Bild der Dinge aus der Geschichte, Antwort mit Einheit über Ziffernblock oder Antwortkarten
 - [ ] Typen mit geringem Aufwand: `true_false`, `compare_symbol`, `sequence`, `inverse`, `number_house`, `odd_one_out`, `time_order`
 - [ ] Typen mit mittlerem Aufwand: `match_pairs`, `table_read`, `route`, `combinatorics`
-- [ ] `cube_build` für den Baumodus
+- [x] `cube_build` für den Baumodus (Eingabe `build`: Feld antippen, Gebäude wächst mit)
 
 **Weltkarte und Fortschritt** (Spez. 5)
 

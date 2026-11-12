@@ -103,6 +103,11 @@ export function parseRules(data: unknown): Rules {
   return rules;
 }
 
+/** Alle Themen eines Bereichs: Gehege und Baustelle. */
+export function areaFamilies(area: AreaConfig): string[] {
+  return [...area.families, ...(area.site ?? [])];
+}
+
 export function parseAreas(data: unknown): AreaConfig[] {
   const d = obj(data, 'areas.json');
   if (!Array.isArray(d.areas) || d.areas.length === 0)
@@ -121,6 +126,11 @@ export function parseAreas(data: unknown): AreaConfig[] {
       families,
     };
     if (o.requires !== undefined) area.requires = str(o.requires, `areas[${i}].requires`);
+    if (o.site !== undefined) {
+      if (!Array.isArray(o.site))
+        throw new ContentError(`areas.json areas[${i}].site: Liste erwartet`);
+      area.site = o.site.map((f, k) => str(f, `areas[${i}].site[${k}]`));
+    }
     return area;
   });
   const ids = areas.map((a) => a.id);
@@ -392,7 +402,7 @@ export function parseContent(raw: RawContent, generatorIds: readonly string[]): 
     if (!content.animals[area.animal]) {
       throw new ContentError(`areas.json: ${area.id} nennt unbekanntes Tier ${area.animal}`);
     }
-    for (const family of area.families) {
+    for (const family of [...area.families, ...(area.site ?? [])]) {
       if (!content.families[family]) {
         throw new ContentError(`areas.json: ${area.id} nennt unbekannte Familie ${family}`);
       }

@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { BaseScene } from './BaseScene';
-import { familyParams, findArea } from '../logic/content';
+import { areaFamilies, familyParams, findArea } from '../logic/content';
 import { fewestCoins } from '../logic/generators/moneyLay';
 import { GENERATORS } from '../logic/generators';
 import { check } from '../logic/check';
@@ -45,10 +45,24 @@ import { ClockFace } from '../ui/math/ClockFace';
 import { MoneyInput } from '../ui/MoneyInput';
 import { OrderInput } from '../ui/OrderInput';
 import { GridInput } from '../ui/GridInput';
+import { SelectInput } from '../ui/SelectInput';
+import { BuildInput } from '../ui/BuildInput';
+import { BuildingView, drawPlan, drawView, planNumbers, PlanView } from '../ui/math/Cubes';
+import { drawSolid, SolidRow } from '../ui/math/Solids';
 import { ComposeInput } from '../ui/ComposeInput';
 import { drawArrow, GridBoard } from '../ui/math/GridBoard';
 import { drawPiece, PiecesView } from '../ui/math/Pieces';
 import { PositionScene } from '../ui/math/PositionScene';
+import {
+  BarChart,
+  CalendarView,
+  drawIce,
+  drawTally,
+  IceView,
+  TableView,
+  TallyView,
+  tallyWidth,
+} from '../ui/math/DataViews';
 import { Numpad } from '../ui/Numpad';
 import { ProgressDots } from '../ui/ProgressDots';
 import { StoryPictureView } from '../ui/StoryPictureView';
@@ -73,13 +87,15 @@ const PLATE_H = 190;
 const CLOCK = { y: 432, radius: 105 };
 /** Zehnerfeld und Punktefeld groß genug für den Blick aus normalem Abstand */
 const displayScale = (visual: Visual): number =>
-  visual.type === 'tenframe'
-    ? 1.5
-    : visual.type === 'dots'
-      ? 2.4
-      : visual.type === 'position'
-        ? 1.3
-        : 1;
+  visual.type === 'ice' && visual.shown?.length
+    ? 0.85
+    : visual.type === 'tenframe'
+      ? 1.5
+      : visual.type === 'dots'
+        ? 2.4
+        : visual.type === 'position'
+          ? 1.3
+          : 1;
 
 /** Bild zur Aufgabe (Zehnerstangen, Zehnerfeld) */
 const DISPLAY_Y = 420;
@@ -119,7 +135,15 @@ export class TaskScene extends BaseScene<TaskSceneData> {
   private panel!: HintPanel;
   private expression?: Expression;
   private answerInput?:
-    Numpad | AnswerCards | MoneyInput | ClockInput | OrderInput | GridInput | ComposeInput;
+    | Numpad
+    | AnswerCards
+    | MoneyInput
+    | ClockInput
+    | OrderInput
+    | GridInput
+    | ComposeInput
+    | SelectInput
+    | BuildInput;
   private aidButtons: Button[] = [];
   private feedbackIcon?: Phaser.GameObjects.Image;
   /** Frage, Sachtext, Einheit und Bild (werden je Aufgabe neu angelegt) */
@@ -144,7 +168,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     const area = findArea(content, data.areaId);
     const family = data.family;
     const generator = GENERATORS[family];
-    if (!area || !area.families.includes(family) || !generator) {
+    if (!area || !areaFamilies(area).includes(family) || !generator) {
       throw new Error(`Bereich ${data.areaId} hat keine Aufgaben der Familie ${family}`);
     }
     this.family = family;
@@ -309,6 +333,30 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       });
       return;
     }
+    if (task.select) {
+      this.answerInput = new SelectInput(this, {
+        items: task.select,
+        area: { x: PANEL.x, y: GRID_Y - 10 },
+        keys: { x: INPUT_X, y: INPUT_Y },
+        okLabel: this.t('common.ok'),
+        onSubmit: (value) => this.submit(value),
+      });
+      return;
+    }
+    if (task.build) {
+      this.answerInput = new BuildInput(this, {
+        info: task.build,
+        target: { x: PANEL.x - 210, y: GRID_Y - 10 },
+        grid: { x: PANEL.x, y: GRID_Y - 10 },
+        model: { x: PANEL.x + 230, y: GRID_Y - 10 },
+        keys: { x: INPUT_X, y: INPUT_Y },
+        okLabel: this.t('common.ok'),
+        clearLabel: this.t('grid.clear'),
+        frontLabel: this.t('build.front'),
+        onSubmit: (value) => this.submit(value),
+      });
+      return;
+    }
     if (task.compose) {
       this.answerInput = new ComposeInput(this, {
         info: task.compose,
@@ -333,7 +381,14 @@ export class TaskScene extends BaseScene<TaskSceneData> {
         task.options,
         (value) => this.submit(value),
         (option) =>
-          option.shape || option.piece || option.moves
+          option.shape ||
+          option.piece ||
+          option.moves ||
+          option.tally ||
+          option.ice ||
+          option.solid ||
+          option.plan ||
+          option.view
             ? ''
             : option.label
               ? this.text(option.label.key, option.label.params)
@@ -343,6 +398,18 @@ export class TaskScene extends BaseScene<TaskSceneData> {
           const g = this.add.graphics({ x: 0, y: -4 });
           if (option.shape) drawShape(g, option.shape, 56);
           else if (option.piece) drawPiece(g, option.piece, 52);
+          else if (option.tally) {
+            const { n, bundled } = option.tally;
+            const gap = bundled ? 8 : Math.min(8, 150 / n);
+            drawTally(g, n, -tallyWidth(n, bundled, gap) / 2 + gap / 2, 0, 52, bundled, gap);
+          } else if (option.ice) drawIce(g, option.ice, 0, 52, 32);
+          else if (option.solid) drawSolid(g, option.solid, 84);
+          else if (option.plan) {
+            drawPlan(g, option.plan, 30);
+            card.add(g);
+            card.add(planNumbers(this, option.plan, 30, 0, -4, FontSize.small - 4));
+            return;
+          } else if (option.view) drawView(g, option.view, 26, 0, 44);
           else if (option.moves) {
             const n = option.moves.length;
             const step = Math.min(34, 150 / n);
@@ -591,6 +658,10 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       this.answerInput.showSolution(String(this.task.answer)).setButtonsVisible(false);
     } else if (this.answerInput instanceof ComposeInput) {
       this.answerInput.placeAll();
+    } else if (this.answerInput instanceof SelectInput && Array.isArray(this.task.answer)) {
+      this.answerInput.showSolution(this.task.answer);
+    } else if (this.answerInput instanceof BuildInput && Array.isArray(this.task.answer)) {
+      this.answerInput.showSolution(this.task.answer);
     } else if (this.answerInput instanceof ClockInput && this.task.clock) {
       // Die Uhr zeigt die richtige Zeit, die Tasten machen Platz für „Weiter“.
       this.answerInput.setTime(this.task.clock.time).setButtonsVisible(false);
@@ -718,6 +789,55 @@ export class TaskScene extends BaseScene<TaskSceneData> {
         visual.slots,
         visual.hidden,
       );
+    }
+    if (visual.type === 'solids') {
+      return new SolidRow(this, PANEL.x, VISUAL_Y, visual.items);
+    }
+    if (visual.type === 'building') {
+      return new BuildingView(
+        this,
+        PANEL.x,
+        VISUAL_Y + 40,
+        visual.heights,
+        40,
+        visual.marks ? { front: this.t('build.front'), right: this.t('build.right') } : undefined,
+      );
+    }
+    if (visual.type === 'plan') {
+      return new PlanView(this, PANEL.x, VISUAL_Y, visual.heights, 54, this.t('build.front'));
+    }
+    if (visual.type === 'tally') {
+      return new TallyView(this, PANEL.x, VISUAL_Y, visual.rows);
+    }
+    if (visual.type === 'table') {
+      return new TableView(
+        this,
+        PANEL.x,
+        VISUAL_Y,
+        visual.head.map((k) => this.t(k)),
+        visual.rows,
+      );
+    }
+    if (visual.type === 'bars') {
+      return new BarChart(this, PANEL.x, VISUAL_Y, visual.items, visual.step, visual.max);
+    }
+    if (visual.type === 'calendar') {
+      return new CalendarView(
+        this,
+        PANEL.x,
+        VISUAL_Y,
+        this.t(`month.${visual.month}`),
+        ['mo', 'di', 'mi', 'do', 'fr', 'sa', 'so'].map((d) => this.t(`day.short.${d}`)),
+        visual.start,
+        visual.days,
+        visual.marks,
+      );
+    }
+    if (visual.type === 'ice') {
+      return new IceView(this, PANEL.x, VISUAL_Y, visual.flavors, visual.bases, visual.shown, {
+        flavors: this.t('ice.flavors'),
+        bases: this.t('ice.bases'),
+      });
     }
     if (visual.type === 'position') {
       return new PositionScene(this, PANEL.x, VISUAL_Y, visual.place);

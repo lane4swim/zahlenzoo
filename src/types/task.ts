@@ -19,7 +19,11 @@ export type TaskKind =
   /** Weg mit Pfeiltasten legen */
   | 'path'
   /** Formteile in einen Umriss legen */
-  | 'compose';
+  | 'compose'
+  /** mehrere Dinge antippen, dann OK (Körper sortieren) */
+  | 'select'
+  /** Würfelgebäude bauen oder Bauplan schreiben (Feld antippen: ein Würfel mehr) */
+  | 'build';
 
 /**
  * Stufe einer Aufgabenfamilie. Stufe 0 gibt es nur für das Einspluseins bis 20
@@ -82,9 +86,74 @@ export type PieceSlot = Piece & { c: number; r: number };
 /** Formen legen: Umriss aus Plätzen, Teile in der Ablage (in der Startlage). */
 export type ComposeInfo = { cols: number; rows: number; slots: PieceSlot[]; pieces: Piece[] };
 
+/** Eissorten und Behälter (Kombinatorik in der Zoo-Zählung). */
+export type Flavor = 'strawberry' | 'chocolate' | 'vanilla' | 'pistachio' | 'blueberry';
+export type IceBase = 'cone' | 'cup';
+/** Ein Eis: Kugeln von unten nach oben, Waffel oder Becher. */
+export type Ice = { scoops: Flavor[]; base: IceBase };
+
+/** Körper: Würfel, Quader, Kugel, Zylinder, Kegel, Pyramide; look: Körper oder Gegenstand. */
+export type SolidKind = 'cube' | 'cuboid' | 'sphere' | 'cylinder' | 'cone' | 'pyramid';
+export type SolidSpec = { kind: SolidKind; look: 'plain' | 'object' };
+
+/** Würfelgebäude auf 3 × 3 Feldern: Höhen zeilenweise von hinten nach vorn, links nach rechts. */
+export type Heights = number[];
+
+/** Würfelgebäude: Bauplan (Draufsicht) zum Nachbauen oder Gebäude zum Aufschreiben. */
+export type BuildInfo = { mode: 'build' | 'plan'; target: Heights };
+
 /** Darstellungen für Hinweise und einblendbare Hilfen. */
 export type Visual =
   | ({ type: 'board' } & BoardSpec)
+  | {
+      /** Körper oder Gegenstände nebeneinander */
+      type: 'solids';
+      items: SolidSpec[];
+    }
+  | {
+      /** Würfelgebäude von schräg oben; marks: Seiten „vorn“ und „rechts“ beschriften */
+      type: 'building';
+      heights: Heights;
+      marks?: boolean;
+    }
+  | {
+      /** Bauplan: Draufsicht mit der Anzahl der Würfel je Feld */
+      type: 'plan';
+      heights: Heights;
+    }
+  | {
+      /** Strichliste: je Zeile ein Bild und n Striche (Fünferbündel) */
+      type: 'tally';
+      rows: Array<{ icon: string; n: number }>;
+    }
+  | {
+      /** Tabelle: Spaltenköpfe als Textschlüssel, Zeilen mit Bild und Zahlen */
+      type: 'table';
+      head: string[];
+      rows: Array<{ icon: string; values: number[] }>;
+    }
+  | {
+      /** Säulendiagramm: Säulen mit Bild darunter, Skala in Schritten von step bis max */
+      type: 'bars';
+      items: Array<{ icon: string; value: number }>;
+      step: number;
+      max: number;
+    }
+  | {
+      /** Kalenderblatt: Monat 1–12, erster Tag als Wochentag (0 = Montag), Tage; marks: eingekreist */
+      type: 'calendar';
+      month: number;
+      start: number;
+      days: number;
+      marks?: number[];
+    }
+  | {
+      /** Eis: Auswahl (Sorten, Behälter) und schon gelegte Möglichkeiten */
+      type: 'ice';
+      flavors: Flavor[];
+      bases?: IceBase[];
+      shown?: Ice[];
+    }
   | {
       /** Figur aus Formteilen; hidden: Plätze, die nur als Umriss erscheinen (Lücke) */
       type: 'pieces';
@@ -179,6 +248,16 @@ export type TaskOption = {
   piece?: Piece;
   /** Weg als Pfeile auf der Karte (Buchstaben r, l, u, d) */
   moves?: string;
+  /** Strichliste auf der Karte; bundled: false = Striche ohne Fünferbündel */
+  tally?: { n: number; bundled: boolean };
+  /** Eis auf der Karte (Welches Eis fehlt?) */
+  ice?: Ice;
+  /** Körper auf der Karte */
+  solid?: SolidSpec;
+  /** Bauplan auf der Karte */
+  plan?: Heights;
+  /** Ansicht auf der Karte: Höhen der Säulen von links nach rechts */
+  view?: number[];
 };
 
 export type TaskAnswer = number | number[] | string;
@@ -279,6 +358,10 @@ export type Task = {
   grid?: GridInfo;
   /** Formteile in einen Umriss legen */
   compose?: ComposeInfo;
+  /** Mehrfachauswahl: Dinge zum Antippen (Antwort: Nummern der richtigen Dinge) */
+  select?: SolidSpec[];
+  /** Würfelgebäude bauen oder Bauplan schreiben */
+  build?: BuildInfo;
   /** Uhrzeit: angezeigte oder einzustellende Zeit */
   clock?: ClockInfo;
   /** typische falsche Antworten als Text (z. B. Uhrzeiten) mit Fehlerart */
