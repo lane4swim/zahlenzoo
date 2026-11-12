@@ -124,7 +124,7 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
   - [x] Teil 1: `shapes_basic` (Namen, Ecken/Seiten, zählen, Rätsel), `pattern_continue` (Formkarten, Lücke), `symmetry_check` (ja/nein, Spiegelachse), `area_count` (Kästchen zählen, vergleichen, Umfang); Darstellung Formen und Kästchenfiguren
   - [x] Teil 2: `shapes_compose` (Teile ziehen, einrasten, durch Antippen drehen; fehlendes Teil, Teile zählen), `grid_draw` (abmalen, Spiegelbild ergänzen, Rechteck/Quadrat mit n Kästchen), `space_orientation` (Lagewörter am Tisch, über/unter/zwischen/links/rechts antippen, einem Weg folgen, Wege mit Pfeilen wählen und legen); neue Eingaben Raster, Pfeiltasten (auch Tastatur), Formen legen (auch ohne Ziehen)
 - [x] Giraffenhof: `measure_length`, `compare_length`, `anchor_sizes`, `length_convert` (`fraction_units` entfällt, siehe Klärung 3); Lineal mit Gegenständen, Stützpunktgrößen, m/cm umwandeln und rechnen
-- [ ] Zoo-Zählung: `tally_chart`, `read_table`, `read_chart`, `read_calendar`, `combinatorics`
+- [x] Zoo-Zählung: `tally_chart`, `read_table`, `read_chart`, `read_calendar`, `combinatorics` (Strichlisten mit Fünferbündeln, Tabellen, Säulendiagramme mit Skala 1/2/5/10, Kalenderblatt, Eis-Kombinatorik mit Paaren und Anordnungen)
 - [ ] Raumorientierung: `route_instructions`, `position_words` auf Weltkarte und im Gehege
 - [ ] Baumodus aus dem Gehege: `solids_basic`, `cube_buildings`
 - [ ] Freier Modus „Muster erfinden“ ohne Sterne, Ergebnis im Zoo ausgestellt (KE 5)

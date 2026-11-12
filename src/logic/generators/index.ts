@@ -17,6 +17,18 @@ import { plusFacts20, PLUS_FACTS_20 } from './plusFacts20';
 import { CLOCK_FAMILIES, clockFor } from './clock';
 import { compareMoney, COMPARE_MONEY } from './compareMoney';
 import { DIVIDE_REST, divideRest } from './divideRest';
+import {
+  COMBINATORICS,
+  combinatorics,
+  READ_CALENDAR,
+  READ_CHART,
+  READ_TABLE,
+  readCalendar,
+  readChart,
+  readTable,
+  TALLY_CHART,
+  tallyChart,
+} from './data';
 import { SHAPES_COMPOSE, shapesCompose } from './compose';
 import { GRID_DRAW, gridDraw, SPACE_ORIENTATION, spaceOrientation } from './space';
 import {
@@ -93,6 +105,11 @@ export const GENERATORS: Readonly<Record<string, Generator>> = {
   [PATTERN_CONTINUE]: patternContinue,
   [SYMMETRY_CHECK]: symmetryCheck,
   [AREA_COUNT]: areaCount,
+  [TALLY_CHART]: tallyChart,
+  [READ_TABLE]: readTable,
+  [READ_CHART]: readChart,
+  [READ_CALENDAR]: readCalendar,
+  [COMBINATORICS]: combinatorics,
   [SHAPES_COMPOSE]: shapesCompose,
   [GRID_DRAW]: gridDraw,
   [SPACE_ORIENTATION]: spaceOrientation,

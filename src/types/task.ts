@@ -82,9 +82,48 @@ export type PieceSlot = Piece & { c: number; r: number };
 /** Formen legen: Umriss aus Plätzen, Teile in der Ablage (in der Startlage). */
 export type ComposeInfo = { cols: number; rows: number; slots: PieceSlot[]; pieces: Piece[] };
 
+/** Eissorten und Behälter (Kombinatorik in der Zoo-Zählung). */
+export type Flavor = 'strawberry' | 'chocolate' | 'vanilla' | 'pistachio' | 'blueberry';
+export type IceBase = 'cone' | 'cup';
+/** Ein Eis: Kugeln von unten nach oben, Waffel oder Becher. */
+export type Ice = { scoops: Flavor[]; base: IceBase };
+
 /** Darstellungen für Hinweise und einblendbare Hilfen. */
 export type Visual =
   | ({ type: 'board' } & BoardSpec)
+  | {
+      /** Strichliste: je Zeile ein Bild und n Striche (Fünferbündel) */
+      type: 'tally';
+      rows: Array<{ icon: string; n: number }>;
+    }
+  | {
+      /** Tabelle: Spaltenköpfe als Textschlüssel, Zeilen mit Bild und Zahlen */
+      type: 'table';
+      head: string[];
+      rows: Array<{ icon: string; values: number[] }>;
+    }
+  | {
+      /** Säulendiagramm: Säulen mit Bild darunter, Skala in Schritten von step bis max */
+      type: 'bars';
+      items: Array<{ icon: string; value: number }>;
+      step: number;
+      max: number;
+    }
+  | {
+      /** Kalenderblatt: Monat 1–12, erster Tag als Wochentag (0 = Montag), Tage; marks: eingekreist */
+      type: 'calendar';
+      month: number;
+      start: number;
+      days: number;
+      marks?: number[];
+    }
+  | {
+      /** Eis: Auswahl (Sorten, Behälter) und schon gelegte Möglichkeiten */
+      type: 'ice';
+      flavors: Flavor[];
+      bases?: IceBase[];
+      shown?: Ice[];
+    }
   | {
       /** Figur aus Formteilen; hidden: Plätze, die nur als Umriss erscheinen (Lücke) */
       type: 'pieces';
@@ -179,6 +218,10 @@ export type TaskOption = {
   piece?: Piece;
   /** Weg als Pfeile auf der Karte (Buchstaben r, l, u, d) */
   moves?: string;
+  /** Strichliste auf der Karte; bundled: false = Striche ohne Fünferbündel */
+  tally?: { n: number; bundled: boolean };
+  /** Eis auf der Karte (Welches Eis fehlt?) */
+  ice?: Ice;
 };
 
 export type TaskAnswer = number | number[] | string;

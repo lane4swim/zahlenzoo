@@ -82,7 +82,8 @@
     {
       "id": "zoozaehlung",
       "animal": "meerkat",
-      "requires": "giraffenhof"
+      "requires": "giraffenhof",
+      "families": ["tally_chart", "read_table", "read_chart", "read_calendar", "combinatorics"]
     }
   ]
 }
