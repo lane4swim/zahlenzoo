@@ -77,6 +77,7 @@ describe('Textdateien', () => {
     }
   });
 
+  // Erzeugt je Familie und Stufe 200 Aufgaben; auf langsamen CI-Rechnern dauert das über 5 s.
   it('enthalten für alle Familien Fragen, Antworten, Hinweise und Fehler ohne offene Platzhalter', () => {
     // „@schlüssel“ wird wie im Spiel mit denselben Werten gefüllt.
     const resolved = (params: Readonly<Record<string, string | number>> | undefined) =>
@@ -135,7 +136,7 @@ describe('Textdateien', () => {
         }
       }
     }
-  });
+  }, 30_000);
 
   it('enthalten Namen für alle Tierbilder', () => {
     for (const avatar of AVATARS) expect(i18n.has(`avatar.${avatar}`)).toBe(true);
