@@ -78,7 +78,7 @@ export class PiecesView extends Phaser.GameObjects.Container {
     rows: number,
     slots: readonly PieceSlot[],
     hidden: readonly number[] = [],
-    unit = 64,
+    unit = 84,
   ) {
     super(scene, x, y);
     const g = scene.add.graphics();

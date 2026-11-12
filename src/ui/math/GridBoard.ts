@@ -21,10 +21,10 @@ export class GridBoard extends Phaser.GameObjects.Container {
     x: number,
     y: number,
     readonly spec: BoardSpec,
-    maxSize = 260,
+    maxSize = 280,
   ) {
     super(scene, x, y);
-    this.cell = Math.min(52, Math.floor(maxSize / Math.max(spec.cols, spec.rows)));
+    this.cell = Math.min(72, Math.floor(maxSize / Math.max(spec.cols, spec.rows)));
     const w = spec.cols * this.cell;
     const h = spec.rows * this.cell;
     this.left = -w / 2;

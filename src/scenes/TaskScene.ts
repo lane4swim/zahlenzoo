@@ -73,12 +73,18 @@ const PLATE_H = 190;
 const CLOCK = { y: 432, radius: 105 };
 /** Zehnerfeld und Punktefeld groß genug für den Blick aus normalem Abstand */
 const displayScale = (visual: Visual): number =>
-  visual.type === 'tenframe' ? 1.5 : visual.type === 'dots' ? 2.4 : 1;
+  visual.type === 'tenframe'
+    ? 1.5
+    : visual.type === 'dots'
+      ? 2.4
+      : visual.type === 'position'
+        ? 1.3
+        : 1;
 
 /** Bild zur Aufgabe (Zehnerstangen, Zehnerfeld) */
 const DISPLAY_Y = 420;
 /** Raster zum Antippen und Umriss beim Formenlegen (zwischen Hinweis und Tasten) */
-const GRID_Y = 452;
+const GRID_Y = 448;
 const COMPOSE_Y = 430;
 
 /**

@@ -25,10 +25,10 @@ export class PositionScene extends Phaser.GameObjects.Container {
     floor.lineBetween(-260, 100, 260, 100);
 
     const pos: Record<Place, [number, number, number]> = {
-      over: [0, -95, 1],
+      over: [0, -115, 1],
       under: [0, 62, 0.8],
       front: [-30, 70, 1.25],
-      behind: [40, -24, 0.85],
+      behind: [40, 2, 0.75],
       next: [215, 52, 1],
     };
     const [bx, by, scale] = pos[place];

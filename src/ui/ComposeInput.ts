@@ -43,7 +43,7 @@ export class ComposeInput extends Phaser.GameObjects.Container {
   ) {
     super(scene, 0, 0);
     const { info, outline } = options;
-    this.unit = options.unit ?? 64;
+    this.unit = options.unit ?? 84;
     const u = this.unit;
     const g = scene.add.graphics();
     for (const slot of info.slots) {
