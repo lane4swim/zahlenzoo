@@ -116,7 +116,7 @@ export const tallyChart: Generator = (level, rng, id, params): Task => {
       ...base,
       kind: 'number-input',
       prompt: {
-        terms: [],
+        terms: ['?'],
         textKey: 'task.prompt.tally.read',
         textParams: { animals: plural(animals[i]!) },
       },
@@ -162,7 +162,7 @@ export const tallyChart: Generator = (level, rng, id, params): Task => {
     return {
       ...base,
       kind: 'number-input',
-      prompt: { terms: [], textKey: 'task.prompt.tally.total' },
+      prompt: { terms: ['?'], textKey: 'task.prompt.tally.total' },
       display: { visual },
       answer: total,
       typicalErrors: errors(total, [
@@ -191,7 +191,7 @@ export const tallyChart: Generator = (level, rng, id, params): Task => {
     ...base,
     kind: 'number-input',
     prompt: {
-      terms: [],
+      terms: ['?'],
       textKey: 'task.prompt.data.more',
       textParams: { a: plural(animals[i]!), b: plural(animals[j]!) },
     },
@@ -239,7 +239,7 @@ export const readTable: Generator = (level, rng, id, params): Task => {
       ...base,
       kind: 'number-input',
       prompt: {
-        terms: [],
+        terms: ['?'],
         textKey: 'task.prompt.table.cell',
         textParams: { animals: plural(animal), day: `@day.${days[c]}` },
       },
@@ -295,7 +295,7 @@ export const readTable: Generator = (level, rng, id, params): Task => {
       ...base,
       kind: 'number-input',
       prompt: {
-        terms: [],
+        terms: ['?'],
         textKey: 'task.prompt.table.more',
         textParams: { animals: plural(animal), d1: `@day.${days[c1]}`, d2: `@day.${loDay}` },
       },
@@ -321,8 +321,16 @@ export const readTable: Generator = (level, rng, id, params): Task => {
     ...base,
     kind: 'number-input',
     prompt: byRow
-      ? { terms: [], textKey: 'task.prompt.table.sumRow', textParams: { animals: plural(animal) } }
-      : { terms: [], textKey: 'task.prompt.table.sumCol', textParams: { day: `@day.${days[c]}` } },
+      ? {
+          terms: ['?'],
+          textKey: 'task.prompt.table.sumRow',
+          textParams: { animals: plural(animal) },
+        }
+      : {
+          terms: ['?'],
+          textKey: 'task.prompt.table.sumCol',
+          textParams: { day: `@day.${days[c]}` },
+        },
     answer: total,
     typicalErrors: errors(total, [
       [total - 10, 'tens_off'],
@@ -367,7 +375,7 @@ export const readChart: Generator = (level, rng, id, params): Task => {
       ...base,
       kind: 'number-input',
       prompt: {
-        terms: [],
+        terms: ['?'],
         textKey: 'task.prompt.chart.value',
         textParams: { animals: plural(animals[i]!) },
       },
@@ -411,7 +419,7 @@ export const readChart: Generator = (level, rng, id, params): Task => {
     ...base,
     kind: 'number-input',
     prompt: {
-      terms: [],
+      terms: ['?'],
       textKey: 'task.prompt.data.more',
       textParams: { a: plural(animals[a]!), b: plural(animals[b]!) },
     },
@@ -451,7 +459,7 @@ export const readCalendar: Generator = (level, rng, id, params): Task => {
       return {
         ...base,
         kind: 'number-input',
-        prompt: { terms: [], textKey: 'task.prompt.calendar.days', textParams: { month: m } },
+        prompt: { terms: ['?'], textKey: 'task.prompt.calendar.days', textParams: { month: m } },
         display: cal(),
         answer: days,
         typicalErrors: errors(days, [
@@ -500,7 +508,7 @@ export const readCalendar: Generator = (level, rng, id, params): Task => {
         ...base,
         kind: 'number-input',
         prompt: {
-          terms: [],
+          terms: ['?'],
           textKey: 'task.prompt.calendar.count',
           textParams: { days: `@day.plural.${wd}`, month: m },
         },
@@ -519,7 +527,11 @@ export const readCalendar: Generator = (level, rng, id, params): Task => {
     return {
       ...base,
       kind: 'number-input',
-      prompt: { terms: [], textKey: 'task.prompt.calendar.nextWeek', textParams: { d, month: m } },
+      prompt: {
+        terms: ['?'],
+        textKey: 'task.prompt.calendar.nextWeek',
+        textParams: { d, month: m },
+      },
       display: cal([d]),
       answer: d + 7,
       typicalErrors: errors(d + 7, [
@@ -543,7 +555,7 @@ export const readCalendar: Generator = (level, rng, id, params): Task => {
     return {
       ...base,
       kind: 'number-input',
-      prompt: { terms: [], textKey: 'task.prompt.calendar.span', textParams: { a, b } },
+      prompt: { terms: ['?'], textKey: 'task.prompt.calendar.span', textParams: { a, b } },
       display: cal([a, b]),
       answer: b - a,
       typicalErrors: errors(b - a, [
@@ -562,7 +574,7 @@ export const readCalendar: Generator = (level, rng, id, params): Task => {
   return {
     ...base,
     kind: 'number-input',
-    prompt: { terms: [], textKey: 'task.prompt.calendar.twoWeeks', textParams: { d, month: m } },
+    prompt: { terms: ['?'], textKey: 'task.prompt.calendar.twoWeeks', textParams: { d, month: m } },
     display: cal([d]),
     answer: d + 14,
     typicalErrors: errors(d + 14, [
@@ -659,7 +671,7 @@ export const combinatorics: Generator = (level, rng, id, params): Task => {
       level,
       kind: 'number-input',
       strategyId: 'combo_pairs',
-      prompt: { terms: [], textKey: 'task.prompt.ice.pairs', textParams: { a } },
+      prompt: { terms: ['?'], textKey: 'task.prompt.ice.pairs', textParams: { a } },
       display: { visual: { type: 'ice', flavors, bases } },
       answer: n,
       typicalErrors: errors(n, [
@@ -686,7 +698,7 @@ export const combinatorics: Generator = (level, rng, id, params): Task => {
     level,
     kind: 'number-input',
     strategyId: 'combo_stacks',
-    prompt: { terms: [], textKey: `task.prompt.ice.stack.${k}` },
+    prompt: { terms: ['?'], textKey: `task.prompt.ice.stack.${k}` },
     display: { visual: { type: 'ice', flavors } },
     answer: all.length,
     typicalErrors: errors(all.length, [

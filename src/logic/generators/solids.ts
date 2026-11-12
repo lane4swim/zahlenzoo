@@ -153,7 +153,7 @@ export const solidsBasic: Generator = (level, rng, id, params): Task => {
     ...base,
     kind: 'number-input',
     prompt: {
-      terms: [],
+      terms: ['?'],
       textKey: `task.prompt.solid.count.${what}`,
       textParams: { name: `@solid.the.${kind}` },
     },
@@ -211,7 +211,7 @@ export const cubeBuildings: Generator = (level, rng, id, params): Task => {
       ...base,
       kind: 'number-input',
       strategyId: 'cubes_count',
-      prompt: { terms: [], textKey: 'task.prompt.cubes.count' },
+      prompt: { terms: ['?'], textKey: 'task.prompt.cubes.count' },
       display: { visual: { type: 'building', heights: h } },
       answer: n,
       typicalErrors: errors(n, [
@@ -239,7 +239,7 @@ export const cubeBuildings: Generator = (level, rng, id, params): Task => {
         ...base,
         kind: 'number-input',
         strategyId: 'cubes_hidden',
-        prompt: { terms: [], textKey: 'task.prompt.cubes.count' },
+        prompt: { terms: ['?'], textKey: 'task.prompt.cubes.count' },
         display: { visual: { type: 'building', heights: h } },
         answer: n,
         typicalErrors: errors(n, [
