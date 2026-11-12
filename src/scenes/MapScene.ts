@@ -16,18 +16,17 @@ import { isAreaDone } from '../logic/zoo';
 import { AreaMarker } from '../ui/AreaMarker';
 import { decorTexture } from '../ui/rewards';
 import { StarCounter } from '../ui/StarCounter';
-import { Color, CssColor, FontFamily, FontSize, Layout, Stroke, Tex } from '../ui/theme';
+import { Color, CssColor, FontFamily, FontSize, Stroke, Tex } from '../ui/theme';
 
 type Point = { x: number; y: number };
 const POSITIONS: Readonly<Record<string, Point>> = layout.areas;
 
 /**
- * Leiste am unteren Rand, deutlich von der Karte abgesetzt (die Namensschilder der unteren
- * Gehege enden bei etwa y = 660): links „Tagesfutter“, in der Mitte der Hinweis, rechts
- * „Wege im Zoo“. Die Knöpfe sind 96 px hoch und füllen die Leiste ganz aus.
+ * Bedienelemente der Karte (Mitte, Breite, Höhe) und die untere Leiste stehen in
+ * map-layout.json. Ein Test prüft damit, dass keine Dekoration darunter verschwindet.
  */
-const BAR = { top: 668, y: 720, side: 140, width: 232 };
-const MESSAGE_Y = BAR.y;
+const UI = layout.ui;
+const BAR_TOP = layout.bar.top;
 
 /**
  * Zoo-Karte: gezeichneter Hintergrund mit acht Gehegen. Freigeschaltete Bereiche
@@ -50,6 +49,13 @@ export class MapScene extends BaseScene {
       return;
     }
     this.add.image(0, 0, Tex.map).setOrigin(0);
+    // Untere Leiste: hell hinterlegt, damit Knöpfe und Hinweis nicht in die Gehege laufen.
+    // Sie liegt unter der Dekoration, damit Brunnen und Ententeich auf ihr sichtbar bleiben.
+    const bar = this.add.graphics();
+    bar.fillStyle(Color.papier, 0.88);
+    bar.fillRect(0, BAR_TOP, this.scale.width, this.scale.height - BAR_TOP);
+    bar.lineStyle(Stroke.inner, Color.kontur, 0.6);
+    bar.lineBetween(0, BAR_TOP, this.scale.width, BAR_TOP);
     // Gekaufte Dekoration steht an ihrem festen Platz: Der Zoo wächst sichtbar.
     for (const d of this.content.decor) {
       if (!profile.zoo.decor.includes(d.id)) continue;
@@ -60,19 +66,14 @@ export class MapScene extends BaseScene {
     this.addTitle(this.t('map.title'), 62);
     const zoo: ZooSceneData = { back: 'Map' };
     this.addButton({
-      x: this.scale.width - Layout.margin - 95,
-      y: Layout.margin + Layout.minTouch / 2,
-      width: 190,
+      x: UI.zoo.x,
+      y: UI.zoo.y,
+      width: UI.zoo.w,
       label: this.t('map.zoo'),
       fill: Color.sonne,
       onPress: () => this.scene.start(SceneKey.Zoo, zoo),
     });
-    new StarCounter(
-      this,
-      this.scale.width - Layout.margin - 270,
-      Layout.margin + 48,
-      profile.stars,
-    );
+    new StarCounter(this, UI.stars.x, UI.stars.y, profile.stars);
 
     const starsByArea = Object.fromEntries(
       this.content.areas.map((a) => [a.id, areaProgress(profile, a.id).stars]),
@@ -86,21 +87,14 @@ export class MapScene extends BaseScene {
       this.addMarker(area, pos, state, starsByArea[area.id] ?? 0, done);
     }
 
-    // Untere Leiste: hell hinterlegt, damit Knöpfe und Hinweis nicht in die Gehege laufen
-    const bar = this.add.graphics();
-    bar.fillStyle(Color.papier, 0.88);
-    bar.fillRect(0, BAR.top, this.scale.width, this.scale.height - BAR.top);
-    bar.lineStyle(Stroke.inner, Color.kontur, 0.6);
-    bar.lineBetween(0, BAR.top, this.scale.width, BAR.top);
-
     // Wege im Zoo: Lage und Wege auf dem Zooplan (Zusatzbereich ohne Gehege auf der Karte)
     const tour = this.content.areas.find((a) => a.extra && a.families.length > 0);
     if (tour) {
       const data: AreaSceneData = { areaId: tour.id };
       this.addButton({
-        x: this.scale.width - BAR.side,
-        y: BAR.y,
-        width: BAR.width,
+        x: UI.tour.x,
+        y: UI.tour.y,
+        width: UI.tour.w,
         label: this.t(`area.${tour.id}`),
         fontSize: FontSize.small,
         fill: Color.sonne,
@@ -114,9 +108,9 @@ export class MapScene extends BaseScene {
       const fed = profile.dailyDone === today;
       const daily: TaskSceneData = { areaId: tour.id, family: 'daily', level: 1, daily: true };
       this.addButton({
-        x: BAR.side,
-        y: BAR.y,
-        width: BAR.width,
+        x: UI.daily.x,
+        y: UI.daily.y,
+        width: UI.daily.w,
         label: this.t(fed ? 'map.dailyDone' : 'map.daily'),
         fontSize: FontSize.small,
         fill: fed ? Color.papier : Color.grasHell,
@@ -126,11 +120,12 @@ export class MapScene extends BaseScene {
 
     this.messagePlate = this.add.graphics();
     this.message = this.add
-      .text(this.scale.width / 2, MESSAGE_Y, '', {
+      .text(UI.message.x, UI.message.y, '', {
         fontFamily: FontFamily.text,
-        fontSize: `${FontSize.text - 2}px`,
+        fontSize: `${FontSize.small}px`,
         color: CssColor.text,
         align: 'center',
+        wordWrap: { width: UI.message.w - 40 },
       })
       .setOrigin(0.5);
     this.showMessage(this.t('map.tapAnimal'));
@@ -191,11 +186,11 @@ export class MapScene extends BaseScene {
   private showMessage(text: string): void {
     this.message.setText(text);
     const w = this.message.width + 40;
-    const h = 52;
+    const h = Math.max(52, this.message.height + 10);
     this.messagePlate.clear();
     this.messagePlate.fillStyle(Color.papier, 0.95);
     this.messagePlate.lineStyle(Stroke.inner + 0.5, Color.kontur, 1);
-    this.messagePlate.fillRoundedRect(this.scale.width / 2 - w / 2, MESSAGE_Y - h / 2, w, h, 16);
-    this.messagePlate.strokeRoundedRect(this.scale.width / 2 - w / 2, MESSAGE_Y - h / 2, w, h, 16);
+    this.messagePlate.fillRoundedRect(UI.message.x - w / 2, UI.message.y - h / 2, w, h, 16);
+    this.messagePlate.strokeRoundedRect(UI.message.x - w / 2, UI.message.y - h / 2, w, h, 16);
   }
 }

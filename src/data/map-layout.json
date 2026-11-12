@@ -1,13 +1,84 @@
 {
-  "comment": "Lage der Gehege auf der Zoo-Karte (1024 × 768). Gemeinsame Quelle für art/build_map.py und MapScene.",
+  "comment": "Lage der Gehege und der Bedienelemente auf der Zoo-Karte (1024 × 768). Gemeinsame Quelle für art/build_map.py, MapScene und den Test, dass alle Dekorationen sichtbar bleiben (tests/logic.mapLayout.test.ts). Bedienelemente: Mitte x/y, Breite w, Höhe h.",
   "areas": {
-    "affenwald": { "x": 150, "y": 270 },
-    "pinguinfelsen": { "x": 395, "y": 255 },
-    "elefantenwiese": { "x": 640, "y": 270 },
-    "zookasse": { "x": 880, "y": 255 },
-    "futteruhr": { "x": 880, "y": 560 },
-    "schmetterlingshaus": { "x": 640, "y": 575 },
-    "giraffenhof": { "x": 395, "y": 560 },
-    "zoozaehlung": { "x": 150, "y": 575 }
+    "affenwald": {
+      "x": 150,
+      "y": 270
+    },
+    "pinguinfelsen": {
+      "x": 395,
+      "y": 255
+    },
+    "elefantenwiese": {
+      "x": 640,
+      "y": 270
+    },
+    "zookasse": {
+      "x": 880,
+      "y": 255
+    },
+    "futteruhr": {
+      "x": 880,
+      "y": 560
+    },
+    "schmetterlingshaus": {
+      "x": 640,
+      "y": 575
+    },
+    "giraffenhof": {
+      "x": 395,
+      "y": 560
+    },
+    "zoozaehlung": {
+      "x": 150,
+      "y": 575
+    }
+  },
+  "ui": {
+    "back": {
+      "x": 114,
+      "y": 72,
+      "w": 180,
+      "h": 96
+    },
+    "title": {
+      "x": 512,
+      "y": 62,
+      "w": 300,
+      "h": 72
+    },
+    "stars": {
+      "x": 730,
+      "y": 72,
+      "w": 120,
+      "h": 56
+    },
+    "zoo": {
+      "x": 905,
+      "y": 72,
+      "w": 190,
+      "h": 96
+    },
+    "daily": {
+      "x": 240,
+      "y": 718,
+      "w": 200,
+      "h": 96
+    },
+    "tour": {
+      "x": 784,
+      "y": 718,
+      "w": 200,
+      "h": 96
+    },
+    "message": {
+      "x": 512,
+      "y": 718,
+      "w": 330,
+      "h": 96
+    }
+  },
+  "bar": {
+    "top": 668
   }
 }

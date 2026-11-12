@@ -11,7 +11,7 @@
     {
       "id": "drachen",
       "price": 4,
-      "x": 330,
+      "x": 324,
       "y": 100,
       "size": 92
     },
@@ -19,14 +19,14 @@
       "id": "windrad",
       "price": 3,
       "x": 150,
-      "y": 132,
+      "y": 154,
       "size": 84
     },
     {
       "id": "vogelhaus",
       "price": 3,
       "x": 395,
-      "y": 118,
+      "y": 130,
       "size": 84
     },
     {
@@ -39,9 +39,9 @@
     {
       "id": "fahne",
       "price": 3,
-      "x": 880,
-      "y": 122,
-      "size": 84
+      "x": 40,
+      "y": 404,
+      "size": 76
     },
     {
       "id": "laterne",
@@ -67,23 +67,23 @@
     {
       "id": "blumenkuebel",
       "price": 3,
-      "x": 990,
+      "x": 984,
       "y": 398,
       "size": 76
     },
     {
       "id": "brunnen",
       "price": 6,
-      "x": 150,
-      "y": 700,
-      "size": 110
+      "x": 72,
+      "y": 714,
+      "size": 100
     },
     {
       "id": "ententeich",
       "price": 6,
-      "x": 880,
-      "y": 700,
-      "size": 112
+      "x": 952,
+      "y": 714,
+      "size": 100
     }
   ]
 }
