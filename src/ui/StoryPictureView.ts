@@ -17,8 +17,13 @@ export class StoryPictureView extends Phaser.GameObjects.Container {
     const small = total <= 30 && picture.groups.length <= 6 && picture.groups.every((n) => n <= 15);
     const parts = small ? this.smallGroups(picture) : this.bigGroups(picture);
     const width = parts.reduce((s, p) => s + p.width, 0) + (parts.length - 1) * 28;
-    if (small && width > maxWidth) {
-      this.removeAll(true);
+    if (small && width > maxWidth && width * 0.6 <= maxWidth) {
+      // etwas zu breit: einzeln lassen (zählbar) und verkleinern
+      this.place(parts);
+      this.setScale(maxWidth / width);
+    } else if (small && width > maxWidth) {
+      // Die Einzelbilder gehören noch zu keinem Container: aufräumen, sonst stehen sie oben links.
+      for (const p of parts) p.container.destroy();
       this.place(this.bigGroups(picture));
     } else {
       this.place(parts);

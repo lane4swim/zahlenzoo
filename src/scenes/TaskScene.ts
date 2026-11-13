@@ -52,6 +52,7 @@ import { MoneyInput } from '../ui/MoneyInput';
 import { DragSortInput } from '../ui/DragSortInput';
 import { MatchInput } from '../ui/MatchInput';
 import { NumberLineInput } from '../ui/NumberLineInput';
+import { ShareInput } from '../ui/ShareInput';
 import { NumberHouse } from '../ui/math/NumberHouse';
 import { NumberRay } from '../ui/math/NumberRay';
 import { ReprPairs } from '../ui/math/Repr';
@@ -123,6 +124,10 @@ const MATCH = { top: 404, bottom: 572, next: 712 };
 const LINE_Y = 470;
 /** Ziehen und Ordnen: Kartenreihe (darunter „OK“) */
 const SORT_Y = 560;
+/** Bild zu einer Rechnung ohne Sachtext */
+const PICTURE_Y = 450;
+/** Verteilen und Aufteilen: Vorrat, Teller oder Körbe, Tasten */
+const SHARE = { pile: 440, groups: 590, keys: 716 };
 
 /**
  * Aufgabenansicht: Tier links, Rechnung oben, Hinweise in der Mitte, Eingabe unten.
@@ -163,6 +168,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     | DragSortInput
     | MatchInput
     | NumberLineInput
+    | ShareInput
     | GridInput
     | ComposeInput
     | SelectInput
@@ -376,12 +382,25 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       this.showStory(task);
     } else {
       this.showTerms(task);
+      if (task.prompt.picture) {
+        // Bild ohne Sachtext (z. B. schon verteilte Bananen): zwischen Hinweis und Eingabe
+        this.picture = new StoryPictureView(
+          this,
+          PANEL.x,
+          PICTURE_Y,
+          task.prompt.picture,
+          PANEL.width,
+        );
+        this.storyObjects.push(this.picture);
+      }
     }
     this.panel.clear();
     this.expression?.setAnswer('');
     // Rechenhilfen nur, wenn die Aufgabe Zahlen hat; beim Geldlegen sind Teller und
     // Münzen die Darstellung.
-    for (const b of this.aidButtons) b.setVisible(!task.money && this.knownNumbers().length > 0);
+    for (const b of this.aidButtons) {
+      b.setVisible(!task.money && !task.share && this.knownNumbers().length > 0);
+    }
     const instruction = task.prompt.instructionKey ?? (task.money ? 'task.money.plate' : undefined);
     this.panelParts = [];
     if (instruction) {
@@ -468,6 +487,25 @@ export class TaskScene extends BaseScene<TaskSceneData> {
         topY: MATCH.top,
         bottomY: MATCH.bottom,
         wordOf: (n) => this.t(`num.${n}`),
+        onSubmit: (value) => this.submit(value),
+      });
+      this.explainIfDue();
+      announce(this.spokenText());
+      return;
+    }
+    if (task.share) {
+      this.answerInput = new ShareInput(this, {
+        info: task.share,
+        x: PANEL.x,
+        pileY: SHARE.pile,
+        groupsY: SHARE.groups,
+        keysY: SHARE.keys,
+        labels: {
+          each: this.t('share.eachOne'),
+          fill: this.t('share.fillBasket'),
+          reset: this.t('share.reset'),
+          ok: this.t('common.ok'),
+        },
         onSubmit: (value) => this.submit(value),
       });
       this.explainIfDue();
@@ -698,7 +736,9 @@ export class TaskScene extends BaseScene<TaskSceneData> {
         ms: Math.round(this.time.now - this.taskStart),
       });
     }
-    this.expression?.setAnswer(this.task.options ? this.cardText(value) : value, 'correct');
+    // Verteilen gibt die Teller ab („4,4,4“); im Kästchen steht die Anzahl je Teller
+    const shown = this.task.share ? String(this.task.answer) : value;
+    this.expression?.setAnswer(this.task.options ? this.cardText(value) : shown, 'correct');
     if (this.answerInput instanceof AnswerCards) this.answerInput.markCorrect(value);
     this.showFeedbackIcon(Tex.correct);
     // Jede richtige Antwort versorgt das Tier sichtbar (Spezifikation, Abschnitt 5).
@@ -778,6 +818,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     if (this.answerInput instanceof AnswerCards) this.answerInput.markWrong(value);
     if (this.answerInput instanceof Numpad) this.answerInput.clear();
     if (this.answerInput instanceof MatchInput) this.answerInput.clear();
+    if (this.answerInput instanceof ShareInput) this.answerInput.clear();
     if (this.answerInput instanceof GridInput && this.task.grid?.mode === 'pick')
       this.answerInput.clear();
     // Gelegtes Geld bleibt liegen, damit das Kind ergänzen oder zurücklegen kann.
@@ -823,6 +864,9 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       // Die Karten zeigen die richtige Reihenfolge; „Weiter“ steht an der Stelle von „OK“.
       this.answerInput.showOrder(this.task.answer.map(String));
       nextY = SORT_Y + 118;
+    } else if (this.answerInput instanceof ShareInput) {
+      this.answerInput.showSolution();
+      nextY = SHARE.keys;
     } else if (this.answerInput instanceof MatchInput && Array.isArray(this.task.answer)) {
       this.answerInput.showSolution(this.task.answer);
       nextY = MATCH.next;
@@ -1162,6 +1206,8 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       input.showMarks(visual.marks ?? [], visual.arrow);
       return true;
     }
+    // Verteilen: Der Hinweis steht als Text; das Bild wäre unter Vorrat und Tellern verdeckt.
+    if (input instanceof ShareInput) return true;
     if (input instanceof MatchInput && visual.type === 'repr' && this.task.match) {
       const answer = this.task.answer as number[];
       const { top, bottom } = this.task.match;

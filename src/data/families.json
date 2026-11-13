@@ -1130,6 +1130,55 @@
           "zoom": 20
         }
       }
+    },
+    "double_half": {
+      "title": "Verdoppeln und Halbieren",
+      "kinds": {
+        "choice": 0.3
+      },
+      "levels": {
+        "1": {
+          "description": "bis 20: Doppelte bis 10 + 10, Hälften gerader Zahlen bis 20 (Zehnerfeld, Punktefeld)",
+          "stage": "small"
+        },
+        "2": {
+          "description": "bis 100 ohne Übergang (23 → 46, 30 → 60; Hälfte von 86, 60)",
+          "stage": "plain"
+        },
+        "3": {
+          "description": "bis 100 mit Übergang (37 → 74; Hälfte von 70, 74): Zehner und Einer einzeln",
+          "stage": "carry"
+        }
+      }
+    },
+    "divide_share": {
+      "title": "Verteilen und Aufteilen",
+      "kinds": {
+        "choice": 0.3
+      },
+      "levels": {
+        "1": {
+          "description": "Handeln: gerecht auf Teller verteilen oder immer gleich viele in Körbe legen (bis 20)",
+          "stage": "act",
+          "divisors": [2, 3, 4, 5],
+          "maxEach": 5,
+          "maxTotal": 20
+        },
+        "2": {
+          "description": "Bild: Dinge sind schon verteilt oder in Körben; Geteiltaufgabe ausrechnen (bis 30)",
+          "stage": "picture",
+          "divisors": [2, 3, 4, 5],
+          "maxEach": 6,
+          "maxTotal": 30
+        },
+        "3": {
+          "description": "Zeichen: passende Rechnung zur Geschichte wählen; Geteiltaufgaben aus Malaufgaben (bis 50)",
+          "stage": "symbol",
+          "divisors": [2, 3, 4, 5, 10],
+          "maxEach": 10,
+          "maxTotal": 50
+        }
+      }
     }
   }
 }

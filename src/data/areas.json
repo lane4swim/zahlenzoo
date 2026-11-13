@@ -32,7 +32,7 @@
     {
       "id": "elefantenwiese",
       "animal": "elephant",
-      "families": ["mult_table", "divide_rest", "story_multdiv"],
+      "families": ["double_half", "mult_table", "divide_share", "divide_rest", "story_multdiv"],
       "requires": "pinguinfelsen"
     },
     {

@@ -30,6 +30,13 @@ function toNumberList(input: TaskInput): number[] | undefined {
 export function check(task: Task, input: TaskInput): CheckResult {
   const { answer } = task;
   if (task.grid) return checkGrid(task, input);
+  if (task.share?.mode === 'share' && typeof input === 'string' && input.includes(',')) {
+    // Verteilen: Anzahl auf jedem Teller; gerecht heißt überall gleich viel
+    const counts = toNumberList(input);
+    if (!counts) return { correct: false, invalid: true };
+    if (counts.some((c) => c !== counts[0])) return { correct: false, errorTag: 'share_unequal' };
+    return counts[0] === answer ? { correct: true } : { correct: false, errorTag: 'share_rest' };
+  }
 
   if (typeof answer === 'number') {
     const value = toNumber(input);
