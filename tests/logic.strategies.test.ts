@@ -3,12 +3,14 @@ import { add100 } from '../src/logic/generators/add100';
 import { sub100 } from '../src/logic/generators/sub100';
 import { createRng } from '../src/logic/rng';
 import {
+  explainTask,
   recordStrategy,
   shouldAskStrategy,
   strategyPaths,
   type StrategyWay,
 } from '../src/logic/strategies';
 import { createProfile } from '../src/services/save';
+import type { AnswerOutcome } from '../src/types/round';
 import type { MathInfo, Task, TaskLevel } from '../src/types/task';
 import { paramsOf, RULES } from './helpers/content';
 
@@ -95,5 +97,35 @@ describe('Wann gefragt wird', () => {
     for (const w of ways) p = recordStrategy(p, 'add_100', w);
     p = recordStrategy(p, 'sub_100', 'other');
     expect(p.strategyUse).toEqual({ add_100: { steps: 2, places: 1 }, sub_100: { other: 1 } });
+  });
+});
+
+describe('Erklärfrage nach der Runde', () => {
+  const round = (family: 'add_100' | 'sub_100', n = 10) =>
+    Array.from({ length: n }, (_, seed) =>
+      (family === 'add_100' ? add100 : sub100)(2, createRng(seed), `t${seed}`, paramsOf(family)(2)),
+    );
+  const always = { explainAsk: { ...RULES.explainAsk, chance: 1 } };
+
+  it('nennt eine richtig gelöste Rechnung der Runde mit Ergebnis', () => {
+    const tasks = round('add_100');
+    const outcomes = tasks.map((_, i): AnswerOutcome => (i === 0 ? 'first_try' : 'wrong'));
+    const m = tasks[0]!.math!;
+    expect(explainTask(tasks, outcomes, always, createRng(1))).toBe(
+      `${m.a} + ${m.b} = ${m.result}`,
+    );
+  });
+
+  it('kommt nicht ohne richtige Lösung, nicht bei anderen Familien und nicht bei chance 0', () => {
+    const tasks = round('sub_100');
+    const wrong = tasks.map(() => 'wrong' as const);
+    const right = tasks.map(() => 'with_help' as const);
+    expect(explainTask(tasks, wrong, always, createRng(1))).toBeUndefined();
+    expect(explainTask(tasks, right, always, createRng(1))).toMatch(/^\d+ − \d+ = \d+$/);
+    const other = { explainAsk: { families: ['mult_table'], chance: 1 } };
+    expect(explainTask(tasks, right, other, createRng(1))).toBeUndefined();
+    const off = { explainAsk: { ...RULES.explainAsk, chance: 0 } };
+    expect(explainTask(tasks, right, off, createRng(1))).toBeUndefined();
+    expect(RULES.explainAsk.families).toContain('sub_100');
   });
 });

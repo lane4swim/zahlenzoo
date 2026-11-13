@@ -46,6 +46,8 @@ export type RoundEndSceneData = {
   times?: number[];
   /** Tempo-Runde: Dauer in ms */
   tempoMs?: number;
+  /** Erklärfrage: Rechnung der Runde, die das Kind einer Person erklären soll */
+  explain?: string;
   /** Tagesfutter: Ergebnis je Aufgabe */
   daily?: Array<{
     family: string;

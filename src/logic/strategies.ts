@@ -1,5 +1,6 @@
 import type { Rng } from './rng';
 import type { Rules } from '../types/content';
+import type { AnswerOutcome } from '../types/round';
 import type { Profile } from '../types/save';
 import type { MathInfo, Task } from '../types/task';
 
@@ -74,4 +75,30 @@ export function recordStrategy(profile: Profile, family: string, way: StrategyWa
     ...profile,
     strategyUse: { ...use, [family]: { ...forFamily, [way]: (forFamily[way] ?? 0) + 1 } },
   };
+}
+
+/**
+ * Erklärfrage nach der Runde (KE 5, Kommunizieren): eine richtig gelöste Rechnung der Runde,
+ * die das Kind einer Person erklären soll, z. B. „47 + 26 = 73“. Nicht automatisch geprüft;
+ * nur bei den Familien aus rules.json und mit der dort eingestellten Wahrscheinlichkeit.
+ */
+export function explainTask(
+  tasks: readonly Task[],
+  outcomes: readonly AnswerOutcome[],
+  rules: Pick<Rules, 'explainAsk'>,
+  rng: Rng,
+): string | undefined {
+  const { families, chance } = rules.explainAsk;
+  const solved = tasks.filter(
+    (t, i) =>
+      t.math !== undefined &&
+      families.includes(t.family) &&
+      outcomes[i] !== undefined &&
+      outcomes[i] !== 'wrong',
+  );
+  if (solved.length === 0 || !rng.chance(chance)) return undefined;
+  // am liebsten eine Aufgabe mit Zehnerübergang: Da gibt es am meisten zu erklären
+  const carry = solved.filter((t) => t.math!.carry);
+  const m = rng.pick(carry.length > 0 ? carry : solved).math!;
+  return step(m.a, m.op, m.b);
 }

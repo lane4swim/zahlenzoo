@@ -1,5 +1,5 @@
 {
-  "_hinweis": "Startwerte aus der Spezifikation (Abschnitte 5, 6, 7, 8). Nach Spieltest und Pilot hier anpassen. strategyPick: Frage „Wie hast du gerechnet?“ nach richtigen Aufgaben mit Zehnerübergang; chance 0 schaltet sie ab. skill: Kompetenzmodell (Abschnitt 7): Stufe steigt ab upConfidence und upMin Antworten, sinkt unter downConfidence über downWindow Antworten; Erklärung nach explainAfterErrors gleichen Fehlern; Tagesfutter mit dailyTasks Aufgaben; Tempo-Runde ab tempoMinLevel und tempoConfidence.",
+  "_hinweis": "Startwerte aus der Spezifikation (Abschnitte 5, 6, 7, 8). Nach Spieltest und Pilot hier anpassen. strategyPick: Frage „Wie hast du gerechnet?“ nach richtigen Aufgaben mit Zehnerübergang; chance 0 schaltet sie ab. skill: Kompetenzmodell (Abschnitt 7): Stufe steigt ab upConfidence und upMin Antworten, sinkt unter downConfidence über downWindow Antworten; Erklärung nach explainAfterErrors gleichen Fehlern; Tagesfutter mit dailyTasks Aufgaben; Tempo-Runde ab tempoMinLevel und tempoConfidence. explainAsk: nach der Runde die Frage „Erkläre einer Person, wie du … gerechnet hast“ (nicht geprüft) mit dieser Wahrscheinlichkeit; chance 0 schaltet sie ab.",
   "round": {
     "size": 10,
     "minSize": 8,
@@ -24,6 +24,10 @@
     "families": ["add_100", "sub_100"],
     "chance": 0.35,
     "maxPerRound": 2
+  },
+  "explainAsk": {
+    "families": ["plus_facts_20", "add_100", "sub_100", "smart_calc"],
+    "chance": 0.4
   },
   "skill": {
     "upConfidence": 0.85,

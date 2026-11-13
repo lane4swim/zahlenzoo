@@ -131,7 +131,7 @@ describe('Affenwald', () => {
 
   it('Ordnen: vier verschiedene Zahlen, Lösung sortiert', () => {
     for (const t of tasks('compare_100', 3)) {
-      expect(t.kind).toBe('order');
+      expect(t.kind).toBe('drag-sort');
       const values = t.options!.map((o) => Number(o.value));
       expect(new Set(values).size).toBe(4);
       const answer = t.answer as number[];

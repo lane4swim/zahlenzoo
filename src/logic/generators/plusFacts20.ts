@@ -1,5 +1,6 @@
 import { optionsFromErrors, typicalErrors, uniqueErrors } from '../options';
 import { kindShare, share } from '../params';
+import { houseFloors, optionalShare } from './variants';
 import {
   additionHints,
   additionStrategy,
@@ -59,10 +60,20 @@ function factHints(m: MathInfo, firstKey: string | undefined): [Hint, Hint, Hint
 export const plusFacts20: Generator = (level, rng, id, params): Task => {
   let math: MathInfo;
   let firstKey: string | undefined;
+  let house: Visual | undefined;
+  let inverseOf: string | undefined;
   let kind: TaskKind = rng.chance(kindShare(params, 'choice')) ? 'choice' : 'number-input';
 
   if (level <= 1) {
-    if (rng.chance(share(params, 'toTenShare'))) {
+    if (rng.chance(optionalShare(params, 'houseShare'))) {
+      // Zahlenhaus: Zerlegungen einer Zahl bis 10, ein Stockwerk mit Lücke
+      const top = rng.int(5, 10);
+      const a = rng.int(1, top - 1);
+      math = { op: '+', a, b: top - a, result: top, missing: 'b', carry: false };
+      firstKey = 'hint.facts_house.1';
+      house = { type: 'house', top, ...houseFloors(top, a, rng) };
+      kind = 'gap';
+    } else if (rng.chance(share(params, 'toTenShare'))) {
       // Zerlegen der 10: 6 + ? = 10
       const a = rng.int(1, 9);
       math = { op: '+', a, b: 10 - a, result: 10, missing: 'b', carry: false };
@@ -85,7 +96,9 @@ export const plusFacts20: Generator = (level, rng, id, params): Task => {
     const a = rng.int(2, 9);
     const b = rng.int(11 - a, 9);
     if (rng.chance(share(params, 'inverseShare'))) {
+      // Umkehraufgabe: Die Plusaufgabe ist bekannt, die Minusaufgabe wird daraus abgeleitet.
       math = { op: '-', a: a + b, b, result: a, missing: 'result', carry: true };
+      inverseOf = `${a} + ${b} = ${a + b}`;
     } else {
       math = { op: '+', a, b, result: a + b, missing: 'result', carry: true };
     }
@@ -103,14 +116,19 @@ export const plusFacts20: Generator = (level, rng, id, params): Task => {
     family: PLUS_FACTS_20,
     level,
     kind,
-    prompt: { terms },
+    prompt: {
+      terms,
+      ...(inverseOf ? { textKey: 'task.prompt.inverse', textParams: { known: inverseOf } } : {}),
+    },
     answer,
     hints: factHints(math, firstKey),
     strategyId: firstKey ? firstKey.replace(/^hint\.|\.1$/g, '') : strategy,
     math,
     typicalErrors: errors,
-    dedupeKey:
-      math.op === '-'
+    ...(house ? { display: { visual: house } } : {}),
+    dedupeKey: house
+      ? `pf_house:${math.a}:${math.result}`
+      : math.op === '-'
         ? `pf_sub:${math.a}:${math.b}`
         : math.missing === 'b'
           ? `pf_gap:${math.a}:${math.result}`
