@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { claimKeys } from './focus';
 import { Button } from './Button';
 import { ClockFace } from './math/ClockFace';
 import { Color, CssColor, FontFamily, FontSize, Layout } from './theme';
@@ -105,6 +106,8 @@ export class ClockInput extends Phaser.GameObjects.Container {
     scene.input.on(Phaser.Input.Events.POINTER_UP, this.onUp, this);
     scene.add.existing(this);
     scene.input.keyboard?.on('keydown', this.onKey);
+    // Diese Tasten gehören der Eingabe, nicht der allgemeinen Tastaturbedienung.
+    this.once(Phaser.GameObjects.Events.DESTROY, claimKeys(scene, ['arrows', 'enter']));
     this.once(Phaser.GameObjects.Events.DESTROY, () => {
       scene.input.keyboard?.off('keydown', this.onKey);
       scene.input.off(Phaser.Input.Events.POINTER_MOVE, this.onMove, this);

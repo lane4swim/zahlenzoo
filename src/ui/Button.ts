@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { drawFocusRing, registerFocusable, shownInScene, type Focusable } from './focus';
 import { Color, CssColor, FontFamily, FontSize, Layout, Stroke } from './theme';
 
 export type ButtonOptions = {
@@ -25,7 +26,7 @@ const EDGE = 8;
 const RADIUS = 20;
 
 /** Taste mit sichtbarer Unterkante (Stilvorgabe, Regel 4). Löst beim Loslassen aus. */
-export class Button extends Phaser.GameObjects.Container {
+export class Button extends Phaser.GameObjects.Container implements Focusable {
   private readonly face: Phaser.GameObjects.Container;
   private readonly top: Phaser.GameObjects.Graphics;
   private readonly label?: Phaser.GameObjects.Text;
@@ -34,6 +35,8 @@ export class Button extends Phaser.GameObjects.Container {
   private fill: number;
   private enabled = true;
   private pressed = false;
+  private ring?: Phaser.GameObjects.Graphics;
+  private readonly onPress: () => void;
 
   constructor(scene: Phaser.Scene, options: ButtonOptions) {
     super(scene, options.x, options.y);
@@ -93,7 +96,41 @@ export class Button extends Phaser.GameObjects.Container {
       options.onPress();
     });
 
+    this.onPress = options.onPress;
+    // Tastaturbedienung: Jede Taste ist mit Tab und Pfeiltasten erreichbar.
+    const unregister = registerFocusable(scene, this);
+    this.once(Phaser.GameObjects.Events.DESTROY, unregister);
+
     scene.add.existing(this);
+  }
+
+  canFocus(): boolean {
+    return this.enabled && this.input?.enabled === true && shownInScene(this) && this.alpha > 0.5;
+  }
+
+  activate(): void {
+    // kurz eingedrückt zeigen, dann auslösen
+    this.press(true);
+    this.scene.time.delayedCall(90, () => {
+      this.press(false);
+      this.onPress();
+    });
+  }
+
+  setFocused(focused: boolean): void {
+    if (focused) {
+      this.ring ??= this.scene.add.graphics();
+      drawFocusRing(this.ring, this.btnW, this.btnH - EDGE / 2);
+      this.add(this.ring);
+      this.ring.setVisible(true);
+    } else {
+      this.ring?.setVisible(false);
+    }
+  }
+
+  focusPoint(): { x: number; y: number } {
+    const m = this.getWorldTransformMatrix();
+    return { x: m.tx, y: m.ty };
   }
 
   private drawTop(): void {

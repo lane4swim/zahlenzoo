@@ -1,11 +1,40 @@
 /**
+ * Anzeige-Einstellungen des aktiven Profils (Spezifikation 9): größere Schrift, hoher Kontrast,
+ * weniger Bewegung. Jede Szene übernimmt sie beim Start (BaseScene), Farben und Größen unten
+ * richten sich danach.
+ */
+export type DisplaySettings = { largeText: boolean; highContrast: boolean; reducedMotion: boolean };
+const display: DisplaySettings = { largeText: false, highContrast: false, reducedMotion: false };
+
+export function applyDisplay(settings: Partial<DisplaySettings> | undefined): void {
+  display.largeText = settings?.largeText === true;
+  display.highContrast = settings?.highContrast === true;
+  display.reducedMotion = settings?.reducedMotion === true;
+}
+
+export function displaySettings(): Readonly<DisplaySettings> {
+  return display;
+}
+
+/** Größere Schrift: Lesetexte wachsen um etwa ein Achtel, Ziffern und Titel bleiben. */
+const LARGE = 1.125;
+const scaled = (px: number) => (display.largeText ? Math.round(px * LARGE) : px);
+
+/**
  * Farben und Schriftgrößen aus der Stilvorgabe (`stilprobe/tokens.json`,
- * `stilprobe/style-guide.md`). Keine anderen Farbwerte verwenden.
+ * `stilprobe/style-guide.md`). Keine anderen Farbwerte verwenden; einzige Ausnahme ist der
+ * hohe Kontrast (Schwarz auf Weiß für Konturen, Text und helle Flächen).
  */
 export const Color = {
-  kontur: 0x4a3426,
-  text: 0x3a2a20,
-  papier: 0xfff8ec,
+  get kontur(): number {
+    return display.highContrast ? 0x000000 : 0x4a3426;
+  },
+  get text(): number {
+    return display.highContrast ? 0x000000 : 0x3a2a20;
+  },
+  get papier(): number {
+    return display.highContrast ? 0xffffff : 0xfff8ec;
+  },
   kartenSchatten: 0xe8d3a8,
   himmel: 0xbfe6f2,
   himmelTief: 0x8fcde3,
@@ -21,13 +50,19 @@ export const Color = {
   grauWarm: 0xc9bba3,
   laub: 0x3f8f4f,
   pinguinGefieder: 0x6c8ea3,
-} as const;
+};
 
 export const CssColor = {
-  kontur: '#4A3426',
-  text: '#3A2A20',
-  papier: '#FFF8EC',
-} as const;
+  get kontur(): string {
+    return display.highContrast ? '#000000' : '#4A3426';
+  },
+  get text(): string {
+    return display.highContrast ? '#000000' : '#3A2A20';
+  },
+  get papier(): string {
+    return display.highContrast ? '#FFFFFF' : '#FFF8EC';
+  },
+};
 
 /** Schriften: Andika (Text und Ziffern), Fredoka (Titel); beide selbst gehostet (SIL OFL). */
 export const FontFamily = {
@@ -37,16 +72,24 @@ export const FontFamily = {
 
 /** Mindestgrößen in der Basisauflösung (Spezifikation, Abschnitt 9). */
 export const FontSize = {
-  small: 24,
-  text: 28,
+  get small(): number {
+    return scaled(24);
+  },
+  get text(): number {
+    return scaled(28);
+  },
   digits: 48,
   title: 56,
-} as const;
+};
 
 export const Stroke = {
-  outline: 4,
-  inner: 2.5,
-} as const;
+  get outline(): number {
+    return display.highContrast ? 5 : 4;
+  },
+  get inner(): number {
+    return display.highContrast ? 3.5 : 2.5;
+  },
+};
 
 /** Tasten mindestens 96 × 96 px (Stilvorgabe); Abstand mindestens 16 px. */
 export const Layout = {
@@ -57,6 +100,7 @@ export const Layout = {
 
 /** Bewegung reduzieren, wenn das Betriebssystem es verlangt (Spezifikation, Abschnitt 9). */
 export function reducedMotion(): boolean {
+  if (display.reducedMotion) return true;
   return (
     typeof window !== 'undefined' &&
     window.matchMedia?.('(prefers-reduced-motion: reduce)').matches === true

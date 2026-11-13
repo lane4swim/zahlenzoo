@@ -114,7 +114,7 @@ export class RoundEndScene extends BaseScene<RoundEndSceneData> {
       const text = this.addText(cx, y, line).setWordWrapWidth(820).setOrigin(0.5, 0);
       y += text.height + 10;
     }
-    if (this.badges.length > 0) this.showBadges(cx + 70, Math.max(y + 46, 540));
+    if (this.badges.length > 0) this.showBadges(cx + 70, Math.min(Math.max(y + 46, 540), 560));
 
     // Das Tier freut sich über die geschaffte Runde.
     const animalId = findArea(this.content, this.result.areaId)?.animal;
@@ -177,10 +177,13 @@ export class RoundEndScene extends BaseScene<RoundEndSceneData> {
           fontFamily: FontFamily.text,
           fontSize: `${FontSize.text}px`,
           color: CssColor.text,
-          wordWrap: { width: 520 },
+          wordWrap: { width: 620 },
         },
       )
       .setOrigin(0, 0.5);
+    // Umgebrochene Zeilen (größere Schrift) dürfen nicht unter die Knöpfe (Oberkante 592) rutschen.
+    y = Math.min(y, 584 - Math.max(label.height, 84) / 2);
+    label.y = y;
     const size = 84;
     const shown = this.badges.slice(0, 4);
     const total = shown.length * (size + 8) + 12 + label.width;

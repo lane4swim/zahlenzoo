@@ -13,6 +13,7 @@ import {
   type ZooSceneData,
 } from '../types/scenes';
 import { isAreaDone } from '../logic/zoo';
+import { announce } from '../ui/a11y';
 import { AreaMarker } from '../ui/AreaMarker';
 import { decorTexture } from '../ui/rewards';
 import { StarCounter } from '../ui/StarCounter';
@@ -48,7 +49,7 @@ export class MapScene extends BaseScene {
       this.scene.start(SceneKey.Profile);
       return;
     }
-    this.add.image(0, 0, Tex.map).setOrigin(0);
+    this.addBackground(Tex.map);
     // Untere Leiste: hell hinterlegt, damit Knöpfe und Hinweis nicht in die Gehege laufen.
     // Sie liegt unter der Dekoration, damit Brunnen und Ententeich auf ihr sichtbar bleiben.
     const bar = this.add.graphics();
@@ -184,6 +185,7 @@ export class MapScene extends BaseScene {
 
   /** Kurzer Hinweis unten auf einem Schild, damit er auf der Karte lesbar bleibt. */
   private showMessage(text: string): void {
+    announce(text);
     this.message.setText(text);
     const w = this.message.width + 40;
     const h = Math.max(52, this.message.height + 10);

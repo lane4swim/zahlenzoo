@@ -250,6 +250,35 @@ const FLAVOR_COLOR: Record<Flavor, number> = {
 };
 
 /** Zeichnet ein Eis mit Mitte unten bei (x, y); size = Breite einer Kugel. */
+/**
+ * Kennzeichen je Sorte, damit die Farbe nicht allein entscheidet (Farbenblindheit):
+ * Erdbeere Kerne, Pistazie Nusskreuz, Blaubeere Ring; Schoko und Vanille unterscheiden sich
+ * deutlich in der Helligkeit.
+ */
+function flavorMark(
+  g: Phaser.GameObjects.Graphics,
+  f: Flavor,
+  x: number,
+  y: number,
+  r: number,
+): void {
+  g.fillStyle(Color.kontur, 1);
+  g.lineStyle(Math.max(1.5, r * 0.12), Color.kontur, 1);
+  if (f === 'strawberry') {
+    for (const [dx, dy] of [
+      [-0.35, -0.2],
+      [0.3, -0.3],
+      [0, 0.3],
+    ] as const)
+      g.fillCircle(x + dx * r, y + dy * r, Math.max(1.5, r * 0.1));
+  } else if (f === 'pistachio') {
+    g.lineBetween(x - r * 0.35, y - r * 0.35, x + r * 0.35, y + r * 0.35);
+    g.lineBetween(x - r * 0.35, y + r * 0.35, x + r * 0.35, y - r * 0.35);
+  } else if (f === 'blueberry') {
+    g.strokeCircle(x, y, r * 0.42);
+  }
+}
+
 export function drawIce(
   g: Phaser.GameObjects.Graphics,
   ice: Ice,
@@ -265,6 +294,8 @@ export function drawIce(
     g.fillStyle(FLAVOR_COLOR[f], 1);
     g.fillCircle(x, cy, r);
     g.strokeCircle(x, cy, r);
+    flavorMark(g, f, x, cy, r);
+    g.lineStyle(Stroke.inner, Color.kontur, 1);
   });
 }
 
@@ -341,6 +372,8 @@ export class IceView extends Phaser.GameObjects.Container {
             g.lineStyle(Stroke.inner, Color.kontur, 1);
             g.fillCircle(fx, choiceY, 21);
             g.strokeCircle(fx, choiceY, 21);
+            flavorMark(g, f, fx, choiceY, 21);
+            g.lineStyle(Stroke.inner, Color.kontur, 1);
           });
         },
       },

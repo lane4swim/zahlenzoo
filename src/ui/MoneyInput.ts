@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { claimKeys } from './focus';
 import { Button } from './Button';
 import { Color, CssColor, FontFamily, FontSize, Layout, Stroke, Tex } from './theme';
 import { moneyLabel } from '../logic/generators/moneyLay';
@@ -120,6 +121,8 @@ export class MoneyInput extends Phaser.GameObjects.Container {
     this.add(this.tray);
     scene.add.existing(this);
     scene.input.keyboard?.on('keydown', this.onKey);
+    // Diese Tasten gehören der Eingabe, nicht der allgemeinen Tastaturbedienung.
+    this.once(Phaser.GameObjects.Events.DESTROY, claimKeys(scene, ['enter']));
     this.once(Phaser.GameObjects.Events.DESTROY, () => {
       scene.input.keyboard?.off('keydown', this.onKey);
     });

@@ -66,7 +66,6 @@
   "parent.noProfiles": "Noch keine Profile.",
   "parent.profileLine": "{name}: {stars} Sterne",
   "settings.title": "Einstellungen",
-  "settings.placeholder": "Die Einstellungen folgen in Phase 4.",
   "strategy.add_complement_tens": "Zehner ergänzen",
   "area.elefantenwiese": "Elefantenwiese",
   "area.zookasse": "Zoo-Kasse",
@@ -838,5 +837,18 @@
   "parent.imported": "Der Spielstand wurde geladen.",
   "parent.importFailed": "Diese Datei ist kein gültiger Spielstand. Es wurde nichts geändert.",
   "parent.deleted": "Das Profil {name} wurde gelöscht.",
-  "parent.clearAll": "Alle lokalen Daten löschen"
+  "parent.clearAll": "Alle lokalen Daten löschen",
+  "menu.update": "Neue Version laden",
+  "menu.offlineReady": "Jetzt auch ohne Internet spielbar.",
+  "settings.music": "Musik",
+  "settings.sfx": "Geräusche",
+  "settings.readAloud": "Vorlesen-Knopf",
+  "settings.largeText": "Größere Schrift",
+  "settings.highContrast": "Hoher Kontrast",
+  "settings.reducedMotion": "Weniger Bewegung",
+  "settings.volume.off": "aus",
+  "settings.volume.low": "leise",
+  "settings.volume.high": "laut",
+  "settings.on": "an",
+  "settings.off": "aus"
 }

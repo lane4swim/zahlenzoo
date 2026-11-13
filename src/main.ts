@@ -15,6 +15,8 @@ import { SettingsScene } from './scenes/SettingsScene';
 import { TaskScene } from './scenes/TaskScene';
 import { ZooScene } from './scenes/ZooScene';
 import { createServices } from './services/services';
+import { updates } from './services/update';
+import { registerSW } from 'virtual:pwa-register';
 import { CssColor } from './ui/theme';
 
 /** Basisauflösung im Querformat (Spezifikation, Abschnitt 1 und 3). */
@@ -69,4 +71,21 @@ async function start(): Promise<void> {
   if (import.meta.env.DEV) (window as unknown as { zahlenzoo: Phaser.Game }).zahlenzoo = game;
 }
 
+/**
+ * Service Worker für den Offline-Betrieb (nur im veröffentlichten Build). Eine neue Version
+ * wird nur vorgemerkt; geladen wird sie über „Neue Version laden“ im Menü.
+ */
+function registerOffline(): void {
+  if (import.meta.env.DEV || !('serviceWorker' in navigator)) return;
+  const update = registerSW({
+    onNeedRefresh: () => updates.setNeedRefresh(() => update(true)),
+    onOfflineReady: () => updates.setOfflineReady(),
+    // Bei langen Sitzungen stündlich nach einer neuen Version schauen
+    onRegisteredSW: (_url, registration) => {
+      if (registration) setInterval(() => void registration.update(), 60 * 60 * 1000);
+    },
+  });
+}
+
+registerOffline();
 void start();
