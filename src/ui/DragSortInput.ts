@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { Button } from './Button';
+import { uiSound } from './sound';
 import { Color, CssColor, FontFamily, FontSize, reducedMotion } from './theme';
 
 export type SortItem = { value: string; label: string };
@@ -129,6 +130,7 @@ export class DragSortInput extends Phaser.GameObjects.Container {
       const a = this.order.indexOf(this.selected);
       const b = this.order.indexOf(value);
       [this.order[a], this.order[b]] = [value, this.selected];
+      uiSound(this.scene, 'drop');
       this.selected = undefined;
       this.layout(true);
     }
@@ -147,6 +149,7 @@ export class DragSortInput extends Phaser.GameObjects.Container {
     this.before = [...this.order];
     const card = this.cards.get(value);
     if (card) this.bringToTop(card);
+    uiSound(this.scene, 'pick');
   }
 
   private dragMove(value: string, x: number, y: number): void {
@@ -179,6 +182,7 @@ export class DragSortInput extends Phaser.GameObjects.Container {
     const card = this.cards.get(value);
     // weit neben der Reihe losgelassen: alles sanft zurück wie vorher
     if (card && Math.abs(card.y) > DROP_BAND) this.order = [...this.before];
+    uiSound(this.scene, 'drop');
     this.layout(true);
   }
 

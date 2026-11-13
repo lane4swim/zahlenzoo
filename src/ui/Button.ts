@@ -1,5 +1,7 @@
 import Phaser from 'phaser';
 import { drawFocusRing, registerFocusable, shownInScene, type Focusable } from './focus';
+import { uiSound } from './sound';
+import type { Sfx } from '../logic/audio';
 import { Color, CssColor, FontFamily, FontSize, Layout, Stroke } from './theme';
 
 export type ButtonOptions = {
@@ -20,6 +22,8 @@ export type ButtonOptions = {
   labelBottom?: boolean;
   /** Lange Beschriftungen umbrechen (Breite in Pixeln) */
   wrapWidth?: number;
+  /** Effekt beim Drücken (Standard: leises Tippen; null: keiner) */
+  sound?: Sfx | null;
 };
 
 const EDGE = 8;
@@ -93,10 +97,14 @@ export class Button extends Phaser.GameObjects.Container implements Focusable {
     this.on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
       if (!this.pressed || !this.enabled) return;
       this.press(false);
-      options.onPress();
+      this.onPress();
     });
 
-    this.onPress = options.onPress;
+    const sound = options.sound === undefined ? 'tap' : options.sound;
+    this.onPress = () => {
+      if (sound) uiSound(scene, sound);
+      options.onPress();
+    };
     // Tastaturbedienung: Jede Taste ist mit Tab und Pfeiltasten erreichbar.
     const unregister = registerFocusable(scene, this);
     this.once(Phaser.GameObjects.Events.DESTROY, unregister);

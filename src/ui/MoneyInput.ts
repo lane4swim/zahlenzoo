@@ -95,6 +95,7 @@ export class MoneyInput extends Phaser.GameObjects.Container {
         label: moneyLabel(cents),
         icon: moneyTexture(cents),
         iconScale: note ? 0.34 : 0.4,
+        sound: 'coin',
         onPress: () => this.place(cents),
       });
       this.tray.push(button);
@@ -106,6 +107,7 @@ export class MoneyInput extends Phaser.GameObjects.Container {
       height: KEY,
       icon: Tex.backspace,
       iconScale: 0.8,
+      sound: 'erase',
       onPress: () => this.takeBack(this.items.length - 1),
     });
     const ok = new Button(scene, {

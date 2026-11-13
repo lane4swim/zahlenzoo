@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { dashPiece, drawPiece, slotPos } from './math/Pieces';
+import { uiSound } from './sound';
 import { Color, reducedMotion } from './theme';
 import { lies, sameLie, slotCenter } from '../logic/pieces';
 import type { ComposeInfo, Piece, PieceSlot } from '../types/task';
@@ -165,6 +166,7 @@ export class ComposeInput extends Phaser.GameObjects.Container {
   }
 
   private place(obj: PieceObject, index: number, slot: PieceSlot): void {
+    uiSound(this.scene, 'drop');
     const { info, outline } = this.options;
     const [px, py] = slotPos(slot, info.cols, info.rows, this.unit);
     obj.placed = true;

@@ -84,6 +84,19 @@ export class RoundEndScene extends BaseScene<RoundEndSceneData> {
     this.addBackground(Tex.menuRoundEnd);
     this.addTitle(this.t(this.result.daily ? 'roundEnd.dailyTitle' : 'roundEnd.title'), 104);
     new StarMeter(this, cx, 230, this.reward.stars);
+    // Ton: kurze Melodie, dann je Stern ein Funkeln (passend zur Sternanimation)
+    const { audio } = this.services;
+    audio.play('round_end');
+    for (let i = 0; i < this.reward.stars; i++) {
+      this.time.delayedCall(450 + i * 350, () => audio.play('star'));
+    }
+    const after = 450 + this.reward.stars * 350 + 250;
+    if (this.reward.levelUnlocked) this.time.delayedCall(after, () => audio.play('unlock'));
+    if (this.badges.length > 0) {
+      this.time.delayedCall(after + (this.reward.levelUnlocked ? 900 : 0), () =>
+        audio.play('badge'),
+      );
+    }
     this.addText(
       cx,
       330,
@@ -137,7 +150,10 @@ export class RoundEndScene extends BaseScene<RoundEndSceneData> {
     const art = animalId ? this.content.animals[animalId] : undefined;
     if (art) {
       const animal = new AnimalSprite(this, 100, 744, art, 190);
-      this.time.delayedCall(500, () => animal.cheer());
+      this.time.delayedCall(500, () => {
+        animal.cheer();
+        if (animalId) this.services.audio.animal(animalId);
+      });
     }
 
     const { areaId, family, level } = this.result;

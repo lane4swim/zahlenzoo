@@ -5,6 +5,8 @@ import type { TaskInput } from './task';
 export const GameEvent = {
   AnswerSubmitted: 'answer-submitted',
   RoundFinished: 'round-finished',
+  /** Effekt eines UI-Bausteins (Name aus logic/audio SFX) */
+  UiSound: 'ui-sound',
 } as const;
 
 export type AnswerSubmittedPayload = { taskId: string; input: TaskInput };

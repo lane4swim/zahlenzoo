@@ -7,6 +7,7 @@ import { fewestCoins } from '../logic/generators/moneyLay';
 import { GENERATORS } from '../logic/generators';
 import { check } from '../logic/check';
 import { createRng, type Rng } from '../logic/rng';
+import type { SpeechPart } from '../logic/audio';
 import {
   explainTask,
   recordStrategy,
@@ -189,6 +190,8 @@ export class TaskScene extends BaseScene<TaskSceneData> {
   private timeLog: Array<{ taskId: string; family: string; ms: number }> = [];
   /** Fehlerart, deren Strategie die nächste Aufgabe erklärt */
   private explainNext?: string;
+  /** Vorlesen: Teile des Hinweistextes mit Schlüssel (für eingesprochene Dateien) */
+  private panelParts: SpeechPart[] = [];
   /** Erklärfrage am Rundenende (einmal je Runde ausgewürfelt) */
   private explainCache?: { text: string | undefined };
 
@@ -306,6 +309,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       label: this.t('task.hint'),
       icon: Tex.hint,
       iconScale: 0.45,
+      sound: 'hint',
       onPress: () => this.showNextHint(),
     });
 
@@ -379,7 +383,11 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     // Münzen die Darstellung.
     for (const b of this.aidButtons) b.setVisible(!task.money && this.knownNumbers().length > 0);
     const instruction = task.prompt.instructionKey ?? (task.money ? 'task.money.plate' : undefined);
-    if (instruction) this.panel.show(this.t(instruction));
+    this.panelParts = [];
+    if (instruction) {
+      this.panel.show(this.t(instruction));
+      this.panelParts = [{ key: instruction, text: this.t(instruction) }];
+    }
     if (task.money) {
       this.answerInput = new MoneyInput(this, {
         x: INPUT_X,
@@ -700,6 +708,8 @@ export class TaskScene extends BaseScene<TaskSceneData> {
         ? this.pick(this.content.praise.firstTry)
         : this.pick(this.content.praise.withHelp);
     this.panel.show(praise, Tex.correct);
+    this.panelParts = [{ text: praise }];
+    this.services.audio.play('correct');
     announce(praise);
     this.finishTask(outcome);
     if (shouldAskStrategy(this.task, this.strategyRules(), this.strategyAsked, this.flowRng)) {
@@ -764,6 +774,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       }
     }
     this.animal?.think();
+    this.services.audio.play('wrong');
     if (this.answerInput instanceof AnswerCards) this.answerInput.markWrong(value);
     if (this.answerInput instanceof Numpad) this.answerInput.clear();
     if (this.answerInput instanceof MatchInput) this.answerInput.clear();
@@ -1114,6 +1125,19 @@ export class TaskScene extends BaseScene<TaskSceneData> {
 
   private showHint(hint: Hint, text: string, icon: string): void {
     announce(text);
+    // Für das Vorlesen: der Hinweis selbst mit Schlüssel, davor und danach freie Sätze
+    const own = this.hintText(hint);
+    const at = text.indexOf(own);
+    const unit = this.storyUnit();
+    const params = unit ? { ...hint.params, unit } : hint.params;
+    this.panelParts =
+      at < 0
+        ? [{ text }]
+        : [
+            { text: text.slice(0, at) },
+            { key: hint.key, ...(params ? { params } : {}), text: own },
+            { text: text.slice(at + own.length) },
+          ];
     this.aid = undefined;
     this.picture?.setVisible(true);
     // Ein Hinweisbild ersetzt das Aufgabenbild; ohne Bild bleibt es (außer nach dem Blitzblick).
@@ -1216,11 +1240,33 @@ export class TaskScene extends BaseScene<TaskSceneData> {
   }
 
   private readAloud(): void {
-    this.services.audio.speak(this.spokenText());
+    this.services.audio.speak(this.spokenParts());
   }
 
-  /** Aufgabe als Satz: zum Vorlesen und für Bildschirmleser. */
+  /** Aufgabe als Satz: für Bildschirmleser. */
   private spokenText(): string {
+    return this.spokenParts()
+      .map((p) => p.text.trim())
+      .filter((t) => t !== '')
+      .join(' ');
+  }
+
+  /** Hinweistext in Teilen; passt er nicht mehr zum Gezeigten, als ein freier Satz. */
+  private panelSpeech(): SpeechPart[] {
+    const message = this.panel.message?.trim() ?? '';
+    if (message === '') return [];
+    const joined = this.panelParts
+      .map((p) => p.text.trim())
+      .filter((t) => t !== '')
+      .join(' ');
+    return joined === message ? this.panelParts : [{ text: message }];
+  }
+
+  /**
+   * Aufgabe zum Vorlesen in Teilen: Frage und Hinweis mit ihrem Textschlüssel (dafür kann es
+   * eine Aufnahme geben), Zahlen und Rechnungen als freier Text für die Sprachausgabe.
+   */
+  private spokenParts(): SpeechPart[] {
     const words: Record<string, string> = {
       '+': this.t('read.plus'),
       '-': this.t('read.minus'),
@@ -1243,20 +1289,38 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     };
     const story = this.task.prompt.story;
     if (story) {
-      const extra = this.panel.message ? ` ${this.panel.message}` : '';
-      return `${this.t(`story.${story.id}`, story.params)}${extra}`;
+      return [
+        {
+          key: `story.${story.id}`,
+          params: story.params,
+          text: this.t(`story.${story.id}`, story.params),
+        },
+        ...this.panelSpeech(),
+      ];
     }
     const terms = this.task.prompt.terms
       .map((term) => (typeof term === 'number' ? String(term) : (words[term] ?? term)))
       .join(' ')
       .replace(/ ,/g, ',');
-    const question = this.question();
-    const extra = this.panel.message ? `. ${this.panel.message}` : '';
+    const { textKey, textParams } = this.task.prompt;
+    const parts: SpeechPart[] = [];
+    if (textKey) {
+      parts.push({
+        key: textKey,
+        ...(textParams ? { params: textParams } : {}),
+        text: this.question(),
+      });
+    }
+    parts.push({ text: terms });
+    const panel = this.panelSpeech();
+    if (panel.length > 0 && terms.trim() !== '') parts[parts.length - 1]!.text += '.';
+    parts.push(...panel);
     // Antwortsätze (z. B. Fragen zur Situation) werden mit vorgelesen.
-    const sentences = (this.task.options ?? [])
-      .filter((o) => o.label)
-      .map((o) => this.text(o.label!.key, o.label!.params));
-    const choices = sentences.length > 0 ? ` ${sentences.join(' ')}` : '';
-    return `${question ? `${question} ` : ''}${terms}${extra}${choices}`;
+    for (const o of this.task.options ?? []) {
+      if (!o.label) continue;
+      const { key, params } = o.label;
+      parts.push({ key, ...(params ? { params } : {}), text: this.text(key, params) });
+    }
+    return parts;
   }
 }

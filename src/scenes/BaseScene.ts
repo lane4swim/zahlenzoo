@@ -1,5 +1,7 @@
 import Phaser from 'phaser';
+import { musicFor, type Sfx } from '../logic/audio';
 import type { Services } from '../services/services';
+import { GameEvent } from '../types/events';
 import type { GameContent } from '../types/content';
 import { Button, type ButtonOptions } from '../ui/Button';
 import { announce } from '../ui/a11y';
@@ -38,6 +40,13 @@ export abstract class BaseScene<TData extends object = object> extends Phaser.Sc
     applyDisplay(this.services.save.activeProfile?.settings);
     // Tastaturbedienung: Tab, Pfeiltasten, Leertaste und Eingabe für alle Knöpfe der Szene.
     new FocusManager(this);
+    // Ton: Lautstärken des Profils, Musik der Szene, Effekte der UI-Bausteine
+    const { audio, save } = this.services;
+    const settings = save.activeProfile?.settings;
+    if (settings) audio.setVolumes(settings.music, settings.sfx);
+    const music = musicFor(this.scene.key);
+    if (music !== undefined) audio.setMusic(music);
+    this.listen(this.events, GameEvent.UiSound, (name: Sfx) => audio.play(name));
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, this.cleanup, this);
     this.onInit(data);
   }

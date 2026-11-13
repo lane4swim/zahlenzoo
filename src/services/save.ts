@@ -93,7 +93,8 @@ export type KeyValueStore = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
 
 export const DEFAULT_SETTINGS: Settings = {
   music: 0.4,
-  sfx: 0.8,
+  // Standard leise (Spezifikation 9): beide auf der Stufe „leise“
+  sfx: 0.4,
   readAloud: true,
   largeText: false,
 };
