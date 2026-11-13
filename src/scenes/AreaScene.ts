@@ -103,7 +103,10 @@ export class AreaScene extends BaseScene<AreaSceneData> {
     if (art) {
       // Antippen lässt das Tier vor Freude springen.
       const animal = new AnimalSprite(this, art.areaSpot.x, art.areaSpot.y, art, 280);
-      animal.setInteractive({ useHandCursor: true }).on('pointerup', () => animal.cheer());
+      animal.setInteractive({ useHandCursor: true }).on('pointerup', () => {
+        animal.cheer();
+        this.services.audio.animal(area.animal);
+      });
       // Das Baby-Tier aus dem Zoo-Laden steht mit seinem Namen neben dem großen Tier.
       const baby = profile.zoo.babies.find((b) => b.animal === area.animal);
       if (baby) this.addBaby(babyTexture(art), baby.name, art.areaSpot.x - 130, art.areaSpot.y);

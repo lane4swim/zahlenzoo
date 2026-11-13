@@ -73,6 +73,7 @@ export class ClockInput extends Phaser.GameObjects.Container {
             height: KEY,
             label: sign < 0 ? '−' : '+',
             fontSize: FontSize.digits,
+            sound: 'clock',
             onPress: () => this.change(sign * minutes),
           }),
         );

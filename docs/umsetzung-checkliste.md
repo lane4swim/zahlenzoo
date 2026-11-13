@@ -160,10 +160,10 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 
 **Audio** (Spez. 9, 11)
 
-- [ ] `audio.ts`: eingesprochene Datei, sonst Sprachausgabe des Browsers (Variante B)
-- [ ] Audio-Schlüssel für jeden Text
-- [ ] Ton erst nach der ersten Berührung; Musik und Effekte getrennt regelbar, Standard leise
-- [ ] Erste Aufnahmen: Hinweise der Hilfestufe 1
+- [x] `audio.ts`: eingesprochene Datei, sonst Sprachausgabe des Browsers (Variante B); Musik je Szene, Effekte über ein Ereignis der UI-Bausteine, Musik leiser beim Vorlesen
+- [x] Audio-Schlüssel für jeden Text: der Textschlüssel selbst (z. B. `hint.add_stepwise.1`); Aufnahmen nur für Sätze ohne Platzhalter, Zahlen liest die Sprachausgabe
+- [x] Ton erst nach der ersten Berührung; Musik und Effekte getrennt regelbar (Einstellungen je Profil), Standard leise
+- [ ] Erste Aufnahmen: Hinweise der Hilfestufe 1 (Aufnahmeliste `docs/aufnahmeliste.md` mit 330 Sätzen, davon 107 Hinweise der Stufe 1; Werkzeug `art/build_voice.py` bereitet Aufnahmen auf; Aufnahmen selbst fehlen noch)
 
 **Grafik und Ressourcen** (Spez. 11)
 
@@ -172,7 +172,7 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 - [ ] Mathe-Darstellungen: Zehnerfeld, Hundertertafel, Rechenstrich, Zahlenstrahl, Zehnerstangen und Einerwürfel, Uhr, Münzen und Scheine (stilisiert), Muster-Kacheln, Formen, Körper
 - [ ] Rund 20 Aufgabenobjekte, 12 Dekorationen, 12 Abzeichen, 8 Profil-Avatare; fertig: 4 Futterobjekte (Fisch, Eimer, Banane, Futternapf), 12 Dekorationen und 12 Abzeichen (`art/build_rewards.py`); Profil-Avatare: die 8 runden Tierbilder der Zoo-Karte (`karte_*_128.png`) sind als Profilbilder eingebunden
 - [ ] UI-Atlas, Tier-Atlas, Objekt-Atlas; Sprite-Sheets je Animation mit Atlas-JSON fertig, Symbole der Aufgabenansicht als Einzelbilder
-- [ ] 15 Soundeffekte und 8 Tierlaute, 3 Musikstücke
+- [x] 15 Soundeffekte und 8 Tierlaute, 3 Musikstücke als Loop: selbst erzeugt mit `art/build_audio.py` (Teil von `npm run art`), zusammen etwa 800 KB; Tierlaute spielzeughaft synthetisch
 - [ ] `ATTRIBUTIONS.md` für jede fremde Datei; Lizenzen geprüft (CC0, CC-BY mit Namensnennung, kein NC)
 
 **Inhaltliche Prüfung**

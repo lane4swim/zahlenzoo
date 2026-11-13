@@ -51,7 +51,7 @@ export default defineConfig({
       },
       workbox: {
         // alles ablegen: Spielcode, Schriften, Bilder (auch Tier-Sprite-Sheets) und Daten
-        globPatterns: ['**/*.{js,css,html,png,webp,json,woff,woff2,svg,ico,webmanifest}'],
+        globPatterns: ['**/*.{js,css,html,png,webp,json,woff,woff2,svg,ico,webmanifest,mp3}'],
         maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
         // Bilder lädt das Spiel mit ?v=<Build-Kennung>; abgelegt sind sie ohne
         ignoreURLParametersMatching: [/^v$/],

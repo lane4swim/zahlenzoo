@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { claimKeys } from './focus';
 import { Button } from './Button';
+import { uiSound } from './sound';
 import { Color, FontSize, Layout, Tex } from './theme';
 
 export type NumpadOptions = {
@@ -38,7 +39,15 @@ export class Numpad extends Phaser.GameObjects.Container {
       const row = Math.floor(i / 6);
       const x = (col - 2.5) * step;
       const y = (row - 0.5) * step;
-      const common = { x, y, width: KEY, height: KEY, onPress: () => this.press(key) };
+      const common = {
+        x,
+        y,
+        width: KEY,
+        height: KEY,
+        // Ziffern und Löschen klingen in press(), auch beim Tippen auf der Tastatur
+        sound: null,
+        onPress: () => this.press(key),
+      };
       const button =
         key === 'del'
           ? new Button(scene, { ...common, icon: Tex.backspace, iconScale: 0.8 })
@@ -65,6 +74,7 @@ export class Numpad extends Phaser.GameObjects.Container {
 
   private press(key: string): void {
     if (!this.enabled) return;
+    if (key !== 'ok') uiSound(this.scene, key === 'del' ? 'erase' : 'digit');
     if (key === 'del') {
       this.setValue(this.value.slice(0, -1));
     } else if (key === 'ok') {

@@ -1,4 +1,6 @@
 import { BaseScene } from './BaseScene';
+import { ANIMAL_SOUNDS, MUSIC, SFX } from '../logic/audio';
+import { soundKey } from '../services/audio';
 import { RAW_CONTENT, TEXTS_DE } from '../data';
 import type { Services } from '../services/services';
 import type { GameContent } from '../types/content';
@@ -80,6 +82,12 @@ export class BootScene extends BaseScene {
     // Pfade relativ zu `base` aus vite.config.ts (GitHub Pages: /zahlenzoo/).
     this.load.setPath(`${import.meta.env.BASE_URL}assets/`);
     for (const [key, file] of Object.entries(IMAGES)) this.load.image(key, versioned(file));
+    // Klänge aus art/build_audio.py (MP3 spielen alle Browser)
+    for (const s of SFX) this.load.audio(soundKey.sfx(s), versioned(`audio/sfx/${s}.mp3`));
+    for (const a of ANIMAL_SOUNDS) {
+      this.load.audio(soundKey.animal(a), versioned(`audio/animals/${a}.mp3`));
+    }
+    for (const m of MUSIC) this.load.audio(soundKey.music(m), versioned(`audio/music/${m}.mp3`));
     this.queueContentAssets(this.content);
   }
 
@@ -93,6 +101,8 @@ export class BootScene extends BaseScene {
       .map((a) => content.animals[a.animal])
       .filter((a) => a !== undefined);
     createAnimalAnimations(this, arts);
+    // Ton beginnt nach der ersten Berührung; bis dahin merkt sich der Dienst die Musik.
+    this.services.audio.attach(this.sound, `${import.meta.env.BASE_URL}assets/`);
     const { save } = this.services;
     this.scene.start(save.activeProfile ? SceneKey.Menu : SceneKey.Profile);
   }

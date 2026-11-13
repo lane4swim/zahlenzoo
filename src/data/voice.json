@@ -1,0 +1,4 @@
+{
+  "_hinweis": "Eingesprochene Texte in public/assets/audio/voice/<schlüssel>.mp3; erzeugt von art/build_voice.py. Fehlt ein Schlüssel, liest die Sprachausgabe des Browsers.",
+  "keys": []
+}

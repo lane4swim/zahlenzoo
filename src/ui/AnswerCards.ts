@@ -48,6 +48,8 @@ export class AnswerCards extends Phaser.GameObjects.Container {
         label: labels[i] ?? option.value,
         fontSize: short ? FontSize.digits : this.sentences ? FontSize.small : FontSize.text,
         ...(this.sentences ? { wrapWidth: LIST_W - 40 } : {}),
+        // Richtig oder Falsch klingt danach; ein Tippgeräusch wäre doppelt
+        sound: null,
         onPress: () => onPick(option.value),
       });
       decorate?.(option, card);
