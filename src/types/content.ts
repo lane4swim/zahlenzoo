@@ -21,6 +21,11 @@ export type Rules = {
    * chance 0 schaltet sie ab.
    */
   strategyPick: { families: string[]; chance: number; maxPerRound: number };
+  /**
+   * Nach der Runde: „Erkläre einer Person, wie du … gerechnet hast“ (KE 5, Kommunizieren;
+   * nicht automatisch geprüft). chance 0 schaltet sie ab.
+   */
+  explainAsk: { families: string[]; chance: number };
   /** Kompetenzmodell (Spezifikation 7): Schwellen für Stufenwechsel, Erklärung, Tagesfutter, Tempo */
   skill: SkillRules;
 };

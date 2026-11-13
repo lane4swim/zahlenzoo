@@ -12,8 +12,6 @@ export type TaskKind =
   | 'money'
   | 'pattern'
   | 'word'
-  /** Zahlen in einer Reihenfolge antippen (Ordnen) */
-  | 'order'
   /** Felder auf einem Raster antippen (Kästchen malen, Feld wählen) */
   | 'grid'
   /** Weg mit Pfeiltasten legen */
@@ -23,7 +21,9 @@ export type TaskKind =
   /** mehrere Dinge antippen, dann OK (Körper sortieren) */
   | 'select'
   /** Würfelgebäude bauen oder Bauplan schreiben (Feld antippen: ein Würfel mehr) */
-  | 'build';
+  | 'build'
+  /** Paare verbinden: Zahl und Darstellung (Darstellungswechsel) */
+  | 'match';
 
 /**
  * Stufe einer Aufgabenfamilie. Stufe 0 gibt es nur für das Einspluseins bis 20
@@ -102,9 +102,50 @@ export type Heights = number[];
 /** Würfelgebäude: Bauplan (Draufsicht) zum Nachbauen oder Gebäude zum Aufschreiben. */
 export type BuildInfo = { mode: 'build' | 'plan'; target: Heights };
 
+/**
+ * Zahlenstrahl von min bis max: kleine Striche alle `ticks`, Zahlen alle `labels`.
+ * marks: Zahlen, die unter dem Strahl stehen (z. B. die Lösung); arrow: Pfeil auf eine Zahl.
+ */
+export type LineSpec = {
+  min: number;
+  max: number;
+  ticks: number;
+  labels: number;
+  arrow?: number;
+  marks?: number[];
+};
+
+/**
+ * Marker auf dem Zahlenstrahl setzen (Antwort: die Zahl). snap: Raster beim Setzen;
+ * tolerance: so weit darf der Marker daneben liegen (Stufe 3: ungefähr).
+ */
+export type LineInfo = LineSpec & { snap: number; tolerance: number };
+
+/** Darstellung einer Zahl auf einer Zuordnungskarte. */
+export type ReprKind = 'digits' | 'word' | 'tensones' | 'tenframe';
+export type MatchCard = { n: number; repr: ReprKind };
+
+/**
+ * Paare verbinden: oben die Karten `top`, unten `bottom` (gemischt). Antwort: zu jeder oberen
+ * Karte die Nummer der passenden unteren Karte.
+ */
+export type MatchInfo = { top: MatchCard[]; bottom: MatchCard[] };
+
 /** Darstellungen für Hinweise und einblendbare Hilfen. */
 export type Visual =
   | ({ type: 'board' } & BoardSpec)
+  | ({ type: 'line' } & LineSpec)
+  | {
+      /** Zahlenhaus: Dachzahl, Stockwerke mit zwei Zahlen; null ist die gesuchte Zahl */
+      type: 'house';
+      top: number;
+      floors: Array<[number | null, number | null]>;
+    }
+  | {
+      /** Zuordnung gelöst: Paare aus Zahl und Darstellung nebeneinander (Hinweis) */
+      type: 'repr';
+      pairs: Array<[MatchCard, MatchCard]>;
+    }
   | {
       /** Körper oder Gegenstände nebeneinander */
       type: 'solids';
@@ -362,6 +403,12 @@ export type Task = {
   select?: SolidSpec[];
   /** Würfelgebäude bauen oder Bauplan schreiben */
   build?: BuildInfo;
+  /** Paare verbinden (Darstellungswechsel) */
+  match?: MatchInfo;
+  /** Ziehen und Ordnen: Beschriftung links und rechts der Reihe (Textschlüssel) */
+  sortEnds?: [string, string];
+  /** Marker auf dem Zahlenstrahl setzen */
+  line?: LineInfo;
   /** Uhrzeit: angezeigte oder einzustellende Zeit */
   clock?: ClockInfo;
   /** typische falsche Antworten als Text (z. B. Uhrzeiten) mit Fehlerart */

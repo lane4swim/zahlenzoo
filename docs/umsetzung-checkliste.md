@@ -115,7 +115,7 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 
 **Bereiche und Familien** (Spez. 5, KE 2)
 
-- [x] Affenwald: `neighbors_100` (mit `number_sequences`), `count_steps_100` (vorwärts, rückwärts, in Schritten 3, 4, 10), `read_write_100` (Zahlwort lesen und schreiben, Zahlwort zur Zahl wählen), `place_value_100` (Zehnerstangen zählen, zerlegen, umbündeln), `quick_count` (Blitzblick auf Zehnerfeld, Punktefeld und Zehnerstangen), `compare_100` (Vergleichszeichen, Stufe 3 `order_100`: Zahlen durch Antippen ordnen); sechs Themen im Gehege
+- [x] Affenwald: `neighbors_100` (mit `number_sequences`), `count_steps_100` (vorwärts, rückwärts, in Schritten 3, 4, 10), `read_write_100` (Zahlwort lesen und schreiben, Zahlwort zur Zahl wählen), `place_value_100` (Zehnerstangen zählen, zerlegen, umbündeln), `quick_count` (Blitzblick auf Zehnerfeld, Punktefeld und Zehnerstangen), `compare_100` (Vergleichszeichen, Stufe 3 `order_100`: Zahlen ziehen und ordnen), `match_repr` (Darstellungen zuordnen: Zahl zu Zehnerfeld, Zehnerstangen, Zahlwort), `number_line` (Zahlenstrahl: Marker setzen und ablesen); acht Themen im Gehege
 - [x] Pinguinfelsen: Stufe 0 `plus_facts_20`; `add_100`, `sub_100`, `decompose_10`, `complement_tens`, `tens_calc` (als „Blitzrechnen“), `estimate_100`, `smart_calc` („Geschickt rechnen“: Tauschaufgaben, Nachbaraufgaben mit Verdopplungen als Startaufgaben, Hilfsaufgaben mit glatten Zehnern), `path_choice`, `story_addsub`; acht Themen im Gehege
 - [ ] Elefantenwiese (`divide_rest` „Teilen mit Rest“ fertig: Stufe 1 Antwortkarten „3 Rest 2“, Stufe 2 Quotient oder Rest eintippen, Stufe 3 Sachaufgaben, die den Rest deuten; Klärung 5): `double_half`, `mult_core`, `mult_derive`, Division als Verteilen und Aufteilen, `story_multdiv`; davon `mult_table` fertig (Stufe 1 Kernaufgaben 1, 2, 5, 10 mit Verdoppeln und Halbieren, Stufe 2 Ableiten, Stufe 3 Umkehren und Verteilen), `story_multdiv` offen
 - [x] Zoo-Kasse: `money_lay` (Münzen und Scheine auf den Zahlteller legen; Stufe 1 Euro bis 20, Stufe 2 Euro bis 100, Stufe 3 Cent bis 100), `money_calc` (Sachaufgaben mit Geld), `money_convert` (ct und €: volle Euro, Zehner-Cent, beliebige Cent mit Null an der Zehnerstelle), `compare_money` (gleiche Einheit, verschiedene Schreibweisen, drei Beträge oder „gleich viel“), `question_pick` (passende Frage wählen; falsche Fragen: passt nicht, fehlende Angabe, steht schon im Text; Stufe 3 mit überflüssigen Angaben), `exact_or_estimate` (Stufe 1 und 2 genau oder ungefähr, Stufe 3 Überschlag „Reicht das Geld?“); Papagei, sechs Themen in zwei Reihen im Gehege
@@ -128,18 +128,18 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 - [x] Raumorientierung: `route_instructions`, `position_words` auf Weltkarte und im Gehege (im Gehege: `space_orientation` im Schmetterlingshaus; auf der Weltkarte: Knopf „Wege im Zoo“ mit `zoo_routes` auf dem Zooplan der acht Gehege)
 - [x] Baumodus aus dem Gehege: `solids_basic`, `cube_buildings` (Baustelle im Schmetterlingshaus; sechs Körper als Körper und Gegenstand, Mehrfachauswahl; Würfelgebäude 3 × 3 bis 3 hoch: zählen (jeder Würfel sichtbar, siehe `allVisible`), Bauplan wählen, nach Plan bauen, Bauplan schreiben, Ansicht von vorn und von rechts)
 - [x] Freier Modus „Muster erfinden“ ohne Sterne, Ergebnis im Zoo ausgestellt (KE 5): Knopf im Gehege des Schmetterlingshauses, Rückmeldung „wiederholt sich nach n Formen“, Reiter „Muster“ in „Mein Zoo“ (höchstens 6)
-- [ ] Übergreifend: `match_repr`, `strategy_pick`, Erklärfrage an eine erwachsene Person nach der Runde; fertig: `strategy_pick` („Wie hast du gerechnet?“ nach Plus- und Minusaufgaben mit Zehnerübergang, Häufigkeit in `rules.json`, Wahl je Familie im Spielstand gezählt)
+- [x] Übergreifend: `match_repr` (Affenwald, Eingabe Paare verbinden), `strategy_pick` („Wie hast du gerechnet?“ nach Plus- und Minusaufgaben mit Zehnerübergang, Häufigkeit in `rules.json`, Wahl je Familie im Spielstand gezählt), Erklärfrage am Rundenende („Erkläre jemandem, wie du 47 + 26 = 73 gerechnet hast.“, nicht geprüft, `explainAsk` in `rules.json`), Entdeckerpäckchen „Was fällt dir auf?“ und „Was passt nicht?“ in „Geschickt rechnen“ ab Stufe 2
 
 **Weitere Aufgabentypen und Eingabeformen** (Spez. 6, KE 6)
 
-- [ ] `drag-sort` mit Einrasten und sanftem Zurückschicken; als Ersatz ohne Ziehen gibt es `order` (Zahlen der Reihe nach antippen)
-- [ ] `number-line`
+- [x] `drag-sort` mit Einrasten und sanftem Zurückschicken; ohne Ziehen: zwei Karten antippen tauscht sie (auch mit der Tastatur); ersetzt das frühere Antippen der Reihe nach
+- [x] `number-line`: Marker antippen, ziehen oder mit Pfeiltasten schieben; Stufe 3 „ungefähr“ (± 2)
 - [x] `clock` (Zeiger ziehen oder Tasten; Uhrzeit wählen über Antwortkarten)
 - [x] `money` (Münzen und Scheine antippen und auf den Zahlteller legen)
-- [ ] `pattern` (Raster antippen)
+- [x] `pattern`: Muster fortsetzen über Formkarten, Kästchen malen über die Raster-Eingabe (`grid`)
 - [x] `word` (Bild plus Text): Sachtext, Bild der Dinge aus der Geschichte, Antwort mit Einheit über Ziffernblock oder Antwortkarten
-- [ ] Typen mit geringem Aufwand: `true_false`, `compare_symbol`, `sequence`, `inverse`, `number_house`, `odd_one_out`, `time_order`
-- [ ] Typen mit mittlerem Aufwand: `match_pairs`, `table_read`, `route`, `combinatorics`
+- [x] Typen mit geringem Aufwand: `true_false` („Stimmt die Rechnung?“ bei Plus und Minus bis 100), `compare_symbol` (`compare_100`), `sequence` (Zahlenfolgen in `neighbors_100`), `inverse` (Umkehraufgabe mit bekannter Plusaufgabe im Einspluseins Stufe 3), `number_house` (Zahlenhaus im Einspluseins Stufe 1), `odd_one_out` (Was passt nicht ins Päckchen?), `time_order` (Zeitspannen und Längen ordnen, Stufe 3)
+- [x] Typen mit mittlerem Aufwand: `match_pairs` (Eingabe Paare verbinden), `table_read` (`read_table`), `route` (`zoo_routes`, Pfeil-Weg), `combinatorics` (Eis-Kombinatorik)
 - [x] `cube_build` für den Baumodus (Eingabe `build`: Feld antippen, Gebäude wächst mit)
 
 **Weltkarte und Fortschritt** (Spez. 5)

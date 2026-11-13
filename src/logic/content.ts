@@ -67,6 +67,16 @@ function parseStrategyPick(v: unknown): Rules['strategyPick'] {
   };
 }
 
+/** Fehlt der Eintrag, kommt die Erklärfrage nach der Runde nicht. */
+function parseExplainAsk(v: unknown): Rules['explainAsk'] {
+  if (v === undefined) return { families: [], chance: 0 };
+  const o = obj(v, 'rules.json explainAsk');
+  return {
+    families: strings(o.families, 'explainAsk.families'),
+    chance: frac(o.chance, 'explainAsk.chance'),
+  };
+}
+
 /** Fehlt der Eintrag, gelten die Startwerte der Spezifikation (Abschnitt 7). */
 function parseSkillRules(v: unknown): SkillRules {
   const o = v === undefined ? {} : obj(v, 'rules.json skill');
@@ -136,6 +146,7 @@ export function parseRules(data: unknown): Rules {
     areaUnlockStars: int(d.areaUnlockStars, 'areaUnlockStars', 0, 1000),
     skillHistory: int(d.skillHistory, 'skillHistory', 1, 100),
     strategyPick: parseStrategyPick(d.strategyPick),
+    explainAsk: parseExplainAsk(d.explainAsk),
     skill: parseSkillRules(d.skill),
   };
   const { size, minSize, maxSize, mix: m } = rules.round;

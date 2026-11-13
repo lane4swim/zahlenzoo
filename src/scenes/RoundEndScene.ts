@@ -90,29 +90,45 @@ export class RoundEndScene extends BaseScene<RoundEndSceneData> {
       this.t('roundEnd.summary', { firstTry: summary.firstTry, total: summary.total }),
     );
 
-    const lines: string[] = [];
+    // Rückblick nach Wichtigkeit; was nicht über die Sticker und Knöpfe passt, entfällt.
+    const lines: Array<{ text: string; prio: number }> = [];
+    const add = (text: string, prio: number) => lines.push({ text, prio });
     const { easy, practice } = this.review();
-    if (easy.length > 0) lines.push(this.t('roundEnd.easy', { list: easy.join(', ') }));
-    if (practice.length > 0) lines.push(this.t('roundEnd.practice', { list: practice.join(', ') }));
+    if (easy.length > 0) add(this.t('roundEnd.easy', { list: easy.join(', ') }), 1);
+    if (practice.length > 0) add(this.t('roundEnd.practice', { list: practice.join(', ') }), 2);
     if (this.reward.levelUnlocked) {
-      lines.push(this.t('roundEnd.levelUnlocked', { level: this.reward.unlockedLevel }));
+      add(this.t('roundEnd.levelUnlocked', { level: this.reward.unlockedLevel }), 5);
     }
     // Kompetenzmodell: Stufenwechsel freundlich ankündigen (Spezifikation 7)
     if (this.reward.skillChange === 'up' && !this.reward.levelUnlocked) {
-      lines.push(this.t('roundEnd.skillUp', { level: this.reward.skillLevel }));
+      add(this.t('roundEnd.skillUp', { level: this.reward.skillLevel }), 4);
     } else if (this.reward.skillChange === 'down') {
-      lines.push(this.t('roundEnd.skillDown', { level: this.reward.skillLevel }));
+      add(this.t('roundEnd.skillDown', { level: this.reward.skillLevel }), 4);
     }
     if (this.result.tempoMs !== undefined) {
       const time = formatTime(this.result.tempoMs);
-      lines.push(
-        this.t(this.reward.tempoRecord ? 'roundEnd.tempoRecord' : 'roundEnd.tempo', { time }),
-      );
+      const key = this.reward.tempoRecord ? 'roundEnd.tempoRecord' : 'roundEnd.tempo';
+      add(this.t(key, { time }), 5);
+    }
+    // Erklärfrage (KE 5): nicht geprüft, nur eine Anregung zum Erzählen
+    if (this.result.explain) add(this.t('roundEnd.explain', { task: this.result.explain }), 3);
+
+    // Platz bis zu den Stickern (etwa 100 px) oder bis zu den Knöpfen (Oberkante 592)
+    const bottom = this.badges.length > 0 ? 500 : 584;
+    const texts = lines.map((l) => ({
+      ...l,
+      obj: this.addText(cx, 0, l.text).setWordWrapWidth(820).setOrigin(0.5, 0),
+    }));
+    const height = () => texts.reduce((h, t) => h + t.obj.height + 10, 0);
+    while (texts.length > 0 && 380 + height() > bottom) {
+      const low = texts.reduce((a, b) => (b.prio < a.prio ? b : a));
+      low.obj.destroy();
+      texts.splice(texts.indexOf(low), 1);
     }
     let y = 380;
-    for (const line of lines) {
-      const text = this.addText(cx, y, line).setWordWrapWidth(820).setOrigin(0.5, 0);
-      y += text.height + 10;
+    for (const t of texts) {
+      t.obj.y = y;
+      y += t.obj.height + 10;
     }
     if (this.badges.length > 0) this.showBadges(cx + 70, Math.min(Math.max(y + 46, 540), 560));
 
@@ -177,7 +193,8 @@ export class RoundEndScene extends BaseScene<RoundEndSceneData> {
           fontFamily: FontFamily.text,
           fontSize: `${FontSize.text}px`,
           color: CssColor.text,
-          wordWrap: { width: 620 },
+          // neben drei oder vier Stickerbildern bleibt weniger Breite für die Namen
+          wordWrap: { width: this.badges.length >= 3 ? 420 : 620 },
         },
       )
       .setOrigin(0, 0.5);

@@ -468,8 +468,9 @@ export const compare100: Generator = (level, rng, id, params): Task => {
       id,
       family: COMPARE_100,
       level,
-      kind: 'order',
+      kind: 'drag-sort',
       prompt: { terms: [], textKey: up ? 'task.prompt.orderUp' : 'task.prompt.orderDown' },
+      sortEnds: up ? ['sort.smallest', 'sort.largest'] : ['sort.largest', 'sort.smallest'],
       answer: sorted,
       options: numbers.map((n) => ({ value: String(n) })),
       hints: [

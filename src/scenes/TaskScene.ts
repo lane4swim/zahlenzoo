@@ -8,6 +8,7 @@ import { GENERATORS } from '../logic/generators';
 import { check } from '../logic/check';
 import { createRng, type Rng } from '../logic/rng';
 import {
+  explainTask,
   recordStrategy,
   shouldAskStrategy,
   STRATEGY_WAYS,
@@ -47,7 +48,12 @@ import { TensOnes } from '../ui/math/TensOnes';
 import { ClockInput } from '../ui/ClockInput';
 import { ClockFace } from '../ui/math/ClockFace';
 import { MoneyInput } from '../ui/MoneyInput';
-import { OrderInput } from '../ui/OrderInput';
+import { DragSortInput } from '../ui/DragSortInput';
+import { MatchInput } from '../ui/MatchInput';
+import { NumberLineInput } from '../ui/NumberLineInput';
+import { NumberHouse } from '../ui/math/NumberHouse';
+import { NumberRay } from '../ui/math/NumberRay';
+import { ReprPairs } from '../ui/math/Repr';
 import { GridInput } from '../ui/GridInput';
 import { SelectInput } from '../ui/SelectInput';
 import { BuildInput } from '../ui/BuildInput';
@@ -110,6 +116,12 @@ const DISPLAY_Y = 420;
 /** Raster zum Antippen und Umriss beim Formenlegen (zwischen Hinweis und Tasten) */
 const GRID_Y = 448;
 const COMPOSE_Y = 430;
+/** Paare verbinden: obere und untere Kartenreihe, „Weiter“ nach der Lösung */
+const MATCH = { top: 404, bottom: 572, next: 712 };
+/** Zahlenstrahl mit Marker */
+const LINE_Y = 470;
+/** Ziehen und Ordnen: Kartenreihe (darunter „OK“) */
+const SORT_Y = 560;
 
 /**
  * Aufgabenansicht: Tier links, Rechnung oben, Hinweise in der Mitte, Eingabe unten.
@@ -147,7 +159,9 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     | AnswerCards
     | MoneyInput
     | ClockInput
-    | OrderInput
+    | DragSortInput
+    | MatchInput
+    | NumberLineInput
     | GridInput
     | ComposeInput
     | SelectInput
@@ -175,6 +189,8 @@ export class TaskScene extends BaseScene<TaskSceneData> {
   private timeLog: Array<{ taskId: string; family: string; ms: number }> = [];
   /** Fehlerart, deren Strategie die nächste Aufgabe erklärt */
   private explainNext?: string;
+  /** Erklärfrage am Rundenende (einmal je Runde ausgewürfelt) */
+  private explainCache?: { text: string | undefined };
 
   constructor(services: Services) {
     super(SceneKey.Task, services);
@@ -191,6 +207,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     this.errorLog = [];
     this.timeLog = [];
     this.explainNext = undefined;
+    this.explainCache = undefined;
     const content = this.content;
     const area = findArea(content, data.areaId);
     const family = data.family;
@@ -436,10 +453,43 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       });
       return;
     }
-    if (task.kind === 'order' && task.options) {
-      this.answerInput = new OrderInput(this, INPUT_X, INPUT_Y, task.options, (value) =>
-        this.submit(value),
-      );
+    if (task.match) {
+      this.answerInput = new MatchInput(this, {
+        info: task.match,
+        x: INPUT_X,
+        topY: MATCH.top,
+        bottomY: MATCH.bottom,
+        wordOf: (n) => this.t(`num.${n}`),
+        onSubmit: (value) => this.submit(value),
+      });
+      this.explainIfDue();
+      announce(this.spokenText());
+      return;
+    }
+    if (task.line) {
+      this.answerInput = new NumberLineInput(this, {
+        info: task.line,
+        line: { x: PANEL.x, y: LINE_Y, width: PANEL.width - 90 },
+        keys: { x: INPUT_X, y: INPUT_Y },
+        okLabel: this.t('common.ok'),
+        onSubmit: (value) => this.submit(value),
+      });
+      this.explainIfDue();
+      announce(this.spokenText());
+      return;
+    }
+    if (task.kind === 'drag-sort' && task.options) {
+      const ends = task.sortEnds;
+      this.answerInput = new DragSortInput(this, {
+        items: task.options.map((o) => ({ value: o.value, label: this.cardText(o.value) })),
+        x: INPUT_X,
+        y: SORT_Y,
+        ...(ends ? { ends: [this.t(ends[0]), this.t(ends[1])] as [string, string] } : {}),
+        okLabel: this.t('common.ok'),
+        onSubmit: (value) => this.submit(value),
+      });
+      this.explainIfDue();
+      announce(this.spokenText());
       return;
     }
     if (task.options) {
@@ -716,7 +766,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     this.animal?.think();
     if (this.answerInput instanceof AnswerCards) this.answerInput.markWrong(value);
     if (this.answerInput instanceof Numpad) this.answerInput.clear();
-    if (this.answerInput instanceof OrderInput) this.answerInput.clear();
+    if (this.answerInput instanceof MatchInput) this.answerInput.clear();
     if (this.answerInput instanceof GridInput && this.task.grid?.mode === 'pick')
       this.answerInput.clear();
     // Gelegtes Geld bleibt liegen, damit das Kind ergänzen oder zurücklegen kann.
@@ -758,10 +808,18 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       // Ohne Antwortkästchen bleibt die richtige Karte stehen, darunter „Weiter“.
       this.answerInput.showSolution(String(this.task.answer), -110);
       nextY = INPUT_Y + 40;
-    } else if (this.answerInput instanceof OrderInput && Array.isArray(this.task.answer)) {
-      // Die Karten zeigen die richtige Reihenfolge; „Weiter“ steht darunter.
+    } else if (this.answerInput instanceof DragSortInput && Array.isArray(this.task.answer)) {
+      // Die Karten zeigen die richtige Reihenfolge; „Weiter“ steht an der Stelle von „OK“.
       this.answerInput.showOrder(this.task.answer.map(String));
-      nextY = INPUT_Y + 100;
+      nextY = SORT_Y + 118;
+    } else if (this.answerInput instanceof MatchInput && Array.isArray(this.task.answer)) {
+      this.answerInput.showSolution(this.task.answer);
+      nextY = MATCH.next;
+    } else if (
+      this.answerInput instanceof NumberLineInput &&
+      typeof this.task.answer === 'number'
+    ) {
+      this.answerInput.showSolution(this.task.answer);
     } else if (this.answerInput instanceof GridInput) {
       // Das Raster zeigt die Lösung; die Tasten machen Platz für „Weiter“.
       this.answerInput.showSolution(String(this.task.answer)).setButtonsVisible(false);
@@ -816,6 +874,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       errors: this.errorLog.map((e) => e.tag),
       times: this.timeLog.map((t) => t.ms),
       ...(this.tempo ? { tempoMs: Math.round(this.time.now - this.tempoStart) } : {}),
+      ...(this.explainText() ? { explain: this.explainText() } : {}),
       ...(this.daily
         ? {
             daily: this.round.tasks.map((t, i) => {
@@ -833,6 +892,15 @@ export class TaskScene extends BaseScene<TaskSceneData> {
         : {}),
     };
     this.events.emit(GameEvent.RoundFinished, payload);
+  }
+
+  /** Erklärfrage nach der Runde (nicht beim Tagesfutter und in der Tempo-Runde). */
+  private explainText(): string | undefined {
+    if (this.daily || this.tempo) return undefined;
+    this.explainCache ??= {
+      text: explainTask(this.round.tasks, this.round.outcomes, this.content.rules, this.flowRng),
+    };
+    return this.explainCache.text;
   }
 
   private onRoundFinished(payload: RoundFinishedPayload): void {
@@ -905,6 +973,15 @@ export class TaskScene extends BaseScene<TaskSceneData> {
   private visualFor(visual: Visual): Phaser.GameObjects.GameObject {
     if (visual.type === 'board') {
       return new GridBoard(this, PANEL.x, VISUAL_Y, visual);
+    }
+    if (visual.type === 'line') {
+      return new NumberRay(this, PANEL.x, VISUAL_Y + 10, PANEL.width - 90, visual);
+    }
+    if (visual.type === 'house') {
+      return new NumberHouse(this, PANEL.x, VISUAL_Y, visual.top, visual.floors);
+    }
+    if (visual.type === 'repr') {
+      return new ReprPairs(this, PANEL.x, VISUAL_Y, visual.pairs, (n) => this.t(`num.${n}`));
     }
     if (visual.type === 'pieces') {
       return new PiecesView(
@@ -1041,6 +1118,11 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     this.picture?.setVisible(true);
     // Ein Hinweisbild ersetzt das Aufgabenbild; ohne Bild bleibt es (außer nach dem Blitzblick).
     this.display?.setVisible(!hint.visual && !this.displayHidden);
+    // Paare und Zahlenstrahl zeigen den Hinweis direkt in der Eingabe statt in einem Bild.
+    if (hint.visual && this.hintInInput(hint.visual)) {
+      this.panel.show(text, icon);
+      return;
+    }
     const visual = hint.visual ? this.visualFor(hint.visual) : undefined;
     // Beim Blitzblick zeigt der Hinweis das Bild so groß wie in der Aufgabe.
     if (visual && hint.visual && this.task.display) {
@@ -1048,6 +1130,25 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     }
     this.panel.show(text, icon, visual);
     if (visual) this.fitBelowText(visual);
+  }
+
+  private hintInInput(visual: Visual): boolean {
+    const input = this.answerInput;
+    if (input instanceof NumberLineInput && visual.type === 'line') {
+      input.showMarks(visual.marks ?? [], visual.arrow);
+      return true;
+    }
+    if (input instanceof MatchInput && visual.type === 'repr' && this.task.match) {
+      const answer = this.task.answer as number[];
+      const { top, bottom } = this.task.match;
+      for (const [a, b] of visual.pairs) {
+        const t = top.findIndex((c) => c.n === a.n);
+        const z = bottom.findIndex((c) => c.n === b.n);
+        if (t >= 0 && z >= 0 && answer[t] === z) input.showPair(t, z);
+      }
+      return true;
+    }
+    return false;
   }
 
   /**

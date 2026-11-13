@@ -26,18 +26,39 @@ describe('plus_facts_20', () => {
     });
   });
 
-  it('übt in Stufe 1 Plus bis 10 und das Zerlegen der 10', () => {
+  it('übt in Stufe 1 Plus bis 10, das Zerlegen der 10 und Zahlenhäuser', () => {
     let decompose = 0;
-    forAllSeeds(1, ({ math: m, kind }) => {
+    let houses = 0;
+    forAllSeeds(1, ({ math: m, kind, display }) => {
       expect(m!.op).toBe('+');
       expect(m!.result).toBeLessThanOrEqual(10);
-      if (m!.missing === 'b') {
+      if (display?.visual.type === 'house') {
+        houses++;
+        // Im Haus steht die Dachzahl; jedes volle Stockwerk ergibt sie, eines hat die Lücke.
+        const { top, floors } = display.visual;
+        expect(top).toBe(m!.result);
+        expect(floors.filter(([, r]) => r === null)).toEqual([[m!.a, null]]);
+        for (const [l, r] of floors) if (r !== null) expect(l! + r).toBe(top);
+        expect(kind).toBe('gap');
+      } else if (m!.missing === 'b') {
         decompose++;
         expect(m!.result).toBe(10);
         expect(['gap', 'choice']).toContain(kind);
       }
     });
-    expect(decompose).toBeGreaterThan(200);
+    expect(decompose).toBeGreaterThan(150);
+    expect(houses).toBeGreaterThan(100);
+  });
+
+  it('nennt bei der Umkehraufgabe die bekannte Plusaufgabe', () => {
+    let inverse = 0;
+    forAllSeeds(3, ({ math: m, prompt }) => {
+      if (m!.op !== '-') return;
+      inverse++;
+      expect(prompt.textKey).toBe('task.prompt.inverse');
+      expect(prompt.textParams?.['known']).toBe(`${m!.result} + ${m!.b} = ${m!.a}`);
+    });
+    expect(inverse).toBeGreaterThan(100);
   });
 
   it('bleibt in Stufe 2 ohne Übergang und übt in Stufe 3 den Zehnerübergang mit Umkehraufgaben', () => {

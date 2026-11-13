@@ -20,7 +20,9 @@ describe('Antwortkästchen', () => {
             !t.select &&
             !t.build &&
             !t.money &&
-            !t.clock?.set;
+            !t.clock?.set &&
+            !t.match &&
+            !t.line;
           if (numpad && !t.prompt.story && !t.prompt.terms.includes('?')) {
             missing.add(`${family} Stufe ${level}: ${t.prompt.textKey ?? ''}`);
           }

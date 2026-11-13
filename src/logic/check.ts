@@ -35,6 +35,12 @@ export function check(task: Task, input: TaskInput): CheckResult {
     const value = toNumber(input);
     if (value === undefined) return { correct: false, invalid: true };
     if (value === answer) return { correct: true };
+    if (task.line) {
+      // Zahlenstrahl: Auf Stufe 3 genügt „ungefähr“; daneben heißt meist ein Zehner zu weit.
+      const off = Math.abs(value - answer);
+      if (off <= task.line.tolerance) return { correct: true };
+      return { correct: false, errorTag: off >= 8 ? 'line_tens' : 'line_near' };
+    }
     return { correct: false, ...tagFor(task, value) };
   }
 
