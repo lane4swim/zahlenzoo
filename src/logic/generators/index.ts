@@ -17,6 +17,8 @@ import { plusFacts20, PLUS_FACTS_20 } from './plusFacts20';
 import { CLOCK_FAMILIES, clockFor } from './clock';
 import { compareMoney, COMPARE_MONEY } from './compareMoney';
 import { DIVIDE_REST, divideRest } from './divideRest';
+import { DIVIDE_SHARE, divideShare } from './divideShare';
+import { DOUBLE_HALF, doubleHalf } from './doubleHalf';
 import { CUBE_BUILDINGS, cubeBuildings, SOLIDS_BASIC, solidsBasic } from './solids';
 import {
   COMBINATORICS,
@@ -108,6 +110,8 @@ export const GENERATORS: Readonly<Record<string, Generator>> = {
   [ESTIMATE_100]: estimate100,
   [PATH_CHOICE]: pathChoice,
   [DIVIDE_REST]: divideRest,
+  [DOUBLE_HALF]: doubleHalf,
+  [DIVIDE_SHARE]: divideShare,
   [SMART_CALC]: withPackages(smartCalc, SMART_CALC),
   [MEASURE_LENGTH]: measureLength,
   [COMPARE_LENGTH]: withSort(compareLength, 'length'),

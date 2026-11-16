@@ -121,6 +121,14 @@ export type LineSpec = {
  */
 export type LineInfo = LineSpec & { snap: number; tolerance: number };
 
+/**
+ * Verteilen (share: total Dinge gerecht auf groups Teller) oder Aufteilen (measure: immer size
+ * Dinge in einen Korb) zum Selbermachen. Antwort: Anzahl je Teller oder Anzahl Körbe.
+ */
+export type ShareInfo =
+  | { mode: 'share'; total: number; groups: number; icon: string }
+  | { mode: 'measure'; total: number; size: number; icon: string };
+
 /** Darstellung einer Zahl auf einer Zuordnungskarte. */
 export type ReprKind = 'digits' | 'word' | 'tensones' | 'tenframe';
 export type MatchCard = { n: number; repr: ReprKind };
@@ -409,6 +417,8 @@ export type Task = {
   sortEnds?: [string, string];
   /** Marker auf dem Zahlenstrahl setzen */
   line?: LineInfo;
+  /** Verteilen oder Aufteilen zum Selbermachen */
+  share?: ShareInfo;
   /** Uhrzeit: angezeigte oder einzustellende Zeit */
   clock?: ClockInfo;
   /** typische falsche Antworten als Text (z. B. Uhrzeiten) mit Fehlerart */
