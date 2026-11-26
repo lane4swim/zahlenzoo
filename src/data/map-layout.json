@@ -98,6 +98,14 @@
       "meerschweinchen": {
         "x": 824,
         "y": 270
+      },
+      "eselweide": {
+        "x": 200,
+        "y": 560
+      },
+      "ponyhof": {
+        "x": 512,
+        "y": 560
       }
     },
     "signpost": {

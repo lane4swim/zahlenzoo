@@ -22,6 +22,20 @@
       "areaSpot": { "x": 220, "y": 712 },
       "babyPrice": 5
     },
+    "donkey": {
+      "prefix": "eselweide_esel",
+      "icon": "karte_esel",
+      "taskSpot": { "x": 112, "y": 336 },
+      "areaSpot": { "x": 220, "y": 712 },
+      "babyPrice": 5
+    },
+    "pony": {
+      "prefix": "ponyhof_pony",
+      "icon": "karte_pony",
+      "taskSpot": { "x": 112, "y": 336 },
+      "areaSpot": { "x": 220, "y": 712 },
+      "babyPrice": 5
+    },
     "penguin": {
       "prefix": "pinguinfelsen_pinguin",
       "icon": "karte_pinguin",

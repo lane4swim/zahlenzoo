@@ -8,6 +8,8 @@ import {
   rowPoints,
   scatterPoints,
 } from '../src/logic/generators/streichelzoo';
+import { addSub20, decompose10, shapes1 } from '../src/logic/generators/gradeOne';
+import { GENERATORS } from '../src/logic/generators';
 import { compare20, numbers20, pairPoints } from '../src/logic/generators/numbers20';
 import { createRng } from '../src/logic/rng';
 import type { Task, TaskLevel } from '../src/types/task';
@@ -203,5 +205,86 @@ describe('Streichelzoo: Mehr oder weniger', () => {
     expect(p[0]![0]).toBe(p[4]![0]);
     expect(p[1]![0]).toBe(p[5]![0]);
     expect(p[0]![1]).toBeLessThan(p[4]![1]);
+  });
+});
+
+describe('Streichelzoo: Eselweide', () => {
+  it('Zerlegen: Teile ergeben das Ganze, bis 10', () => {
+    for (const level of levels) {
+      for (let seed = 0; seed < 300; seed++) {
+        const task = decompose10(level, createRng(seed), 't', params('decompose_10', level));
+        expect(task.family).toBe('decompose_10');
+        expect(task.level).toBe(level);
+        const m = task.math!;
+        expect(m.a + m.b).toBe(m.result);
+        expect(m.result).toBeLessThanOrEqual(level === 1 ? 6 : 10);
+        if (level === 3) expect(m.result).toBe(10);
+        if (level === 2) expect(task.display?.visual.type).toBe('house');
+        checkCards(task);
+      }
+    }
+  });
+
+  it('Plus und Minus bis 20: Stufe 1 ohne, Stufe 3 mit Zehnerübergang, Stufe 2 Doppel', () => {
+    for (const level of levels) {
+      for (let seed = 0; seed < 300; seed++) {
+        const task = addSub20(level, createRng(seed), 't', params('addsub_20', level));
+        const m = task.math!;
+        expect(m.op === '+' ? m.a + m.b : m.a - m.b).toBe(m.result);
+        expect(Math.max(m.a, m.b, m.result)).toBeLessThanOrEqual(20);
+        expect(m.result).toBeGreaterThanOrEqual(0);
+        if (level === 1) {
+          expect(m.carry).toBe(false);
+          expect(m.a).toBeGreaterThan(10);
+        }
+        if (level === 2) expect(Math.abs(m.a - m.b)).toBeLessThanOrEqual(1);
+        if (level === 3) expect(m.carry).toBe(true);
+        checkCards(task);
+      }
+    }
+  });
+
+  it('Lagewörter laufen als eigenes Thema', () => {
+    for (const level of levels) {
+      const task = GENERATORS.position_1!(level, createRng(3), 't', params('position_1', level));
+      expect(task.family).toBe('position_1');
+      checkCards(task);
+    }
+  });
+});
+
+describe('Streichelzoo: Ponyhof', () => {
+  it('Formen: drei Formenkarten, die gesuchte ist dabei', () => {
+    for (const level of [1, 2] as TaskLevel[]) {
+      for (let seed = 0; seed < 200; seed++) {
+        const task = shapes1(level, createRng(seed), 't', params('shapes_1', level));
+        expect(task.options).toHaveLength(3);
+        expect(task.options!.every((o) => o.shape)).toBe(true);
+        const right = task.options!.filter((o) => o.shape!.kind === task.answer);
+        expect(right).toHaveLength(1);
+      }
+    }
+    for (let seed = 0; seed < 200; seed++) {
+      const task = shapes1(3, createRng(seed), 't', params('shapes_1', 3));
+      const visual = task.display!.visual;
+      if (visual.type !== 'shapes') throw new Error('Formen erwartet');
+      expect(task.answer).toBeGreaterThanOrEqual(1);
+      checkCards(task);
+    }
+  });
+
+  it('Muster, Geld und Uhr: eigene Themen, höchstens drei Karten, Geld bis 20 €', () => {
+    for (const family of ['pattern_1', 'money_20', 'clock_1']) {
+      for (const level of levels) {
+        for (let seed = 0; seed < 100; seed++) {
+          const task = GENERATORS[family]!(level, createRng(seed), 't', params(family, level));
+          expect(task.family).toBe(family);
+          checkCards(task);
+          if (family === 'money_20') {
+            expect(task.money!.amount).toBeLessThanOrEqual(level === 1 ? 10 : 20);
+          }
+        }
+      }
+    }
   });
 });

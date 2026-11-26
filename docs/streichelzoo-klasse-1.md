@@ -86,11 +86,15 @@ Der Streichelzoo ist eine eigene Karte wie der große Zoo, mit eigenen Gehegen. 
 | Ziegenwiese | Ziege | `count_20`, `quick_count_20` | offen |
 | Hasenstall | Hase | `addsub_10` | 6 Sterne auf der Ziegenwiese |
 | Meerschweinchen | Meerschweinchen | `numbers_20`, `compare_20` | 6 Sterne im Hasenstall |
-| weitere, z. B. Esel, Ponys, Hühner | | übrige Themen aus Abschnitt 4 und 6 | jeweils über das vorige Gehege |
+| Eselweide | Esel | `decompose_10`, `addsub_20`, `position_1` | 6 Sterne bei den Meerschweinchen |
+| Ponyhof | Pony | `shapes_1`, `pattern_1`, `money_20`, `clock_1` (die Themen der Scheune aus Abschnitt 6) | 6 Sterne auf der Eselweide |
+| weitere, z. B. Hühner | | neue Themen | jeweils über das vorige Gehege |
+
+Damit sind alle Themen aus den Abschnitten 4 und 6 umgesetzt. `position_1`, `pattern_1`, `money_20` und `clock_1` nutzen die Generatoren der Klasse 2 mit eigenen Parametern in `families.json` (Hülle `gradeOneFrom` in `src/logic/generators/gradeOne.ts`: eigene Familie, höchstens drei Karten). Bei Formen zeigen die Karten Formen statt Wörtern; beim Geldlegen steht für Klasse 1 der Betrag als Zahl über dem Zahlteller.
 
 Umsetzung von `compare_20` Stufe 1: Die beiden Tiergruppen stehen auf zwei großen Antwortkarten; das Kind tippt die Karte mit mehr (oder weniger) Tieren. Die Gruppen zeigen verschiedene Tiere, damit die Größe der Bilder nicht über „mehr“ entscheidet. Bei `numbers_20` Stufe 1 wird das Zahlwort nur vorgelesen; geantwortet wird immer mit drei Karten.
 
-Ein neues Gehege braucht einen Eintrag in `areas.json` mit `"map": "streichelzoo"`, eine Lage unter `streichelzoo.areas` in `map-layout.json`, ein Tier in `animals.json` mit Grafiken (`art/build_animals.py`) und Laut (`art/build_audio.py`) sowie Gehege- und Aufgabenhintergrund (`art/build_backgrounds.py`). Freie Plätze auf der Karte liegen unten links und in der Mitte, wo jetzt Teich und Heuballen stehen; die Scheune unten rechts kann ebenfalls weichen (`art/build_map.py`, `background_petting`).
+Ein neues Gehege braucht einen Eintrag in `areas.json` mit `"map": "streichelzoo"`, eine Lage unter `streichelzoo.areas` in `map-layout.json`, ein Tier in `animals.json` mit Grafiken (`art/build_animals.py`) und Laut (`art/build_audio.py`) sowie Gehege- und Aufgabenhintergrund (`art/build_backgrounds.py`). Alle sechs Plätze der beiden Reihen sind bis auf den Platz unten rechts (Scheune) belegt; ein weiteres Gehege kommt dorthin oder braucht eine dritte Reihe auf der Karte (`art/build_map.py`, `background_petting`).
 
 Für Klasse 1 öffnen Affenwald und Pinguinfelsen (`gradeOneBridge` in `areas.json`), wenn im ganzen Streichelzoo zusammen 24 Sterne gesammelt sind. Die Scheune aus Abschnitt 6 kann ein eigenes Gehege werden, z. B. der Ponyhof.
 

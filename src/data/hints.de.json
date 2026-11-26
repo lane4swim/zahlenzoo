@@ -698,5 +698,22 @@
   "error.teen_ten": "Die Zahl ist größer als 10. Vergiss die Zehn nicht.",
   "error.neighbor_wrong_side": "Schau, in welche Richtung die Reihe geht: Jede Zahl ist 1 größer.",
   "error.compare_count": "Bilde Paare, dann siehst du, wo mehr sind.",
-  "error.difference_total": "Du hast alle zusammengezählt. Gefragt ist, wie viele mehr sind."
+  "error.difference_total": "Du hast alle zusammengezählt. Gefragt ist, wie viele mehr sind.",
+  "hint.addsub20.analog.1": "Rechne erst ohne die Zehn: {a} {op} {b} = {result}. Dann kommt die Zehn dazu.",
+  "hint.addsub20.analog.2": "Im Zehnerfeld: Das volle Feld ist die 10. Rechne nur im zweiten Feld.",
+  "hint.addsub20.3": "{a} {op} {b} = {result}",
+  "hint.addsub20.double.1": "Das Doppelte von {a}: zweimal gleich viele.",
+  "hint.addsub20.double.2": "Schau auf das Zehnerfeld: zweimal {a}.",
+  "hint.addsub20.near.1": "Fast ein Doppel: {a} + {a} = {double}. Dann noch 1 dazu.",
+  "hint.shapes1.same.1": "Schau auf die Form, nicht auf die Farbe oder die Größe.",
+  "hint.shapes1.hear.1": "Hör noch einmal genau hin, welche Form gesucht ist.",
+  "hint.shapes1.count.1": "Suche jede Form, die ein {name} ist, und zeige mit dem Finger darauf.",
+  "hint.shapes1.count.2": "Gehe der Reihe nach von links nach rechts und zähle nur, was ein {name} ist.",
+  "hint.shapes1.count.3": "Es sind {n}.",
+  "error.decompose_sum": "Das sind alle zusammen. Gefragt ist, wie viele noch keinen Haken haben.",
+  "error.near_double": "Das ist das Doppel. Eine Zahl ist 1 größer, also kommt noch 1 dazu.",
+  "error.shape_all": "Das sind alle Formen. Zähle nur die gesuchte Form.",
+  "hint.decompose1.1": "Es sind {n} Tiere. {k} haben einen Haken. Wie viele sind übrig?",
+  "hint.decompose1.2": "Im Zehnerfeld sind {k} Plättchen voll, die Ringe fehlen noch bis {n}.",
+  "hint.decompose1.3": "{k} und {rest} sind zusammen {n}."
 }

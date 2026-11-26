@@ -240,7 +240,8 @@ Plan: [`streichelzoo-klasse-1.md`](streichelzoo-klasse-1.md).
 - [x] Streichelzoo als eigene Karte mit Wegweiser zum großen Zoo und zurück; Startkarte je Klasse; Zurück aus Gehege, Aufgabe und Rundenende auf die Karte des Geheges
 - [x] Gehege Ziegenwiese (Ziege: Zählen, Blitzblick) und Hasenstall (Hase: Plus und Minus bis 10), je mit Tier, Baby, Kartensymbol, Laut, Gehege- und Aufgabenhintergrund; Bank auf der großen Karte versetzt, Babykarten in „Mein Zoo“ in zwei Reihen
 - [x] Gehege Meerschweinchen: `numbers_20` (Zahlwort hören, Ordnungszahlen, Zahlenreihe, Zahlenstrahl, Zahlwörter 11 bis 20) und `compare_20` (Tiergruppen auf großen Karten, Zeichen <, >, =, „Wie viele mehr?“ mit Paaren); Meerschweinchen mit Baby, Quieken und Hintergründen; Scheune auf der Karte nach unten rechts
-- [ ] Weitere Gehege im Streichelzoo, z. B. Esel, Ponys (Anleitung: `streichelzoo-klasse-1.md`, Abschnitt 3)
+- [x] Eselweide (Esel: Zerlegen, Plus und Minus bis 20, Lagewörter) und Ponyhof (Pony: Formen, Muster, Geld bis 20 €, volle Stunden), je mit Tier, Baby, Laut und Hintergründen; Teich und Heuballen der Karte entfernt
+- [ ] Lagewörter und Uhr für Klasse 1 ohne Wortkarten (bisher „unter dem Tisch“, „7 Uhr“ als Text; wird vorgelesen)
 - [x] Themen `count_20` (Antippen mit Häkchen), `quick_count_20` (Würfel- und Fingerbilder, Zehnerfelder), `addsub_10` (mit Bild, Bildrechengeschichten, Umkehraufgaben); höchstens drei Antwortkarten
 - [x] Klasse 1 in der Aufgabenansicht: kein Aufgaben-, Hinweis- und Lobtext, Vorlesen beim Erscheinen und bei jedem Hinweis, Knöpfe nur als Symbol, ohne Rechenhilfen der Klasse 2, Runden mit 7 Aufgaben
 - [ ] Bildsymbol je Aufgabe (antippen, schau, gib)
@@ -248,7 +249,7 @@ Plan: [`streichelzoo-klasse-1.md`](streichelzoo-klasse-1.md).
 - [ ] Größere Tippflächen (80 × 80) für Klasse 1
 - [ ] Aufnahmen: Zahlwörter 0 bis 20, Aufgaben- und Hinweissätze des Streichelzoos (bis dahin Sprachausgabe des Browsers)
 - [ ] Spieltest mit Kindern der 1. Klasse
-- [ ] Übrige Themen: `decompose_10`, `addsub_20`, `position_1`; Scheune mit `shapes_1`, `pattern_1`, `money_20`, `clock_1`
+- [x] Alle Themen aus `streichelzoo-klasse-1.md`, Abschnitte 4 und 6
 
 ## Phase 5: Pilot und Erweiterung (3 bis 4 Wochen)
 

@@ -722,7 +722,14 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     // Klasse 1: Die Frage wird nur vorgelesen (question()), die Zahlen bleiben sichtbar.
     if (!key || this.firstGrade) {
       this.panel.setY(PANEL.y);
-      if (key && task.prompt.terms.length === 0) return;
+      if (key && task.prompt.terms.length === 0) {
+        // Klasse 1, Geld legen: Der Betrag steht sonst nur im (vorgelesenen) Text.
+        if (this.firstGrade && task.money) {
+          const unit = task.money.unit === 'euro' ? '€' : 'ct';
+          this.expression = new Expression(this, PANEL.x, 200, [task.money.amount, unit]);
+        }
+        return;
+      }
       this.expression = new Expression(this, PANEL.x, 200, task.prompt.terms);
       return;
     }

@@ -452,6 +452,70 @@ def aufgabe_meerschweinchen():
     return svg(W, H, "".join(b))
 
 
+def shelter(x, base, w=240, h=130):
+    """Offener Unterstand mit Pultdach (Eselweide)."""
+    out = rect(x, base - h, 16, h, 4, C["erde"]) + rect(x + w - 16, base - h, 16, h, 4, C["erde"])
+    out += rect(x + 10, base - h + 20, w - 20, h - 20, 6, C["affe-dunkel"])
+    out += path(f"M {x - 20} {base - h + 10} L {x + w + 20} {base - h - 20} L {x + w + 20} {base - h + 4} "
+                f"L {x - 20} {base - h + 34} Z", C["grau-warm"])
+    return out
+
+
+def hay_rack(x, base):
+    out = rect(x - 60, base - 70, 120, 70, 6, C["erde"])
+    for i in range(1, 6):
+        out += path(f"M {x - 60 + i * 20} {base - 70} V {base}", sw=SI)
+    out += ell(x, base - 74, 64, 16, C["sonne"])
+    return out
+
+
+def jump(x, base):
+    """Kleines Hindernis mit rot-weißer Stange (Ponyhof)."""
+    out = rect(x - 90, base - 70, 14, 70, 4, C["papier"]) + rect(x + 76, base - 70, 14, 70, 4, C["papier"])
+    for i in range(6):
+        col = C["rosa"] if i % 2 == 0 else C["weiss"]
+        out += rect(x - 80 + i * 27, base - 50, 27, 12, 0, col)
+    return out
+
+
+def gehege_eselweide():
+    b = [gehege_base("laub-hell", "gras", "gras-hell")]
+    b.append(shelter(700, 640))
+    b.append(fence(-20, 1060, 640))
+    b.append(hay_rack(480, 720))
+    b.append(ba.tree(90, 560, 44, 260, [(-10, -10, 70), (50, -40, 60), (-50, -50, 54)]))
+    b.append("".join(tuft(x, y) for (x, y) in [(260, 700), (640, 750), (860, 730)]))
+    b.append(flowers([(300, 744, "sonne"), (920, 750, "weiss")]))
+    return svg(W, H, "".join(b))
+
+
+def gehege_ponyhof():
+    b = [gehege_base("laub-hell", "gras", "karte-schatten")]
+    b.append(barn(720, 600))
+    b.append(fence(-20, 1060, 640))
+    b.append(jump(440, 730))
+    b.append(hay(960, 730, 0.8))
+    b.append(ba.tree(90, 560, 44, 260, [(-10, -10, 70), (50, -40, 60), (-50, -50, 54)]))
+    b.append(flowers([(300, 744, "rosa"), (640, 750, "sonne")]))
+    return svg(W, H, "".join(b))
+
+
+def aufgabe_eselweide():
+    b = [task_ground(C["laub-hell"], "gras", "gras-hell", ledge("gras", cap="gras-hell"))]
+    b.append(fence(560, 1060, 560))
+    b.append(tuft(200, 344) + tuft(40, 330))
+    b.append(flowers([(300, 740, "sonne"), (900, 748, "weiss")]))
+    return svg(W, H, "".join(b))
+
+
+def aufgabe_ponyhof():
+    b = [task_ground(C["laub-hell"], "gras", "karte-schatten", ledge("gras", cap="gras-hell"))]
+    b.append(fence(560, 1060, 560))
+    b.append(tuft(200, 344))
+    b.append(flowers([(300, 740, "rosa"), (900, 748, "sonne")]))
+    return svg(W, H, "".join(b))
+
+
 def aufgabe_hasenstall():
     b = [task_ground(C["laub-hell"], "gras", "gras-hell", ledge("gras", cap="gras-hell"))]
     b.append(fence(560, 1060, 560))
@@ -546,7 +610,7 @@ FILES = {
     "menue_erwachsene_1024x768": menu_adults(),
     "menue_rundenende_1024x768": menu_round_end(),
 }
-for area in ["ziegenwiese", "hasenstall", "meerschweinchen", "elefantenwiese", "zookasse", "futteruhr", "schmetterlingshaus", "giraffenhof", "zoozaehlung"]:
+for area in ["ziegenwiese", "hasenstall", "meerschweinchen", "eselweide", "ponyhof", "elefantenwiese", "zookasse", "futteruhr", "schmetterlingshaus", "giraffenhof", "zoozaehlung"]:
     FILES[f"{area}_hintergrund_1024x768"] = globals()[f"gehege_{area}"]()
     FILES[f"{area}_aufgabe_1024x768"] = globals()[f"aufgabe_{area}"]()
 

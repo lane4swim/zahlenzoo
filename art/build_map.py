@@ -78,6 +78,23 @@ def deco_meerschweinchen(cx, cy):
     return out
 
 
+def deco_eselweide(cx, cy):
+    out = plot(cx, cy, C["gras"])
+    out += rect(cx + 40, cy - 66, 64, 40, 4, C["affe-dunkel"])
+    out += path(f"M {cx + 32} {cy - 62} L {cx + 112} {cy - 78} L {cx + 112} {cy - 66} L {cx + 32} {cy - 50} Z", C["grau-warm"])
+    out += ell(cx - 80, cy + 40, 26, 9, C["sonne"])
+    return out
+
+
+def deco_ponyhof(cx, cy):
+    out = plot(cx, cy, C["karte-schatten"])
+    out += rect(cx - 104, cy - 46, 8, 28, 3, C["papier"]) + rect(cx - 52, cy - 46, 8, 28, 3, C["papier"])
+    for i in range(4):
+        out += rect(cx - 100 + i * 14, cy - 40, 14, 7, 0, C["rosa"] if i % 2 == 0 else C["weiss"])
+    out += path(f"M {cx + 60} {cy + 48} A 16 16 0 1 1 {cx + 92} {cy + 48}", sw=7, extra=f'stroke="{C["grau-warm"]}"')
+    return out
+
+
 def plaza(cx, cy):
     """Runder Platz auf dem Hauptweg, auf dem der Wegweiser steht."""
     return ell(cx, cy, 70, 40, C["karte-schatten"]) + ell(cx, cy + 4, 46, 22, C["erde"], False, 'opacity="0.25"')
@@ -167,6 +184,8 @@ DECO = {
     "ziegenwiese": deco_ziegenwiese,
     "hasenstall": deco_hasenstall,
     "meerschweinchen": deco_meerschweinchen,
+    "eselweide": deco_eselweide,
+    "ponyhof": deco_ponyhof,
     "affenwald": deco_affenwald,
     "pinguinfelsen": deco_pinguinfelsen,
     "elefantenwiese": deco_elefantenwiese,
@@ -247,16 +266,9 @@ def background_petting():
     b.append(plaza(PETTING["signpost"]["x"], PETTING["signpost"]["y"]))
     for area_id, a in areas.items():
         b.append(DECO[area_id](a["x"], a["y"]))
-    # Scheune unten rechts, Teich und Heuballen unten
+    # Scheune unten rechts, daneben ein Heuballen
     b.append(barn(840, 610))
-    b.append(ell(250, 570, 110, 46, C["wasser"]) + ell(220, 556, 40, 9, C["weiss"], False, 'opacity="0.5"'))
-    for (x, y) in [(560, 560), (620, 590)]:
-        b.append(hay(x, y))
-    b.append(small_tree(420, 610, 0.9))
-    # Zaun am unteren Rand
-    for x in range(10, 1024, 60):
-        b.append(rect(x - 5, 620, 10, 40, 4, C["erde"]))
-    b.append(rect(0, 630, 1024, 10, 4, C["erde"]))
+    b.append(hay(960, 630))
     for (x, y) in [(18, 170), (1006, 176)]:
         b.append(ell(x, y, 46, 26, C["gras-dunkel"]))
     b.append(small_tree(356, 180, 0.9) + small_tree(668, 176, 0.9))

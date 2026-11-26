@@ -154,7 +154,7 @@ Das Kind baut einen Zoo auf: Auf einer Karte wählt es einen Bereich, versorgt d
 | Schmetterlingshaus | Schmetterling | Muster, Achsensymmetrie erkennen, Formen erkennen und legen, Flächen und Umfang, Lage und Wege | 2, 3 |
 | Giraffenhof | Giraffe | Längen messen und vergleichen, Stützpunkte für 1 cm und 1 m, cm und m umwandeln; später Hunderterraum bis 1000 und Runden | 2, 3 |
 | Zoo-Zählung | Erdmännchen | Strichlisten, Tabellen und Kalender lesen, einfache Kombinatorik mit Anordnungen | 2, 3 |
-| Streichelzoo (eigene Karte: Ziegenwiese, Hasenstall, Meerschweinchen, weitere geplant) | Ziege, Hase, Meerschweinchen, … | Zahlen bis 20: Zählen, Blitzblick, Vergleichen, Zerlegen, Plus und Minus bis 20, Lagewörter; Formen, Muster, Geld bis 20 €, volle Stunden | 1 (2 zur Wiederholung) |
+| Streichelzoo (eigene Karte: Ziegenwiese, Hasenstall, Meerschweinchen, Eselweide, Ponyhof) | Ziege, Hase, Meerschweinchen, Esel, Pony | Zahlen bis 20: Zählen, Blitzblick, Vergleichen, Zerlegen, Plus und Minus bis 20, Lagewörter; Formen, Muster, Geld bis 20 €, volle Stunden | 1 (2 zur Wiederholung) |
 
 **Freischaltung (Startwerte, im Test anzupassen)**
 

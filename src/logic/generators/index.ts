@@ -90,6 +90,15 @@ import {
   quickCount20,
 } from './streichelzoo';
 import { COMPARE_20, compare20, NUMBERS_20, numbers20 } from './numbers20';
+import {
+  ADDSUB_20,
+  addSub20,
+  DECOMPOSE_10,
+  decompose10,
+  gradeOneFrom,
+  SHAPES_1,
+  shapes1,
+} from './gradeOne';
 /** Generatoren je Aufgabenfamilie; areas.json und families.json verweisen auf diese IDs. */
 export const GENERATORS: Readonly<Record<string, Generator>> = {
   [COUNT_20]: count20,
@@ -97,6 +106,14 @@ export const GENERATORS: Readonly<Record<string, Generator>> = {
   [ADDSUB_10]: addSub10,
   [NUMBERS_20]: numbers20,
   [COMPARE_20]: compare20,
+  [DECOMPOSE_10]: decompose10,
+  [ADDSUB_20]: addSub20,
+  // Klasse 1 mit eigenen Parametern: Lagewörter, Muster, Geld, volle Stunden
+  position_1: gradeOneFrom(spaceOrientation, 'position_1'),
+  [SHAPES_1]: shapes1,
+  pattern_1: gradeOneFrom(patternContinue, 'pattern_1'),
+  money_20: gradeOneFrom(moneyLay, 'money_20'),
+  clock_1: gradeOneFrom(clockFor('clock_full'), 'clock_1'),
   [ADD_100]: withTrueFalse(add100),
   [NEIGHBORS_100]: neighbors100,
   [MULT_TABLE]: multTable,

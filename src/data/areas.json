@@ -22,6 +22,20 @@
       "requires": "hasenstall"
     },
     {
+      "id": "eselweide",
+      "animal": "donkey",
+      "map": "streichelzoo",
+      "families": ["decompose_10", "addsub_20", "position_1"],
+      "requires": "meerschweinchen"
+    },
+    {
+      "id": "ponyhof",
+      "animal": "pony",
+      "map": "streichelzoo",
+      "families": ["shapes_1", "pattern_1", "money_20", "clock_1"],
+      "requires": "eselweide"
+    },
+    {
       "id": "affenwald",
       "gradeOneBridge": true,
       "animal": "monkey",
