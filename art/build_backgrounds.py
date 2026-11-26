@@ -420,6 +420,38 @@ def gehege_hasenstall():
     return svg(W, H, "".join(b))
 
 
+def hideout(x, base, w=110, h=64, color="erde"):
+    """Häuschen für Meerschweinchen: Holzhaus mit rundem Eingang."""
+    out = rect(x - w / 2, base - h, w, h, 8, C[color])
+    out += path(f"M {x - w / 2 - 10} {base - h + 4} L {x} {base - h - 36} L {x + w / 2 + 10} {base - h + 4} Z", C["orange"])
+    out += path(f"M {x - 20} {base} V {base - 22} A 20 20 0 0 1 {x + 20} {base - 22} V {base} Z", K, False)
+    return out
+
+
+def gehege_meerschweinchen():
+    b = [gehege_base("laub-hell", "gras", "gras-hell")]
+    b.append(fence(-20, 1060, 640))
+    b.append(hideout(760, 690, 150, 84) + hideout(940, 720, 110, 64, "affe-dunkel"))
+    b.append(hay(560, 720, 0.8))
+    # Salatköpfe und Gurkenscheiben im Napf
+    b.append(ell(400, 730, 70, 20, C["orange"]) + ell(400, 724, 56, 10, C["erde"], False))
+    for dx in (-28, 0, 28):
+        b.append(circ(400 + dx, 716, 13, C["gras"]) + circ(400 + dx, 716, 6, C["gras-hell"], False))
+    b.append(ba.tree(90, 560, 44, 260, [(-10, -10, 70), (50, -40, 60), (-50, -50, 54)]))
+    b.append("".join(tuft(x, y) for (x, y) in [(260, 700), (640, 750)]))
+    b.append(flowers([(300, 744, "rosa"), (880, 750, "weiss")]))
+    return svg(W, H, "".join(b))
+
+
+def aufgabe_meerschweinchen():
+    b = [task_ground(C["laub-hell"], "gras", "gras-hell", ledge("gras", cap="gras-hell"))]
+    b.append(fence(560, 1060, 560))
+    b.append(hideout(60, 332, 90, 52))
+    b.append(tuft(200, 344))
+    b.append(flowers([(300, 740, "sonne"), (900, 748, "rosa")]))
+    return svg(W, H, "".join(b))
+
+
 def aufgabe_hasenstall():
     b = [task_ground(C["laub-hell"], "gras", "gras-hell", ledge("gras", cap="gras-hell"))]
     b.append(fence(560, 1060, 560))
@@ -514,7 +546,7 @@ FILES = {
     "menue_erwachsene_1024x768": menu_adults(),
     "menue_rundenende_1024x768": menu_round_end(),
 }
-for area in ["ziegenwiese", "hasenstall", "elefantenwiese", "zookasse", "futteruhr", "schmetterlingshaus", "giraffenhof", "zoozaehlung"]:
+for area in ["ziegenwiese", "hasenstall", "meerschweinchen", "elefantenwiese", "zookasse", "futteruhr", "schmetterlingshaus", "giraffenhof", "zoozaehlung"]:
     FILES[f"{area}_hintergrund_1024x768"] = globals()[f"gehege_{area}"]()
     FILES[f"{area}_aufgabe_1024x768"] = globals()[f"aufgabe_{area}"]()
 

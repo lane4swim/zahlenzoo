@@ -574,7 +574,8 @@ export class TaskScene extends BaseScene<TaskSceneData> {
           option.ice ||
           option.solid ||
           option.plan ||
-          option.view
+          option.view ||
+          option.group
             ? ''
             : option.label
               ? this.text(option.label.key, option.label.params)
@@ -596,7 +597,20 @@ export class TaskScene extends BaseScene<TaskSceneData> {
             card.add(planNumbers(this, option.plan, 30, 0, -4, FontSize.small - 4));
             return;
           } else if (option.view) drawView(g, option.view, 26, 0, 44);
-          else if (option.moves) {
+          else if (option.group) {
+            // Gruppe gleicher Tiere in Fünferreihen (Mengen vergleichen ohne Zahlen)
+            const { icon, n } = option.group;
+            const size = 40;
+            const rows = Math.ceil(n / 5);
+            for (let i = 0; i < n; i++) {
+              const cols = Math.min(5, n - Math.floor(i / 5) * 5);
+              const x = ((i % 5) - (cols - 1) / 2) * (size + 4);
+              const y = (Math.floor(i / 5) - (rows - 1) / 2) * (size + 6) - 4;
+              card.add(this.add.image(x, y, icon).setDisplaySize(size, size));
+            }
+            g.destroy();
+            return;
+          } else if (option.moves) {
             const n = option.moves.length;
             const step = Math.min(34, 150 / n);
             [...option.moves].forEach((m, i) => {
@@ -610,6 +624,8 @@ export class TaskScene extends BaseScene<TaskSceneData> {
           }
           card.add(g);
         },
+        // Tiergruppen brauchen größere Karten
+        task.options.some((o) => o.group) ? { width: 260, height: 150 } : undefined,
       );
     } else {
       this.answerInput = new Numpad(this, {
@@ -1153,7 +1169,15 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     if (visual.type === 'dice') return new DiceFace(this, PANEL.x, VISUAL_Y, visual.n);
     if (visual.type === 'fingers') return new Fingers(this, PANEL.x, VISUAL_Y, visual.n);
     if (visual.type === 'count') {
-      return new CountField(this, PANEL.x, VISUAL_Y, visual.icon, visual.points);
+      return new CountField(
+        this,
+        PANEL.x,
+        VISUAL_Y,
+        visual.icon,
+        visual.points,
+        visual.icons,
+        visual.marked,
+      );
     }
     if (visual.type === 'tenframe') {
       return new TenFrame(this, PANEL.x, VISUAL_Y + 20, visual.first, visual.second, visual.op);
@@ -1419,11 +1443,14 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     const panel = this.panelSpeech();
     if (panel.length > 0 && terms.trim() !== '') parts[parts.length - 1]!.text += '.';
     parts.push(...panel);
-    // Antwortsätze (z. B. Fragen zur Situation) werden mit vorgelesen.
+    // Antwortsätze (z. B. Fragen zur Situation) werden mit vorgelesen, kurze Karten
+    // wie „3.“ nicht.
     for (const o of this.task.options ?? []) {
       if (!o.label) continue;
       const { key, params } = o.label;
-      parts.push({ key, ...(params ? { params } : {}), text: this.text(key, params) });
+      const text = this.text(key, params);
+      if (text.length <= 4) continue;
+      parts.push({ key, ...(params ? { params } : {}), text });
     }
     return parts;
   }

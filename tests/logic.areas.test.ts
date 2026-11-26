@@ -15,16 +15,16 @@ import { CONTENT, RULES } from './helpers/content';
 const area = (id: string) => findArea(CONTENT, id)!;
 
 describe('Bereiche', () => {
-  it('hat acht Gehege im großen Zoo, zwei im Streichelzoo und „Wege im Zoo“ als Zusatzbereich', () => {
+  it('hat acht Gehege im großen Zoo, drei im Streichelzoo und „Wege im Zoo“ als Zusatzbereich', () => {
     const gehege = enclosures(CONTENT);
     const zoo = gehege.filter((a) => areaMap(a) === 'zoo');
     const petting = gehege.filter((a) => areaMap(a) === 'streichelzoo');
     expect(zoo).toHaveLength(8);
-    expect(petting.map((a) => a.id)).toEqual(['ziegenwiese', 'hasenstall']);
+    expect(petting.map((a) => a.id)).toEqual(['ziegenwiese', 'hasenstall', 'meerschweinchen']);
     for (const a of zoo) expect(layout.areas).toHaveProperty(a.id);
     for (const a of petting) expect(layout.streichelzoo.areas).toHaveProperty(a.id);
     expect(Object.keys(layout.areas)).toHaveLength(8);
-    expect(Object.keys(layout.streichelzoo.areas)).toHaveLength(2);
+    expect(Object.keys(layout.streichelzoo.areas)).toHaveLength(3);
     const extra = CONTENT.areas.filter((a) => a.extra);
     expect(extra.map((a) => a.id)).toEqual(['zooplan']);
     expect(layout.areas).not.toHaveProperty('zooplan');
@@ -35,6 +35,7 @@ describe('Bereiche', () => {
     expect(states).toEqual({
       ziegenwiese: 'open',
       hasenstall: 'locked',
+      meerschweinchen: 'locked',
       affenwald: 'open',
       pinguinfelsen: 'open',
       elefantenwiese: 'locked',

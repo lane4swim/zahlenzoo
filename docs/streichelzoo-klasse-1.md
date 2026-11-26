@@ -85,9 +85,12 @@ Der Streichelzoo ist eine eigene Karte wie der große Zoo, mit eigenen Gehegen. 
 | --- | --- | --- | --- |
 | Ziegenwiese | Ziege | `count_20`, `quick_count_20` | offen |
 | Hasenstall | Hase | `addsub_10` | 6 Sterne auf der Ziegenwiese |
-| weitere, z. B. Meerschweinchen, Esel, Ponys, Hühner | | übrige Themen aus Abschnitt 4 und 6 | jeweils über das vorige Gehege |
+| Meerschweinchen | Meerschweinchen | `numbers_20`, `compare_20` | 6 Sterne im Hasenstall |
+| weitere, z. B. Esel, Ponys, Hühner | | übrige Themen aus Abschnitt 4 und 6 | jeweils über das vorige Gehege |
 
-Ein neues Gehege braucht einen Eintrag in `areas.json` mit `"map": "streichelzoo"`, eine Lage unter `streichelzoo.areas` in `map-layout.json`, ein Tier in `animals.json` mit Grafiken (`art/build_animals.py`) und Laut (`art/build_audio.py`) sowie Gehege- und Aufgabenhintergrund (`art/build_backgrounds.py`). Freie Plätze auf der Karte liegen dort, wo jetzt Scheune, Teich und Heuballen stehen (`art/build_map.py`, `background_petting`).
+Umsetzung von `compare_20` Stufe 1: Die beiden Tiergruppen stehen auf zwei großen Antwortkarten; das Kind tippt die Karte mit mehr (oder weniger) Tieren. Die Gruppen zeigen verschiedene Tiere, damit die Größe der Bilder nicht über „mehr“ entscheidet. Bei `numbers_20` Stufe 1 wird das Zahlwort nur vorgelesen; geantwortet wird immer mit drei Karten.
+
+Ein neues Gehege braucht einen Eintrag in `areas.json` mit `"map": "streichelzoo"`, eine Lage unter `streichelzoo.areas` in `map-layout.json`, ein Tier in `animals.json` mit Grafiken (`art/build_animals.py`) und Laut (`art/build_audio.py`) sowie Gehege- und Aufgabenhintergrund (`art/build_backgrounds.py`). Freie Plätze auf der Karte liegen unten links und in der Mitte, wo jetzt Teich und Heuballen stehen; die Scheune unten rechts kann ebenfalls weichen (`art/build_map.py`, `background_petting`).
 
 Für Klasse 1 öffnen Affenwald und Pinguinfelsen (`gradeOneBridge` in `areas.json`), wenn im ganzen Streichelzoo zusammen 24 Sterne gesammelt sind. Die Scheune aus Abschnitt 6 kann ein eigenes Gehege werden, z. B. der Ponyhof.
 

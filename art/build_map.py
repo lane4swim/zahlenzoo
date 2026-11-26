@@ -69,6 +69,15 @@ def deco_hasenstall(cx, cy):
     return out
 
 
+def deco_meerschweinchen(cx, cy):
+    out = plot(cx, cy, C["gras-hell"])
+    for (x, y, col) in [(cx - 70, cy - 40, "erde"), (cx + 74, cy + 30, "affe-dunkel")]:
+        out += rect(x - 26, y - 14, 52, 30, 6, C[col])
+        out += path(f"M {x - 30} {y - 12} L {x} {y - 32} L {x + 30} {y - 12} Z", C["orange"])
+        out += ell(x, y + 8, 8, 8, K, False)
+    return out
+
+
 def plaza(cx, cy):
     """Runder Platz auf dem Hauptweg, auf dem der Wegweiser steht."""
     return ell(cx, cy, 70, 40, C["karte-schatten"]) + ell(cx, cy + 4, 46, 22, C["erde"], False, 'opacity="0.25"')
@@ -157,6 +166,7 @@ def deco_zoozaehlung(cx, cy):
 DECO = {
     "ziegenwiese": deco_ziegenwiese,
     "hasenstall": deco_hasenstall,
+    "meerschweinchen": deco_meerschweinchen,
     "affenwald": deco_affenwald,
     "pinguinfelsen": deco_pinguinfelsen,
     "elefantenwiese": deco_elefantenwiese,
@@ -237,12 +247,12 @@ def background_petting():
     b.append(plaza(PETTING["signpost"]["x"], PETTING["signpost"]["y"]))
     for area_id, a in areas.items():
         b.append(DECO[area_id](a["x"], a["y"]))
-    # Scheune oben rechts, Teich und Heuballen unten
-    b.append(barn(824, 330))
+    # Scheune unten rechts, Teich und Heuballen unten
+    b.append(barn(840, 610))
     b.append(ell(250, 570, 110, 46, C["wasser"]) + ell(220, 556, 40, 9, C["weiss"], False, 'opacity="0.5"'))
-    for (x, y) in [(560, 560), (620, 590), (760, 560)]:
+    for (x, y) in [(560, 560), (620, 590)]:
         b.append(hay(x, y))
-    b.append(small_tree(900, 600, 1.1) + small_tree(420, 610, 0.9))
+    b.append(small_tree(420, 610, 0.9))
     # Zaun am unteren Rand
     for x in range(10, 1024, 60):
         b.append(rect(x - 5, 620, 10, 40, 4, C["erde"]))

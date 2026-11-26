@@ -15,6 +15,8 @@ export class CountField extends Phaser.GameObjects.Container {
     y: number,
     icon: string,
     points: ReadonlyArray<readonly [number, number]>,
+    icons?: readonly string[],
+    marked: readonly number[] = [],
   ) {
     super(scene, x, y);
     const xs = points.map((p) => p[0]);
@@ -22,19 +24,20 @@ export class CountField extends Phaser.GameObjects.Container {
     const w = Math.max(...xs) - Math.min(...xs) + ICON;
     const h = Math.max(...ys) - Math.min(...ys) + ICON;
     this.add(scene.add.zone(0, 0, w, h));
-    for (const [px, py] of points) {
-      const img = scene.add.image(px, py, icon).setDisplaySize(ICON, ICON);
+    points.forEach(([px, py], i) => {
+      const img = scene.add.image(px, py, icons?.[i] ?? icon).setDisplaySize(ICON, ICON);
       const check = scene.add
         .image(px + ICON / 3, py - ICON / 3, Tex.correct)
         .setDisplaySize(CHECK, CHECK)
-        .setVisible(false);
+        .setVisible(marked.includes(i));
+      if (marked.includes(i)) img.setAlpha(0.7);
       img.setInteractive({ useHandCursor: true });
       img.on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
         check.setVisible(!check.visible);
         img.setAlpha(check.visible ? 0.7 : 1);
       });
       this.add([img, check]);
-    }
+    });
     scene.add.existing(this);
   }
 }

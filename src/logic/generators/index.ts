@@ -89,11 +89,14 @@ import {
   QUICK_COUNT_20,
   quickCount20,
 } from './streichelzoo';
+import { COMPARE_20, compare20, NUMBERS_20, numbers20 } from './numbers20';
 /** Generatoren je Aufgabenfamilie; areas.json und families.json verweisen auf diese IDs. */
 export const GENERATORS: Readonly<Record<string, Generator>> = {
   [COUNT_20]: count20,
   [QUICK_COUNT_20]: quickCount20,
   [ADDSUB_10]: addSub10,
+  [NUMBERS_20]: numbers20,
+  [COMPARE_20]: compare20,
   [ADD_100]: withTrueFalse(add100),
   [NEIGHBORS_100]: neighbors100,
   [MULT_TABLE]: multTable,

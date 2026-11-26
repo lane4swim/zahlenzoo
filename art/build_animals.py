@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Zahlen-Zoo: die übrigen acht Tiere (Ziege, Hase, Elefant, Papagei, Eule, Schmetterling,
+"""Zahlen-Zoo: die übrigen neun Tiere (Ziege, Hase, Meerschweinchen, Elefant, Papagei, Eule, Schmetterling,
 Giraffe, Erdmännchen) mit derselben Ausstattung wie Pinguin und Affe:
 5 Ausdrücke, Idle (6), Freude (8), Fütterung (8), Baby und Kartensymbol 128 × 128.
 
@@ -337,8 +337,35 @@ def rabbit(eyes, mouth, limbs, bob, brow_on, tag):
     return defs, body, head, ""
 
 
+def guineapig(eyes, mouth, limbs, bob, brow_on, tag):
+    """Meerschweinchen von vorn: rund, ohne Hals, dreifarbiges Fell, kleine runde Ohren."""
+    O, P, D = C["orange"], C["papier"], C["affe-dunkel"]
+    # Freude: kleiner Hüpfer („Popcorning“) über bob/lift, Pfötchen heben sich
+    body = ell(256, 372 + bob * 0.5, 150, 108 - bob * 0.5, O)
+    body += path("M 160 330 Q 200 300 240 330 Q 230 420 170 430 Q 130 400 160 330 Z", P, False)
+    body += path("M 300 420 Q 340 360 380 380 Q 392 430 350 462 Q 310 460 300 420 Z", D, False)
+    paws = {"down": [(206, 470), (306, 470)], "mid": [(186, 440), (326, 440)], "up": [(176, 404), (336, 404)]}
+    for (px, py) in paws[limbs]:
+        body += ell(px, py, 20, 12, C["ohr-rosa"])
+    head = ""
+    for side in (-1, 1):
+        ex = 256 + side * 70
+        head += ell(ex, 168, 24, 18, C["ohr-rosa"])
+    head += ell(256, 236, 104, 86, O)
+    head += path("M 256 150 Q 236 200 230 300 Q 256 312 282 300 Q 276 200 256 150 Z", P, False)
+    head += path("M 170 200 Q 200 170 226 190 Q 220 240 186 250 Q 164 236 170 200 Z", D, False)
+    head += ell(256, 268, 30, 20, P, False)
+    head += path("M 248 260 L 264 260 L 256 268 Z", C["rosa"], sw=SI)
+    head += cheeks(196, 316, 250, 12, 8)
+    head += ba.eye(222, 222, eyes) + ba.eye(290, 222, eyes) + brow(brow_on, 270, 190)
+    defs, m = mouth_at(MAMMAL_MOUTH[mouth], 256, 280, 0.4, tag)
+    head += m
+    return defs, body, head, ""
+
+
 # Tierdaten: Zeichnung, Kopfmitte (Baby, Symbol), Mund (Fütterung), Futter, Symbolmaßstab
 ANIMALS = {
+    "meerschweinchen_meerschweinchen": dict(draw=guineapig, head=(256, 236), mouth=(256, 280), food="moehre", icon=0.46),
     "hasenstall_hase": dict(draw=rabbit, head=(256, 190), mouth=(256, 246), food="moehre", icon=0.42),
     "ziegenwiese_ziege": dict(draw=goat, head=(256, 186), mouth=(256, 246), food="moehre", icon=0.42),
     "elefantenwiese_elefant": dict(draw=elephant, head=(256, 226), mouth=(300, 282), food="heu", icon=0.25),

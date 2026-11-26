@@ -31,20 +31,24 @@ export class AnswerCards extends Phaser.GameObjects.Container {
     onPick: (value: string) => void,
     labelOf: (option: TaskOption) => string = (o) => o.value,
     decorate?: (option: TaskOption, card: Button) => void,
+    /** feste Kartengröße, z. B. größere Karten mit Tiergruppen (Klasse 1) */
+    size?: { width: number; height: number },
   ) {
     super(scene, x, y);
     const labels = options.map(labelOf);
     const longest = Math.max(...labels.map((l) => l.length));
     this.sentences = longest > SENTENCE;
     const short = longest <= SHORT;
-    const cardW = this.sentences ? LIST_W : short ? CARD_W : Math.max(CARD_W, 24 + longest * 15);
+    const cardW =
+      size?.width ??
+      (this.sentences ? LIST_W : short ? CARD_W : Math.max(CARD_W, 24 + longest * 15));
     const step = this.sentences ? LIST_H + 8 : cardW + Layout.gap + 8;
     options.forEach((option, i) => {
       const card = new Button(scene, {
         x: this.sentences ? 0 : (i - (options.length - 1) / 2) * step,
         y: this.sentences ? (i - (options.length - 1)) * step + LIST_H / 2 + 8 : 0,
         width: cardW,
-        height: this.sentences ? LIST_H : CARD_H,
+        height: size?.height ?? (this.sentences ? LIST_H : CARD_H),
         label: labels[i] ?? option.value,
         fontSize: short ? FontSize.digits : this.sentences ? FontSize.small : FontSize.text,
         ...(this.sentences ? { wrapWidth: LIST_W - 40 } : {}),

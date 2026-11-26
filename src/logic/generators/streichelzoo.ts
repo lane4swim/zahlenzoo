@@ -24,7 +24,7 @@ export const QUICK_COUNT_20 = 'quick_count_20';
 export const ADDSUB_10 = 'addsub_10';
 
 /** Antwortkarten in Klasse 1: die Lösung und zwei falsche */
-const CARDS = 3;
+export const CARDS = 3;
 
 /** Dinge im Streichelzoo zum Zählen und Rechnen (Bilder aus public/assets/img). */
 export const PETTING_ICONS = [
@@ -34,8 +34,11 @@ export const PETTING_ICONS = [
   'karte_ziege',
 ] as const;
 
-/** Ziffernblock oder Antwortkarten (Anteil „choice“ aus families.json). */
-function withAnswer(
+/**
+ * Ziffernblock oder Antwortkarten (Anteil „choice“ aus families.json). Steht die gesuchte
+ * Zahl nicht am Ende (15, 16, ?, 18), wird sie als Lücke eingetippt.
+ */
+export function withAnswer(
   task: Omit<Task, 'kind' | 'options' | 'typicalErrors'>,
   errors: TypicalError[],
   rng: Rng,
@@ -45,7 +48,9 @@ function withAnswer(
   const answer = task.answer as number;
   const clean = uniqueErrors(errors, answer).filter((e) => e.value >= 1 && e.value <= max);
   const cards = clean.length >= CARDS - 1 && rng.chance(kindShare(params, 'choice'));
-  const kind: TaskKind = cards ? 'choice' : 'number-input';
+  const terms = task.prompt.terms;
+  const last = terms.length <= 1 || terms.at(-1) === '?';
+  const kind: TaskKind = cards ? 'choice' : last ? 'number-input' : 'gap';
   return {
     ...task,
     kind,

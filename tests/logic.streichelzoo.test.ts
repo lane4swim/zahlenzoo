@@ -8,6 +8,7 @@ import {
   rowPoints,
   scatterPoints,
 } from '../src/logic/generators/streichelzoo';
+import { compare20, numbers20, pairPoints } from '../src/logic/generators/numbers20';
 import { createRng } from '../src/logic/rng';
 import type { Task, TaskLevel } from '../src/types/task';
 import { CONTENT } from './helpers/content';
@@ -114,5 +115,93 @@ describe('Streichelzoo: Plus und Minus bis 10', () => {
       seen.add(task.prompt.textKey === 'task.prompt.inverse' ? 'inverse' : task.math!.op);
     }
     expect(seen).toEqual(new Set(['+', '-', 'inverse']));
+  });
+});
+
+describe('Streichelzoo: Zahlen bis 20', () => {
+  it('Stufe 1: Zahlwörter bis 10 und Ordnungszahlen bis 5', () => {
+    const seen = new Set<string>();
+    for (let seed = 0; seed < 300; seed++) {
+      const task = numbers20(1, createRng(seed), 't', params('numbers_20', 1));
+      const n = task.answer as number;
+      if (task.strategyId === 'ordinal') {
+        seen.add('ordinal');
+        expect(n).toBeGreaterThanOrEqual(1);
+        expect(n).toBeLessThanOrEqual(5);
+        const visual = task.display!.visual;
+        expect(visual.type === 'count' && visual.marked).toEqual([n - 1]);
+      } else {
+        seen.add('hear');
+        expect(n).toBeLessThanOrEqual(10);
+        expect(task.prompt.textParams?.word).toBe(`@num.${n}`);
+      }
+      checkCards(task);
+    }
+    expect(seen).toEqual(new Set(['ordinal', 'hear']));
+  });
+
+  it('Stufe 2: Zahlenreihe bis 20 mit genau einer Lücke', () => {
+    for (let seed = 0; seed < 300; seed++) {
+      const task = numbers20(2, createRng(seed), 't', params('numbers_20', 2));
+      const terms = task.prompt.terms.filter((t) => t !== ',');
+      expect(terms.filter((t) => t === '?')).toHaveLength(1);
+      const i = terms.indexOf('?');
+      const numbers = terms.map((t, k) => (k === i ? (task.answer as number) : (t as number)));
+      numbers.forEach((n, k) => k > 0 && expect(n - numbers[k - 1]!).toBe(1));
+      expect(Math.max(...numbers)).toBeLessThanOrEqual(20);
+      checkCards(task);
+    }
+  });
+
+  it('Stufe 3: Zahlenstrahl bis 20 und Zahlwörter 11 bis 20 mit Zahlendreher', () => {
+    let teen = false;
+    for (let seed = 0; seed < 300; seed++) {
+      const task = numbers20(3, createRng(seed), 't', params('numbers_20', 3));
+      expect(task.family).toBe('numbers_20');
+      const n = task.answer as number;
+      expect(n).toBeLessThanOrEqual(20);
+      if (task.typicalErrors?.some((e) => e.errorTag === 'teen_swap')) teen = true;
+    }
+    expect(teen).toBe(true);
+  });
+});
+
+describe('Streichelzoo: Mehr oder weniger', () => {
+  it('Stufe 1: zwei Karten mit Tiergruppen, die richtige hat mehr (weniger) Tiere', () => {
+    for (let seed = 0; seed < 300; seed++) {
+      const task = compare20(1, createRng(seed), 't', params('compare_20', 1));
+      const [left, right] = task.options!;
+      const a = left!.group!.n;
+      const b = right!.group!.n;
+      expect(a).not.toBe(b);
+      expect(left!.group!.icon).not.toBe(right!.group!.icon);
+      const more = task.prompt.textKey === 'task.prompt.groupsMore';
+      const bigger = a > b ? 'left' : 'right';
+      expect(task.answer).toBe(more ? bigger : bigger === 'left' ? 'right' : 'left');
+    }
+  });
+
+  it('Stufe 2 und 3: Zeichen passen, Unterschied ist positiv', () => {
+    for (const level of [2, 3] as TaskLevel[]) {
+      for (let seed = 0; seed < 300; seed++) {
+        const task = compare20(level, createRng(seed), 't', params('compare_20', level));
+        if (task.strategyId === 'compare_difference') {
+          expect(task.answer as number).toBeGreaterThanOrEqual(1);
+          checkCards(task);
+          continue;
+        }
+        const [a, , b] = task.prompt.terms as number[];
+        expect(Math.max(a!, b!)).toBeLessThanOrEqual(level === 2 ? 10 : 20);
+        expect(task.answer).toBe(a! < b! ? '<' : a! > b! ? '>' : '=');
+      }
+    }
+  });
+
+  it('Paare stehen untereinander, links bündig', () => {
+    const p = pairPoints(4, 2);
+    expect(p).toHaveLength(6);
+    expect(p[0]![0]).toBe(p[4]![0]);
+    expect(p[1]![0]).toBe(p[5]![0]);
+    expect(p[0]![1]).toBeLessThan(p[4]![1]);
   });
 });

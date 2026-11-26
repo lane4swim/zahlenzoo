@@ -94,6 +94,10 @@
       "hasenstall": {
         "x": 512,
         "y": 270
+      },
+      "meerschweinchen": {
+        "x": 824,
+        "y": 270
       }
     },
     "signpost": {

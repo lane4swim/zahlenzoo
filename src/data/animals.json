@@ -15,6 +15,13 @@
       "areaSpot": { "x": 220, "y": 712 },
       "babyPrice": 5
     },
+    "guineapig": {
+      "prefix": "meerschweinchen_meerschweinchen",
+      "icon": "karte_meerschweinchen",
+      "taskSpot": { "x": 112, "y": 336 },
+      "areaSpot": { "x": 220, "y": 712 },
+      "babyPrice": 5
+    },
     "penguin": {
       "prefix": "pinguinfelsen_pinguin",
       "icon": "karte_pinguin",

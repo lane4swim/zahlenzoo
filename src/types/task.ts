@@ -281,6 +281,10 @@ export type Visual =
       type: 'count';
       icon: string;
       points: Array<[number, number]>;
+      /** Bild je Punkt statt `icon` (z. B. zwei Tierarten beim Vergleichen) */
+      icons?: string[];
+      /** Punkte (Index), die schon ein Häkchen haben (Ordnungszahlen: „das dritte“) */
+      marked?: number[];
     }
   | {
       /** Punktefeld: rows Reihen mit je cols Punkten; die ersten `split` Reihen andersfarbig */
@@ -316,6 +320,8 @@ export type TaskOption = {
   piece?: Piece;
   /** Weg als Pfeile auf der Karte (Buchstaben r, l, u, d) */
   moves?: string;
+  /** Gruppe gleicher Dinge auf der Karte (Mengen vergleichen ohne Zahlen, Klasse 1) */
+  group?: { icon: string; n: number };
   /** Strichliste auf der Karte; bundled: false = Striche ohne Fünferbündel */
   tally?: { n: number; bundled: boolean };
   /** Eis auf der Karte (Welches Eis fehlt?) */

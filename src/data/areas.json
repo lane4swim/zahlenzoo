@@ -15,6 +15,13 @@
       "requires": "ziegenwiese"
     },
     {
+      "id": "meerschweinchen",
+      "animal": "guineapig",
+      "map": "streichelzoo",
+      "families": ["numbers_20", "compare_20"],
+      "requires": "hasenstall"
+    },
+    {
       "id": "affenwald",
       "gradeOneBridge": true,
       "animal": "monkey",
