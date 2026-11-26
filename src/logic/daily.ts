@@ -1,4 +1,4 @@
-import { areaState, profileGrade } from './areas';
+import { areaStates, profileGrade } from './areas';
 import { areaFamilies, enclosures } from './content';
 import { confidence, daysBetween } from './skills';
 import type { GameContent } from '../types/content';
@@ -14,12 +14,10 @@ export type DailyItem = { family: string; areaId: string; level: TaskLevel };
  */
 export function dailyPlan(content: GameContent, profile: Profile, today: string): DailyItem[] {
   const r = content.rules.skill;
-  const stars = Object.fromEntries(
-    content.areas.map((a) => [a.id, profile.areas[a.id]?.stars ?? 0]),
-  );
+  const states = areaStates(content, profile);
   const candidates: Array<{ family: string; areaId: string }> = [];
   for (const area of enclosures(content)) {
-    if (areaState(area, stars, content.rules, profileGrade(profile)) !== 'open') continue;
+    if (states[area.id] !== 'open') continue;
     for (const family of areaFamilies(area)) {
       if (!candidates.some((c) => c.family === family))
         candidates.push({ family, areaId: area.id });

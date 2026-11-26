@@ -2,8 +2,15 @@
   "_hinweis": "Tiergrafiken aus art/ und ihre Plätze in den Szenen (Fußpunkt in Pixeln der Basisauflösung 1024 × 768). babyPrice: Sterne für ein Baby-Tier.",
   "animals": {
     "goat": {
-      "prefix": "streichelzoo_ziege",
+      "prefix": "ziegenwiese_ziege",
       "icon": "karte_ziege",
+      "taskSpot": { "x": 112, "y": 336 },
+      "areaSpot": { "x": 220, "y": 712 },
+      "babyPrice": 5
+    },
+    "rabbit": {
+      "prefix": "hasenstall_hase",
+      "icon": "karte_hase",
       "taskSpot": { "x": 112, "y": 336 },
       "areaSpot": { "x": 220, "y": 712 },
       "babyPrice": 5

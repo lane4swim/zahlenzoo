@@ -77,9 +77,19 @@ Jedes Profil bekommt eine Klasse (1 oder 2). Die Frage erscheint beim Anlegen de
 
 24 Sterne entsprechen etwa 8 bis 12 Runden mit guten Ergebnissen. Damit kann ein sicheres Kind gegen Ende von Klasse 1 in die Klasse-2-Bereiche hineinschnuppern, ohne dass es dort zu früh landet.
 
-### Ort auf der Karte
+### Eigene Karte (geändert am 26.11.2026)
 
-Die 8 Gehege liegen in zwei Reihen (y = 270 und y = 560), dazwischen der Hauptweg (`PATH_Y = 415` in `art/build_map.py`). Vorschlag: Der Streichelzoo sitzt als kleineres Gehege in der Mitte des Hauptwegs am Zooeingang (etwa x = 512, y = 415). Lage und Größe sind mit `map-layout.json` und dem Test `tests/logic.mapLayout.test.ts` gegen die Dekorationen zu prüfen.
+Der Streichelzoo ist eine eigene Karte wie der große Zoo, mit eigenen Gehegen. Welche Karte nach „Spielen“ erscheint, hängt von der Klasse ab: Klasse 1 beginnt im Streichelzoo, Klasse 2 im großen Zoo. Ein Wegweiser in der Mitte des Hauptwegs führt jeweils zur anderen Karte; „Zurück zur Karte“ führt aus Gehege, Aufgabe und Rundenende auf die Karte des Geheges.
+
+| Gehege | Tier | Themen | Freischaltung |
+| --- | --- | --- | --- |
+| Ziegenwiese | Ziege | `count_20`, `quick_count_20` | offen |
+| Hasenstall | Hase | `addsub_10` | 6 Sterne auf der Ziegenwiese |
+| weitere, z. B. Meerschweinchen, Esel, Ponys, Hühner | | übrige Themen aus Abschnitt 4 und 6 | jeweils über das vorige Gehege |
+
+Ein neues Gehege braucht einen Eintrag in `areas.json` mit `"map": "streichelzoo"`, eine Lage unter `streichelzoo.areas` in `map-layout.json`, ein Tier in `animals.json` mit Grafiken (`art/build_animals.py`) und Laut (`art/build_audio.py`) sowie Gehege- und Aufgabenhintergrund (`art/build_backgrounds.py`). Freie Plätze auf der Karte liegen dort, wo jetzt Scheune, Teich und Heuballen stehen (`art/build_map.py`, `background_petting`).
+
+Für Klasse 1 öffnen Affenwald und Pinguinfelsen (`gradeOneBridge` in `areas.json`), wenn im ganzen Streichelzoo zusammen 24 Sterne gesammelt sind. Die Scheune aus Abschnitt 6 kann ein eigenes Gehege werden, z. B. der Ponyhof.
 
 ### Ablauf einer Runde für Klasse 1
 
@@ -246,7 +256,7 @@ Die bisher ungenutzte Stufe 0 (`TaskLevel`) wird damit nicht gebraucht.
 | Aufgabenbilder | Kaninchen, Meerschweinchen, Huhn, Küken, Schaf, Esel, Ente; Möhre, Heu, Löwenzahn, Eimer, Stall | rund 12 Objekte, 256 × 256 |
 | Hintergründe | Streichelzoo-Gehege mit Gatter, Stall und Wiese; Scheune innen | `art/build_backgrounds.py` |
 | Fingerbilder | eine und zwei Hände mit 0 bis 5 gestreckten Fingern | Vektor, für Blitzblick und Hinweise |
-| Karte | kleineres Gehege am Eingang, Zustände gesperrt (entfällt), offen, fertig; Kartensymbol `karte_ziege` | `art/build_map.py`, `map-layout.json` |
+| Karte | eigene Streichelzoo-Karte, Wegweiser auf beiden Karten, Kartensymbole je Tier | `art/build_map.py`, `map-layout.json` |
 | Profil | Avatar `goat` in `AVATARS` | optional |
 | Bildsymbole | antippen, schau, gib, ziehen, legen (Geld), Uhr stellen; Knöpfe Zurück, Hinweis, Vorlesen, OK, Scheune | für Anweisungen und Knöpfe ohne Text |
 | Ton | Ziegenmeckern, sanftes Streichel-Geräusch | `art/build_audio.py`, Lizenz in `ATTRIBUTIONS.md` |
@@ -259,7 +269,7 @@ Die bisher ungenutzte Stufe 0 (`TaskLevel`) wird damit nicht gebraucht.
 | --- | --- | --- |
 | Klasse im Profil: `grade?: 1 \| 2`, fehlt = 2; keine Migration nötig | `src/types/save.ts`, `src/services/save.ts` | gering |
 | Klassenfrage beim Anlegen, Änderung im Erwachsenenbereich | `ProfileCreateScene`, `ParentScene` | gering |
-| Bereich `streichelzoo` (Tier `goat`, ohne `requires`, `grades: [1, 2]`, Scheune als `site`) | `areas.json`, `animals.json`, `map-layout.json` | gering |
+| Gehege des Streichelzoos mit `"map": "streichelzoo"` (Ziegenwiese, Hasenstall, später weitere) | `areas.json`, `animals.json`, `map-layout.json` | gering je Gehege, Grafik mittel |
 | Name und Symbol der `site` je Bereich statt fest „Baustelle“ (`area.site`) | `AreaScene`, `strings.de.json` | gering |
 | Freischaltung je Klasse: Affenwald und Pinguinfelsen für Klasse 1 hinter `gradeOneBridgeStars` | `src/logic/areas.ts` (`areaState` bekommt die Klasse), `rules.json` | gering |
 | Rundenlänge und Tagesfutter je Bereich oder Klasse | `rules.json`, `src/logic/rounds.ts`, `src/logic/daily.ts` | gering |
@@ -279,7 +289,7 @@ Vorgehen wie bei der Pinguinfelsen-Phase: erst ein vertikaler Schnitt mit Klasse
 | 2 | Leittier Ziege? | Ja | Ziege, Baby Zicklein |
 | 3 | Eigene Familien-IDs oder Stufe 0 in vorhandenen Familien? | Ja | eigene IDs für alle 12 Familien (Gehege und Scheune); Stufe 0 bleibt ungenutzt |
 | 4 | Formen, Muster, Geld und Uhr für Klasse 1: Stufe 0, Bastelecke oder gar nicht? | Ja | in der Scheune des Streichelzoos (Abschnitt 6); Deutung, weil die Kinder die Stufe 0 in fernen Bereichen kaum erreichen |
-| 5 | Ort auf der Karte | Ja | Mitte des Hauptwegs am Eingang |
+| 5 | Ort auf der Karte | Ja | zuerst Mitte des Hauptwegs; am 26.11.2026 ersetzt durch eine eigene Karte mit Wegweiser (Abschnitt 3) |
 | 6 | Schwelle für Affenwald und Pinguinfelsen bei Klasse 1 | Ja | 24 Sterne als Startwert, nach Spieltest anpassen |
 | 7 | Gehört der Streichelzoo zu V1 oder zu einer neuen Phase? | Ja | eigene Phase nach dem Feinschliff (Phase 4), vor dem Pilot; Spezifikation Abschnitte 1, 5, 9, 11, 12 und 13 anpassen |
 

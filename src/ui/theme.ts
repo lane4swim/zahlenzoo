@@ -132,4 +132,6 @@ export const Tex = {
   map: 'karte_hintergrund',
   mapLock: 'karte_schloss',
   mapSign: 'karte_schild',
+  signpost: 'karte_wegweiser',
+  pettingMap: 'karte_streichelzoo',
 } as const;

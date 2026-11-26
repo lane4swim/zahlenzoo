@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Zahlen-Zoo: die übrigen sieben Tiere (Ziege, Elefant, Papagei, Eule, Schmetterling,
+"""Zahlen-Zoo: die übrigen acht Tiere (Ziege, Hase, Elefant, Papagei, Eule, Schmetterling,
 Giraffe, Erdmännchen) mit derselben Ausstattung wie Pinguin und Affe:
 5 Ausdrücke, Idle (6), Freude (8), Fütterung (8), Baby und Kartensymbol 128 × 128.
 
@@ -309,9 +309,38 @@ def goat(eyes, mouth, limbs, bob, brow_on, tag):
     return defs, body, head, ""
 
 
+def rabbit(eyes, mouth, limbs, bob, brow_on, tag):
+    G, P, D = C["grau-warm"], C["papier"], C["affe-dunkel"]
+    # Freude: Ohren gehen hoch und auseinander, die Vorderpfoten heben sich
+    spread = {"down": 0, "mid": 10, "up": 22}[limbs]
+    body = circ(352, 448, 22, P)  # Puschelschwanz
+    body += ell(256, 374 + bob * 0.5, 100, 106 - bob * 0.5, G)
+    body += ell(256, 396 + bob * 0.4, 60, 76 - bob * 0.4, P, False)
+    for x in (196, 316):
+        body += ell(x, 474, 44, 16, G) + ell(x, 474, 22, 7, C["ohr-rosa"], False)
+    paws = {"down": [(222, 392), (290, 392)], "mid": [(198, 352), (314, 352)], "up": [(188, 300), (324, 300)]}
+    for (px, py) in paws[limbs]:
+        body += ell(px, py, 16, 20, G)
+    head = ""
+    for side in (-1, 1):
+        ex = 256 + side * (34 + spread)
+        angle = side * (8 + spread)
+        head += rot(ell(ex, 76, 24, 74, G) + ell(ex, 82, 11, 54, C["ohr-rosa"], False), angle, ex, 150)
+    head += ell(256, 196, 78, 70, G)
+    head += ell(256, 232, 40, 28, P, False)
+    head += path("M 248 232 L 264 232 L 256 242 Z", C["rosa"], sw=SI)
+    head += rect(248, 252, 16, 14, 3, C["weiss"], extra=f'stroke-width="{SI}"')
+    head += cheeks(200, 312, 220, 12, 8)
+    head += ba.eye(226, 190, eyes) + ba.eye(286, 190, eyes) + brow(brow_on, 268, 158)
+    defs, m = mouth_at(MAMMAL_MOUTH[mouth], 256, 246, 0.4, tag)
+    head += m
+    return defs, body, head, ""
+
+
 # Tierdaten: Zeichnung, Kopfmitte (Baby, Symbol), Mund (Fütterung), Futter, Symbolmaßstab
 ANIMALS = {
-    "streichelzoo_ziege": dict(draw=goat, head=(256, 186), mouth=(256, 246), food="moehre", icon=0.42),
+    "hasenstall_hase": dict(draw=rabbit, head=(256, 190), mouth=(256, 246), food="moehre", icon=0.42),
+    "ziegenwiese_ziege": dict(draw=goat, head=(256, 186), mouth=(256, 246), food="moehre", icon=0.42),
     "elefantenwiese_elefant": dict(draw=elephant, head=(256, 226), mouth=(300, 282), food="heu", icon=0.25),
     "zookasse_papagei": dict(draw=parrot, head=(256, 190), mouth=(262, 248), food="nuss", icon=0.4),
     "futteruhr_eule": dict(draw=owl, head=(256, 196), mouth=(258, 252), food="beeren", icon=0.38),

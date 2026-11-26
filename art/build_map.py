@@ -19,7 +19,9 @@ C, K, SW, SI = ba.C, ba.K, ba.SW, ba.SI
 svg, ell, circ, path, rect, tree, cloud = ba.svg, ba.ell, ba.circ, ba.path, ba.rect, ba.tree, ba.cloud
 P = C["pinguin-gefieder"]
 
-LAYOUT = json.loads((REPO / "src" / "data" / "map-layout.json").read_text(encoding="utf-8"))["areas"]
+MAP_LAYOUT = json.loads((REPO / "src" / "data" / "map-layout.json").read_text(encoding="utf-8"))
+LAYOUT = MAP_LAYOUT["areas"]
+PETTING = MAP_LAYOUT["streichelzoo"]
 PLOT_W, PLOT_H = 214, 168
 PATH_Y = 415
 
@@ -48,16 +50,28 @@ def flower(x, y, color):
 
 
 # ------------------------------------------------------------- Gehege-Motive
-def deco_streichelzoo(cx, cy):
-    """Kleine runde Weide auf dem Hauptweg am Eingang, mit Zaun und Heuballen."""
-    r = 62
-    out = circ(cx, cy - 8, r, C["gras"])
-    for i in range(9):
-        a = 200 + i * 17.5
-        px, py = cx + r * math.cos(math.radians(a)), cy - 8 + r * math.sin(math.radians(a))
-        out += rect(px - 4, py - 12, 8, 18, 3, C["erde"])
-    out += rect(cx + 34, cy + 18, 30, 18, 6, C["sonne"])
+def deco_ziegenwiese(cx, cy):
+    out = plot(cx, cy, C["gras"])
+    out += rect(cx + 40, cy - 66, 60, 40, 6, C["erde"])
+    out += path(f"M {cx + 34} {cy - 64} L {cx + 70} {cy - 88} L {cx + 106} {cy - 64} Z", C["orange"])
+    out += rect(cx - 96, cy + 22, 38, 22, 6, C["sonne"])
     return out
+
+
+def deco_hasenstall(cx, cy):
+    out = plot(cx, cy, C["gras-hell"])
+    out += rect(cx - 98, cy - 64, 56, 34, 6, C["erde"])
+    out += path(f"M {cx - 104} {cy - 62} L {cx - 70} {cy - 84} L {cx - 36} {cy - 62} Z", C["rosa"])
+    for k in range(3):
+        x = cx + 50 + k * 16
+        out += path(f"M {x - 5} {cy + 30} L {x + 5} {cy + 30} L {x} {cy + 46} Z", C["orange"], sw=SI)
+        out += path(f"M {x} {cy + 30} V {cy + 20}", sw=4, extra=f'stroke="{C["gras-dunkel"]}"')
+    return out
+
+
+def plaza(cx, cy):
+    """Runder Platz auf dem Hauptweg, auf dem der Wegweiser steht."""
+    return ell(cx, cy, 70, 40, C["karte-schatten"]) + ell(cx, cy + 4, 46, 22, C["erde"], False, 'opacity="0.25"')
 
 
 def deco_affenwald(cx, cy):
@@ -141,7 +155,8 @@ def deco_zoozaehlung(cx, cy):
 
 
 DECO = {
-    "streichelzoo": deco_streichelzoo,
+    "ziegenwiese": deco_ziegenwiese,
+    "hasenstall": deco_hasenstall,
     "affenwald": deco_affenwald,
     "pinguinfelsen": deco_pinguinfelsen,
     "elefantenwiese": deco_elefantenwiese,
@@ -154,29 +169,37 @@ DECO = {
 
 
 # ------------------------------------------------------------- Hintergrund
-def background_map():
-    b = []
-    b.append(rect(0, 0, 1024, 768, 0, C["gras-hell"], False))
-    # Himmel hinter Titel und Knöpfen
-    b.append(rect(0, 0, 1024, 118, 0, C["himmel"], False))
-    b.append(path("M 0 118 Q 128 98 256 118 T 512 118 T 768 118 T 1024 118 V 0 H 0 Z", C["himmel"], False))
-    b.append(path("M 0 128 Q 160 92 340 120 T 700 112 T 1024 124 V 150 H 0 Z", C["laub-hell"], False))
-    b.append(cloud(330, 52, 0.55) + cloud(760, 66, 0.5))
-    # Hauptweg zwischen den Reihen, mit Abzweigen zu jedem Gehege
+def paths(areas):
+    """Hauptweg zwischen den Reihen, mit Abzweigen zu jedem Gehege."""
     main = f"M -20 {PATH_Y} Q 128 {PATH_Y - 22} 256 {PATH_Y} T 512 {PATH_Y} T 768 {PATH_Y} T 1044 {PATH_Y}"
     spurs = []
-    for a in LAYOUT.values():
-        if a.get("compact"):
-            continue  # liegt auf dem Hauptweg
+    for a in areas.values():
         top_row = a["y"] < PATH_Y
         y_edge = a["y"] + PLOT_H / 2 - 10 if top_row else a["y"] - PLOT_H / 2 + 10
         spurs.append(f"M {a['x']} {y_edge} L {a['x']} {PATH_Y}")
+    b = []
     for d, w in [(main, 46), *[(s, 34) for s in spurs]]:
         b.append(path(d, sw=w + 2 * SW, extra=f'stroke="{K}"'))
     for d, w in [(main, 46), *[(s, 34) for s in spurs]]:
         b.append(path(d, sw=w, extra=f'stroke="{C["karte-schatten"]}"'))
     for x in range(40, 1024, 92):
         b.append(ell(x, PATH_Y + 2, 6, 3, C["erde"], False, 'opacity="0.45"'))
+    return "".join(b)
+
+
+def sky_strip():
+    b = rect(0, 0, 1024, 768, 0, C["gras-hell"], False)
+    # Himmel hinter Titel und Knöpfen
+    b += rect(0, 0, 1024, 118, 0, C["himmel"], False)
+    b += path("M 0 118 Q 128 98 256 118 T 512 118 T 768 118 T 1024 118 V 0 H 0 Z", C["himmel"], False)
+    b += path("M 0 128 Q 160 92 340 120 T 700 112 T 1024 124 V 150 H 0 Z", C["laub-hell"], False)
+    b += cloud(330, 52, 0.55) + cloud(760, 66, 0.5)
+    return b
+
+
+def background_map():
+    b = [sky_strip(), paths(LAYOUT)]
+    b.append(plaza(MAP_LAYOUT["signpost"]["x"], MAP_LAYOUT["signpost"]["y"]))
     # Gehege
     for area_id, a in LAYOUT.items():
         b.append(DECO[area_id](a["x"], a["y"]))
@@ -186,6 +209,49 @@ def background_map():
     b.append(small_tree(272, 180, 0.9) + small_tree(518, 176, 0.9) + small_tree(760, 182, 0.9))
     for (x, y, c) in [(70, 460, "rosa"), (300, 456, "sonne"), (250, 372, "weiss"), (690, 372, "rosa"),
                       (790, 458, "sonne"), (990, 370, "rosa"), (34, 370, "sonne"), (740, 370, "weiss")]:
+        b.append(flower(x, y, c))
+    return svg(1024, 768, "".join(b))
+
+
+def barn(cx, base, s=1.0):
+    w, h = 170 * s, 110 * s
+    out = rect(cx - w / 2, base - h, w, h, 8, C["rosa"])
+    out += path(f"M {cx - w / 2 - 14} {base - h + 6} L {cx} {base - h - 70 * s} L {cx + w / 2 + 14} {base - h + 6} Z",
+                C["erde"])
+    out += rect(cx - 30 * s, base - 70 * s, 60 * s, 70 * s, 6, C["papier"])
+    out += path(f"M {cx - 30 * s} {base - 70 * s} L {cx + 30 * s} {base} M {cx + 30 * s} {base - 70 * s} L {cx - 30 * s} {base}",
+                sw=SI)
+    out += circ(cx, base - h - 26 * s, 12 * s, C["papier"])
+    return out
+
+
+def hay(x, y):
+    return rect(x - 26, y - 16, 52, 32, 8, C["sonne"]) + path(f"M {x - 20} {y} H {x + 20}", sw=2, extra='opacity="0.5"')
+
+
+def background_petting():
+    """Streichelzoo (Klasse 1): Bauernhof mit eigenen Gehegen; freie Plätze für weitere
+    Gehege (z. B. Meerschweinchen, Esel, Ponys) liegen dort, wo jetzt Scheune und Teich sind."""
+    areas = PETTING["areas"]
+    b = [sky_strip(), paths(areas)]
+    b.append(plaza(PETTING["signpost"]["x"], PETTING["signpost"]["y"]))
+    for area_id, a in areas.items():
+        b.append(DECO[area_id](a["x"], a["y"]))
+    # Scheune oben rechts, Teich und Heuballen unten
+    b.append(barn(824, 330))
+    b.append(ell(250, 570, 110, 46, C["wasser"]) + ell(220, 556, 40, 9, C["weiss"], False, 'opacity="0.5"'))
+    for (x, y) in [(560, 560), (620, 590), (760, 560)]:
+        b.append(hay(x, y))
+    b.append(small_tree(900, 600, 1.1) + small_tree(420, 610, 0.9))
+    # Zaun am unteren Rand
+    for x in range(10, 1024, 60):
+        b.append(rect(x - 5, 620, 10, 40, 4, C["erde"]))
+    b.append(rect(0, 630, 1024, 10, 4, C["erde"]))
+    for (x, y) in [(18, 170), (1006, 176)]:
+        b.append(ell(x, y, 46, 26, C["gras-dunkel"]))
+    b.append(small_tree(356, 180, 0.9) + small_tree(668, 176, 0.9))
+    for (x, y, c) in [(70, 460, "rosa"), (300, 456, "sonne"), (690, 372, "rosa"), (990, 370, "rosa"),
+                      (34, 370, "sonne"), (740, 470, "weiss"), (360, 372, "weiss")]:
         b.append(flower(x, y, c))
     return svg(1024, 768, "".join(b))
 
@@ -242,8 +308,19 @@ def icon_sign():
     return svg(128, 128, s)
 
 
+def icon_signpost():
+    s = shadow(64, 120, 30, 6)
+    s += rect(58, 30, 12, 88, 5, C["erde"])
+    s += path("M 22 34 H 92 L 108 48 L 92 62 H 22 Z", C["papier"])
+    s += path("M 106 66 H 36 L 20 80 L 36 94 H 106 Z", C["sonne"])
+    s += path("M 34 48 H 80", sw=SI, extra='opacity="0.5"') + path("M 48 80 H 94", sw=SI, extra='opacity="0.5"')
+    return svg(128, 128, s)
+
+
 FILES = {
     "karte_hintergrund_1024x768": background_map(),
+    "karte_streichelzoo_1024x768": background_petting(),
+    "karte_wegweiser_128": icon_signpost(),
     "karte_affe_128": icon_monkey(),
     "karte_pinguin_128": icon_penguin(),
     "karte_schloss_128": icon_lock(),

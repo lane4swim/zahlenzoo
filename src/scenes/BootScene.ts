@@ -32,6 +32,8 @@ const IMAGES: Record<string, string> = {
   [Tex.map]: 'img/map/karte_hintergrund_1024x768.png',
   [Tex.mapLock]: 'img/map/karte_schloss_128.png',
   [Tex.mapSign]: 'img/map/karte_schild_128.png',
+  [Tex.signpost]: 'img/map/karte_wegweiser_128.png',
+  [Tex.pettingMap]: 'img/map/karte_streichelzoo_1024x768.png',
   ...MONEY_IMAGES,
   ...Object.fromEntries(
     [

@@ -29,8 +29,9 @@ export type Rules = {
   /** Kompetenzmodell (Spezifikation 7): Schwellen für Stufenwechsel, Erklärung, Tagesfutter, Tempo */
   skill: SkillRules;
   /**
-   * Profile der Klasse 1 (streichelzoo-klasse-1.md, Abschnitt 3): Sterne im Streichelzoo,
-   * ab denen Bereiche mit `requiresGrade1` öffnen, Aufgaben je Runde und im Tagesfutter.
+   * Profile der Klasse 1 (streichelzoo-klasse-1.md, Abschnitt 3): Sterne im ganzen
+   * Streichelzoo, ab denen Gehege mit `gradeOneBridge` öffnen; Aufgaben je Runde und im
+   * Tagesfutter.
    */
   gradeOne: { bridgeStars: number; roundSize: number; dailyTasks: number };
 };
@@ -53,6 +54,10 @@ export type SkillRules = {
   tempoConfidence: number;
 };
 
+/** Karten: der große Zoo (Klasse 2) und der Streichelzoo (Klasse 1), verbunden über Wegweiser. */
+export const MAP_IDS = ['zoo', 'streichelzoo'] as const;
+export type MapId = (typeof MAP_IDS)[number];
+
 /** Bereich der Weltkarte (areas.json). */
 export type AreaConfig = {
   id: string;
@@ -69,8 +74,13 @@ export type AreaConfig = {
   free?: 'pattern';
   /** Vorgängerbereich; fehlt bei Startbereichen */
   requires?: string;
-  /** nur Klasse 1: Bereich öffnet erst ab `gradeOne.bridgeStars` Sternen in diesem Bereich */
-  requiresGrade1?: string;
+  /** Karte, auf der das Gehege liegt (fehlt: der große Zoo) */
+  map?: MapId;
+  /**
+   * nur Klasse 1: Das Gehege öffnet erst ab `gradeOne.bridgeStars` Sternen im ganzen
+   * Streichelzoo (Weg vom Streichelzoo in den großen Zoo).
+   */
+  gradeOneBridge?: boolean;
 };
 
 /** Parameter einer Stufe; `description` dient nur der Lesbarkeit. */

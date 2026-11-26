@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { BaseScene } from './BaseScene';
 import { areaFamilies, familyParams, findArea } from '../logic/content';
-import { profileGrade } from '../logic/areas';
+import { areaMap, profileGrade } from '../logic/areas';
 import { dailyPlan } from '../logic/daily';
 import { explainDue, formatTime } from '../logic/skills';
 import { fewestCoins } from '../logic/generators/moneyLay';
@@ -31,7 +31,7 @@ import {
 import type { Services } from '../services/services';
 import { GameEvent, type AnswerSubmittedPayload, type RoundFinishedPayload } from '../types/events';
 import type { AnswerOutcome } from '../types/round';
-import { SceneKey, type TaskSceneData } from '../types/scenes';
+import { SceneKey, type MapSceneData, type TaskSceneData } from '../types/scenes';
 import type { CheckResult, Hint, Task, TaskLevel, TextParams, Visual } from '../types/task';
 import { announce } from '../ui/a11y';
 import { AnimalSprite } from '../ui/AnimalSprite';
@@ -290,7 +290,8 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       label: this.buttonLabel('task.toMap'),
       icon: Tex.mapIcon,
       iconScale: 0.5,
-      onPress: () => this.scene.start(SceneKey.Map),
+      // zurück zur Karte des Geheges (beim Tagesfutter: des gastgebenden Geheges)
+      onPress: () => this.scene.start(SceneKey.Map, this.mapData()),
     });
     this.dots = new ProgressDots(this, width / 2 - 20, top);
     if (this.tempo) {
@@ -624,6 +625,11 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     announce(this.spokenText());
     // Klasse 1: Die Aufgabe wird beim Erscheinen vorgelesen.
     if (this.firstGrade) this.time.delayedCall(250, () => this.readAloud());
+  }
+
+  private mapData(): MapSceneData {
+    const area = findArea(this.content, this.areaId);
+    return area ? { map: areaMap(area) } : {};
   }
 
   /** Beschriftung eines Symbolknopfs; Klasse 1 sieht nur das Symbol. */

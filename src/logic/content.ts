@@ -4,6 +4,7 @@ import type {
   AnimalConfig,
   DecorConfig,
   AreaConfig,
+  MapId,
   FamilyConfig,
   GameContent,
   Legal,
@@ -15,6 +16,7 @@ import type {
   StoryOp,
   StoryTemplate,
 } from '../types/content';
+import { MAP_IDS } from '../types/content';
 
 /**
  * Prüft die Inhaltsdateien beim Laden. Fehler nennen Datei und Stelle, damit
@@ -205,8 +207,16 @@ export function parseAreas(data: unknown): AreaConfig[] {
       families,
     };
     if (o.requires !== undefined) area.requires = str(o.requires, `areas[${i}].requires`);
-    if (o.requiresGrade1 !== undefined)
-      area.requiresGrade1 = str(o.requiresGrade1, `areas[${i}].requiresGrade1`);
+    if (o.map !== undefined) {
+      if (!MAP_IDS.includes(o.map as MapId))
+        throw new ContentError(`areas.json areas[${i}].map: ${MAP_IDS.join(' oder ')} erwartet`);
+      area.map = o.map as MapId;
+    }
+    if (o.gradeOneBridge !== undefined) {
+      if (typeof o.gradeOneBridge !== 'boolean')
+        throw new ContentError(`areas.json areas[${i}].gradeOneBridge: ja/nein erwartet`);
+      area.gradeOneBridge = o.gradeOneBridge;
+    }
     if (o.extra !== undefined) {
       if (typeof o.extra !== 'boolean')
         throw new ContentError(`areas.json areas[${i}].extra: ja/nein erwartet`);
@@ -228,10 +238,8 @@ export function parseAreas(data: unknown): AreaConfig[] {
   const ids = areas.map((a) => a.id);
   if (new Set(ids).size !== ids.length) throw new ContentError('areas.json: doppelte Bereichs-IDs');
   for (const a of areas) {
-    for (const r of [a.requires, a.requiresGrade1]) {
-      if (r && !ids.includes(r)) {
-        throw new ContentError(`areas.json: ${a.id} verweist auf unbekannten Bereich ${r}`);
-      }
+    if (a.requires && !ids.includes(a.requires)) {
+      throw new ContentError(`areas.json: ${a.id} verweist auf unbekannten Bereich ${a.requires}`);
     }
   }
   return areas;

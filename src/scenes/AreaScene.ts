@@ -1,4 +1,5 @@
 import { BaseScene } from './BaseScene';
+import { areaMap } from '../logic/areas';
 import { findArea } from '../logic/content';
 import { tempoOffered } from '../logic/skills';
 import { areaProgress, familyLevel } from '../services/save';
@@ -55,7 +56,7 @@ export class AreaScene extends BaseScene<AreaSceneData> {
     const progress = areaProgress(profile, area.id);
     this.addBackground(area.backdrop ?? areaBackground(area.id));
     if (area.backdrop) this.veil();
-    this.addBackButton(() => this.scene.start(SceneKey.Map));
+    this.addBackButton(() => this.scene.start(SceneKey.Map, { map: areaMap(area) }));
     this.addTitle(onSite ? this.t('area.site') : this.t(`area.${area.id}`));
     if (area.free === 'pattern' && !onSite) {
       const data: PatternSceneData = { areaId: area.id };

@@ -1,4 +1,4 @@
-import { areaState, profileGrade } from './areas';
+import { areaStates } from './areas';
 import { enclosures } from './content';
 import type { Achievement, AreaConfig, GameContent } from '../types/content';
 import type { AreaProgress, Profile } from '../types/save';
@@ -26,14 +26,8 @@ export function totalStars(profile: Profile): number {
 
 /** Bereiche, die das Kind schon erreicht hat (offen oder „bald“). */
 function reachedAreas(content: GameContent, profile: Profile): Set<string> {
-  const stars = Object.fromEntries(
-    content.areas.map((a) => [a.id, profile.areas[a.id]?.stars ?? 0]),
-  );
-  return new Set(
-    content.areas
-      .filter((a) => areaState(a, stars, content.rules, profileGrade(profile)) !== 'locked')
-      .map((a) => a.id),
-  );
+  const states = areaStates(content, profile);
+  return new Set(content.areas.filter((a) => states[a.id] !== 'locked').map((a) => a.id));
 }
 
 export type ShopState = 'owned' | 'buyable' | 'tooExpensive' | 'locked';

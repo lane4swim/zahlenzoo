@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import layout from '../data/map-layout.json';
 import { drawFocusRing, registerFocusable, shownInScene, type Focusable } from './focus';
 import { Color, CssColor, FontFamily, reducedMotion, Stroke, Tex } from './theme';
 
@@ -16,7 +17,7 @@ export type AreaMarkerOptions = {
   dimmed?: boolean;
   /** Gehege fertig: grünes Namensschild und Rosette neben dem Tier */
   done?: boolean;
-  /** kleineres Gehege auf dem Hauptweg (Streichelzoo): Tierbild 96 statt 128 px, Schild näher */
+  /** kleinerer Marker auf dem Hauptweg (Wegweiser): Bild 96 statt 128 px, Schild näher */
   compact?: boolean;
   onPress: () => void;
 };
@@ -26,8 +27,8 @@ export const DONE_TEXTURE = 'abzeichen_gehege_fertig';
 
 const HIT_W = 170;
 const HIT_H = 190;
-/** Maße des kleineren Gehege-Markers (auch im Kartentest verwendet) */
-export const COMPACT = { iconScale: 0.75, iconY: -12, plateY: 44, hitH: 150 };
+/** Maße des kleineren Markers (Wegweiser), auch im Kartentest verwendet */
+const COMPACT = layout.compactMarker;
 
 /** Gehege-Markierung auf der Zoo-Karte: Symbol, Namensschild, Sterne. */
 export class AreaMarker extends Phaser.GameObjects.Container implements Focusable {

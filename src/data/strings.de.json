@@ -921,5 +921,13 @@
   "strategy.addsub10_plus": "Plus bis 10",
   "strategy.addsub10_minus": "Minus bis 10",
   "task.prompt.count20": "Wie viele sind es? Tippe jedes an.",
-  "area.streichelzoo.dat": "dem Streichelzoo"
+  "area.ziegenwiese": "Ziegenwiese",
+  "area.hasenstall": "Hasenstall",
+  "area.ziegenwiese.dat": "der Ziegenwiese",
+  "area.hasenstall.dat": "dem Hasenstall",
+  "map.to.streichelzoo": "Streichelzoo",
+  "map.to.zoo": "Großer Zoo",
+  "map.lockedBridge": "Sammle im Streichelzoo noch {stars} Sterne, dann öffnet sich dieses Gehege.",
+  "avatar.rabbit": "Hase",
+  "baby.rabbit": "Häschen"
 }

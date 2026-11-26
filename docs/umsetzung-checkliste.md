@@ -236,8 +236,10 @@ Plan: [`streichelzoo-klasse-1.md`](streichelzoo-klasse-1.md).
 **Erster Schnitt (26.11.2026)**
 
 - [x] Klasse im Profil (`grade`, fehlt = Klasse 2): Auswahl beim Anlegen, Änderung im Erwachsenenbereich (Einstellungen)
-- [x] Freischaltung je Klasse: Klasse 1 beginnt im Streichelzoo, Affenwald und Pinguinfelsen ab `gradeOne.bridgeStars` (24) Sternen dort; Klasse 2 unverändert, Streichelzoo offen
-- [x] Bereich Streichelzoo: Ziege (alle Zustände, Baby, Kartensymbol, Meckern), Gehege- und Aufgabenhintergrund, rundes Gehege auf dem Hauptweg (Bank auf der Karte versetzt), Babykarten in „Mein Zoo“ für neun Tiere
+- [x] Freischaltung je Klasse: Klasse 1 beginnt im Streichelzoo, Affenwald und Pinguinfelsen ab `gradeOne.bridgeStars` (24) Sternen im ganzen Streichelzoo; Klasse 2 unverändert, Streichelzoo offen
+- [x] Streichelzoo als eigene Karte mit Wegweiser zum großen Zoo und zurück; Startkarte je Klasse; Zurück aus Gehege, Aufgabe und Rundenende auf die Karte des Geheges
+- [x] Gehege Ziegenwiese (Ziege: Zählen, Blitzblick) und Hasenstall (Hase: Plus und Minus bis 10), je mit Tier, Baby, Kartensymbol, Laut, Gehege- und Aufgabenhintergrund; Bank auf der großen Karte versetzt, Babykarten in „Mein Zoo“ in zwei Reihen
+- [ ] Weitere Gehege im Streichelzoo, z. B. Meerschweinchen, Esel, Ponys (Anleitung: `streichelzoo-klasse-1.md`, Abschnitt 3)
 - [x] Themen `count_20` (Antippen mit Häkchen), `quick_count_20` (Würfel- und Fingerbilder, Zehnerfelder), `addsub_10` (mit Bild, Bildrechengeschichten, Umkehraufgaben); höchstens drei Antwortkarten
 - [x] Klasse 1 in der Aufgabenansicht: kein Aufgaben-, Hinweis- und Lobtext, Vorlesen beim Erscheinen und bei jedem Hinweis, Knöpfe nur als Symbol, ohne Rechenhilfen der Klasse 2, Runden mit 7 Aufgaben
 - [ ] Bildsymbol je Aufgabe (antippen, schau, gib)

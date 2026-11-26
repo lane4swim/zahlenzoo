@@ -154,11 +154,11 @@ Das Kind baut einen Zoo auf: Auf einer Karte wählt es einen Bereich, versorgt d
 | Schmetterlingshaus | Schmetterling | Muster, Achsensymmetrie erkennen, Formen erkennen und legen, Flächen und Umfang, Lage und Wege | 2, 3 |
 | Giraffenhof | Giraffe | Längen messen und vergleichen, Stützpunkte für 1 cm und 1 m, cm und m umwandeln; später Hunderterraum bis 1000 und Runden | 2, 3 |
 | Zoo-Zählung | Erdmännchen | Strichlisten, Tabellen und Kalender lesen, einfache Kombinatorik mit Anordnungen | 2, 3 |
-| Streichelzoo | Ziege | Zahlen bis 20: Zählen, Blitzblick, Vergleichen, Zerlegen, Plus und Minus bis 20, Lagewörter; in der Scheune Formen, Muster, Geld bis 20 €, volle Stunden | 1 (2 zur Wiederholung) |
+| Streichelzoo (eigene Karte: Ziegenwiese, Hasenstall, weitere geplant) | Ziege, Hase, … | Zahlen bis 20: Zählen, Blitzblick, Vergleichen, Zerlegen, Plus und Minus bis 20, Lagewörter; Formen, Muster, Geld bis 20 €, volle Stunden | 1 (2 zur Wiederholung) |
 
 **Freischaltung (Startwerte, im Test anzupassen)**
 
-- Jedes Profil hat eine Klasse (1 oder 2). Klasse 2: zu Beginn offen sind Streichelzoo, Affenwald und Pinguinfelsen. Klasse 1: zu Beginn offen ist nur der Streichelzoo; Affenwald und Pinguinfelsen öffnen bei 24 Sternen im Streichelzoo oder beim Wechsel auf Klasse 2.
+- Jedes Profil hat eine Klasse (1 oder 2). Der Streichelzoo ist eine eigene Karte; Klasse 1 beginnt dort, Klasse 2 im großen Zoo; ein Wegweiser verbindet beide Karten. Klasse 2: zu Beginn offen sind Ziegenwiese, Affenwald und Pinguinfelsen. Klasse 1: zu Beginn offen ist nur die Ziegenwiese; Affenwald und Pinguinfelsen öffnen bei 24 Sternen im ganzen Streichelzoo oder beim Wechsel auf Klasse 2.
 - Jeder weitere Bereich öffnet, wenn im Vorgängerbereich insgesamt 6 Sterne gesammelt sind.
 - Jeder Bereich hat 3 Stufen; die nächste Stufe öffnet nach einer Runde mit mindestens 2 Sternen.
 - Mit Sternen kauft das Kind Tiere (Baby-Tiere des Bereichs) und Dekoration; ein Spiel-Shop mit echtem Geld existiert nicht.
