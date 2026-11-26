@@ -28,6 +28,11 @@ export type Rules = {
   explainAsk: { families: string[]; chance: number };
   /** Kompetenzmodell (Spezifikation 7): Schwellen für Stufenwechsel, Erklärung, Tagesfutter, Tempo */
   skill: SkillRules;
+  /**
+   * Profile der Klasse 1 (streichelzoo-klasse-1.md, Abschnitt 3): Sterne im Streichelzoo,
+   * ab denen Bereiche mit `requiresGrade1` öffnen, Aufgaben je Runde und im Tagesfutter.
+   */
+  gradeOne: { bridgeStars: number; roundSize: number; dailyTasks: number };
 };
 
 export type SkillRules = {
@@ -64,6 +69,8 @@ export type AreaConfig = {
   free?: 'pattern';
   /** Vorgängerbereich; fehlt bei Startbereichen */
   requires?: string;
+  /** nur Klasse 1: Bereich öffnet erst ab `gradeOne.bridgeStars` Sternen in diesem Bereich */
+  requiresGrade1?: string;
 };
 
 /** Parameter einer Stufe; `description` dient nur der Lesbarkeit. */

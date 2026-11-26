@@ -1,6 +1,11 @@
 {
-  "comment": "Lage der Gehege und der Bedienelemente auf der Zoo-Karte (1024 × 768). Gemeinsame Quelle für art/build_map.py, MapScene und den Test, dass alle Dekorationen sichtbar bleiben (tests/logic.mapLayout.test.ts). Bedienelemente: Mitte x/y, Breite w, Höhe h.",
+  "comment": "Lage der Gehege und der Bedienelemente auf der Zoo-Karte (1024 × 768). Gemeinsame Quelle für art/build_map.py, MapScene und den Test, dass alle Dekorationen sichtbar bleiben (tests/logic.mapLayout.test.ts). Bedienelemente: Mitte x/y, Breite w, Höhe h. compact: kleineres Gehege auf dem Hauptweg (Streichelzoo am Eingang), Tierbild 96 px.",
   "areas": {
+    "streichelzoo": {
+      "x": 517,
+      "y": 415,
+      "compact": true
+    },
     "affenwald": {
       "x": 150,
       "y": 270

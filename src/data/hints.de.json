@@ -654,5 +654,20 @@
   "error.share_unequal": "Gerecht heißt: Auf jedem Teller liegt gleich viel.",
   "error.share_rest": "Verteile alles, bis nichts mehr übrig ist.",
   "hint.divshare.picture.share.1": "Jede Gruppe gehört einem Elefanten. Zähle, wie viele in einer Gruppe sind.",
-  "hint.divshare.picture.measure.1": "Jede Gruppe ist ein Korb. Zähle die Körbe."
+  "hint.divshare.picture.measure.1": "Jede Gruppe ist ein Korb. Zähle die Körbe.",
+  "hint.count20.1": "Tippe jedes Tier genau einmal an. Dann zählst du keins doppelt.",
+  "hint.count20.2": "Jetzt stehen sie in Fünferreihen. Eine volle Reihe sind 5.",
+  "hint.count20.3": "Es sind {n}. Die letzte Zahl beim Zählen sagt, wie viele es sind.",
+  "hint.quick20.dice.1": "Das Würfelbild kennst du. Wie viele Augen hat es?",
+  "hint.quick20.fingers.1": "Eine ganze Hand sind 5 Finger. Wie viele kommen noch dazu?",
+  "hint.addsub10.plus.1": "Wie viele sind es zuerst? Wie viele kommen dazu?",
+  "hint.addsub10.minus.1": "Wie viele sind es zuerst? Wie viele gehen weg?",
+  "hint.addsub10.plus.2": "Schau auf das Zehnerfeld: {a} volle Plättchen, {b} Ringe kommen dazu. Eine volle Reihe sind 5.",
+  "hint.addsub10.minus.2": "Schau auf das Zehnerfeld: {a} Plättchen, {b} sind durchgestrichen. Wie viele bleiben?",
+  "hint.addsub10.3": "{a} {op} {b} = {result}",
+  "error.count_skip": "Fast! Hast du ein Tier vergessen? Tippe jedes an.",
+  "error.count_double": "Fast! Hast du ein Tier zweimal gezählt?",
+  "error.quick_five": "Schau noch mal: Eine volle Reihe oder Hand sind 5.",
+  "error.off_by_one": "Ganz nah dran! Schau auf die Fünf, dann musst du nicht zählen.",
+  "error.operand_echo": "Das ist eine Zahl aus der Aufgabe. Was kommt heraus?"
 }

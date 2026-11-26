@@ -81,8 +81,19 @@ import { MATCH_REPR, matchRepr, NUMBER_LINE, numberLine } from './represent';
 import { COMPARE_DURATION, compareDuration, TIME_UNITS, timeUnits } from './time';
 import type { Generator } from '../../types/task';
 
+import {
+  ADDSUB_10,
+  addSub10,
+  COUNT_20,
+  count20,
+  QUICK_COUNT_20,
+  quickCount20,
+} from './streichelzoo';
 /** Generatoren je Aufgabenfamilie; areas.json und families.json verweisen auf diese IDs. */
 export const GENERATORS: Readonly<Record<string, Generator>> = {
+  [COUNT_20]: count20,
+  [QUICK_COUNT_20]: quickCount20,
+  [ADDSUB_10]: addSub10,
   [ADD_100]: withTrueFalse(add100),
   [NEIGHBORS_100]: neighbors100,
   [MULT_TABLE]: multTable,

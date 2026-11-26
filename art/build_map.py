@@ -6,6 +6,7 @@ Nutzt Hilfsfunktionen, Linienstärken und Farben der Stilprobe
 Aufruf: npm run art  (schreibt art/svg/*.svg und rendert PNG nach public/assets/img/map/)
 """
 import json
+import math
 import sys
 from pathlib import Path
 
@@ -47,6 +48,18 @@ def flower(x, y, color):
 
 
 # ------------------------------------------------------------- Gehege-Motive
+def deco_streichelzoo(cx, cy):
+    """Kleine runde Weide auf dem Hauptweg am Eingang, mit Zaun und Heuballen."""
+    r = 62
+    out = circ(cx, cy - 8, r, C["gras"])
+    for i in range(9):
+        a = 200 + i * 17.5
+        px, py = cx + r * math.cos(math.radians(a)), cy - 8 + r * math.sin(math.radians(a))
+        out += rect(px - 4, py - 12, 8, 18, 3, C["erde"])
+    out += rect(cx + 34, cy + 18, 30, 18, 6, C["sonne"])
+    return out
+
+
 def deco_affenwald(cx, cy):
     return (plot(cx, cy, C["gras"]) + small_tree(cx - 72, cy - 8) + small_tree(cx + 72, cy - 8)
             + ba.banana(cx + 84, cy + 30, 10, 0.45))
@@ -128,6 +141,7 @@ def deco_zoozaehlung(cx, cy):
 
 
 DECO = {
+    "streichelzoo": deco_streichelzoo,
     "affenwald": deco_affenwald,
     "pinguinfelsen": deco_pinguinfelsen,
     "elefantenwiese": deco_elefantenwiese,
@@ -152,6 +166,8 @@ def background_map():
     main = f"M -20 {PATH_Y} Q 128 {PATH_Y - 22} 256 {PATH_Y} T 512 {PATH_Y} T 768 {PATH_Y} T 1044 {PATH_Y}"
     spurs = []
     for a in LAYOUT.values():
+        if a.get("compact"):
+            continue  # liegt auf dem Hauptweg
         top_row = a["y"] < PATH_Y
         y_edge = a["y"] + PLOT_H / 2 - 10 if top_row else a["y"] - PLOT_H / 2 + 10
         spurs.append(f"M {a['x']} {y_edge} L {a['x']} {PATH_Y}")
@@ -168,7 +184,7 @@ def background_map():
     for (x, y) in [(18, 170), (1006, 176), (24, 720), (1000, 716), (272, 740), (520, 748), (760, 742)]:
         b.append(ell(x, y, 46, 26, C["gras-dunkel"]))
     b.append(small_tree(272, 180, 0.9) + small_tree(518, 176, 0.9) + small_tree(760, 182, 0.9))
-    for (x, y, c) in [(70, 460, "rosa"), (300, 456, "sonne"), (500, 368, "weiss"), (560, 458, "rosa"),
+    for (x, y, c) in [(70, 460, "rosa"), (300, 456, "sonne"), (250, 372, "weiss"), (690, 372, "rosa"),
                       (790, 458, "sonne"), (990, 370, "rosa"), (34, 370, "sonne"), (740, 370, "weiss")]:
         b.append(flower(x, y, c))
     return svg(1024, 768, "".join(b))

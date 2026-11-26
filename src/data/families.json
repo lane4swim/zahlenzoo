@@ -1,6 +1,82 @@
 {
-  "_hinweis": "Aufgabenfamilien mit Parametern je Stufe. kinds: Anteile der Eingabeformen. Anteile (Share) liegen zwischen 0 und 1. Zahlenraum jeweils bis 100.",
+  "_hinweis": "Aufgabenfamilien mit Parametern je Stufe. kinds: Anteile der Eingabeformen. Anteile (Share) liegen zwischen 0 und 1. Zahlenraum jeweils bis 100, im Streichelzoo (Klasse 1) bis 20.",
   "families": {
+    "count_20": {
+      "title": "Zählen",
+      "kinds": {
+        "choice": 0.5
+      },
+      "levels": {
+        "1": {
+          "description": "bis 10 in einer Reihe; jedes angetippte Tier bekommt ein Häkchen",
+          "layout": "row",
+          "min": 3,
+          "max": 10
+        },
+        "2": {
+          "description": "bis 10 verstreut",
+          "layout": "scatter",
+          "min": 4,
+          "max": 10
+        },
+        "3": {
+          "description": "11 bis 20 in Fünferreihen (zwei Zehner)",
+          "layout": "groups",
+          "min": 11,
+          "max": 20
+        }
+      }
+    },
+    "quick_count_20": {
+      "title": "Blitzblick bis 20",
+      "kinds": {
+        "choice": 0.5
+      },
+      "levels": {
+        "1": {
+          "description": "Würfelbilder 1 bis 6 und Fingerbilder bis 10, 2,5 Sekunden",
+          "fingerShare": 0.5,
+          "flashMs": 2500
+        },
+        "2": {
+          "description": "Zehnerfeld bis 10, 2 Sekunden",
+          "shape": "tenframe",
+          "min": 3,
+          "max": 10,
+          "flashMs": 2000
+        },
+        "3": {
+          "description": "zwei Zehnerfelder bis 20",
+          "shape": "tenframe",
+          "min": 11,
+          "max": 20,
+          "flashMs": 2500
+        }
+      }
+    },
+    "addsub_10": {
+      "title": "Plus und Minus bis 10",
+      "kinds": {
+        "choice": 0.4
+      },
+      "levels": {
+        "1": {
+          "description": "Plus bis 10 mit Bild; ein Teil als Bildrechengeschichte",
+          "mode": "plus",
+          "storyShare": 0.4
+        },
+        "2": {
+          "description": "Minus bis 10 mit Bild (Weggenommenes durchgestrichen)",
+          "mode": "minus",
+          "storyShare": 0.4
+        },
+        "3": {
+          "description": "Plus und Minus gemischt ohne Bild, Umkehraufgaben",
+          "mode": "mixed",
+          "inverseShare": 0.3
+        }
+      }
+    },
     "plus_facts_20": {
       "title": "Einspluseins bis 20",
       "kinds": {

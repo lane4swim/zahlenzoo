@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Zahlen-Zoo: die übrigen sechs Tiere (Elefant, Papagei, Eule, Schmetterling,
+"""Zahlen-Zoo: die übrigen sieben Tiere (Ziege, Elefant, Papagei, Eule, Schmetterling,
 Giraffe, Erdmännchen) mit derselben Ausstattung wie Pinguin und Affe:
 5 Ausdrücke, Idle (6), Freude (8), Fütterung (8), Baby und Kartensymbol 128 × 128.
 
@@ -87,6 +87,11 @@ def item(name):
         return (ell(0, 6, 24, 20, C["orange"]) + circ(0, -16, 10, K, False)
                 + path("M 0 -12 V 24", sw=SI) + circ(-10, 4, 3.5, K, False) + circ(10, 10, 3.5, K, False)
                 + circ(-8, 16, 3, K, False))
+    if name == "moehre":
+        return (path("M -10 -22 Q -18 -40 -6 -44 M 0 -24 Q 0 -46 10 -48 M 8 -22 Q 20 -38 26 -30",
+                     sw=6, extra=f'stroke="{C["gras-dunkel"]}"')
+                + path("M -14 -22 Q 0 -30 14 -22 Q 8 10 0 34 Q -8 10 -14 -22 Z", C["orange"])
+                + path("M -8 -6 H 0 M -4 8 H 4", sw=2, extra='opacity="0.6"'))
     raise ValueError(name)
 
 
@@ -275,8 +280,38 @@ def meerkat(eyes, mouth, limbs, bob, brow_on, tag):
     return defs, body, head, ""
 
 
+def goat(eyes, mouth, limbs, bob, brow_on, tag):
+    W_, G, D = C["papier"], C["grau-warm"], C["affe-dunkel"]
+    # Freude zeigt die Ziege mit Ohren und Schwanz, nicht mit erhobenen Beinen.
+    tail = {"down": "M 344 352 Q 372 330 364 310", "mid": "M 344 352 Q 384 330 390 300",
+            "up": "M 344 352 Q 392 320 404 284"}[limbs]
+    ear = {"down": 24, "mid": 8, "up": -14}[limbs]
+    body = path(tail, sw=14 + 2 * SW, extra=f'stroke="{K}"') + path(tail, sw=14, extra=f'stroke="{W_}"')
+    body += rect(226, 230, 60, 90, 24, W_)
+    body += ell(256, 372 + bob * 0.5, 108, 92 - bob * 0.5, W_)
+    body += ell(300, 360, 34, 26, C["karte-schatten"], False, 'opacity="0.8"')
+    for x in (186, 228, 270, 312):
+        body += rect(x - 4, 410, 30, 66, 12, W_) + rect(x - 6, 456, 34, 22, 8, D)
+    head = ""
+    for side in (-1, 1):
+        hx = 256 + side * 34
+        head += path(f"M {hx} 132 Q {hx + side * 30} 70 {hx + side * 70} 78 Q {hx + side * 40} 92 {hx + side * 16} 140 Z", G)
+        ex = 256 + side * 92
+        head += rot(ell(ex, 178, 40, 16, W_) + ell(ex, 178, 26, 8, C["ohr-rosa"], False), side * ear, ex, 178)
+    head += ell(256, 186, 72, 70, W_)
+    head += ell(256, 232, 46, 32, C["karte-schatten"])
+    head += ell(242, 224, 5, 4, K, False) + ell(270, 224, 5, 4, K, False)
+    head += path("M 240 258 Q 256 310 272 258 Z", G)
+    head += cheeks(200, 312, 204, 12, 8)
+    head += ba.eye(226, 178, eyes) + ba.eye(286, 178, eyes) + brow(brow_on, 268, 146)
+    defs, m = mouth_at(MAMMAL_MOUTH[mouth], 256, 246, 0.45, tag)
+    head += m
+    return defs, body, head, ""
+
+
 # Tierdaten: Zeichnung, Kopfmitte (Baby, Symbol), Mund (Fütterung), Futter, Symbolmaßstab
 ANIMALS = {
+    "streichelzoo_ziege": dict(draw=goat, head=(256, 186), mouth=(256, 246), food="moehre", icon=0.42),
     "elefantenwiese_elefant": dict(draw=elephant, head=(256, 226), mouth=(300, 282), food="heu", icon=0.25),
     "zookasse_papagei": dict(draw=parrot, head=(256, 190), mouth=(262, 248), food="nuss", icon=0.4),
     "futteruhr_eule": dict(draw=owl, head=(256, 196), mouth=(258, 252), food="beeren", icon=0.38),

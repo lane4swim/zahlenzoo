@@ -1,8 +1,14 @@
 {
-  "_hinweis": "Bereiche der Weltkarte in der Reihenfolge der Freischaltung. families: Aufgabenfamilien aus families.json in der Reihenfolge im Gehege; ohne families zeigt die Karte „bald“. requires: Vorgängerbereich.",
+  "_hinweis": "Bereiche der Weltkarte in der Reihenfolge der Freischaltung. families: Aufgabenfamilien aus families.json in der Reihenfolge im Gehege; ohne families zeigt die Karte „bald“. requires: Vorgängerbereich. requiresGrade1: nur für Profile der Klasse 1 zusätzlich nötig (Sterne laut rules.json gradeOne.bridgeStars).",
   "areas": [
     {
+      "id": "streichelzoo",
+      "animal": "goat",
+      "families": ["count_20", "quick_count_20", "addsub_10"]
+    },
+    {
       "id": "affenwald",
+      "requiresGrade1": "streichelzoo",
       "animal": "monkey",
       "families": [
         "neighbors_100",
@@ -17,6 +23,7 @@
     },
     {
       "id": "pinguinfelsen",
+      "requiresGrade1": "streichelzoo",
       "animal": "penguin",
       "families": [
         "plus_facts_20",

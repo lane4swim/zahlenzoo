@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { BaseScene } from './BaseScene';
 import layout from '../data/map-layout.json';
-import { areaState } from '../logic/areas';
+import { areaState, profileGrade, requiredArea } from '../logic/areas';
 import { findArea } from '../logic/content';
 import { areaProgress } from '../services/save';
 import type { Services } from '../services/services';
@@ -19,7 +19,7 @@ import { decorTexture } from '../ui/rewards';
 import { StarCounter } from '../ui/StarCounter';
 import { Color, CssColor, FontFamily, FontSize, Stroke, Tex } from '../ui/theme';
 
-type Point = { x: number; y: number };
+type Point = { x: number; y: number; compact?: boolean };
 const POSITIONS: Readonly<Record<string, Point>> = layout.areas;
 
 /**
@@ -79,13 +79,14 @@ export class MapScene extends BaseScene {
     const starsByArea = Object.fromEntries(
       this.content.areas.map((a) => [a.id, areaProgress(profile, a.id).stars]),
     );
+    const grade = profileGrade(profile);
     for (const area of this.content.areas) {
       if (area.extra) continue;
       const pos = POSITIONS[area.id];
       if (!pos) continue;
-      const state = areaState(area, starsByArea, this.content.rules);
+      const state = areaState(area, starsByArea, this.content.rules, grade);
       const done = isAreaDone(area, profile.areas[area.id]);
-      this.addMarker(area, pos, state, starsByArea[area.id] ?? 0, done);
+      this.addMarker(area, pos, state, starsByArea[area.id] ?? 0, done, requiredArea(area, grade));
     }
 
     // Wege im Zoo: Lage und Wege auf dem Zooplan (Zusatzbereich ohne Gehege auf der Karte)
@@ -138,6 +139,7 @@ export class MapScene extends BaseScene {
     state: string,
     stars: number,
     done: boolean,
+    requires: string | undefined,
   ): void {
     const name = this.t(`area.${area.id}`);
     const icon = this.content.animals[area.animal]?.icon;
@@ -153,7 +155,7 @@ export class MapScene extends BaseScene {
         onPress: () => this.scene.start(SceneKey.Area, data),
       });
     } else if (state === 'locked') {
-      const required = area.requires ? findArea(this.content, area.requires) : undefined;
+      const required = requires ? findArea(this.content, requires) : undefined;
       new AreaMarker(this, {
         ...pos,
         name,

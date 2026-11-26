@@ -347,6 +347,39 @@ def gehege_zoozaehlung():
     return svg(W, H, "".join(b))
 
 
+def barn(x, base, w=240, h=170):
+    """Stall mit Satteldach und offenem Tor (Streichelzoo)."""
+    top = base - h
+    out = rect(x, top, w, h, 10, C["erde"])
+    for i in range(1, 6):
+        out += path(f"M {x + i * w / 6} {top + 12} V {base - 8}", sw=2, extra='opacity="0.35"')
+    out += path(f"M {x - 24} {top + 8} L {x + w / 2} {top - 90} L {x + w + 24} {top + 8} Z", C["orange"])
+    out += rect(x + w / 2 - 44, base - 110, 88, 110, 8, C["affe-dunkel"])
+    out += path(f"M {x + w / 2 - 44} {base - 110} L {x + w / 2 + 44} {base} M {x + w / 2 + 44} {base - 110} "
+                f"L {x + w / 2 - 44} {base}", sw=SI, extra='opacity="0.6"')
+    out += circ(x + w / 2, top - 30, 18, C["papier"])
+    return out
+
+
+def hay(x, base, s=1.0):
+    out = rect(x - 50 * s, base - 54 * s, 100 * s, 54 * s, 12 * s, C["sonne"])
+    for dy in (18, 36):
+        out += path(f"M {x - 44 * s} {base - dy * s} H {x + 44 * s}", sw=2, extra='opacity="0.5"')
+    return out
+
+
+def gehege_streichelzoo():
+    b = [gehege_base("laub-hell", "gras", "gras-hell")]
+    b.append(barn(720, 600))
+    b.append(fence(-20, 640, 620) + fence(980, 1060, 620))
+    b.append(hay(620, 700, 0.9) + hay(980, 720, 0.8))
+    b.append(ba.tree(90, 560, 44, 260, [(-10, -10, 70), (50, -40, 60), (-50, -50, 54)]))
+    b.append(ell(420, 712, 70, 18, C["wasser"]) + ell(400, 706, 30, 6, C["weiss"], False, 'opacity="0.5"'))
+    b.append("".join(tuft(x, y) for (x, y) in [(260, 690), (520, 740), (760, 730), (880, 700)]))
+    b.append(flowers([(320, 740, "sonne"), (560, 700, "weiss"), (860, 750, "rosa")]))
+    return svg(W, H, "".join(b))
+
+
 # ============================================================== Bereiche: Aufgabenansicht
 def aufgabe_elefantenwiese():
     b = [task_ground(C["laub-hell"], "gras", "gras-hell", ledge("gras", cap="gras-hell"))]
@@ -419,13 +452,21 @@ def aufgabe_zoozaehlung():
     return svg(W, H, "".join(b))
 
 
+def aufgabe_streichelzoo():
+    b = [task_ground(C["laub-hell"], "gras", "gras-hell", ledge("gras", cap="gras-hell"))]
+    b.append(fence(560, 1060, 560))
+    b.append(tuft(200, 344) + tuft(40, 330))
+    b.append(flowers([(300, 740, "sonne"), (900, 748, "weiss")]))
+    return svg(W, H, "".join(b))
+
+
 FILES = {
     "menue_start_1024x768": menu_start(),
     "menue_profil_1024x768": menu_profile(),
     "menue_erwachsene_1024x768": menu_adults(),
     "menue_rundenende_1024x768": menu_round_end(),
 }
-for area in ["elefantenwiese", "zookasse", "futteruhr", "schmetterlingshaus", "giraffenhof", "zoozaehlung"]:
+for area in ["streichelzoo", "elefantenwiese", "zookasse", "futteruhr", "schmetterlingshaus", "giraffenhof", "zoozaehlung"]:
     FILES[f"{area}_hintergrund_1024x768"] = globals()[f"gehege_{area}"]()
     FILES[f"{area}_aufgabe_1024x768"] = globals()[f"aufgabe_{area}"]()
 

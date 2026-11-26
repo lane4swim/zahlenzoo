@@ -55,7 +55,7 @@ describe('Runde', () => {
     expect(() => createRound([])).toThrow(RangeError);
     const { round } = compose(1, 1);
     expect(() => createRound([round.tasks[0]!, round.tasks[0]!])).toThrow(RangeError);
-    expect(() => compose(1, 1, 7)).toThrow(RangeError);
+    expect(() => compose(1, 1, 5)).toThrow(RangeError);
     expect(() => compose(1, 1, 13)).toThrow(RangeError);
   });
 });

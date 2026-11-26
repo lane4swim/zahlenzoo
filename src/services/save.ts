@@ -2,6 +2,7 @@ import {
   AVATARS,
   type AreaProgress,
   type Avatar,
+  type Grade,
   type Profile,
   type SaveData,
   type Settings,
@@ -127,6 +128,10 @@ function validate(data: Record<string, unknown>): SaveData {
       throw new Error(`Profil ${i} ist ungültig`);
     }
     if (!AVATARS.includes(p.avatar as Avatar)) throw new Error(`Profil ${i}: unbekanntes Tierbild`);
+    if (p.grade !== undefined && p.grade !== 1 && p.grade !== 2) {
+      const { grade: _ignored, ...rest } = p;
+      return rest as unknown as Profile;
+    }
     return p as unknown as Profile;
   });
   const active = typeof data.activeProfileId === 'string' ? data.activeProfileId : null;
@@ -159,13 +164,19 @@ export function cleanNickname(nickname: string): string {
   return nickname.replace(/\s+/g, ' ').trim().slice(0, NICKNAME_MAX);
 }
 
-export function createProfile(nickname: string, avatar: Avatar, now = new Date()): Profile {
+export function createProfile(
+  nickname: string,
+  avatar: Avatar,
+  now = new Date(),
+  grade: Grade = 2,
+): Profile {
   const name = cleanNickname(nickname);
   if (name === '') throw new Error('Spitzname fehlt');
   return {
     id: newId(),
     nickname: name,
     avatar,
+    grade,
     createdAt: now.toISOString().slice(0, 10),
     stars: 0,
     zoo: { babies: [], decor: [] },
@@ -233,8 +244,8 @@ export class SaveService {
     return this.data.profiles.find((p) => p.id === this.data.activeProfileId);
   }
 
-  addProfile(nickname: string, avatar: Avatar): Profile {
-    const profile = createProfile(nickname, avatar);
+  addProfile(nickname: string, avatar: Avatar, grade: Grade = 2): Profile {
+    const profile = createProfile(nickname, avatar, new Date(), grade);
     this.data = {
       ...this.data,
       profiles: [...this.data.profiles, profile],

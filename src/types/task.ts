@@ -264,6 +264,25 @@ export type Visual =
       ones: number;
     }
   | {
+      /** Würfelbild mit 1 bis 6 Augen (Blitzblick, Klasse 1) */
+      type: 'dice';
+      n: number;
+    }
+  | {
+      /** Fingerbild: zwei Hände, zuerst eine volle Hand (Kraft der 5), 0 bis 10 Finger */
+      type: 'fingers';
+      n: number;
+    }
+  | {
+      /**
+       * Dinge zum Zählen (Klasse 1): Bild `icon` an den Punkten (Mitte, Pixel um 0, 0).
+       * Angetippte Dinge bekommen ein Häkchen; das hilft, keins doppelt zu zählen.
+       */
+      type: 'count';
+      icon: string;
+      points: Array<[number, number]>;
+    }
+  | {
       /** Punktefeld: rows Reihen mit je cols Punkten; die ersten `split` Reihen andersfarbig */
       type: 'dots';
       rows: number;

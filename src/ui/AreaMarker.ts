@@ -16,6 +16,8 @@ export type AreaMarkerOptions = {
   dimmed?: boolean;
   /** Gehege fertig: grünes Namensschild und Rosette neben dem Tier */
   done?: boolean;
+  /** kleineres Gehege auf dem Hauptweg (Streichelzoo): Tierbild 96 statt 128 px, Schild näher */
+  compact?: boolean;
   onPress: () => void;
 };
 
@@ -24,16 +26,21 @@ export const DONE_TEXTURE = 'abzeichen_gehege_fertig';
 
 const HIT_W = 170;
 const HIT_H = 190;
+/** Maße des kleineren Gehege-Markers (auch im Kartentest verwendet) */
+export const COMPACT = { iconScale: 0.75, iconY: -12, plateY: 44, hitH: 150 };
 
 /** Gehege-Markierung auf der Zoo-Karte: Symbol, Namensschild, Sterne. */
 export class AreaMarker extends Phaser.GameObjects.Container implements Focusable {
   private readonly figure: Phaser.GameObjects.Container;
   private ring?: Phaser.GameObjects.Graphics;
   private readonly onPress: () => void;
+  private readonly hitH: number;
 
   constructor(scene: Phaser.Scene, options: AreaMarkerOptions) {
     super(scene, options.x, options.y);
-    const icon = scene.add.image(0, -18, options.icon);
+    const compact = options.compact === true;
+    const icon = scene.add.image(0, compact ? COMPACT.iconY : -18, options.icon);
+    if (compact) icon.setScale(COMPACT.iconScale);
     const parts: Phaser.GameObjects.GameObject[] = [icon];
     if (options.signText) {
       parts.push(
@@ -58,7 +65,7 @@ export class AreaMarker extends Phaser.GameObjects.Container implements Focusabl
     const hasStars = options.stars !== undefined;
     const starW = hasStars ? 58 : 0;
     const plateW = label.width + 28 + starW;
-    const plateY = 66;
+    const plateY = compact ? COMPACT.plateY : 66;
     label.setPosition(-plateW / 2 + 14, plateY);
     const plate = scene.add.graphics();
     plate.fillStyle(options.done ? Color.grasHell : Color.papier, 1);
@@ -85,7 +92,8 @@ export class AreaMarker extends Phaser.GameObjects.Container implements Focusabl
       this.add(scene.add.image(58, -62, DONE_TEXTURE).setScale(0.24));
     }
     if (options.dimmed) this.setAlpha(0.8);
-    this.setSize(HIT_W, HIT_H);
+    this.hitH = compact ? COMPACT.hitH : HIT_H;
+    this.setSize(HIT_W, this.hitH);
     this.setInteractive({ useHandCursor: true });
     this.on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => this.figure.setScale(0.94));
     this.on(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => this.figure.setScale(1));
@@ -122,7 +130,7 @@ export class AreaMarker extends Phaser.GameObjects.Container implements Focusabl
   setFocused(focused: boolean): void {
     if (focused) {
       this.ring ??= this.scene.add.graphics();
-      drawFocusRing(this.ring, HIT_W - 20, HIT_H - 10, 30);
+      drawFocusRing(this.ring, HIT_W - 20, this.hitH - 10, 30);
       this.ring.setPosition(0, 4);
       this.add(this.ring);
       this.ring.setVisible(true);

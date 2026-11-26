@@ -1,6 +1,6 @@
 # Streichelzoo: Entwurf für Klasse 1
 
-Entwurf, Stand 26.11.2026. Ergänzend: `zahlen-zoo-spezifikation.md`, `kompetenzerwartungen-klasse-2.md`, `ausarbeitung-offene-familien.md`. Noch nichts davon ist umgesetzt. Alle Entscheidungen (Abschnitt 9) und Fragen an die Lehrkraft (Abschnitt 10) wurden am 26.11.2026 mit „Ja“ beantwortet; dazu kam die Vorgabe, so wenig Text wie möglich zu zeigen. Die Abschnitte unten berücksichtigen das bereits.
+Entwurf, Stand 26.11.2026. Umsetzung begonnen: erster Schnitt mit Klasse im Profil, Bereich und drei Themen (Stand in `umsetzung-checkliste.md`, Phase 4b). Ergänzend: `zahlen-zoo-spezifikation.md`, `kompetenzerwartungen-klasse-2.md`, `ausarbeitung-offene-familien.md`. Alle Entscheidungen (Abschnitt 9) und Fragen an die Lehrkraft (Abschnitt 10) wurden am 26.11.2026 mit „Ja“ beantwortet; dazu kam die Vorgabe, so wenig Text wie möglich zu zeigen. Die Abschnitte unten berücksichtigen das bereits.
 
 ## Ergebnis der Klärung (26.11.2026)
 

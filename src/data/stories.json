@@ -2,6 +2,30 @@
   "_hinweis": "Vorlagen für Sachaufgaben (Spezifikation, Abschnitt 11): Rechenart, Bild und Familie. Texte und Einheiten stehen in word-templates.de.json unter story.<id> und story.<id>.unit. Platzhalter: add und sub {a} {b}; mult {groups} {each}; share {total} {groups}; measure {total} {size}. icon leer: Sachaufgabe ohne Bild (z. B. Geld).",
   "stories": [
     {
+      "id": "add_ziegen",
+      "op": "add",
+      "icon": "karte_ziege",
+      "family": "addsub_10"
+    },
+    {
+      "id": "add_kueken",
+      "op": "add",
+      "icon": "objekt_kueken",
+      "family": "addsub_10"
+    },
+    {
+      "id": "sub_moehren",
+      "op": "sub",
+      "icon": "objekt_moehre",
+      "family": "addsub_10"
+    },
+    {
+      "id": "sub_kaninchen",
+      "op": "sub",
+      "icon": "objekt_kaninchen",
+      "family": "addsub_10"
+    },
+    {
       "id": "add_fische",
       "op": "add",
       "icon": "objekt_fisch",

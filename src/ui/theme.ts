@@ -50,6 +50,7 @@ export const Color = {
   grauWarm: 0xc9bba3,
   laub: 0x3f8f4f,
   pinguinGefieder: 0x6c8ea3,
+  ohrRosa: 0xf7b7a6,
 };
 
 export const CssColor = {

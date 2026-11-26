@@ -229,6 +229,24 @@ Ein Bereich komplett: Pinguinfelsen mit `add_100` (Spez. 13).
 
 - [ ] **Tor 4:** Alle Akzeptanzkriterien aus Spez. Abschnitt 12 sind erfüllt.
 
+## Phase 4b: Streichelzoo für Klasse 1
+
+Plan: [`streichelzoo-klasse-1.md`](streichelzoo-klasse-1.md).
+
+**Erster Schnitt (26.11.2026)**
+
+- [x] Klasse im Profil (`grade`, fehlt = Klasse 2): Auswahl beim Anlegen, Änderung im Erwachsenenbereich (Einstellungen)
+- [x] Freischaltung je Klasse: Klasse 1 beginnt im Streichelzoo, Affenwald und Pinguinfelsen ab `gradeOne.bridgeStars` (24) Sternen dort; Klasse 2 unverändert, Streichelzoo offen
+- [x] Bereich Streichelzoo: Ziege (alle Zustände, Baby, Kartensymbol, Meckern), Gehege- und Aufgabenhintergrund, rundes Gehege auf dem Hauptweg (Bank auf der Karte versetzt), Babykarten in „Mein Zoo“ für neun Tiere
+- [x] Themen `count_20` (Antippen mit Häkchen), `quick_count_20` (Würfel- und Fingerbilder, Zehnerfelder), `addsub_10` (mit Bild, Bildrechengeschichten, Umkehraufgaben); höchstens drei Antwortkarten
+- [x] Klasse 1 in der Aufgabenansicht: kein Aufgaben-, Hinweis- und Lobtext, Vorlesen beim Erscheinen und bei jedem Hinweis, Knöpfe nur als Symbol, ohne Rechenhilfen der Klasse 2, Runden mit 7 Aufgaben
+- [ ] Bildsymbol je Aufgabe (antippen, schau, gib)
+- [ ] Gehege, Rundenende und Karte für Klasse 1 ohne Text (bisher nur die Aufgabenansicht)
+- [ ] Größere Tippflächen (80 × 80) für Klasse 1
+- [ ] Aufnahmen: Zahlwörter 0 bis 20, Aufgaben- und Hinweissätze des Streichelzoos (bis dahin Sprachausgabe des Browsers)
+- [ ] Spieltest mit Kindern der 1. Klasse
+- [ ] Übrige Themen: `numbers_20`, `compare_20`, `decompose_10`, `addsub_20`, `position_1`; Scheune mit `shapes_1`, `pattern_1`, `money_20`, `clock_1`
+
 ## Phase 5: Pilot und Erweiterung (3 bis 4 Wochen)
 
 - [ ] Deployment auf statischem Hosting mit HTTPS: GitHub Pages über `.github/workflows/deploy.yml` bei jedem Push auf `main` eingerichtet; offen ist die erste erfolgreiche Veröffentlichung

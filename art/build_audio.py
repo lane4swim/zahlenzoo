@@ -1,6 +1,6 @@
 """
 Erzeugt alle Klänge des Zahlen-Zoos selbst (keine fremden Dateien, keine Lizenzfragen):
-15 Effekte, 8 Tierlaute und 3 Musikstücke als Loop (Spezifikation, Abschnitt 11).
+15 Effekte, 9 Tierlaute und 3 Musikstücke als Loop (Spezifikation, Abschnitt 11).
 
 Aufruf: python3 art/build_audio.py  (braucht numpy und ffmpeg; Teil von `npm run art`)
 Ausgabe: public/assets/audio/{sfx,animals,music}/<name>.mp3
@@ -365,7 +365,17 @@ def animal_meerkat():
     return out
 
 
+def animal_goat():
+    # Meckern: „mä-ä-äh“ mit schnellem Zittern der Tonhöhe und Lautstärke
+    t = 0.75
+    x = t_axis(t)
+    f = np.linspace(560, 480, len(x)) * (1 + 0.05 * np.sin(2 * np.pi * 9 * x))
+    trem = 0.7 + 0.3 * np.sin(2 * np.pi * 9 * x)
+    return vowel(f, t, (900, 2000), 10) * trem * env(t, 0.02, 0.1, 0.8, 0.2)
+
+
 ANIMALS = {
+    "goat": animal_goat,
     "monkey": animal_monkey,
     "penguin": animal_penguin,
     "elephant": animal_elephant,

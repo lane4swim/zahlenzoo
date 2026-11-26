@@ -1,4 +1,5 @@
 import { BaseScene } from './BaseScene';
+import { profileGrade } from '../logic/areas';
 import { familyOverview, parentGate } from '../logic/parent';
 import { createRng } from '../logic/rng';
 import type { Services } from '../services/services';
@@ -262,6 +263,24 @@ export class ParentScene extends BaseScene<ParentSceneData> {
       });
     });
     this.small(cx, 540, this.t('parent.strategyAskHelp'), 820).setOrigin(0.5, 0).setAlign('center');
+
+    // Klasse: Klasse 1 beginnt im Streichelzoo und sieht keinen Aufgabentext.
+    const grade = profileGrade(profile);
+    this.addText(cx - 250, 660, this.t('parent.grade'));
+    ([1, 2] as const).forEach((value, i) => {
+      this.addButton({
+        x: cx + 10 + i * 220,
+        y: 660,
+        width: 200,
+        label: this.t(`profile.grade${value}`),
+        fontSize: FontSize.small,
+        fill: value === grade ? Color.grasHell : Color.papier,
+        onPress: () => {
+          this.services.save.updateProfile({ ...profile, grade: value });
+          this.go({});
+        },
+      });
+    });
   }
 
   // -------------------------------------------------------------------------

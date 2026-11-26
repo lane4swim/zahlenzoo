@@ -1,4 +1,4 @@
-import { areaState } from './areas';
+import { areaState, profileGrade } from './areas';
 import { enclosures } from './content';
 import type { Achievement, AreaConfig, GameContent } from '../types/content';
 import type { AreaProgress, Profile } from '../types/save';
@@ -30,7 +30,9 @@ function reachedAreas(content: GameContent, profile: Profile): Set<string> {
     content.areas.map((a) => [a.id, profile.areas[a.id]?.stars ?? 0]),
   );
   return new Set(
-    content.areas.filter((a) => areaState(a, stars, content.rules) !== 'locked').map((a) => a.id),
+    content.areas
+      .filter((a) => areaState(a, stars, content.rules, profileGrade(profile)) !== 'locked')
+      .map((a) => a.id),
   );
 }
 
