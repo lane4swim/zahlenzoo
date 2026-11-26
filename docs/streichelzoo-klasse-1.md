@@ -1,6 +1,21 @@
 # Streichelzoo: Entwurf für Klasse 1
 
-Entwurf zur Prüfung, Stand 26.11.2026. Ergänzend: `zahlen-zoo-spezifikation.md`, `kompetenzerwartungen-klasse-2.md`, `ausarbeitung-offene-familien.md`. Nichts davon ist umgesetzt; die Entscheidungen in Abschnitt 9 und die Fragen an die Lehrkraft in Abschnitt 10 stehen vor der Umsetzung.
+Entwurf, Stand 26.11.2026. Ergänzend: `zahlen-zoo-spezifikation.md`, `kompetenzerwartungen-klasse-2.md`, `ausarbeitung-offene-familien.md`. Noch nichts davon ist umgesetzt. Alle Entscheidungen (Abschnitt 9) und Fragen an die Lehrkraft (Abschnitt 10) wurden am 26.11.2026 mit „Ja“ beantwortet; dazu kam die Vorgabe, so wenig Text wie möglich zu zeigen. Die Abschnitte unten berücksichtigen das bereits.
+
+## Ergebnis der Klärung (26.11.2026)
+
+Wo eine Frage zwei Möglichkeiten nannte, ist das „Ja“ so gedeutet, wie es in der Spalte „Gilt jetzt“ steht.
+
+| Frage | Gilt jetzt |
+| --- | --- |
+| Klasse im Profil oder nur ein zusätzlicher Bereich? | Klasse im Profil (Deutung: Vorschlag angenommen) |
+| Leittier Ziege, eigene Familien-IDs, Ort am Eingang, 24 Sterne, eigene Phase | wie vorgeschlagen |
+| Zahlenraum bis 20, Ordnungszahlen bis 5, Zeichen <, >, = in Klasse 1 | wie vorgeschlagen |
+| Zehnerübergang am Ende von Klasse 1 | ja: `addsub_20` Stufe 3 bleibt |
+| Formen und Muster in Klasse 1 | ja: Themen in der Scheune des Streichelzoos (Abschnitt 6) |
+| Geld und Uhr in Klasse 1 | ja: Geld bis 20 € (Stufe 1 bis 10 €; Deutung, die Frage nannte 10 € oder 20 €) und volle Stunden, beides in der Scheune |
+| Fingerbilder als Hilfe | erwünscht: in Hinweisstufe 2 neben Fünfer- und Zehnerstruktur (Abschnitt 5) |
+| Menge Text | minimieren: Kinder der Klasse 1 sehen keinen Aufgabentext, nur Bildsymbole, Ziffern und Rechnungen; alles Sprachliche kommt als Ton (Abschnitt 5) |
 
 ## 1. Ziel und Rahmen
 
@@ -11,18 +26,18 @@ Der Streichelzoo ist ein neuer Bereich am Eingang der Zoo-Karte, in dem Kinder d
 | Zielgruppe | 6 bis 7 Jahre, Klasse 1; Klasse 2 freiwillig zur Wiederholung |
 | Leittier | Ziege (Baby: Zicklein); weitere Tiere des Streichelzoos erscheinen als Aufgabenbilder |
 | Zahlenraum | bis 10 in den Stufen 1, bis 20 in den Stufen 2 und 3 |
-| Themen | 8 Aufgabenfamilien (Abschnitt 4), passend zu den 8 Reitern im Gehege (`MAX_TABS_PER_ROW = 4`, zwei Reihen) |
+| Themen | 8 Aufgabenfamilien im Gehege (Abschnitt 4), passend zu den 8 Reitern (`MAX_TABS_PER_ROW = 4`, zwei Reihen); 4 weitere in der Scheune (Abschnitt 6) |
 | Runde | 6 bis 8 Aufgaben statt 8 bis 12 |
-| Lesen | Jede Aufgabe wird beim Erscheinen vorgelesen; Text höchstens ein kurzer Satz, Anweisung zusätzlich als Bildsymbol |
+| Lesen | nicht nötig: Jede Aufgabe wird beim Erscheinen vorgelesen; sichtbar sind nur Bildsymbol, Bilder, Ziffern und Rechnungen |
 | Technik | gleiche Logik, Szenen und Eingabeformen wie die übrigen Bereiche; neue Familien greifen soweit möglich auf vorhandene Generatoren zurück |
 
 **Nicht-Ziele:** Ziffern schreiben üben (nicht prüfbar mit Ziffernblock), Lesen lernen, eigener Spielmodus nur für Klasse 1, Zeitdruck jeder Art.
 
 ## 2. Lehrplangrundlage und Befund
 
-Der NRW-Lehrplan nennt keine Erwartungen für das Ende von Klasse 1, nur für das Ende der Schuleingangsphase (Klasse 1 und 2). Die Verteilung auf die beiden Schuljahre legt die Schule fest. Der Entwurf folgt der üblichen Verteilung in Lehrwerken für Klasse 1; sie ist mit einer Lehrkraft zu bestätigen (Abschnitt 10).
+Der NRW-Lehrplan nennt keine Erwartungen für das Ende von Klasse 1, nur für das Ende der Schuleingangsphase (Klasse 1 und 2). Die Verteilung auf die beiden Schuljahre legt die Schule fest. Der Entwurf folgt der üblichen Verteilung in Lehrwerken für Klasse 1; sie wurde am 26.11.2026 bestätigt (Abschnitt 10).
 
-**Annahme für Klasse 1 (sinngemäß, nicht aus dem Lehrplan)**
+**Inhalte für Klasse 1 (sinngemäß, nicht aus dem Lehrplan; bestätigt am 26.11.2026)**
 
 | Schwerpunkt | Inhalte Klasse 1 | Familie im Streichelzoo |
 | --- | --- | --- |
@@ -34,26 +49,29 @@ Der NRW-Lehrplan nennt keine Erwartungen für das Ende von Klasse 1, nur für da
 | Operationsverständnis und Kopfrechnen | Plus und Minus bis 10, Tausch- und Umkehraufgaben, Rechengeschichten mit Bild | `addsub_10` |
 | Kopfrechnen | Plus und Minus bis 20 ohne und mit Zehnerübergang, Verdoppeln bis 10 + 10 | `addsub_20` |
 | Raum und Form | Lagebeziehungen (oben, unten, vor, hinter, neben, zwischen, links, rechts) | `position_1` |
+| Raum und Form | Formen wiedererkennen, Muster fortsetzen | Scheune · `shapes_1`, `pattern_1` |
+| Größen | Geld bis 20 €, volle Stunden | Scheune · `money_20`, `clock_1` |
 
 **Befund**
 
 - Viele Stufen 1 der Klasse-2-Bereiche enthalten schon Stoff aus Klasse 1: `plus_facts_20` (Plus bis 10, Zahlenhäuser), `quick_count` (Zehnerfeld bis 10 und 20), `number_line` (0 bis 20), `read_write_100` (Zahlwort bis 20), `space_orientation` (Lagewörter), `double_half` (Doppelte bis 10 + 10), `story_addsub` (bis 20). Diese Generatoren lassen sich mit kleineren Zahlen weiterverwenden.
 - Es fehlen für Klasse 1: Zählen mit Antippen, Mengen ohne Zahlen vergleichen, Ordnungszahlen, Minus bis 10 als eigene Stufe und eine Stufe mit Bildern und ohne Ziffern.
-- Formen, Muster, Geld bis 20 € und volle Stunden gehören in vielen Lehrwerken schon zu Klasse 1. Der Entwurf nimmt sie nicht in den Streichelzoo auf, sondern schlägt eine Stufe 0 in den vorhandenen Bereichen vor (Abschnitt 6); Entscheidung in Abschnitt 9.
+- Formen, Muster, Geld bis 20 € und volle Stunden gehören zu Klasse 1 (Klärung vom 26.11.2026). Sie liegen in der Scheune des Streichelzoos (Abschnitt 6), weil Kinder der Klasse 1 Schmetterlingshaus, Zoo-Kasse und Futteruhr über die Freischaltkette erst spät erreichen.
 - Die prozessbezogenen Erwartungen und Leitlinien aus `kompetenzerwartungen-klasse-2.md`, Abschnitt 3, gelten unverändert. Für Klasse 1 wiegt eine besonders schwer: Hinweise führen vom zählenden Rechnen weg (Kraft der 5, Zerlegen), nicht zum Abzählen in Einzelschritten.
 
 ## 3. Einbindung ins Spiel
 
 ### Klasse im Profil
 
-Jedes Profil bekommt eine Klasse (1 oder 2). Die Frage erscheint beim Anlegen des Profils als zwei große Bildkarten („Ich gehe in die 1. Klasse“, „… in die 2. Klasse“) und lässt sich im Erwachsenenbereich ändern, etwa zum Schuljahreswechsel. Fortschritt geht beim Wechsel nicht verloren.
+Jedes Profil bekommt eine Klasse (1 oder 2). Die Frage erscheint beim Anlegen des Profils als zwei große Karten mit den Ziffern 1 und 2 und wird vorgelesen („In welche Klasse gehst du?“); sie lässt sich im Erwachsenenbereich ändern, etwa zum Schuljahreswechsel. Fortschritt geht beim Wechsel nicht verloren.
 
 | | Klasse 1 | Klasse 2 |
 | --- | --- | --- |
 | Zu Beginn offen | Streichelzoo | Streichelzoo, Affenwald, Pinguinfelsen |
 | Affenwald und Pinguinfelsen | öffnen bei 24 Sternen im Streichelzoo (Startwert `gradeOneBridgeStars` in `rules.json`) oder beim Wechsel auf Klasse 2 | offen |
 | Übrige Bereiche | wie bisher über den Vorgängerbereich | wie bisher |
-| Vorlesen beim Erscheinen der Aufgabe | an | wie bisher (Einstellung) |
+| Vorlesen beim Erscheinen der Aufgabe | immer an | wie bisher (Einstellung) |
+| Aufgaben- und Hinweistext | ausgeblendet (Abschnitt 5) | wie bisher |
 | Rundenlänge | 6 bis 8 Aufgaben | 8 bis 12 Aufgaben |
 | Tagesfutter | nur aus dem Streichelzoo, 4 Aufgaben | wie bisher; Streichelzoo-Familien zählen mit, wenn geübt |
 
@@ -65,11 +83,11 @@ Die 8 Gehege liegen in zwei Reihen (y = 270 und y = 560), dazwischen der Hauptwe
 
 ### Ablauf einer Runde für Klasse 1
 
-1. Die Ziege steht am Gatter; die Aufgabe wird vorgelesen.
+1. Die Ziege steht am Gatter; die Aufgabe wird vorgelesen, sichtbar sind nur Bildsymbol, Bild und Zahlen.
 2. Das Kind antwortet mit Antippen, Ziehen oder dem vorhandenen Ziffernblock.
-3. Richtig: Ein Tier wird gestreichelt oder gefüttert (Möhre, Heu, Löwenzahn), die Fußspuren füllen sich.
+3. Richtig: Ein Tier wird gestreichelt oder gefüttert (Möhre, Heu, Löwenzahn), die Fußspuren füllen sich, ein kurzer Lobsatz erklingt.
 4. Falsch: Hinweis 1 wird vorgelesen und zeigt sofort ein Bild; ein zweiter Versuch folgt.
-5. Nach 6 bis 8 Aufgaben gibt es Sterne wie in allen Bereichen (Spezifikation, Abschnitt 8).
+5. Nach 6 bis 8 Aufgaben gibt es Sterne wie in allen Bereichen (Spezifikation, Abschnitt 8); der Abschluss ist eine Tieranimation ohne Text.
 
 ## 4. Aufgabenfamilien
 
@@ -106,7 +124,7 @@ Ziel: Anzahlen ohne Abzählen erfassen (Kraft der 5).
 
 | Stufe | Inhalt | Beispiel |
 | --- | --- | --- |
-| 1 | Würfelbilder 1 bis 6, 2,5 Sekunden sichtbar | Würfel mit 5 Augen |
+| 1 | Würfelbilder 1 bis 6 und Fingerbilder bis 10, 2,5 Sekunden sichtbar | Würfel mit 5 Augen; eine volle Hand und 2 Finger |
 | 2 | Zehnerfeld bis 10, 2 Sekunden | 8 Punkte: oben 5, unten 3 |
 | 3 | zwei Zehnerfelder bis 20 (wie `quick_count` Stufe 2) | 13 |
 
@@ -130,7 +148,7 @@ Ziel: Mengen und Zahlen vergleichen, zuerst ohne Ziffern.
 
 | Stufe | Inhalt | Beispiel |
 | --- | --- | --- |
-| 1 | zwei Gehege als Bild, bis 10; Karten „mehr“, „weniger“, „gleich viel“ oder das Gehege antippen | „Wo sind mehr Schafe?“ |
+| 1 | zwei Gehege als Bild, bis 10; das Gehege mit mehr oder weniger Tieren antippen, bei gleich vielen das Gleichheitszeichen | „Wo sind mehr Schafe?“ |
 | 2 | Zahlen bis 10 mit <, >, = (Krokodilmaul als Bildhilfe nur im Hinweis) | 7 ☐ 4 |
 | 3 | bis 20 vergleichen; Unterschied als Anzahl | „Wie viele Hühner mehr als Enten?“ (Paare bilden im Bild) |
 
@@ -160,11 +178,11 @@ Ziel: Plus und Minus bis 10 als Handlung verstehen und ohne Abzählen rechnen.
 | 2 | Minus bis 10 mit Bild (Wegnehmen) | „7 Möhren. Die Ziege frisst 2.“ |
 | 3 | Plus und Minus gemischt ohne Bild; Tausch- und Umkehraufgaben | 3 + 6, 6 + 3; aus 4 + 5 = 9 wird 9 − 5 |
 
-Bei Rechengeschichten wählt das Kind in Stufe 1 die passende Rechnung (Karten „4 + 3“, „4 − 3“, „3 + 3“), danach das Ergebnis.
+Bei Rechengeschichten sieht das Kind die Szene als Bild und hört die Geschichte; es wählt in Stufe 1 die passende Rechnung (Karten „4 + 3“, „4 − 3“, „3 + 3“), danach das Ergebnis.
 
 Fehler: `op_swapped` (Plus statt Minus), `off_by_one` (Zählfehler, Start- oder Endzahl doppelt), `operand_echo` (eine der Zahlen als Antwort).
 
-Hinweise: 1 „Wie viele waren es zuerst? Kommen welche dazu oder gehen welche weg?“ 2 Zehnerfeld: erst 5, dann der Rest (Kraft der 5). 3 Lösung mit Bild und vorgelesenem Satz.
+Hinweise: 1 „Wie viele waren es zuerst? Kommen welche dazu oder gehen welche weg?“ 2 Zehnerfeld oder Fingerbild: erst 5, dann der Rest (Kraft der 5). 3 Lösung mit Bild und vorgelesenem Satz.
 
 ### `addsub_20` Plus und Minus bis 20
 
@@ -174,7 +192,7 @@ Hinweise: 1 „Wie viele waren es zuerst? Kommen welche dazu oder gehen welche w
 | 2 | Verdoppeln bis 10 + 10 und Fast-Verdoppeln | 6 + 6, 6 + 7 |
 | 3 | Zehnerübergang mit Zehnerfeld (Kraft der 10) | 8 + 5 = 8 + 2 + 3; 13 − 5 |
 
-Stufe 3 hängt an Lehrkraftfrage 2 (Abschnitt 10). `plus_facts_20` im Pinguinfelsen bleibt unverändert und übt dasselbe für Klasse 2 ohne Bildvorgabe.
+Der Zehnerübergang in Stufe 3 gehört nach der Klärung vom 26.11.2026 zu Klasse 1. `plus_facts_20` im Pinguinfelsen bleibt unverändert und übt dasselbe für Klasse 2 ohne Bildvorgabe.
 
 Fehler: `ten_crossing` (13 statt 12 o. ä. beim Übergang), `analog_wrong` (13 + 4 = 7, Zehner vergessen), `off_by_one`. Hinweis 2 Stufe 3: zwei Zehnerfelder, das erste wird erst voll gemacht.
 
@@ -194,26 +212,31 @@ Wie im Schmetterlingshaus nur „von dir aus gesehen“, kein Perspektivwechsel 
 
 Die Regeln aus Abschnitt 9 der Spezifikation gelten; für den Streichelzoo und für Profile der Klasse 1 kommen diese hinzu:
 
-- **Vorlesen zuerst:** Jede Aufgabe und jeder Hinweis wird automatisch vorgelesen. Der Vorlese-Knopf bleibt zum Wiederholen.
-- **Wenig Text:** Ein Satz pro Aufgabe, nur Wörter, die Kinder in den ersten Schulmonaten hören und lesen. Anweisungen tragen zusätzlich ein Bildsymbol (Finger für „antippen“, Auge für „schau“, Hand mit Möhre für „gib“).
+- **Kein Text im Spiel:** Für Profile der Klasse 1 zeigt das Spiel keinen Aufgaben-, Hinweis- oder Lobtext. Sichtbar bleiben Bilder, Ziffern, Rechenzeichen und Bildsymbole. Text gibt es nur im Erwachsenenbereich.
+- **Alles wird gesprochen:** Jede Aufgabe und jeder Hinweis wird automatisch vorgelesen, kurz und mit Wörtern, die Kinder am Schulanfang kennen. Ein Lautsprecher-Knopf wiederholt den Satz.
+- **Bildsymbole statt Anweisungen:** Jede Aufgabe trägt ein Symbol für die Handlung (Finger für „antippen“, Auge für „schau“, Hand mit Möhre für „gib“, Pfeil für „ziehen“). Antwortkarten tragen Bilder oder Zahlen, keine Wörter.
+- **Knöpfe ohne Beschriftung:** Zurück, Hinweis, Vorlesen und OK als Symbol; die Wörter nur, wenn das Profil Klasse 2 hat.
 - **Größere Tippflächen:** mindestens 80 × 80 Pixel statt 64 × 64, Abstand 20 Pixel. Antwortkarten höchstens 3 statt 4.
 - **Bilder vor Ziffern:** In Stufe 1 jeder Familie ist eine Menge sichtbar; Ziffern allein erst ab Stufe 2 oder 3.
-- **Kein Abzählen als Hinweis:** Ausnahme ist nur `count_20`. Sonst zeigen Hinweise Fünfer- und Zehnerstruktur, Zerlegen und Paare bilden.
-- **Kürzere Runden:** 6 bis 8 Aufgaben; Rundenabschluss mit Tieranimation statt Text.
-- **Lob:** eigene Lobsätze, noch kürzer („Genau!“, „Du hast jedes Tier gezählt.“) in `praise.de.json`.
+- **Kein Abzählen als Hinweis:** Ausnahme ist nur `count_20`. Sonst zeigen Hinweise Fünfer- und Zehnerstruktur, Fingerbilder, Zerlegen und Paare bilden.
+- **Fingerbilder:** In Hinweisstufe 2 von `quick_count_20`, `decompose_10`, `addsub_10` und `addsub_20` erscheint neben dem Zehnerfeld ein Fingerbild: eine volle Hand ist 5, zwei volle Hände sind 10. Die Finger werden als Ganzes gezeigt, nicht einzeln abgezählt.
+- **Kürzere Runden:** 6 bis 8 Aufgaben; Rundenabschluss mit Tieranimation.
+- **Lob:** eigene, gesprochene Lobsätze, noch kürzer („Genau!“, „Du hast jedes Tier gezählt.“) in `praise.de.json`.
 
-## 6. Klasse-1-Inhalte außerhalb des Streichelzoos (Vorschlag)
+## 6. Scheune: Formen, Muster, Geld und Uhr
 
-Für Inhalte, die nicht in die 8 Reiter passen, sieht das Aufgabenmodell schon Stufe 0 vor (`TaskLevel = 0 | 1 | 2 | 3`, bisher ungenutzt). Für Profile der Klasse 1 würde sie in einzelnen Familien als erste Stufe erscheinen, sobald der Bereich offen ist:
+Formen, Muster, Geld und Uhr gehören zu Klasse 1, passen aber nicht mehr in die 8 Reiter des Geheges. Sie liegen deshalb in der Scheune des Streichelzoos. Die Scheune funktioniert wie die Baustelle im Schmetterlingshaus (`site` in `areas.json`): Ein Knopf im Gehege führt hinein, dort stehen 4 eigene Reiter. Die Familien haben eigene IDs (Entscheidung 3) und verwenden die Generatoren der Klasse-2-Familien mit kleineren Parametern.
 
-| Familie (Bereich) | Stufe 0 | Voraussetzung |
-| --- | --- | --- |
-| `shapes_basic` (Schmetterlingshaus) | Kreis, Dreieck, Quadrat, Rechteck wiedererkennen, ohne Fachbegriff Ecke und Seite | Lehrkraftfrage 3 |
-| `pattern_continue` (Schmetterlingshaus) | AB-Muster mit Tieren statt Formen | Lehrkraftfrage 3 |
-| `money_lay` (Zoo-Kasse) | Euro bis 10 mit 1 €, 2 €, 5 €, 10 € | Lehrkraftfrage 4 |
-| `clock_full` (Futteruhr) | volle Stunden lesen | Lehrkraftfrage 4 |
+| Familie | Thema | Grundlage | Stufe 1 | Stufe 2 | Stufe 3 |
+| --- | --- | --- | --- | --- | --- |
+| `shapes_1` | Formen | `shapes_basic` | Kreis, Dreieck, Quadrat, Rechteck wiedererkennen (gleiche Form antippen) | Form hören und antippen | Formen im Bild finden und zählen (Stall aus Formen) |
+| `pattern_1` | Muster | `pattern_continue` | AB-Muster mit Tieren (Huhn, Ente, Huhn, …) | AAB- und ABC-Muster | Lücke in der Mitte |
+| `money_20` | Geld | `money_lay` | Euro bis 10 mit 1 €, 2 €, 5 € legen | Euro bis 20 mit 1 €, 2 €, 5 €, 10 € legen | Futter im Hofladen bezahlen: Preis bis 20 € legen, Betrag zweier Münzen nennen |
+| `clock_1` | Uhr | `clock_full` | volle Stunden lesen | volle Stunden einstellen | eine Stunde später oder früher (Fütterungszeit) |
 
-Weil Klasse-1-Profile diese Bereiche über die Freischaltkette erst spät erreichen, ist ein zweiter Weg denkbar: eine „Bastelecke“ im Streichelzoo-Gehege (wie die Baustelle im Schmetterlingshaus, `site` in `areas.json`) mit Formen und Mustern. Das ist in diesem Entwurf nicht ausgearbeitet.
+Fehler und Hinweise übernehmen die Familien aus ihrer Grundlage; Hinweistexte werden für Klasse 1 kürzer eingesprochen. Für Profile der Klasse 2 ist die Scheune ebenfalls offen.
+
+Die bisher ungenutzte Stufe 0 (`TaskLevel`) wird damit nicht gebraucht.
 
 ## 7. Zu erstellende Ressourcen
 
@@ -221,12 +244,13 @@ Weil Klasse-1-Profile diese Bereiche über die Freischaltkette erst spät erreic
 | --- | --- | --- |
 | Tier | Ziege in 4 Zuständen (ruhig, freut sich, frisst, denkt) und Zicklein | wie die übrigen Tiere mit `art/build_animals.py` |
 | Aufgabenbilder | Kaninchen, Meerschweinchen, Huhn, Küken, Schaf, Esel, Ente; Möhre, Heu, Löwenzahn, Eimer, Stall | rund 12 Objekte, 256 × 256 |
-| Hintergrund | Streichelzoo-Gehege mit Gatter, Stall und Wiese | `art/build_backgrounds.py` |
+| Hintergründe | Streichelzoo-Gehege mit Gatter, Stall und Wiese; Scheune innen | `art/build_backgrounds.py` |
+| Fingerbilder | eine und zwei Hände mit 0 bis 5 gestreckten Fingern | Vektor, für Blitzblick und Hinweise |
 | Karte | kleineres Gehege am Eingang, Zustände gesperrt (entfällt), offen, fertig; Kartensymbol `karte_ziege` | `art/build_map.py`, `map-layout.json` |
 | Profil | Avatar `goat` in `AVATARS` | optional |
-| Bildsymbole | antippen, schau, gib, ziehen | für Anweisungen ohne Lesen |
+| Bildsymbole | antippen, schau, gib, ziehen, legen (Geld), Uhr stellen; Knöpfe Zurück, Hinweis, Vorlesen, OK, Scheune | für Anweisungen und Knöpfe ohne Text |
 | Ton | Ziegenmeckern, sanftes Streichel-Geräusch | `art/build_audio.py`, Lizenz in `ATTRIBUTIONS.md` |
-| Sprache | Zahlwörter 0 bis 20, rund 60 Aufgabensätze, 24 Hinweise der Stufe 1, 10 Lobsätze | in die Aufnahmeliste (`docs/aufnahmeliste.md`); Zahlwörter zuerst, weil die Sprachausgabe des Browsers bei „siebzehn“ oder „zwölf“ je Gerät unterschiedlich klingt |
+| Sprache | Zahlwörter 0 bis 20, rund 80 Aufgabensätze, Hinweise aller drei Stufen für 12 Familien (rund 100 Sätze, weil kein Text sie ersetzt), 10 Lobsätze, Klassenfrage | in die Aufnahmeliste (`docs/aufnahmeliste.md`); Zahlwörter zuerst, weil die Sprachausgabe des Browsers bei „siebzehn“ oder „zwölf“ je Gerät unterschiedlich klingt |
 | Daten | Einträge in `areas.json`, `families.json`, `animals.json`, `hints.de.json`, `praise.de.json`, `strings.de.json`, `stories.json`, `rules.json` | keine neue Datei |
 
 ## 8. Technische Umsetzung
@@ -235,40 +259,42 @@ Weil Klasse-1-Profile diese Bereiche über die Freischaltkette erst spät erreic
 | --- | --- | --- |
 | Klasse im Profil: `grade?: 1 \| 2`, fehlt = 2; keine Migration nötig | `src/types/save.ts`, `src/services/save.ts` | gering |
 | Klassenfrage beim Anlegen, Änderung im Erwachsenenbereich | `ProfileCreateScene`, `ParentScene` | gering |
-| Bereich `streichelzoo` (Tier `goat`, ohne `requires`, `grades: [1, 2]`) | `areas.json`, `animals.json`, `map-layout.json` | gering |
+| Bereich `streichelzoo` (Tier `goat`, ohne `requires`, `grades: [1, 2]`, Scheune als `site`) | `areas.json`, `animals.json`, `map-layout.json` | gering |
+| Name und Symbol der `site` je Bereich statt fest „Baustelle“ (`area.site`) | `AreaScene`, `strings.de.json` | gering |
 | Freischaltung je Klasse: Affenwald und Pinguinfelsen für Klasse 1 hinter `gradeOneBridgeStars` | `src/logic/areas.ts` (`areaState` bekommt die Klasse), `rules.json` | gering |
 | Rundenlänge und Tagesfutter je Bereich oder Klasse | `rules.json`, `src/logic/rounds.ts`, `src/logic/daily.ts` | gering |
 | Familien, die vorhandene Generatoren nutzen: Hülle wie `storyAddSubFor('money_calc')`, die die Familien-ID setzt | `src/logic/generators/index.ts` und betroffene Generatoren | gering bis mittel |
 | Neu: `count_20` (Antippen mit Häkchen, Eingabeform `select` wiederverwenden), Mengenbilder für `compare_20`, Ordnungszahlen in `numbers_20` | `src/logic/generators/`, `src/ui/` | mittel |
-| Automatisches Vorlesen und größere Tippflächen für Klasse-1-Profile | `TaskScene`, UI-Bausteine | gering bis mittel |
+| Für Klasse-1-Profile: Text ausblenden, Bildsymbol je Aufgabe, Knöpfe nur als Symbol, Vorlesen immer an, größere Tippflächen | `TaskScene`, `AreaScene`, `RoundEndScene`, UI-Bausteine, `families.json` (Symbol je Familie) | mittel |
+| Fingerbilder als Darstellung in Blitzblick und Hinweisstufe 2 | `src/ui/`, `hints.de.json` | mittel |
 | Tests: Zahlenraum ≤ 10 bzw. ≤ 20 für 1000 Startwerte, Fehlerkarten, Freischaltung je Klasse, Kartenlage | `tests/` | mittel |
 
-Vorgehen wie bei der Pinguinfelsen-Phase: erst ein vertikaler Schnitt mit Klassenfrage, Bereich und drei Familien (`count_20`, `quick_count_20`, `addsub_10`), dann Spieltest mit Kindern der 1. Klasse, dann die übrigen fünf Familien.
+Vorgehen wie bei der Pinguinfelsen-Phase: erst ein vertikaler Schnitt mit Klassenfrage, Bereich und drei Familien (`count_20`, `quick_count_20`, `addsub_10`), dann Spieltest mit Kindern der 1. Klasse, dann die übrigen fünf Familien und die Scheune.
 
-## 9. Entscheidungen vor der Umsetzung
+## 9. Entscheidungen (26.11.2026)
 
-| Nr. | Frage | Vorschlag |
-| --- | --- | --- |
-| 1 | Klasse im Profil oder Streichelzoo nur als zusätzlicher, immer offener Bereich? | Klasse im Profil; ohne sie landen Erstklässler nach wenigen Sternen in Klasse-2-Aufgaben |
-| 2 | Leittier Ziege? | Ja; Alternativen: Kaninchen, Pony |
-| 3 | Eigene Familien-IDs oder Stufe 0 in vorhandenen Familien? | eigene IDs für die 8 Streichelzoo-Familien, Stufe 0 nur für Abschnitt 6 |
-| 4 | Formen, Muster, Geld und Uhr für Klasse 1: Stufe 0, Bastelecke oder gar nicht? | erst nach Lehrkraftfragen 3 und 4 entscheiden |
-| 5 | Ort auf der Karte | Mitte des Hauptwegs am Eingang |
-| 6 | Schwelle für Affenwald und Pinguinfelsen bei Klasse 1 | 24 Sterne als Startwert, nach Spieltest anpassen |
-| 7 | Gehört der Streichelzoo zu V1 oder zu einer neuen Phase? | eigene Phase nach dem Feinschliff (Phase 4), vor dem Pilot; die Spezifikation (Abschnitte 1, 5, 9, 11, 12, 13) wird nach den Entscheidungen angepasst |
-
-## 10. Fragen an die Lehrkraft
-
-| Nr. | Frage | Annahme im Entwurf | Folge, wenn die Annahme nicht stimmt |
+| Nr. | Frage | Antwort | Gilt jetzt |
 | --- | --- | --- | --- |
-| 1 | Reicht der Zahlenraum bis 20 am Ende von Klasse 1? | ja | Stufe 3 einzelner Familien bis 10 begrenzen oder bis 30 erweitern |
-| 2 | Gehört der Zehnerübergang (8 + 5) ans Ende von Klasse 1 oder an den Anfang von Klasse 2? | Ende Klasse 1 | `addsub_20` Stufe 3 streichen; bleibt im Pinguinfelsen |
-| 3 | Gehören Formen und einfache Muster zu Klasse 1? | ja, ohne Fachbegriffe Ecke und Seite | Stufe 0 in `shapes_basic` und `pattern_continue` entfällt |
-| 4 | Geld bis 10 € oder 20 € und volle Stunden in Klasse 1? | Geld bis 10 € ja, Uhr eher Klasse 2 | Stufe 0 in `money_lay` oder `clock_full` anpassen |
-| 5 | Ordnungszahlen (der Dritte) in Klasse 1? | ja, bis 5 | aus `numbers_20` Stufe 1 streichen |
-| 6 | Zeichen <, >, = schon in Klasse 1? | ja, ab der Mitte des Schuljahres | `compare_20` Stufe 2 nur mit Wörtern |
-| 7 | Reicht ein Satz Vorlesetext, oder sollen Aufgaben in den ersten Monaten ganz ohne Schrift auskommen? | ein Satz, immer vorgelesen | Text in Stufe 1 ausblenden, nur Bildsymbol und Ton |
-| 8 | Sind Fingerbilder als Hilfe erwünscht oder nur Fünfer- und Zehnerstruktur? | nur Fünfer- und Zehnerstruktur | Hinweisbilder für Stufe 2 ergänzen |
+| 1 | Klasse im Profil oder Streichelzoo nur als zusätzlicher, immer offener Bereich? | Ja | Klasse im Profil (Deutung) |
+| 2 | Leittier Ziege? | Ja | Ziege, Baby Zicklein |
+| 3 | Eigene Familien-IDs oder Stufe 0 in vorhandenen Familien? | Ja | eigene IDs für alle 12 Familien (Gehege und Scheune); Stufe 0 bleibt ungenutzt |
+| 4 | Formen, Muster, Geld und Uhr für Klasse 1: Stufe 0, Bastelecke oder gar nicht? | Ja | in der Scheune des Streichelzoos (Abschnitt 6); Deutung, weil die Kinder die Stufe 0 in fernen Bereichen kaum erreichen |
+| 5 | Ort auf der Karte | Ja | Mitte des Hauptwegs am Eingang |
+| 6 | Schwelle für Affenwald und Pinguinfelsen bei Klasse 1 | Ja | 24 Sterne als Startwert, nach Spieltest anpassen |
+| 7 | Gehört der Streichelzoo zu V1 oder zu einer neuen Phase? | Ja | eigene Phase nach dem Feinschliff (Phase 4), vor dem Pilot; Spezifikation Abschnitte 1, 5, 9, 11, 12 und 13 anpassen |
+
+## 10. Fragen an die Lehrkraft (26.11.2026)
+
+| Nr. | Frage | Antwort | Gilt jetzt |
+| --- | --- | --- | --- |
+| 1 | Reicht der Zahlenraum bis 20 am Ende von Klasse 1? | Ja | bis 20 |
+| 2 | Gehört der Zehnerübergang (8 + 5) ans Ende von Klasse 1? | Ja | `addsub_20` Stufe 3 bleibt |
+| 3 | Gehören Formen und einfache Muster zu Klasse 1? | Ja | `shapes_1`, `pattern_1` in der Scheune, ohne Fachbegriffe Ecke und Seite |
+| 4 | Geld und volle Stunden in Klasse 1? | Ja | `money_20` (Stufe 1 bis 10 €, Stufe 2 und 3 bis 20 €; Deutung), `clock_1` mit vollen Stunden |
+| 5 | Ordnungszahlen (der Dritte) in Klasse 1? | Ja | bis 5 in `numbers_20` Stufe 1 |
+| 6 | Zeichen <, >, = schon in Klasse 1? | Ja | `compare_20` ab Stufe 2 |
+| 7 | Wie viel Text verträgt eine Aufgabe? | Text minimieren | kein Aufgaben-, Hinweis- und Lobtext für Klasse 1; Bildsymbole und Ton (Abschnitt 5) |
+| 8 | Sind Fingerbilder als Hilfe erwünscht? | Ja | in Hinweisstufe 2 neben Fünfer- und Zehnerstruktur (Abschnitt 5) |
 
 ## 11. Prüfung
 
