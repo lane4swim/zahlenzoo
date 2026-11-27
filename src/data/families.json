@@ -8,9 +8,9 @@
       },
       "levels": {
         "1": {
-          "description": "bis 10 in einer Reihe; jedes angetippte Tier bekommt ein Häkchen",
+          "description": "bis 10 (2 bis 10) in einer Reihe; jedes angetippte Tier bekommt ein Häkchen",
           "layout": "row",
-          "min": 3,
+          "min": 2,
           "max": 10
         },
         "2": {
@@ -39,11 +39,12 @@
           "flashMs": 2500
         },
         "2": {
-          "description": "Zehnerfeld bis 10, 2 Sekunden",
+          "description": "Zehnerfeld bis 10 und Punktefelder (2 Sekunden)",
           "shape": "tenframe",
           "min": 3,
           "max": 10,
-          "flashMs": 2000
+          "flashMs": 2000,
+          "dots": 1
         },
         "3": {
           "description": "zwei Zehnerfelder bis 20",
@@ -149,9 +150,9 @@
           "toTenShare": 0
         },
         "3": {
-          "description": "Zehnerfreunde: zur 10 ergänzen (7 + ? = 10)",
+          "description": "Zehnerfreunde: zur 10 ergänzen (7 + ? = 10), dazwischen Zahlenhäuser",
           "mode": "ten",
-          "houseShare": 0,
+          "houseShare": 0.3,
           "toTenShare": 1
         }
       }
@@ -244,9 +245,9 @@
       "kinds": {},
       "levels": {
         "1": {
-          "description": "Euro bis 10 mit 1 €, 2 €, 5 €",
+          "description": "Euro bis 10 (2 bis 10) mit 1 €, 2 €, 5 €",
           "unit": "euro",
-          "min": 3,
+          "min": 2,
           "max": 10,
           "denominations": [100, 200, 500]
         },

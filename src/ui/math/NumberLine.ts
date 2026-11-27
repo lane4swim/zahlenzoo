@@ -19,6 +19,8 @@ export class NumberLine extends Phaser.GameObjects.Container {
     start: number,
     jumps: readonly number[],
     hideResults = false,
+    /** Sprunggröße verdecken (Ergänzen: Start und Ziel sind bekannt, der Sprung ist gesucht) */
+    hideJumps = false,
   ) {
     super(scene, x, y);
     const g = scene.add.graphics();
@@ -59,7 +61,7 @@ export class NumberLine extends Phaser.GameObjects.Container {
       g.strokePoints(points);
       objects.push(
         scene.add
-          .text(px + w / 2, -ARC_H - 22, jump < 0 ? `−${-jump}` : `+${jump}`, {
+          .text(px + w / 2, -ARC_H - 22, hideJumps ? '?' : jump < 0 ? `−${-jump}` : `+${jump}`, {
             ...LABEL,
             color: CssColor.kontur,
           })
