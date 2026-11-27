@@ -920,7 +920,8 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     this.finishTask('wrong');
     if (!this.daily && this.repeats < this.content.rules.maxRepeats) {
       this.repeats++;
-      this.round = appendTask(this.round, this.factory.next(this.task.level));
+      const last = this.round.tasks.at(-1)?.dedupeKey;
+      this.round = appendTask(this.round, this.factory.next(this.task.level, last));
     }
     // Die Eingabe weicht dem Weiter-Knopf, damit klar ist, was als Nächstes zu tun ist.
     // Beim Geldlegen bleibt der Teller stehen und zeigt den Lösungsweg.

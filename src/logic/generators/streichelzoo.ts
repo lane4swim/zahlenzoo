@@ -127,7 +127,8 @@ export const count20: Generator = (level, rng, id, params): Task => {
         { key: 'hint.count20.3', params: { n }, visual: sorted },
       ],
       strategyId: 'count_20',
-      dedupeKey: `count20:${n}`,
+      // je Anordnung eigene Schlüssel: Stufe 1 und 2 nehmen sich keine Zahlen weg
+      dedupeKey: `count20:${layout}:${n}`,
     },
     [
       { value: n - 1, errorTag: 'count_skip' },

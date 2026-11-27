@@ -15,7 +15,9 @@ import {
   TaskFactory,
 } from '../src/logic/rounds';
 import type { TaskLevel } from '../src/types/task';
-import { paramsOf, RULES } from './helpers/content';
+import { CONTENT, paramsOf, RULES } from './helpers/content';
+import { familyParams } from '../src/logic/content';
+import { GENERATORS } from '../src/logic/generators';
 
 const compose = (level: TaskLevel, seed: number, size?: number) =>
   composeRound({
@@ -111,5 +113,57 @@ describe('Rundenzusammenstellung', () => {
     const factory = new TaskFactory(ADD_100, add100, paramsOf(ADD_100), createRng(8));
     const keys = Array.from({ length: 40 }, () => factory.next(1).dedupeKey);
     expect(new Set(keys).size).toBe(40);
+  });
+});
+
+describe('Vorrat an Aufgaben je Thema', () => {
+  /** Runde zusammenstellen und `repeats` Wiederholungen nach Fehlern anhängen. */
+  const play = (family: string, level: TaskLevel, size: number, repeats: number, seed: number) => {
+    const { round, factory } = composeRound({
+      family,
+      generator: GENERATORS[family]!,
+      params: (l) => familyParams(CONTENT, family, l),
+      level,
+      rng: createRng(seed),
+      rules: CONTENT.rules,
+      size,
+    });
+    const tasks = [...round.tasks];
+    for (let i = 0; i < repeats; i++) tasks.push(factory.next(level, tasks.at(-1)!.dedupeKey));
+    return tasks;
+  };
+
+  it('Runden für Klasse 1 (7) und Klasse 2 (10) ohne doppelte Aufgaben', () => {
+    const doubles: string[] = [];
+    const petting = CONTENT.areas.filter((a) => a.map === 'streichelzoo');
+    for (const family of petting.flatMap((a) => a.families)) {
+      for (const level of [1, 2, 3] as TaskLevel[]) {
+        for (const size of [CONTENT.rules.gradeOne.roundSize, CONTENT.rules.round.size]) {
+          for (let seed = 0; seed < 30; seed++) {
+            const keys = play(family, level, size, 0, seed).map((t) => t.dedupeKey);
+            if (new Set(keys).size !== keys.length) doubles.push(`${family} ${level} (${size})`);
+          }
+        }
+      }
+    }
+    expect([...new Set(doubles)]).toEqual([]);
+  });
+
+  it('hängt nie: Ist der Vorrat erschöpft, kommt eine frühere Aufgabe, nie zweimal hintereinander', () => {
+    for (const family of Object.keys(CONTENT.families)) {
+      for (const level of [1, 2, 3] as TaskLevel[]) {
+        for (let seed = 0; seed < 10; seed++) {
+          const tasks = play(
+            family,
+            level,
+            CONTENT.rules.round.maxSize,
+            CONTENT.rules.maxRepeats,
+            seed,
+          );
+          const extra = tasks.slice(-CONTENT.rules.maxRepeats - 1).map((t) => t.dedupeKey);
+          extra.forEach((k, i) => i > 0 && expect(k, `${family} ${level}`).not.toBe(extra[i - 1]));
+        }
+      }
+    }
   });
 });

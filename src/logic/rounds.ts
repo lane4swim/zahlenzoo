@@ -103,10 +103,16 @@ export type ComposeOptions = {
   size?: number;
 };
 
-/** Erzeugt Aufgaben ohne Duplikate (Tauschaufgaben zählen als gleich). */
+/**
+ * Erzeugt Aufgaben ohne Duplikate (Tauschaufgaben zählen als gleich). Hat eine Stufe weniger
+ * verschiedene Aufgaben, als die Runde braucht (z. B. Zählen bis 10 in einer langen Runde
+ * mit Wiederholungen), kommt eine schon gestellte Aufgabe noch einmal, aber nie zweimal
+ * hintereinander. Die Runde bleibt so immer spielbar.
+ */
 export class TaskFactory {
   private readonly used = new Set<string>();
   private counter = 0;
+  private lastKey?: string;
 
   constructor(
     private readonly family: string,
@@ -115,16 +121,30 @@ export class TaskFactory {
     private readonly rng: Rng,
   ) {}
 
-  next(level: TaskLevel): Task {
+  /**
+   * Nächste Aufgabe. `avoid`: Schlüssel der Aufgabe, nach der die neue kommt (z. B. die letzte
+   * der Runde); sie wird nicht direkt wiederholt.
+   */
+  next(level: TaskLevel, avoid?: string): Task {
     const params = this.params(level);
+    let repeat: Task | undefined;
     for (let i = 0; i < MAX_TRIES; i++) {
       const task = this.generator(level, this.rng, `${this.family}-${this.counter + 1}`, params);
-      if (this.used.has(task.dedupeKey)) continue;
-      this.used.add(task.dedupeKey);
-      this.counter++;
-      return task;
+      if (this.used.has(task.dedupeKey)) {
+        if (!repeat && task.dedupeKey !== (avoid ?? this.lastKey)) repeat = task;
+        continue;
+      }
+      return this.take(task);
     }
-    throw new Error(`TaskFactory: keine neue Aufgabe für ${this.family} Stufe ${level}`);
+    if (repeat) return this.take(repeat);
+    throw new Error(`TaskFactory: keine Aufgabe für ${this.family} Stufe ${level}`);
+  }
+
+  private take(task: Task): Task {
+    this.used.add(task.dedupeKey);
+    this.lastKey = task.dedupeKey;
+    this.counter++;
+    return task;
   }
 }
 

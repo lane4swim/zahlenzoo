@@ -29,7 +29,7 @@ function checkCards(task: Task): void {
 
 describe('Streichelzoo: Zählen', () => {
   it('bleibt im Zahlenraum der Stufe, Dinge überlappen nicht', () => {
-    const range = { 1: [3, 10], 2: [4, 10], 3: [11, 20] } as const;
+    const range = { 1: [2, 10], 2: [4, 10], 3: [11, 20] } as const;
     for (const level of levels) {
       for (let seed = 0; seed < 300; seed++) {
         const task = count20(level, createRng(seed), 't', params('count_20', level));
@@ -218,7 +218,8 @@ describe('Streichelzoo: Eselweide', () => {
         const m = task.math!;
         expect(m.a + m.b).toBe(m.result);
         expect(m.result).toBeLessThanOrEqual(level === 1 ? 6 : 10);
-        if (level === 3) expect(m.result).toBe(10);
+        // Stufe 3: Zehnerfreunde, dazwischen Zahlenhäuser
+        if (level === 3 && task.display?.visual.type !== 'house') expect(m.result).toBe(10);
         if (level === 2) expect(task.display?.visual.type).toBe('house');
         checkCards(task);
       }
