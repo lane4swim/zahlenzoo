@@ -1,6 +1,295 @@
 {
-  "_hinweis": "Aufgabenfamilien mit Parametern je Stufe. kinds: Anteile der Eingabeformen. Anteile (Share) liegen zwischen 0 und 1. Zahlenraum jeweils bis 100.",
+  "_hinweis": "Aufgabenfamilien mit Parametern je Stufe. kinds: Anteile der Eingabeformen. Anteile (Share) liegen zwischen 0 und 1. Zahlenraum jeweils bis 100, im Streichelzoo (Klasse 1) bis 20.",
   "families": {
+    "count_20": {
+      "title": "Zählen",
+      "kinds": {
+        "choice": 0.5
+      },
+      "levels": {
+        "1": {
+          "description": "bis 10 in einer Reihe; jedes angetippte Tier bekommt ein Häkchen",
+          "layout": "row",
+          "min": 3,
+          "max": 10
+        },
+        "2": {
+          "description": "bis 10 verstreut",
+          "layout": "scatter",
+          "min": 4,
+          "max": 10
+        },
+        "3": {
+          "description": "11 bis 20 in Fünferreihen (zwei Zehner)",
+          "layout": "groups",
+          "min": 11,
+          "max": 20
+        }
+      }
+    },
+    "quick_count_20": {
+      "title": "Blitzblick bis 20",
+      "kinds": {
+        "choice": 0.5
+      },
+      "levels": {
+        "1": {
+          "description": "Würfelbilder 1 bis 6 und Fingerbilder bis 10, 2,5 Sekunden",
+          "fingerShare": 0.5,
+          "flashMs": 2500
+        },
+        "2": {
+          "description": "Zehnerfeld bis 10, 2 Sekunden",
+          "shape": "tenframe",
+          "min": 3,
+          "max": 10,
+          "flashMs": 2000
+        },
+        "3": {
+          "description": "zwei Zehnerfelder bis 20",
+          "shape": "tenframe",
+          "min": 11,
+          "max": 20,
+          "flashMs": 2500
+        }
+      }
+    },
+    "addsub_10": {
+      "title": "Plus und Minus bis 10",
+      "kinds": {
+        "choice": 0.4
+      },
+      "levels": {
+        "1": {
+          "description": "Plus bis 10 mit Bild; ein Teil als Bildrechengeschichte",
+          "mode": "plus",
+          "storyShare": 0.4
+        },
+        "2": {
+          "description": "Minus bis 10 mit Bild (Weggenommenes durchgestrichen)",
+          "mode": "minus",
+          "storyShare": 0.4
+        },
+        "3": {
+          "description": "Plus und Minus gemischt ohne Bild, Umkehraufgaben",
+          "mode": "mixed",
+          "inverseShare": 0.3
+        }
+      }
+    },
+    "numbers_20": {
+      "title": "Zahlen bis 20",
+      "kinds": {
+        "choice": 0.5
+      },
+      "levels": {
+        "1": {
+          "description": "Zahlwort hören, Zahl bis 10 wählen; Ordnungszahlen bis 5",
+          "mode": "hear",
+          "ordinalShare": 0.35
+        },
+        "2": {
+          "description": "Zahlenreihe bis 20: Vorgänger, Nachfolger, Lücke",
+          "mode": "row"
+        },
+        "3": {
+          "description": "Zahlenstrahl 0 bis 20 und Zahlwörter 11 bis 20 (zwölf, nicht einundzwanzig)",
+          "mode": "line",
+          "lineShare": 0.5,
+          "min": 0,
+          "max": 20,
+          "ticks": 1,
+          "labels": 5,
+          "snap": 1,
+          "tolerance": 0,
+          "readShare": 0.4
+        }
+      }
+    },
+    "compare_20": {
+      "title": "Mehr oder weniger",
+      "kinds": {
+        "choice": 0.5
+      },
+      "levels": {
+        "1": {
+          "description": "zwei Tiergruppen bis 10 auf den Karten: Wo sind mehr, wo weniger?",
+          "mode": "groups",
+          "lessShare": 0.4
+        },
+        "2": {
+          "description": "Zeichen <, > und = bis 10",
+          "mode": "symbol",
+          "max": 10,
+          "equalShare": 0.2
+        },
+        "3": {
+          "description": "Zeichen bis 20 und „Wie viele mehr?“ (Paare bilden)",
+          "mode": "mixed",
+          "max": 20,
+          "equalShare": 0.15,
+          "differenceShare": 0.5
+        }
+      }
+    },
+    "decompose_10": {
+      "title": "Zerlegen",
+      "kinds": {
+        "choice": 0.4
+      },
+      "levels": {
+        "1": {
+          "description": "Zahlen 3 bis 6 zerlegen: Ein Teil der Tiere hat einen Haken, wie viele fehlen?",
+          "mode": "picture"
+        },
+        "2": {
+          "description": "Zahlenhaus bis 10",
+          "mode": "house",
+          "houseShare": 1,
+          "toTenShare": 0
+        },
+        "3": {
+          "description": "Zehnerfreunde: zur 10 ergänzen (7 + ? = 10)",
+          "mode": "ten",
+          "houseShare": 0,
+          "toTenShare": 1
+        }
+      }
+    },
+    "addsub_20": {
+      "title": "Plus und Minus bis 20",
+      "kinds": {
+        "choice": 0.4
+      },
+      "levels": {
+        "1": {
+          "description": "ohne Zehnerübergang, analog zum kleinen Einspluseins (13 + 4, 17 − 5)",
+          "mode": "analog"
+        },
+        "2": {
+          "description": "Verdoppeln bis 10 + 10 und Fast-Verdoppeln (6 + 7)",
+          "mode": "double",
+          "nearShare": 0.5
+        },
+        "3": {
+          "description": "Zehnerübergang mit Zehnerfeld (8 + 5) und Umkehraufgaben",
+          "mode": "crossing",
+          "inverseShare": 0.3
+        }
+      }
+    },
+    "position_1": {
+      "title": "Wo ist das Tier?",
+      "kinds": {
+        "grid": 0.5,
+        "choice": 0.5
+      },
+      "levels": {
+        "1": {
+          "description": "Lagewörter: über, unter, vor, hinter, neben, zwischen",
+          "mode": "positions"
+        },
+        "2": {
+          "description": "rechts und links von dir aus gesehen; einem Weg folgen",
+          "mode": "leftright"
+        },
+        "3": {
+          "description": "Wege mit Pfeilen beschreiben und legen",
+          "mode": "routes"
+        }
+      }
+    },
+    "shapes_1": {
+      "title": "Formen",
+      "kinds": {
+        "choice": 0.5
+      },
+      "levels": {
+        "1": {
+          "description": "die gleiche Form finden (Farbe, Größe und Drehung anders)",
+          "mode": "same"
+        },
+        "2": {
+          "description": "die genannte Form antippen (vorgelesen)",
+          "mode": "hear"
+        },
+        "3": {
+          "description": "Formen im Bild zählen",
+          "mode": "count"
+        }
+      }
+    },
+    "pattern_1": {
+      "title": "Muster",
+      "kinds": {
+        "choice": 1
+      },
+      "levels": {
+        "1": {
+          "description": "AB-Muster fortsetzen",
+          "mode": "ab"
+        },
+        "2": {
+          "description": "ABC- und AAB-Muster, Lücke auch in der Mitte",
+          "mode": "abc"
+        },
+        "3": {
+          "description": "Muster mit zwei Merkmalen (Form und Farbe)",
+          "mode": "two"
+        }
+      }
+    },
+    "money_20": {
+      "title": "Geld bis 20 €",
+      "kinds": {},
+      "levels": {
+        "1": {
+          "description": "Euro bis 10 mit 1 €, 2 €, 5 €",
+          "unit": "euro",
+          "min": 3,
+          "max": 10,
+          "denominations": [100, 200, 500]
+        },
+        "2": {
+          "description": "Euro bis 20 mit 1 €, 2 €, 5 €, 10 €",
+          "unit": "euro",
+          "min": 11,
+          "max": 20,
+          "denominations": [100, 200, 500, 1000]
+        },
+        "3": {
+          "description": "Euro bis 20 gemischt, auch mit 10-€-Schein",
+          "unit": "euro",
+          "min": 3,
+          "max": 20,
+          "denominations": [100, 200, 500, 1000]
+        }
+      }
+    },
+    "clock_1": {
+      "title": "Volle Stunden",
+      "kinds": {
+        "choice": 1
+      },
+      "levels": {
+        "1": {
+          "description": "Uhr lesen: volle Stunden",
+          "mode": "read",
+          "minutes": [0]
+        },
+        "2": {
+          "description": "Zeiger einstellen: volle Stunden",
+          "mode": "set",
+          "minutes": [0]
+        },
+        "3": {
+          "description": "Eine Stunde später oder früher",
+          "mode": "later",
+          "minutes": [0],
+          "span": 60
+        }
+      }
+    },
     "plus_facts_20": {
       "title": "Einspluseins bis 20",
       "kinds": {

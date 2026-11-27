@@ -1,4 +1,4 @@
-import { areaState } from './areas';
+import { areaStates, profileGrade } from './areas';
 import { areaFamilies, enclosures } from './content';
 import { confidence, daysBetween } from './skills';
 import type { GameContent } from '../types/content';
@@ -14,12 +14,10 @@ export type DailyItem = { family: string; areaId: string; level: TaskLevel };
  */
 export function dailyPlan(content: GameContent, profile: Profile, today: string): DailyItem[] {
   const r = content.rules.skill;
-  const stars = Object.fromEntries(
-    content.areas.map((a) => [a.id, profile.areas[a.id]?.stars ?? 0]),
-  );
+  const states = areaStates(content, profile);
   const candidates: Array<{ family: string; areaId: string }> = [];
   for (const area of enclosures(content)) {
-    if (areaState(area, stars, content.rules) !== 'open') continue;
+    if (states[area.id] !== 'open') continue;
     for (const family of areaFamilies(area)) {
       if (!candidates.some((c) => c.family === family))
         candidates.push({ family, areaId: area.id });
@@ -40,9 +38,11 @@ export function dailyPlan(content: GameContent, profile: Profile, today: string)
       return a.conf - b.conf || b.pause - a.pause;
     });
   const fresh = candidates.filter((c) => !profile.skills[c.family]);
-  return [...played, ...fresh].slice(0, r.dailyTasks).map((c) => ({
-    family: c.family,
-    areaId: c.areaId,
-    level: profile.skills[c.family]?.level ?? 1,
-  }));
+  return [...played, ...fresh]
+    .slice(0, profileGrade(profile) === 1 ? content.rules.gradeOne.dailyTasks : r.dailyTasks)
+    .map((c) => ({
+      family: c.family,
+      areaId: c.areaId,
+      level: profile.skills[c.family]?.level ?? 1,
+    }));
 }

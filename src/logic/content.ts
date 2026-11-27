@@ -4,6 +4,7 @@ import type {
   AnimalConfig,
   DecorConfig,
   AreaConfig,
+  MapId,
   FamilyConfig,
   GameContent,
   Legal,
@@ -15,6 +16,7 @@ import type {
   StoryOp,
   StoryTemplate,
 } from '../types/content';
+import { MAP_IDS } from '../types/content';
 
 /**
  * Prüft die Inhaltsdateien beim Laden. Fehler nennen Datei und Stelle, damit
@@ -122,6 +124,18 @@ function parseSkillRules(v: unknown): SkillRules {
   };
 }
 
+const GRADE_ONE_DEFAULT: Rules['gradeOne'] = { bridgeStars: 24, roundSize: 7, dailyTasks: 4 };
+
+function parseGradeOne(v: unknown): Rules['gradeOne'] {
+  if (v === undefined) return GRADE_ONE_DEFAULT;
+  const o = obj(v, 'rules.json gradeOne');
+  return {
+    bridgeStars: int(o.bridgeStars, 'gradeOne.bridgeStars', 0, 1000),
+    roundSize: int(o.roundSize, 'gradeOne.roundSize', 1, 50),
+    dailyTasks: int(o.dailyTasks, 'gradeOne.dailyTasks', 1, 20),
+  };
+}
+
 export function parseRules(data: unknown): Rules {
   const d = obj(data, 'rules.json');
   const round = obj(d.round, 'rules.json round');
@@ -148,6 +162,7 @@ export function parseRules(data: unknown): Rules {
     strategyPick: parseStrategyPick(d.strategyPick),
     explainAsk: parseExplainAsk(d.explainAsk),
     skill: parseSkillRules(d.skill),
+    gradeOne: parseGradeOne(d.gradeOne),
   };
   const { size, minSize, maxSize, mix: m } = rules.round;
   if (size < minSize || size > maxSize) {
@@ -155,6 +170,9 @@ export function parseRules(data: unknown): Rules {
   }
   if (Math.abs(m.current + m.previous + m.next - 1) > 1e-9) {
     throw new ContentError('rules.json round.mix muss zusammen 1 ergeben');
+  }
+  if (rules.gradeOne.roundSize < minSize || rules.gradeOne.roundSize > maxSize) {
+    throw new ContentError('rules.json gradeOne.roundSize liegt außerhalb von minSize bis maxSize');
   }
   if (rules.stars.two > rules.stars.three)
     throw new ContentError('rules.json stars.two > stars.three');
@@ -189,6 +207,16 @@ export function parseAreas(data: unknown): AreaConfig[] {
       families,
     };
     if (o.requires !== undefined) area.requires = str(o.requires, `areas[${i}].requires`);
+    if (o.map !== undefined) {
+      if (!MAP_IDS.includes(o.map as MapId))
+        throw new ContentError(`areas.json areas[${i}].map: ${MAP_IDS.join(' oder ')} erwartet`);
+      area.map = o.map as MapId;
+    }
+    if (o.gradeOneBridge !== undefined) {
+      if (typeof o.gradeOneBridge !== 'boolean')
+        throw new ContentError(`areas.json areas[${i}].gradeOneBridge: ja/nein erwartet`);
+      area.gradeOneBridge = o.gradeOneBridge;
+    }
     if (o.extra !== undefined) {
       if (typeof o.extra !== 'boolean')
         throw new ContentError(`areas.json areas[${i}].extra: ja/nein erwartet`);

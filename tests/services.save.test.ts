@@ -112,6 +112,25 @@ describe('Profile', () => {
     expect(() => createProfile('   ', 'owl')).toThrow();
   });
 
+  it('speichert die Klasse; ältere Profile ohne Klasse bleiben gültig', () => {
+    expect(createProfile('Mia', 'owl').grade).toBe(2);
+    expect(createProfile('Ben', 'owl', new Date(), 1).grade).toBe(1);
+    const fresh = new SaveService(memoryStore());
+    const p = fresh.addProfile('Ida', 'owl', 1);
+    expect(
+      new SaveService(memoryStore({ [STORAGE_KEY]: fresh.exportJson() })).profiles[0]!.grade,
+    ).toBe(1);
+    expect(p.grade).toBe(1);
+    const { grade: _g, ...old } = createProfile('Alt', 'owl');
+    const loaded = parseSave(JSON.stringify({ ...emptySave(), profiles: [old] }));
+    expect(loaded.profiles[0]!.grade).toBeUndefined();
+    // ungültige Klasse wird beim Laden verworfen (gilt dann als Klasse 2)
+    const odd = parseSave(
+      JSON.stringify({ ...emptySave(), profiles: [{ ...createProfile('X', 'owl'), grade: 7 }] }),
+    );
+    expect(odd.profiles[0]!.grade).toBeUndefined();
+  });
+
   it('lehnt unbekannte Tierbilder beim Laden ab', () => {
     const data = emptySave();
     const profile = { ...createProfile('Mia', 'owl'), avatar: 'dragon' };

@@ -397,6 +397,43 @@ def object_bowl():
     return obj(b)
 
 
+def object_carrot():
+    b = path("M 112 70 Q 84 20 104 10 Q 124 30 124 64 M 128 64 Q 128 14 150 8 Q 160 34 140 70 "
+             "M 140 72 Q 170 36 196 46 Q 180 70 150 80", sw=12, extra=f'stroke="{K}"')
+    b += path("M 112 70 Q 84 20 104 10 Q 124 30 124 64 M 128 64 Q 128 14 150 8 Q 160 34 140 70 "
+              "M 140 72 Q 170 36 196 46 Q 180 70 150 80", sw=6, extra=f'stroke="{C["gras-dunkel"]}"')
+    b += path("M 88 78 Q 128 56 168 78 Q 150 170 128 238 Q 106 170 88 78 Z", C["orange"])
+    for y, w in ((110, 20), (146, 16), (182, 10)):
+        b += path(f"M {128 - w} {y} H {128 - w + 14}", sw=SI, extra='opacity="0.6"')
+    return obj(b)
+
+
+def object_chick():
+    b = ell(128, 160, 78, 70, C["sonne"])
+    b += circ(128, 92, 52, C["sonne"])
+    b += path("M 86 160 Q 70 130 96 124", sw=SI, extra='opacity="0.7"')
+    b += path("M 120 100 L 136 100 L 128 116 Z", C["orange"], sw=SI)
+    b += ba.eye(108, 84, "round") + ba.eye(148, 84, "round")
+    b += path("M 104 228 V 244 M 152 228 V 244", sw=6)
+    b += path("M 118 40 Q 128 22 132 42", sw=SI)
+    return obj(b)
+
+
+def object_rabbit():
+    G = C["grau-warm"]
+    b = ""
+    for side in (-1, 1):
+        x = 128 + side * 26
+        b += ell(x, 66, 18, 52, G) + ell(x, 70, 8, 36, C["ohr-rosa"], False)
+    b += ell(128, 196, 76, 54, G)
+    b += circ(128, 140, 52, G)
+    b += ell(128, 160, 22, 16, C["papier"], False)
+    b += ell(128, 150, 7, 5, C["rosa"], False)
+    b += ba.eye(108, 130, "round") + ba.eye(148, 130, "round")
+    b += circ(204, 204, 16, C["papier"])
+    return obj(b)
+
+
 # ============================================================== Symbole (96 × 96)
 def icon(body):
     return svg(96, 96, body)
@@ -486,6 +523,9 @@ FILES["objekt_fisch_256"] = object_fish()
 FILES["objekt_eimer_256"] = object_bucket()
 FILES["objekt_banane_256"] = object_banana()
 FILES["objekt_futternapf_256"] = object_bowl()
+FILES["objekt_moehre_256"] = object_carrot()
+FILES["objekt_kueken_256"] = object_chick()
+FILES["objekt_kaninchen_256"] = object_rabbit()
 
 FILES["ui_vorlesen_96"] = ui_speaker()
 FILES["ui_zurueck_96"] = ui_back()

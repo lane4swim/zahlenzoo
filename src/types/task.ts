@@ -264,6 +264,29 @@ export type Visual =
       ones: number;
     }
   | {
+      /** Würfelbild mit 1 bis 6 Augen (Blitzblick, Klasse 1) */
+      type: 'dice';
+      n: number;
+    }
+  | {
+      /** Fingerbild: zwei Hände, zuerst eine volle Hand (Kraft der 5), 0 bis 10 Finger */
+      type: 'fingers';
+      n: number;
+    }
+  | {
+      /**
+       * Dinge zum Zählen (Klasse 1): Bild `icon` an den Punkten (Mitte, Pixel um 0, 0).
+       * Angetippte Dinge bekommen ein Häkchen; das hilft, keins doppelt zu zählen.
+       */
+      type: 'count';
+      icon: string;
+      points: Array<[number, number]>;
+      /** Bild je Punkt statt `icon` (z. B. zwei Tierarten beim Vergleichen) */
+      icons?: string[];
+      /** Punkte (Index), die schon ein Häkchen haben (Ordnungszahlen: „das dritte“) */
+      marked?: number[];
+    }
+  | {
       /** Punktefeld: rows Reihen mit je cols Punkten; die ersten `split` Reihen andersfarbig */
       type: 'dots';
       rows: number;
@@ -297,6 +320,8 @@ export type TaskOption = {
   piece?: Piece;
   /** Weg als Pfeile auf der Karte (Buchstaben r, l, u, d) */
   moves?: string;
+  /** Gruppe gleicher Dinge auf der Karte (Mengen vergleichen ohne Zahlen, Klasse 1) */
+  group?: { icon: string; n: number };
   /** Strichliste auf der Karte; bundled: false = Striche ohne Fünferbündel */
   tally?: { n: number; bundled: boolean };
   /** Eis auf der Karte (Welches Eis fehlt?) */

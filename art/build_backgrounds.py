@@ -347,6 +347,183 @@ def gehege_zoozaehlung():
     return svg(W, H, "".join(b))
 
 
+def barn(x, base, w=240, h=170):
+    """Stall mit Satteldach und offenem Tor (Streichelzoo)."""
+    top = base - h
+    out = rect(x, top, w, h, 10, C["erde"])
+    for i in range(1, 6):
+        out += path(f"M {x + i * w / 6} {top + 12} V {base - 8}", sw=2, extra='opacity="0.35"')
+    out += path(f"M {x - 24} {top + 8} L {x + w / 2} {top - 90} L {x + w + 24} {top + 8} Z", C["orange"])
+    out += rect(x + w / 2 - 44, base - 110, 88, 110, 8, C["affe-dunkel"])
+    out += path(f"M {x + w / 2 - 44} {base - 110} L {x + w / 2 + 44} {base} M {x + w / 2 + 44} {base - 110} "
+                f"L {x + w / 2 - 44} {base}", sw=SI, extra='opacity="0.6"')
+    out += circ(x + w / 2, top - 30, 18, C["papier"])
+    return out
+
+
+def hay(x, base, s=1.0):
+    out = rect(x - 50 * s, base - 54 * s, 100 * s, 54 * s, 12 * s, C["sonne"])
+    for dy in (18, 36):
+        out += path(f"M {x - 44 * s} {base - dy * s} H {x + 44 * s}", sw=2, extra='opacity="0.5"')
+    return out
+
+
+def gehege_ziegenwiese():
+    b = [gehege_base("laub-hell", "gras", "gras-hell")]
+    b.append(barn(720, 600))
+    b.append(fence(-20, 640, 620) + fence(980, 1060, 620))
+    b.append(hay(620, 700, 0.9) + hay(980, 720, 0.8))
+    b.append(ba.tree(90, 560, 44, 260, [(-10, -10, 70), (50, -40, 60), (-50, -50, 54)]))
+    b.append(ell(420, 712, 70, 18, C["wasser"]) + ell(400, 706, 30, 6, C["weiss"], False, 'opacity="0.5"'))
+    b.append("".join(tuft(x, y) for (x, y) in [(260, 690), (520, 740), (760, 730), (880, 700)]))
+    b.append(flowers([(320, 740, "sonne"), (560, 700, "weiss"), (860, 750, "rosa")]))
+    return svg(W, H, "".join(b))
+
+
+def hutch(x, base, w=220, h=120):
+    """Hasenstall auf Füßen: Holzkasten mit Gitterfenster, Rampe und Dach."""
+    top = base - 40 - h
+    out = rect(x + 14, base - 44, 14, 44, 4, C["erde"]) + rect(x + w - 28, base - 44, 14, 44, 4, C["erde"])
+    out += rect(x, top, w, h, 10, C["erde"])
+    out += rect(x + 18, top + 22, w * 0.45, h - 44, 6, C["papier"])
+    for i in range(1, 5):
+        gx = x + 18 + i * w * 0.45 / 5
+        out += path(f"M {gx} {top + 22} V {top + h - 22}", sw=SI)
+    out += rect(x + w * 0.62, top + 30, w * 0.26, h - 30, 8, C["affe-dunkel"])
+    out += path(f"M {x - 16} {top + 6} L {x + w / 2} {top - 54} L {x + w + 16} {top + 6} Z", C["rosa"])
+    out += path(f"M {x + w * 0.62} {base - 40} L {x + w * 0.62 - 70} {base} L {x + w * 0.62 - 40} {base} "
+                f"L {x + w * 0.75} {base - 40} Z", C["erde"])
+    return out
+
+
+def carrot_bed(x, y, n=5):
+    out = ell(x, y, 30 * n, 18, C["erde"])
+    for i in range(n):
+        cx = x - 30 * (n - 1) / 2 + i * 30
+        out += path(f"M {cx - 8} {y - 4} Q {cx - 12} {y - 28} {cx} {y - 30} Q {cx + 12} {y - 28} {cx + 8} {y - 4}",
+                    C["gras-dunkel"], sw=SI)
+        out += path(f"M {cx - 7} {y - 2} L {cx + 7} {y - 2} L {cx} {y + 8} Z", C["orange"], sw=SI)
+    return out
+
+
+def gehege_hasenstall():
+    b = [gehege_base("laub-hell", "gras", "gras-hell")]
+    b.append(hutch(720, 620))
+    b.append(fence(-20, 1060, 640))
+    b.append(carrot_bed(400, 700))
+    # kleiner Hügel mit Tunnel
+    b.append(path("M 820 768 Q 900 660 1000 690 Q 1040 720 1040 768 Z", C["gras"]))
+    b.append(ell(930, 728, 30, 22, K, False, 'opacity="0.85"'))
+    b.append(ba.tree(90, 560, 44, 260, [(-10, -10, 70), (50, -40, 60), (-50, -50, 54)]))
+    b.append("".join(tuft(x, y) for (x, y) in [(260, 700), (560, 740), (700, 720)]))
+    b.append(flowers([(300, 744, "rosa"), (620, 700, "sonne"), (760, 750, "weiss")]))
+    return svg(W, H, "".join(b))
+
+
+def hideout(x, base, w=110, h=64, color="erde"):
+    """Häuschen für Meerschweinchen: Holzhaus mit rundem Eingang."""
+    out = rect(x - w / 2, base - h, w, h, 8, C[color])
+    out += path(f"M {x - w / 2 - 10} {base - h + 4} L {x} {base - h - 36} L {x + w / 2 + 10} {base - h + 4} Z", C["orange"])
+    out += path(f"M {x - 20} {base} V {base - 22} A 20 20 0 0 1 {x + 20} {base - 22} V {base} Z", K, False)
+    return out
+
+
+def gehege_meerschweinchen():
+    b = [gehege_base("laub-hell", "gras", "gras-hell")]
+    b.append(fence(-20, 1060, 640))
+    b.append(hideout(760, 690, 150, 84) + hideout(940, 720, 110, 64, "affe-dunkel"))
+    b.append(hay(560, 720, 0.8))
+    # Salatköpfe und Gurkenscheiben im Napf
+    b.append(ell(400, 730, 70, 20, C["orange"]) + ell(400, 724, 56, 10, C["erde"], False))
+    for dx in (-28, 0, 28):
+        b.append(circ(400 + dx, 716, 13, C["gras"]) + circ(400 + dx, 716, 6, C["gras-hell"], False))
+    b.append(ba.tree(90, 560, 44, 260, [(-10, -10, 70), (50, -40, 60), (-50, -50, 54)]))
+    b.append("".join(tuft(x, y) for (x, y) in [(260, 700), (640, 750)]))
+    b.append(flowers([(300, 744, "rosa"), (880, 750, "weiss")]))
+    return svg(W, H, "".join(b))
+
+
+def aufgabe_meerschweinchen():
+    b = [task_ground(C["laub-hell"], "gras", "gras-hell", ledge("gras", cap="gras-hell"))]
+    b.append(fence(560, 1060, 560))
+    b.append(hideout(60, 332, 90, 52))
+    b.append(tuft(200, 344))
+    b.append(flowers([(300, 740, "sonne"), (900, 748, "rosa")]))
+    return svg(W, H, "".join(b))
+
+
+def shelter(x, base, w=240, h=130):
+    """Offener Unterstand mit Pultdach (Eselweide)."""
+    out = rect(x, base - h, 16, h, 4, C["erde"]) + rect(x + w - 16, base - h, 16, h, 4, C["erde"])
+    out += rect(x + 10, base - h + 20, w - 20, h - 20, 6, C["affe-dunkel"])
+    out += path(f"M {x - 20} {base - h + 10} L {x + w + 20} {base - h - 20} L {x + w + 20} {base - h + 4} "
+                f"L {x - 20} {base - h + 34} Z", C["grau-warm"])
+    return out
+
+
+def hay_rack(x, base):
+    out = rect(x - 60, base - 70, 120, 70, 6, C["erde"])
+    for i in range(1, 6):
+        out += path(f"M {x - 60 + i * 20} {base - 70} V {base}", sw=SI)
+    out += ell(x, base - 74, 64, 16, C["sonne"])
+    return out
+
+
+def jump(x, base):
+    """Kleines Hindernis mit rot-weißer Stange (Ponyhof)."""
+    out = rect(x - 90, base - 70, 14, 70, 4, C["papier"]) + rect(x + 76, base - 70, 14, 70, 4, C["papier"])
+    for i in range(6):
+        col = C["rosa"] if i % 2 == 0 else C["weiss"]
+        out += rect(x - 80 + i * 27, base - 50, 27, 12, 0, col)
+    return out
+
+
+def gehege_eselweide():
+    b = [gehege_base("laub-hell", "gras", "gras-hell")]
+    b.append(shelter(700, 640))
+    b.append(fence(-20, 1060, 640))
+    b.append(hay_rack(480, 720))
+    b.append(ba.tree(90, 560, 44, 260, [(-10, -10, 70), (50, -40, 60), (-50, -50, 54)]))
+    b.append("".join(tuft(x, y) for (x, y) in [(260, 700), (640, 750), (860, 730)]))
+    b.append(flowers([(300, 744, "sonne"), (920, 750, "weiss")]))
+    return svg(W, H, "".join(b))
+
+
+def gehege_ponyhof():
+    b = [gehege_base("laub-hell", "gras", "karte-schatten")]
+    b.append(barn(720, 600))
+    b.append(fence(-20, 1060, 640))
+    b.append(jump(440, 730))
+    b.append(hay(960, 730, 0.8))
+    b.append(ba.tree(90, 560, 44, 260, [(-10, -10, 70), (50, -40, 60), (-50, -50, 54)]))
+    b.append(flowers([(300, 744, "rosa"), (640, 750, "sonne")]))
+    return svg(W, H, "".join(b))
+
+
+def aufgabe_eselweide():
+    b = [task_ground(C["laub-hell"], "gras", "gras-hell", ledge("gras", cap="gras-hell"))]
+    b.append(fence(560, 1060, 560))
+    b.append(tuft(200, 344) + tuft(40, 330))
+    b.append(flowers([(300, 740, "sonne"), (900, 748, "weiss")]))
+    return svg(W, H, "".join(b))
+
+
+def aufgabe_ponyhof():
+    b = [task_ground(C["laub-hell"], "gras", "karte-schatten", ledge("gras", cap="gras-hell"))]
+    b.append(fence(560, 1060, 560))
+    b.append(tuft(200, 344))
+    b.append(flowers([(300, 740, "rosa"), (900, 748, "sonne")]))
+    return svg(W, H, "".join(b))
+
+
+def aufgabe_hasenstall():
+    b = [task_ground(C["laub-hell"], "gras", "gras-hell", ledge("gras", cap="gras-hell"))]
+    b.append(fence(560, 1060, 560))
+    b.append(tuft(200, 344) + tuft(40, 330))
+    b.append(flowers([(300, 740, "rosa"), (900, 748, "sonne")]))
+    return svg(W, H, "".join(b))
+
+
 # ============================================================== Bereiche: Aufgabenansicht
 def aufgabe_elefantenwiese():
     b = [task_ground(C["laub-hell"], "gras", "gras-hell", ledge("gras", cap="gras-hell"))]
@@ -419,13 +596,21 @@ def aufgabe_zoozaehlung():
     return svg(W, H, "".join(b))
 
 
+def aufgabe_ziegenwiese():
+    b = [task_ground(C["laub-hell"], "gras", "gras-hell", ledge("gras", cap="gras-hell"))]
+    b.append(fence(560, 1060, 560))
+    b.append(tuft(200, 344) + tuft(40, 330))
+    b.append(flowers([(300, 740, "sonne"), (900, 748, "weiss")]))
+    return svg(W, H, "".join(b))
+
+
 FILES = {
     "menue_start_1024x768": menu_start(),
     "menue_profil_1024x768": menu_profile(),
     "menue_erwachsene_1024x768": menu_adults(),
     "menue_rundenende_1024x768": menu_round_end(),
 }
-for area in ["elefantenwiese", "zookasse", "futteruhr", "schmetterlingshaus", "giraffenhof", "zoozaehlung"]:
+for area in ["ziegenwiese", "hasenstall", "meerschweinchen", "eselweide", "ponyhof", "elefantenwiese", "zookasse", "futteruhr", "schmetterlingshaus", "giraffenhof", "zoozaehlung"]:
     FILES[f"{area}_hintergrund_1024x768"] = globals()[f"gehege_{area}"]()
     FILES[f"{area}_aufgabe_1024x768"] = globals()[f"aufgabe_{area}"]()
 

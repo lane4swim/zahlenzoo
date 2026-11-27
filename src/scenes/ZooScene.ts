@@ -112,6 +112,8 @@ export class ZooScene extends BaseScene<ZooSceneData> {
     price?: number;
     /** Bild stark abgeblendet (noch nicht verdiente Sticker) */
     faded?: boolean;
+    /** Schriftgröße der Beschriftung (Standard: klein) */
+    fontSize?: number;
     onPress: () => void;
   }): Button {
     const { state } = options;
@@ -122,7 +124,7 @@ export class ZooScene extends BaseScene<ZooSceneData> {
       height: 220,
       label: options.label,
       labelBottom: true,
-      fontSize: FontSize.small - 4,
+      fontSize: options.fontSize ?? FontSize.small - 4,
       wrapWidth: options.width - 16,
       fill: state === 'owned' ? Color.grasHell : Color.papier,
       onPress: options.onPress,
@@ -151,18 +153,25 @@ export class ZooScene extends BaseScene<ZooSceneData> {
 
   private showBabies(profile: Profile): void {
     const animals = enclosures(this.content).map((a) => a.animal);
+    // zwei Reihen: bis 8 Tiere je 4, sonst 5 oben und der Rest darunter (mittig)
+    const perRow = animals.length > 8 ? 5 : 4;
+    const step = perRow === 5 ? 188 : 232;
     animals.forEach((animal, i) => {
+      const row = Math.floor(i / perRow);
+      const inRow = Math.min(perRow, animals.length - row * perRow);
       const art = this.content.animals[animal];
       if (!art) return;
       const state = babyState(this.content, profile, animal);
       const baby = profile.zoo.babies.find((b) => b.animal === animal);
       const species = this.t(`baby.${animal}`);
       this.card({
-        x: this.scale.width / 2 + ((i % 4) - 1.5) * 232,
-        y: ROW_Y[Math.floor(i / 4)]!,
-        width: 212,
+        x: this.scale.width / 2 + ((i % perRow) - (inRow - 1) / 2) * step,
+        y: ROW_Y[row]!,
+        width: step - 20,
         texture: babyTexture(art),
-        size: 150,
+        size: perRow === 5 ? 128 : 150,
+        // lange Namen wie „Erdmännchenbaby“ passen auch auf die schmaleren Karten
+        ...(perRow === 5 ? { fontSize: FontSize.small - 7 } : {}),
         label: baby ? baby.name : species,
         state,
         price: art.babyPrice,

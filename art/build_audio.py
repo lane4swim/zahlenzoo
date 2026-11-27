@@ -1,6 +1,6 @@
 """
 Erzeugt alle Klänge des Zahlen-Zoos selbst (keine fremden Dateien, keine Lizenzfragen):
-15 Effekte, 8 Tierlaute und 3 Musikstücke als Loop (Spezifikation, Abschnitt 11).
+15 Effekte, 13 Tierlaute und 3 Musikstücke als Loop (Spezifikation, Abschnitt 11).
 
 Aufruf: python3 art/build_audio.py  (braucht numpy und ffmpeg; Teil von `npm run art`)
 Ausgabe: public/assets/audio/{sfx,animals,music}/<name>.mp3
@@ -365,7 +365,60 @@ def animal_meerkat():
     return out
 
 
+def animal_goat():
+    # Meckern: „mä-ä-äh“ mit schnellem Zittern der Tonhöhe und Lautstärke
+    t = 0.75
+    x = t_axis(t)
+    f = np.linspace(560, 480, len(x)) * (1 + 0.05 * np.sin(2 * np.pi * 9 * x))
+    trem = 0.7 + 0.3 * np.sin(2 * np.pi * 9 * x)
+    return vowel(f, t, (900, 2000), 10) * trem * env(t, 0.02, 0.1, 0.8, 0.2)
+
+
+def animal_rabbit():
+    # Hasen sind leise: schnelles Schnuppern (kurze weiche Geräusche) und ein feines Fiepen
+    out = silence(0.8)
+    for i in range(5):
+        t = 0.05
+        place(out, lowpass(noise(t), 2500) * pluck(t, 0.02), i * 0.09, 0.8)
+    t = 0.18
+    place(out, sine(np.linspace(1500, 1900, int(t * RATE)), t) * env(t, 0.01, 0.04, 0.6, 0.06), 0.52, 0.5)
+    return out
+
+
+def animal_guineapig():
+    # Meerschweinchen „quieken“: drei steigende Pfiffe
+    out = silence(0.9)
+    for i in range(3):
+        t = 0.16
+        f = np.linspace(1100, 2300, int(t * RATE))
+        place(out, (sine(f, t) + 0.2 * sine(2 * f, t)) * env(t, 0.01, 0.03, 0.8, 0.05), i * 0.24, 0.6)
+    return out
+
+
+def animal_donkey():
+    # Esel: „I-aah, i-aah“ – hoch und rau, dann tief
+    out = silence(1.5)
+    for i in range(2):
+        t1, t2 = 0.22, 0.4
+        place(out, vowel(np.linspace(760, 820, int(t1 * RATE)), t1, (1400, 2800), 12) * env(t1, 0.02, 0.05, 0.8, 0.05), i * 0.7, 0.7)
+        place(out, vowel(np.linspace(330, 260, int(t2 * RATE)), t2, (700, 1300), 10) * env(t2, 0.03, 0.1, 0.8, 0.12), i * 0.7 + 0.24, 0.9)
+    return out
+
+
+def animal_pony():
+    # Pony: kurzes, freundliches Wiehern mit schnellem Zittern, von hoch nach tief
+    t = 0.9
+    x = t_axis(t)
+    f = np.linspace(900, 420, len(x)) * (1 + 0.06 * np.sin(2 * np.pi * 16 * x))
+    return vowel(f, t, (1100, 2400), 10) * env(t, 0.02, 0.1, 0.8, 0.3)
+
+
 ANIMALS = {
+    "goat": animal_goat,
+    "donkey": animal_donkey,
+    "pony": animal_pony,
+    "guineapig": animal_guineapig,
+    "rabbit": animal_rabbit,
     "monkey": animal_monkey,
     "penguin": animal_penguin,
     "elephant": animal_elephant,

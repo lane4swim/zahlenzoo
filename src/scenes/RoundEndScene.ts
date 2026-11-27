@@ -1,4 +1,5 @@
 import { BaseScene } from './BaseScene';
+import { areaMap } from '../logic/areas';
 import { findArea } from '../logic/content';
 import {
   applyDailyResult,
@@ -9,7 +10,12 @@ import {
 import { formatTime } from '../logic/skills';
 import { awardBadges } from '../logic/zoo';
 import type { Services } from '../services/services';
-import { SceneKey, type RoundEndSceneData, type TaskSceneData } from '../types/scenes';
+import {
+  SceneKey,
+  type MapSceneData,
+  type RoundEndSceneData,
+  type TaskSceneData,
+} from '../types/scenes';
 import { AnimalSprite } from '../ui/AnimalSprite';
 import { StarMeter } from '../ui/StarMeter';
 import { badgeTexture } from '../ui/rewards';
@@ -182,6 +188,8 @@ export class RoundEndScene extends BaseScene<RoundEndSceneData> {
     const gap = buttons.length === 3 ? 24 : 60;
     const total = buttons.length * width + (buttons.length - 1) * gap;
     const left = cx + 70 - total / 2;
+    const area = findArea(this.content, this.result.areaId);
+    const map: MapSceneData = area ? { map: areaMap(area) } : {};
     buttons.forEach((b, i) => {
       this.addButton({
         x: left + width / 2 + i * (width + gap),
@@ -190,7 +198,7 @@ export class RoundEndScene extends BaseScene<RoundEndSceneData> {
         label: b.label,
         fill: b.primary ? Color.grasHell : Color.papier,
         onPress: () =>
-          b.data ? this.scene.start(SceneKey.Task, b.data) : this.scene.start(SceneKey.Map),
+          b.data ? this.scene.start(SceneKey.Task, b.data) : this.scene.start(SceneKey.Map, map),
       });
     });
   }

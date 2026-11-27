@@ -35,14 +35,40 @@ const ui: Box[] = Object.entries(layout.ui).map(([name, u]) => box(name, u.x, u.
  * Namensschild 40 px hoch, 66 px unter dem Punkt; Breite aus der Namenslänge (22 px Schrift,
  * großzügig 12 px je Zeichen) plus Rand und Sterne.
  */
-const markers: Box[] = Object.entries(layout.areas).flatMap(([id, p]) => {
-  const name = T[`area.${id}`] ?? id;
-  const plateW = name.length * 12 + 28 + 58;
+const areaMarkers = (areas: Record<string, { x: number; y: number }>): Box[] =>
+  Object.entries(areas).flatMap(([id, p]) => {
+    const name = T[`area.${id}`] ?? id;
+    const plateW = name.length * 12 + 28 + 58;
+    return [
+      box(`${id} (Bild)`, p.x, p.y - 18, 128, 128),
+      box(`${id} (Schild)`, p.x, p.y + 66, plateW, 40),
+    ];
+  });
+
+/** Wegweiser zur anderen Karte: kleinerer Marker (AreaMarker, compact), Schild ohne Sterne. */
+const COMPACT = layout.compactMarker;
+const signpost = (p: { x: number; y: number }, nameKey: string): Box[] => {
+  const name = T[nameKey] ?? nameKey;
   return [
-    box(`${id} (Bild)`, p.x, p.y - 18, 128, 128),
-    box(`${id} (Schild)`, p.x, p.y + 66, plateW, 40),
+    box(
+      'Wegweiser (Bild)',
+      p.x,
+      p.y + COMPACT.iconY,
+      128 * COMPACT.iconScale,
+      128 * COMPACT.iconScale,
+    ),
+    box('Wegweiser (Schild)', p.x, p.y + COMPACT.plateY, name.length * 12 + 28, 40),
   ];
-});
+};
+
+const markers: Box[] = [
+  ...areaMarkers(layout.areas),
+  ...signpost(layout.signpost, 'map.to.streichelzoo'),
+];
+const pettingMarkers: Box[] = [
+  ...areaMarkers(layout.streichelzoo.areas),
+  ...signpost(layout.streichelzoo.signpost, 'map.to.zoo'),
+];
 
 const decor = CONTENT.decor.map((d) => ({
   d,
@@ -89,6 +115,28 @@ describe('Dekorationen auf der Zoo-Karte', () => {
     ui.forEach((a, i) => {
       ui.slice(i + 1).forEach((b) => overlaps(a, b) && hits.push(`${a.name} und ${b.name}`));
       markers.forEach((m) => overlaps(a, m) && hits.push(`${a.name} auf ${m.name}`));
+    });
+    expect(hits).toEqual([]);
+  });
+});
+
+describe('Karten: Gehege und Wegweiser', () => {
+  it.each([
+    ['großer Zoo', markers],
+    ['Streichelzoo', pettingMarkers],
+  ])('%s: nichts überdeckt sich, alles bleibt über der unteren Leiste', (_name, list) => {
+    const hits: string[] = [];
+    list.forEach((a, i) => {
+      list.slice(i + 1).forEach((b) => {
+        // Der Wegweiser darf kein Gehege berühren (Gehege untereinander prüft der Test oben
+        // über die echten Abstände der Spalten; die Schildbreite hier ist nur geschätzt).
+        const sign = [a, b].filter((x) => x.name.startsWith('Wegweiser')).length === 1;
+        if (sign && overlaps(a, b)) {
+          hits.push(`${a.name} und ${b.name}`);
+        }
+      });
+      ui.forEach((u) => overlaps(a, u) && hits.push(`${a.name} unter ${u.name}`));
+      if (a.bottom > layout.bar.top) hits.push(`${a.name} in der Leiste`);
     });
     expect(hits).toEqual([]);
   });

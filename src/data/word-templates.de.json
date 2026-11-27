@@ -1,5 +1,13 @@
 {
   "_hinweis": "Texte der Sachaufgaben: kurze Sätze, Wörter aus dem Grundwortschatz der 2. Klasse. Von einer Lehrkraft prüfen lassen (#27).",
+  "story.add_ziegen": "{a} Ziegen sind auf der Wiese. {b} Ziegen kommen dazu. Wie viele Ziegen sind es jetzt?",
+  "story.add_ziegen.unit": "Ziegen",
+  "story.add_kueken": "{a} Küken sind im Stall. {b} Küken kommen dazu. Wie viele Küken sind es jetzt?",
+  "story.add_kueken.unit": "Küken",
+  "story.sub_moehren": "Die Ziege hat {a} Möhren. Sie frisst {b}. Wie viele Möhren sind noch da?",
+  "story.sub_moehren.unit": "Möhren",
+  "story.sub_kaninchen": "{a} Kaninchen sitzen draußen. {b} hoppeln in den Stall. Wie viele sitzen noch draußen?",
+  "story.sub_kaninchen.unit": "Kaninchen",
   "story.add_fische": "Der Pinguin hat {a} Fische. Er bekommt noch {b} Fische dazu. Wie viele Fische hat er jetzt?",
   "story.add_fische.unit": "Fische",
   "story.add_pinguine": "Auf dem Felsen stehen {a} Pinguine. {b} Pinguine kommen aus dem Wasser dazu. Wie viele Pinguine sind es jetzt?",

@@ -1,8 +1,8 @@
 {
-  "_hinweis": "Startwerte aus der Spezifikation (Abschnitte 5, 6, 7, 8). Nach Spieltest und Pilot hier anpassen. strategyPick: Frage „Wie hast du gerechnet?“ nach richtigen Aufgaben mit Zehnerübergang; chance 0 schaltet sie ab. skill: Kompetenzmodell (Abschnitt 7): Stufe steigt ab upConfidence und upMin Antworten, sinkt unter downConfidence über downWindow Antworten; Erklärung nach explainAfterErrors gleichen Fehlern; Tagesfutter mit dailyTasks Aufgaben; Tempo-Runde ab tempoMinLevel und tempoConfidence. explainAsk: nach der Runde die Frage „Erkläre einer Person, wie du … gerechnet hast“ (nicht geprüft) mit dieser Wahrscheinlichkeit; chance 0 schaltet sie ab.",
+  "_hinweis": "Startwerte aus der Spezifikation (Abschnitte 5, 6, 7, 8). Nach Spieltest und Pilot hier anpassen. strategyPick: Frage „Wie hast du gerechnet?“ nach richtigen Aufgaben mit Zehnerübergang; chance 0 schaltet sie ab. skill: Kompetenzmodell (Abschnitt 7): Stufe steigt ab upConfidence und upMin Antworten, sinkt unter downConfidence über downWindow Antworten; Erklärung nach explainAfterErrors gleichen Fehlern; Tagesfutter mit dailyTasks Aufgaben; Tempo-Runde ab tempoMinLevel und tempoConfidence. gradeOne: Profile der Klasse 1 (docs/streichelzoo-klasse-1.md): Affenwald und Pinguinfelsen öffnen ab bridgeStars Sternen im Streichelzoo; roundSize Aufgaben je Runde, dailyTasks im Tagesfutter. explainAsk: nach der Runde die Frage „Erkläre einer Person, wie du … gerechnet hast“ (nicht geprüft) mit dieser Wahrscheinlichkeit; chance 0 schaltet sie ab.",
   "round": {
     "size": 10,
-    "minSize": 8,
+    "minSize": 6,
     "maxSize": 12,
     "mix": {
       "current": 0.7,
@@ -19,6 +19,11 @@
   },
   "levelUnlockStars": 2,
   "areaUnlockStars": 6,
+  "gradeOne": {
+    "bridgeStars": 24,
+    "roundSize": 7,
+    "dailyTasks": 4
+  },
   "skillHistory": 10,
   "strategyPick": {
     "families": ["add_100", "sub_100"],

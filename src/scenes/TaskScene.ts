@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { BaseScene } from './BaseScene';
 import { areaFamilies, familyParams, findArea } from '../logic/content';
+import { areaMap, profileGrade } from '../logic/areas';
 import { dailyPlan } from '../logic/daily';
 import { explainDue, formatTime } from '../logic/skills';
 import { fewestCoins } from '../logic/generators/moneyLay';
@@ -30,7 +31,7 @@ import {
 import type { Services } from '../services/services';
 import { GameEvent, type AnswerSubmittedPayload, type RoundFinishedPayload } from '../types/events';
 import type { AnswerOutcome } from '../types/round';
-import { SceneKey, type TaskSceneData } from '../types/scenes';
+import { SceneKey, type MapSceneData, type TaskSceneData } from '../types/scenes';
 import type { CheckResult, Hint, Task, TaskLevel, TextParams, Visual } from '../types/task';
 import { announce } from '../ui/a11y';
 import { AnimalSprite } from '../ui/AnimalSprite';
@@ -42,6 +43,9 @@ import { HintPanel } from '../ui/HintPanel';
 import { DotArray } from '../ui/math/DotArray';
 import { HundredBoard } from '../ui/math/HundredBoard';
 import { NumberLine } from '../ui/math/NumberLine';
+import { CountField } from '../ui/math/CountField';
+import { DiceFace } from '../ui/math/DiceFace';
+import { Fingers } from '../ui/math/Fingers';
 import { TenFrame } from '../ui/math/TenFrame';
 import { Ruler } from '../ui/math/Ruler';
 import { CellFigures, drawShape, ShapeRow } from '../ui/math/Shapes';
@@ -200,6 +204,11 @@ export class TaskScene extends BaseScene<TaskSceneData> {
   private panelParts: SpeechPart[] = [];
   /** Erklärfrage am Rundenende (einmal je Runde ausgewürfelt) */
   private explainCache?: { text: string | undefined };
+  /**
+   * Klasse 1 (streichelzoo-klasse-1.md, Abschnitt 5): kein Aufgaben-, Hinweis- und Lobtext,
+   * alles wird vorgelesen; Knöpfe nur als Symbol.
+   */
+  private firstGrade = false;
 
   constructor(services: Services) {
     super(SceneKey.Task, services);
@@ -233,6 +242,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     this.strategyPanel = undefined;
     this.praiseIndex = rng.int(0, content.praise.firstTry.length - 1);
     const profile = this.services.save.activeProfile;
+    this.firstGrade = profile !== undefined && profileGrade(profile) === 1;
     this.support = !this.daily && profile?.skills[family]?.support === true;
     if (this.daily && profile) {
       // Tagesfutter: je Thema eine Aufgabe auf der Stufe des Kindes
@@ -256,6 +266,8 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       level: data.level,
       rng,
       rules: content.rules,
+      // Klasse 1: kürzere Runden (streichelzoo-klasse-1.md, Abschnitt 3)
+      size: profile && profileGrade(profile) === 1 ? content.rules.gradeOne.roundSize : undefined,
     });
     this.round = composed.round;
     this.factory = composed.factory;
@@ -275,10 +287,11 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       x: Layout.margin + 48,
       y: top,
       width: 96,
-      label: this.t('task.toMap'),
+      label: this.buttonLabel('task.toMap'),
       icon: Tex.mapIcon,
       iconScale: 0.5,
-      onPress: () => this.scene.start(SceneKey.Map),
+      // zurück zur Karte des Geheges (beim Tagesfutter: des gastgebenden Geheges)
+      onPress: () => this.scene.start(SceneKey.Map, this.mapData()),
     });
     this.dots = new ProgressDots(this, width / 2 - 20, top);
     if (this.tempo) {
@@ -297,12 +310,13 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       });
     }
     // Vorlesen lässt sich in den Einstellungen abschalten; dann gibt es den Knopf nicht.
-    if (this.services.save.activeProfile?.settings.readAloud !== false) {
+    // Klasse 1 braucht das Vorlesen immer.
+    if (this.firstGrade || this.services.save.activeProfile?.settings.readAloud !== false) {
       this.addButton({
         x: width - Layout.margin - 48 - 112,
         y: top,
         width: 96,
-        label: this.t('task.readAloud'),
+        label: this.buttonLabel('task.readAloud'),
         icon: Tex.speaker,
         iconScale: 0.5,
         onPress: () => this.readAloud(),
@@ -312,7 +326,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
       x: width - Layout.margin - 48,
       y: top,
       width: 96,
-      label: this.t('task.hint'),
+      label: this.buttonLabel('task.hint'),
       icon: Tex.hint,
       iconScale: 0.45,
       sound: 'hint',
@@ -326,6 +340,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     this.createAidButtons();
 
     this.panel = new HintPanel(this, PANEL.x, PANEL.y, PANEL.width);
+    this.panel.setTextHidden(this.firstGrade);
     this.listen(this.events, GameEvent.AnswerSubmitted, this.onAnswer);
     this.listen(this.events, GameEvent.RoundFinished, this.onRoundFinished);
     this.showTask();
@@ -335,6 +350,12 @@ export class TaskScene extends BaseScene<TaskSceneData> {
   // Aufbau einer Aufgabe
 
   private createAidButtons(): void {
+    // Klasse 1: Zehnerstangen, Rechenstrich und Hundertertafel gehören zu Klasse 2;
+    // Zehnerfeld und Fingerbild kommen mit den Hinweisen.
+    if (this.firstGrade) {
+      this.aidButtons = [];
+      return;
+    }
     const aids: Array<[Aid, string]> = [
       ['tensOnes', Tex.aidTens],
       ['numberLine', Tex.aidLine],
@@ -553,7 +574,8 @@ export class TaskScene extends BaseScene<TaskSceneData> {
           option.ice ||
           option.solid ||
           option.plan ||
-          option.view
+          option.view ||
+          option.group
             ? ''
             : option.label
               ? this.text(option.label.key, option.label.params)
@@ -575,7 +597,20 @@ export class TaskScene extends BaseScene<TaskSceneData> {
             card.add(planNumbers(this, option.plan, 30, 0, -4, FontSize.small - 4));
             return;
           } else if (option.view) drawView(g, option.view, 26, 0, 44);
-          else if (option.moves) {
+          else if (option.group) {
+            // Gruppe gleicher Tiere in Fünferreihen (Mengen vergleichen ohne Zahlen)
+            const { icon, n } = option.group;
+            const size = 40;
+            const rows = Math.ceil(n / 5);
+            for (let i = 0; i < n; i++) {
+              const cols = Math.min(5, n - Math.floor(i / 5) * 5);
+              const x = ((i % 5) - (cols - 1) / 2) * (size + 4);
+              const y = (Math.floor(i / 5) - (rows - 1) / 2) * (size + 6) - 4;
+              card.add(this.add.image(x, y, icon).setDisplaySize(size, size));
+            }
+            g.destroy();
+            return;
+          } else if (option.moves) {
             const n = option.moves.length;
             const step = Math.min(34, 150 / n);
             [...option.moves].forEach((m, i) => {
@@ -589,6 +624,8 @@ export class TaskScene extends BaseScene<TaskSceneData> {
           }
           card.add(g);
         },
+        // Tiergruppen brauchen größere Karten
+        task.options.some((o) => o.group) ? { width: 260, height: 150 } : undefined,
       );
     } else {
       this.answerInput = new Numpad(this, {
@@ -602,6 +639,18 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     if (this.aid) this.showAid(this.aid);
     this.explainIfDue();
     announce(this.spokenText());
+    // Klasse 1: Die Aufgabe wird beim Erscheinen vorgelesen.
+    if (this.firstGrade) this.time.delayedCall(250, () => this.readAloud());
+  }
+
+  private mapData(): MapSceneData {
+    const area = findArea(this.content, this.areaId);
+    return area ? { map: areaMap(area) } : {};
+  }
+
+  /** Beschriftung eines Symbolknopfs; Klasse 1 sieht nur das Symbol. */
+  private buttonLabel(key: string): string | undefined {
+    return this.firstGrade ? undefined : this.t(key);
   }
 
   /**
@@ -623,6 +672,16 @@ export class TaskScene extends BaseScene<TaskSceneData> {
   private showStory(task: Task): void {
     const story = task.prompt.story!;
     const left = PANEL.x - PANEL.width / 2;
+    if (this.firstGrade) {
+      // Klasse 1: Die Geschichte wird vorgelesen; zu sehen sind Antwortkästchen und Bild.
+      this.expression = new Expression(this, PANEL.x, 200, task.prompt.terms);
+      this.panel.setY(PANEL.y);
+      if (task.prompt.picture) {
+        this.picture = new StoryPictureView(this, PANEL.x, 470, task.prompt.picture, PANEL.width);
+        this.storyObjects.push(this.picture);
+      }
+      return;
+    }
     const text = this.add
       .text(left, 140, this.t(`story.${story.id}`, story.params), {
         fontFamily: FontFamily.text,
@@ -660,8 +719,17 @@ export class TaskScene extends BaseScene<TaskSceneData> {
    */
   private showTerms(task: Task): void {
     const key = task.prompt.textKey;
-    if (!key) {
+    // Klasse 1: Die Frage wird nur vorgelesen (question()), die Zahlen bleiben sichtbar.
+    if (!key || this.firstGrade) {
       this.panel.setY(PANEL.y);
+      if (key && task.prompt.terms.length === 0) {
+        // Klasse 1, Geld legen: Der Betrag steht sonst nur im (vorgelesenen) Text.
+        if (this.firstGrade && task.money) {
+          const unit = task.money.unit === 'euro' ? '€' : 'ct';
+          this.expression = new Expression(this, PANEL.x, 200, [task.money.amount, unit]);
+        }
+        return;
+      }
       this.expression = new Expression(this, PANEL.x, 200, task.prompt.terms);
       return;
     }
@@ -751,6 +819,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     this.panelParts = [{ text: praise }];
     this.services.audio.play('correct');
     announce(praise);
+    if (this.firstGrade) this.services.audio.speak(praise);
     this.finishTask(outcome);
     if (shouldAskStrategy(this.task, this.strategyRules(), this.strategyAsked, this.flowRng)) {
       this.strategyAsked++;
@@ -1104,6 +1173,19 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     if (visual.type === 'hundred') {
       return new HundredBoard(this, PANEL.x, VISUAL_Y + 4, visual.marked);
     }
+    if (visual.type === 'dice') return new DiceFace(this, PANEL.x, VISUAL_Y, visual.n);
+    if (visual.type === 'fingers') return new Fingers(this, PANEL.x, VISUAL_Y, visual.n);
+    if (visual.type === 'count') {
+      return new CountField(
+        this,
+        PANEL.x,
+        VISUAL_Y,
+        visual.icon,
+        visual.points,
+        visual.icons,
+        visual.marked,
+      );
+    }
     if (visual.type === 'tenframe') {
       return new TenFrame(this, PANEL.x, VISUAL_Y + 20, visual.first, visual.second, visual.op);
     }
@@ -1189,6 +1271,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     // Paare und Zahlenstrahl zeigen den Hinweis direkt in der Eingabe statt in einem Bild.
     if (hint.visual && this.hintInInput(hint.visual)) {
       this.panel.show(text, icon);
+      this.speakHint();
       return;
     }
     const visual = hint.visual ? this.visualFor(hint.visual) : undefined;
@@ -1198,6 +1281,12 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     }
     this.panel.show(text, icon, visual);
     if (visual) this.fitBelowText(visual);
+    this.speakHint();
+  }
+
+  /** Klasse 1: Hinweise erscheinen ohne Text und werden deshalb gleich vorgelesen. */
+  private speakHint(): void {
+    if (this.firstGrade) this.services.audio.speak(this.panelSpeech());
   }
 
   private hintInInput(visual: Visual): boolean {
@@ -1361,11 +1450,14 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     const panel = this.panelSpeech();
     if (panel.length > 0 && terms.trim() !== '') parts[parts.length - 1]!.text += '.';
     parts.push(...panel);
-    // Antwortsätze (z. B. Fragen zur Situation) werden mit vorgelesen.
+    // Antwortsätze (z. B. Fragen zur Situation) werden mit vorgelesen, kurze Karten
+    // wie „3.“ nicht.
     for (const o of this.task.options ?? []) {
       if (!o.label) continue;
       const { key, params } = o.label;
-      parts.push({ key, ...(params ? { params } : {}), text: this.text(key, params) });
+      const text = this.text(key, params);
+      if (text.length <= 4) continue;
+      parts.push({ key, ...(params ? { params } : {}), text });
     }
     return parts;
   }

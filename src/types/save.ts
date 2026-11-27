@@ -69,10 +69,15 @@ export type Avatar = (typeof AVATARS)[number];
 /** Selbst erfundenes Muster (Schmetterlingshaus), ausgestellt im Zoo. */
 export type SavedPattern = { items: ShapeSpec[]; at: string };
 
+/** Schulklasse des Kindes: Klasse 1 beginnt im Streichelzoo und sieht keinen Aufgabentext. */
+export type Grade = 1 | 2;
+
 export type Profile = {
   id: string;
   nickname: string;
   avatar: Avatar;
+  /** fehlt bei älteren Profilen: Klasse 2 */
+  grade?: Grade;
   createdAt: string;
   /** Sterne zum Einlösen (die Sterne der Bereiche für die Freischaltung bleiben erhalten) */
   stars: number;

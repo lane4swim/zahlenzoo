@@ -1,11 +1,12 @@
 # Zahlen-Zoo
 
-Browser-Lernspiel für Kinder der 2. und 3. Klasse (Phaser, TypeScript, Vite).
+Browser-Lernspiel für Kinder der 1. bis 3. Klasse (Phaser, TypeScript, Vite); Klasse 1 beginnt im Streichelzoo.
 
 ## Dokumente
 
 - [Spezifikation](docs/zahlen-zoo-spezifikation.md)
 - [Kompetenzerwartungen Klasse 2 (NRW)](docs/kompetenzerwartungen-klasse-2.md)
+- [Streichelzoo für Klasse 1](docs/streichelzoo-klasse-1.md)
 - [Checkliste zur Umsetzung](docs/umsetzung-checkliste.md)
 
 ## Entwicklung

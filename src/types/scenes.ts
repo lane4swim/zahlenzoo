@@ -1,4 +1,5 @@
 import type { AnswerOutcome, RoundSummary } from './round';
+import type { MapId } from './content';
 import type { TaskLevel } from './task';
 
 /** Schlüssel aller Szenen. */
@@ -21,6 +22,8 @@ export const SceneKey = {
 export type ZooTab = 'babies' | 'decor' | 'badges' | 'patterns';
 export type ZooSceneData = { tab?: ZooTab; back?: 'Menu' | 'Map'; message?: string };
 
+/** Karte: großer Zoo oder Streichelzoo; fehlt: zuletzt gezeigte Karte oder die Startkarte der Klasse */
+export type MapSceneData = { map?: MapId };
 /** family: zuletzt gewähltes Thema im Gehege (bei mehreren Aufgabenfamilien) */
 export type AreaSceneData = { areaId: string; family?: string };
 /** Muster erfinden: Bereich, in dessen Gehege „Zurück“ führt */

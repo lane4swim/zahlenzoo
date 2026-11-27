@@ -32,12 +32,19 @@ const IMAGES: Record<string, string> = {
   [Tex.map]: 'img/map/karte_hintergrund_1024x768.png',
   [Tex.mapLock]: 'img/map/karte_schloss_128.png',
   [Tex.mapSign]: 'img/map/karte_schild_128.png',
+  [Tex.signpost]: 'img/map/karte_wegweiser_128.png',
+  [Tex.pettingMap]: 'img/map/karte_streichelzoo_1024x768.png',
   ...MONEY_IMAGES,
   ...Object.fromEntries(
-    ['objekt_fisch', 'objekt_eimer', 'objekt_banane', 'objekt_futternapf'].map((key) => [
-      key,
-      `img/objects/${key}_256.png`,
-    ]),
+    [
+      'objekt_fisch',
+      'objekt_eimer',
+      'objekt_banane',
+      'objekt_futternapf',
+      'objekt_moehre',
+      'objekt_kueken',
+      'objekt_kaninchen',
+    ].map((key) => [key, `img/objects/${key}_256.png`]),
   ),
   ...Object.fromEntries(
     [Tex.menuStart, Tex.menuProfile, Tex.menuAdults, Tex.menuRoundEnd].map((key) => [

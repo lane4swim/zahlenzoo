@@ -1,8 +1,43 @@
 {
-  "_hinweis": "Bereiche der Weltkarte in der Reihenfolge der Freischaltung. families: Aufgabenfamilien aus families.json in der Reihenfolge im Gehege; ohne families zeigt die Karte „bald“. requires: Vorgängerbereich.",
+  "_hinweis": "Bereiche der Weltkarte in der Reihenfolge der Freischaltung. families: Aufgabenfamilien aus families.json in der Reihenfolge im Gehege; ohne families zeigt die Karte „bald“. requires: Vorgängerbereich. map: Karte des Geheges, „zoo“ (Standard) oder „streichelzoo“ (Klasse 1). gradeOneBridge: nur für Profile der Klasse 1 nötig sind zusätzlich gradeOne.bridgeStars Sterne im ganzen Streichelzoo (rules.json).",
   "areas": [
     {
+      "id": "ziegenwiese",
+      "animal": "goat",
+      "map": "streichelzoo",
+      "families": ["count_20", "quick_count_20"]
+    },
+    {
+      "id": "hasenstall",
+      "animal": "rabbit",
+      "map": "streichelzoo",
+      "families": ["addsub_10"],
+      "requires": "ziegenwiese"
+    },
+    {
+      "id": "meerschweinchen",
+      "animal": "guineapig",
+      "map": "streichelzoo",
+      "families": ["numbers_20", "compare_20"],
+      "requires": "hasenstall"
+    },
+    {
+      "id": "eselweide",
+      "animal": "donkey",
+      "map": "streichelzoo",
+      "families": ["decompose_10", "addsub_20", "position_1"],
+      "requires": "meerschweinchen"
+    },
+    {
+      "id": "ponyhof",
+      "animal": "pony",
+      "map": "streichelzoo",
+      "families": ["shapes_1", "pattern_1", "money_20", "clock_1"],
+      "requires": "eselweide"
+    },
+    {
       "id": "affenwald",
+      "gradeOneBridge": true,
       "animal": "monkey",
       "families": [
         "neighbors_100",
@@ -17,6 +52,7 @@
     },
     {
       "id": "pinguinfelsen",
+      "gradeOneBridge": true,
       "animal": "penguin",
       "families": [
         "plus_facts_20",

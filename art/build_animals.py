@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Zahlen-Zoo: die übrigen sechs Tiere (Elefant, Papagei, Eule, Schmetterling,
+"""Zahlen-Zoo: die übrigen elf Tiere (Ziege, Hase, Meerschweinchen, Esel, Pony, Elefant, Papagei, Eule, Schmetterling,
 Giraffe, Erdmännchen) mit derselben Ausstattung wie Pinguin und Affe:
 5 Ausdrücke, Idle (6), Freude (8), Fütterung (8), Baby und Kartensymbol 128 × 128.
 
@@ -87,6 +87,11 @@ def item(name):
         return (ell(0, 6, 24, 20, C["orange"]) + circ(0, -16, 10, K, False)
                 + path("M 0 -12 V 24", sw=SI) + circ(-10, 4, 3.5, K, False) + circ(10, 10, 3.5, K, False)
                 + circ(-8, 16, 3, K, False))
+    if name == "moehre":
+        return (path("M -10 -22 Q -18 -40 -6 -44 M 0 -24 Q 0 -46 10 -48 M 8 -22 Q 20 -38 26 -30",
+                     sw=6, extra=f'stroke="{C["gras-dunkel"]}"')
+                + path("M -14 -22 Q 0 -30 14 -22 Q 8 10 0 34 Q -8 10 -14 -22 Z", C["orange"])
+                + path("M -8 -6 H 0 M -4 8 H 4", sw=2, extra='opacity="0.6"'))
     raise ValueError(name)
 
 
@@ -275,8 +280,136 @@ def meerkat(eyes, mouth, limbs, bob, brow_on, tag):
     return defs, body, head, ""
 
 
+def goat(eyes, mouth, limbs, bob, brow_on, tag):
+    W_, G, D = C["papier"], C["grau-warm"], C["affe-dunkel"]
+    # Freude zeigt die Ziege mit Ohren und Schwanz, nicht mit erhobenen Beinen.
+    tail = {"down": "M 344 352 Q 372 330 364 310", "mid": "M 344 352 Q 384 330 390 300",
+            "up": "M 344 352 Q 392 320 404 284"}[limbs]
+    ear = {"down": 24, "mid": 8, "up": -14}[limbs]
+    body = path(tail, sw=14 + 2 * SW, extra=f'stroke="{K}"') + path(tail, sw=14, extra=f'stroke="{W_}"')
+    body += rect(226, 230, 60, 90, 24, W_)
+    body += ell(256, 372 + bob * 0.5, 108, 92 - bob * 0.5, W_)
+    body += ell(300, 360, 34, 26, C["karte-schatten"], False, 'opacity="0.8"')
+    for x in (186, 228, 270, 312):
+        body += rect(x - 4, 410, 30, 66, 12, W_) + rect(x - 6, 456, 34, 22, 8, D)
+    head = ""
+    for side in (-1, 1):
+        hx = 256 + side * 34
+        head += path(f"M {hx} 132 Q {hx + side * 30} 70 {hx + side * 70} 78 Q {hx + side * 40} 92 {hx + side * 16} 140 Z", G)
+        ex = 256 + side * 92
+        head += rot(ell(ex, 178, 40, 16, W_) + ell(ex, 178, 26, 8, C["ohr-rosa"], False), side * ear, ex, 178)
+    head += ell(256, 186, 72, 70, W_)
+    head += ell(256, 232, 46, 32, C["karte-schatten"])
+    head += ell(242, 224, 5, 4, K, False) + ell(270, 224, 5, 4, K, False)
+    head += path("M 240 258 Q 256 310 272 258 Z", G)
+    head += cheeks(200, 312, 204, 12, 8)
+    head += ba.eye(226, 178, eyes) + ba.eye(286, 178, eyes) + brow(brow_on, 268, 146)
+    defs, m = mouth_at(MAMMAL_MOUTH[mouth], 256, 246, 0.45, tag)
+    head += m
+    return defs, body, head, ""
+
+
+def rabbit(eyes, mouth, limbs, bob, brow_on, tag):
+    G, P, D = C["grau-warm"], C["papier"], C["affe-dunkel"]
+    # Freude: Ohren gehen hoch und auseinander, die Vorderpfoten heben sich
+    spread = {"down": 0, "mid": 10, "up": 22}[limbs]
+    body = circ(352, 448, 22, P)  # Puschelschwanz
+    body += ell(256, 374 + bob * 0.5, 100, 106 - bob * 0.5, G)
+    body += ell(256, 396 + bob * 0.4, 60, 76 - bob * 0.4, P, False)
+    for x in (196, 316):
+        body += ell(x, 474, 44, 16, G) + ell(x, 474, 22, 7, C["ohr-rosa"], False)
+    paws = {"down": [(222, 392), (290, 392)], "mid": [(198, 352), (314, 352)], "up": [(188, 300), (324, 300)]}
+    for (px, py) in paws[limbs]:
+        body += ell(px, py, 16, 20, G)
+    head = ""
+    for side in (-1, 1):
+        ex = 256 + side * (34 + spread)
+        angle = side * (8 + spread)
+        head += rot(ell(ex, 76, 24, 74, G) + ell(ex, 82, 11, 54, C["ohr-rosa"], False), angle, ex, 150)
+    head += ell(256, 196, 78, 70, G)
+    head += ell(256, 232, 40, 28, P, False)
+    head += path("M 248 232 L 264 232 L 256 242 Z", C["rosa"], sw=SI)
+    head += rect(248, 252, 16, 14, 3, C["weiss"], extra=f'stroke-width="{SI}"')
+    head += cheeks(200, 312, 220, 12, 8)
+    head += ba.eye(226, 190, eyes) + ba.eye(286, 190, eyes) + brow(brow_on, 268, 158)
+    defs, m = mouth_at(MAMMAL_MOUTH[mouth], 256, 246, 0.4, tag)
+    head += m
+    return defs, body, head, ""
+
+
+def guineapig(eyes, mouth, limbs, bob, brow_on, tag):
+    """Meerschweinchen von vorn: rund, ohne Hals, dreifarbiges Fell, kleine runde Ohren."""
+    O, P, D = C["orange"], C["papier"], C["affe-dunkel"]
+    # Freude: kleiner Hüpfer („Popcorning“) über bob/lift, Pfötchen heben sich
+    body = ell(256, 372 + bob * 0.5, 150, 108 - bob * 0.5, O)
+    body += path("M 160 330 Q 200 300 240 330 Q 230 420 170 430 Q 130 400 160 330 Z", P, False)
+    body += path("M 300 420 Q 340 360 380 380 Q 392 430 350 462 Q 310 460 300 420 Z", D, False)
+    paws = {"down": [(206, 470), (306, 470)], "mid": [(186, 440), (326, 440)], "up": [(176, 404), (336, 404)]}
+    for (px, py) in paws[limbs]:
+        body += ell(px, py, 20, 12, C["ohr-rosa"])
+    head = ""
+    for side in (-1, 1):
+        ex = 256 + side * 70
+        head += ell(ex, 168, 24, 18, C["ohr-rosa"])
+    head += ell(256, 236, 104, 86, O)
+    head += path("M 256 150 Q 236 200 230 300 Q 256 312 282 300 Q 276 200 256 150 Z", P, False)
+    head += path("M 170 200 Q 200 170 226 190 Q 220 240 186 250 Q 164 236 170 200 Z", D, False)
+    head += ell(256, 268, 30, 20, P, False)
+    head += path("M 248 260 L 264 260 L 256 268 Z", C["rosa"], sw=SI)
+    head += cheeks(196, 316, 250, 12, 8)
+    head += ba.eye(222, 222, eyes) + ba.eye(290, 222, eyes) + brow(brow_on, 270, 190)
+    defs, m = mouth_at(MAMMAL_MOUTH[mouth], 256, 280, 0.4, tag)
+    head += m
+    return defs, body, head, ""
+
+
+def equine(eyes, mouth, limbs, bob, brow_on, tag, coat, light, dark, ears_long, mane):
+    """Esel und Pony von vorn: Körper mit vier Beinen, langer Kopf mit heller Schnauze."""
+    body = rect(226, 236, 60, 90, 24, coat)  # Hals
+    body += ell(256, 372 + bob * 0.5, 112, 88 - bob * 0.5, coat)
+    body += ell(256, 392 + bob * 0.4, 60, 50 - bob * 0.4, light, False)
+    for x in (186, 228, 270, 312):
+        body += rect(x - 4, 408, 30, 70, 12, coat) + rect(x - 6, 458, 34, 20, 8, dark)
+    # Schwanz: Freude hebt ihn an
+    tail = {"down": "M 360 360 Q 392 400 378 452", "mid": "M 360 360 Q 404 380 410 420",
+            "up": "M 360 360 Q 410 340 420 300"}[limbs]
+    body += path(tail, sw=16 + 2 * SW, extra=f'stroke="{K}"') + path(tail, sw=16, extra=f'stroke="{dark}"')
+    ear = {"down": 0, "mid": 8, "up": 18}[limbs]
+    head = ""
+    for side in (-1, 1):
+        ex = 256 + side * 36
+        h = 62 if ears_long else 34
+        head += rot(ell(ex, 112 - h / 2, 16, h, coat) + ell(ex, 112 - h / 2, 7, h * 0.7, C["ohr-rosa"], False),
+                    side * (14 + ear), ex, 120)
+    head += ell(256, 176, 66, 72, coat)
+    head += ell(256, 236, 50, 38, light)
+    head += ell(240, 236, 6, 8, dark, False) + ell(272, 236, 6, 8, dark, False)
+    if mane:
+        head += path("M 220 122 Q 236 96 256 104 Q 276 96 292 122 Q 276 136 256 128 Q 236 136 220 122 Z", dark)
+    head += cheeks(200, 312, 200, 11, 7)
+    head += ba.eye(228, 168, eyes) + ba.eye(284, 168, eyes) + brow(brow_on, 266, 136)
+    defs, m = mouth_at(MAMMAL_MOUTH[mouth], 256, 256, 0.42, tag)
+    head += m
+    return defs, body, head, ""
+
+
+def donkey(eyes, mouth, limbs, bob, brow_on, tag):
+    return equine(eyes, mouth, limbs, bob, brow_on, tag, C["grau-warm"], C["papier"], C["affe-dunkel"],
+                  ears_long=True, mane=False)
+
+
+def pony(eyes, mouth, limbs, bob, brow_on, tag):
+    return equine(eyes, mouth, limbs, bob, brow_on, tag, C["affe-fell"], C["affe-hell"], C["affe-dunkel"],
+                  ears_long=False, mane=True)
+
+
 # Tierdaten: Zeichnung, Kopfmitte (Baby, Symbol), Mund (Fütterung), Futter, Symbolmaßstab
 ANIMALS = {
+    "eselweide_esel": dict(draw=donkey, head=(256, 176), mouth=(256, 256), food="moehre", icon=0.4),
+    "ponyhof_pony": dict(draw=pony, head=(256, 176), mouth=(256, 256), food="heu", icon=0.42),
+    "meerschweinchen_meerschweinchen": dict(draw=guineapig, head=(256, 236), mouth=(256, 280), food="moehre", icon=0.46),
+    "hasenstall_hase": dict(draw=rabbit, head=(256, 190), mouth=(256, 246), food="moehre", icon=0.42),
+    "ziegenwiese_ziege": dict(draw=goat, head=(256, 186), mouth=(256, 246), food="moehre", icon=0.42),
     "elefantenwiese_elefant": dict(draw=elephant, head=(256, 226), mouth=(300, 282), food="heu", icon=0.25),
     "zookasse_papagei": dict(draw=parrot, head=(256, 190), mouth=(262, 248), food="nuss", icon=0.4),
     "futteruhr_eule": dict(draw=owl, head=(256, 196), mouth=(258, 252), food="beeren", icon=0.38),

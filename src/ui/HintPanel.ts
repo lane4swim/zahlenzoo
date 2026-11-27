@@ -41,7 +41,17 @@ export class HintPanel extends Phaser.GameObjects.Container {
 
   /** Unterkante des Hinweistexts in Szenenkoordinaten (für Bilder darunter). */
   get textBottom(): number {
-    return this.text.text === '' ? this.y : this.y + this.text.y + this.text.height;
+    return this.text.text === '' || !this.text.visible
+      ? this.y + (this.icon.visible ? 40 : 0)
+      : this.y + this.text.y + this.text.height;
+  }
+
+  /**
+   * Klasse 1: Text nicht zeigen (er wird vorgelesen); Symbol und Darstellung bleiben.
+   * `message` liefert den Text weiter für das Vorlesen.
+   */
+  setTextHidden(hidden: boolean): void {
+    this.text.setVisible(!hidden);
   }
 
   /** Text mit Symbol; die Darstellung wird ersetzt (undefined entfernt sie). */

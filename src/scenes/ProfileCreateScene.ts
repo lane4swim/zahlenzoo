@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { BaseScene } from './BaseScene';
 import { cleanNickname, NICKNAME_MAX } from '../services/save';
 import type { Services } from '../services/services';
-import { AVATARS, type Avatar } from '../types/save';
+import { AVATARS, type Avatar, type Grade } from '../types/save';
 import { SceneKey } from '../types/scenes';
 import { drawAvatar } from '../ui/AvatarBadge';
 import { Button } from '../ui/Button';
@@ -10,11 +10,14 @@ import { Color, CssColor, FontFamily, FontSize, Tex } from '../ui/theme';
 
 /**
  * Neues Profil: Spitzname (HTML-Eingabefeld über der Leinwand, damit die
- * Bildschirmtastatur des Tablets erscheint) und eines von acht Tierbildern.
+ * Bildschirmtastatur des Tablets erscheint), eines von acht Tierbildern und die Klasse
+ * (Klasse 1 beginnt im Streichelzoo, docs/streichelzoo-klasse-1.md).
  */
 export class ProfileCreateScene extends BaseScene {
   private avatar: Avatar = 'penguin';
   private readonly avatarButtons = new Map<Avatar, Button>();
+  private grade: Grade = 2;
+  private readonly gradeButtons = new Map<Grade, Button>();
   private nameField?: HTMLInputElement;
   private message!: Phaser.GameObjects.Text;
 
@@ -76,9 +79,22 @@ export class ProfileCreateScene extends BaseScene {
         color: CssColor.kontur,
       })
       .setOrigin(0.5);
+    const bottom = this.scale.height - 80;
+    ([1, 2] as const).forEach((grade, i) => {
+      const button = this.addButton({
+        x: cx - 340 + i * 190,
+        y: bottom,
+        width: 170,
+        label: this.t(`profile.grade${grade}`),
+        fontSize: FontSize.small,
+        onPress: () => this.chooseGrade(grade),
+      });
+      this.gradeButtons.set(grade, button);
+    });
+    this.chooseGrade(this.grade);
     this.addButton({
-      x: cx,
-      y: this.scale.height - 80,
+      x: cx + 250,
+      y: bottom,
       width: 260,
       label: this.t('profile.create'),
       fill: Color.grasHell,
@@ -93,6 +109,13 @@ export class ProfileCreateScene extends BaseScene {
     }
   }
 
+  private chooseGrade(grade: Grade): void {
+    this.grade = grade;
+    for (const [g, button] of this.gradeButtons) {
+      button.setFill(g === grade ? Color.sonne : Color.papier);
+    }
+  }
+
   private submit(): void {
     const name = cleanNickname(this.nameField?.value ?? '');
     if (name === '') {
@@ -100,7 +123,7 @@ export class ProfileCreateScene extends BaseScene {
       this.nameField?.focus();
       return;
     }
-    this.services.save.addProfile(name, this.avatar);
+    this.services.save.addProfile(name, this.avatar, this.grade);
     this.scene.start(SceneKey.Menu);
   }
 }

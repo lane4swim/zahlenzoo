@@ -1,4 +1,5 @@
 import { BaseScene } from './BaseScene';
+import { defaultMap, profileGrade } from '../logic/areas';
 import type { Services } from '../services/services';
 import { SceneKey } from '../types/scenes';
 import { drawAvatar } from '../ui/AvatarBadge';
@@ -27,7 +28,8 @@ export class MenuScene extends BaseScene {
       y: 400,
       width: 320,
       label: this.t('menu.play'),
-      onPress: () => this.scene.start(SceneKey.Map),
+      // Klasse 1 beginnt im Streichelzoo, Klasse 2 im großen Zoo
+      onPress: () => this.scene.start(SceneKey.Map, { map: defaultMap(profileGrade(profile)) }),
     });
     this.addButton({
       x: cx,

@@ -27,6 +27,11 @@ export type Sfx = (typeof SFX)[number];
 
 /** Tierlaute (public/assets/audio/animals/<tier>.mp3). */
 export const ANIMAL_SOUNDS = [
+  'goat',
+  'donkey',
+  'pony',
+  'guineapig',
+  'rabbit',
   'penguin',
   'monkey',
   'elephant',

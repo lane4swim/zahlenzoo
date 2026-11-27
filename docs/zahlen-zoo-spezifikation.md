@@ -1,14 +1,14 @@
 # Zahlen-Zoo: Spezifikation (Phaser, TypeScript, Vite)
 
-Stand: 7. November 2026. Ergänzend: `kompetenzerwartungen-klasse-2.md`.
+Stand: 7. November 2026, Streichelzoo ergänzt am 26.11.2026. Ergänzend: `kompetenzerwartungen-klasse-2.md`, `streichelzoo-klasse-1.md`.
 
 ## 1. Ziel und Rahmen
 
-Der Zahlen-Zoo ist ein Browser-Lernspiel, in dem Kinder der 2. und 3. Klasse Zootiere versorgen und dafür kurze Rechenaufgaben lösen. Version 1 deckt Klasse 2 ab, Klasse 3 folgt als Erweiterung.
+Der Zahlen-Zoo ist ein Browser-Lernspiel, in dem Kinder der 2. und 3. Klasse Zootiere versorgen und dafür kurze Rechenaufgaben lösen. Version 1 deckt Klasse 2 ab; der Streichelzoo für Klasse 1 folgt als eigene Phase vor dem Pilot (`streichelzoo-klasse-1.md`), Klasse 3 als Erweiterung.
 
 | Punkt | Festlegung |
 | --- | --- |
-| Zielgruppe | 7 bis 9 Jahre; Klasse 2 in V1, Klasse 3 in V2 |
+| Zielgruppe | 6 bis 9 Jahre; Klasse 2 in V1, Klasse 1 im Streichelzoo (Phase 4b), Klasse 3 in V2 |
 | Geräte | Tablets mit Touch zuerst, Laptops mit Maus zusätzlich |
 | Bildschirm | Querformat, Basisauflösung 1024 × 768, skaliert auf andere Größen |
 | Browser | aktuelle Versionen von Chrome, Safari, Edge und Firefox |
@@ -154,10 +154,11 @@ Das Kind baut einen Zoo auf: Auf einer Karte wählt es einen Bereich, versorgt d
 | Schmetterlingshaus | Schmetterling | Muster, Achsensymmetrie erkennen, Formen erkennen und legen, Flächen und Umfang, Lage und Wege | 2, 3 |
 | Giraffenhof | Giraffe | Längen messen und vergleichen, Stützpunkte für 1 cm und 1 m, cm und m umwandeln; später Hunderterraum bis 1000 und Runden | 2, 3 |
 | Zoo-Zählung | Erdmännchen | Strichlisten, Tabellen und Kalender lesen, einfache Kombinatorik mit Anordnungen | 2, 3 |
+| Streichelzoo (eigene Karte: Ziegenwiese, Hasenstall, Meerschweinchen, Eselweide, Ponyhof) | Ziege, Hase, Meerschweinchen, Esel, Pony | Zahlen bis 20: Zählen, Blitzblick, Vergleichen, Zerlegen, Plus und Minus bis 20, Lagewörter; Formen, Muster, Geld bis 20 €, volle Stunden | 1 (2 zur Wiederholung) |
 
 **Freischaltung (Startwerte, im Test anzupassen)**
 
-- Zu Beginn offen: Affenwald und Pinguinfelsen.
+- Jedes Profil hat eine Klasse (1 oder 2). Der Streichelzoo ist eine eigene Karte; Klasse 1 beginnt dort, Klasse 2 im großen Zoo; ein Wegweiser verbindet beide Karten. Klasse 2: zu Beginn offen sind Ziegenwiese, Affenwald und Pinguinfelsen. Klasse 1: zu Beginn offen ist nur die Ziegenwiese; Affenwald und Pinguinfelsen öffnen bei 24 Sternen im ganzen Streichelzoo oder beim Wechsel auf Klasse 2.
 - Jeder weitere Bereich öffnet, wenn im Vorgängerbereich insgesamt 6 Sterne gesammelt sind.
 - Jeder Bereich hat 3 Stufen; die nächste Stufe öffnet nach einer Runde mit mindestens 2 Sternen.
 - Mit Sternen kauft das Kind Tiere (Baby-Tiere des Bereichs) und Dekoration; ein Spiel-Shop mit echtem Geld existiert nicht.
@@ -333,6 +334,7 @@ Die Bedienung funktioniert mit einem Finger, ohne Tastatur und ohne Lesen langer
 - Schrift: gut lesbare Grundschulschrift ohne Schnörkel, mindestens 28 px für Aufgabentext in der Basisauflösung, Ziffern größer (48 px).
 - Kontrast mindestens 4,5 : 1 für Text; Information nie nur durch Farbe, sondern zusätzlich durch Form oder Symbol.
 - Kurze Sätze, Wörter aus dem Grundwortschatz der 2. Klasse.
+- Profile der Klasse 1 sehen keinen Aufgaben-, Hinweis- und Lobtext: Bildsymbole, Ziffern und Rechnungen, alles Sprachliche als Ton; Knöpfe nur als Symbol, Tippflächen mindestens 80 × 80 Pixel (`streichelzoo-klasse-1.md`, Abschnitt 5).
 
 **Audio**
 
@@ -492,7 +494,7 @@ Die Spiellogik wird automatisch getestet, die Spielbarkeit mit echten Kindern au
 
 Der erste Meilenstein ist ein vollständig spielbarer Bereich; erst danach wächst der Inhalt. So zeigt sich früh, ob Aufgaben, Hilfen und Bedienung bei Kindern funktionieren.
 
-**Roadmap (5 Phasen, 4 Tore)**
+**Roadmap (6 Phasen, 5 Tore)**
 
 1. **Fundament** (1 bis 2 Wochen): Projekt, Szenen- und Logikgerüst, Tests, automatische Prüfung.
    Tor: Eine leere Runde läuft, Tests und Build sind grün.
@@ -502,6 +504,8 @@ Der erste Meilenstein ist ein vollständig spielbarer Bereich; erst danach wäch
    Tor: Eine Lehrkraft hat Aufgaben und Hinweise geprüft.
 4. **Feinschliff** (2 bis 3 Wochen): Offline-Installation, Barrierefreiheit, Erwachsenenbereich, Leistungstest.
    Tor: Akzeptanzkriterien aus Abschnitt 12 sind erfüllt.
+4b. **Streichelzoo (Klasse 1)**: Klasse im Profil, Bereich mit Scheune, 12 Familien, Darstellung ohne Text, Aufnahmen; zuerst ein vertikaler Schnitt mit drei Familien.
+   Tor: Kinder der 1. Klasse spielen eine Runde ohne Hilfe, auch wenn sie noch nicht lesen.
 5. **Pilot und Erweiterung** (3 bis 4 Wochen): Pilot in einer Klasse, Auswertung; danach Giraffenhof (Klasse 3) und Klasse 3.
 
 Die Wochenangaben sind grobe Schätzungen ohne Abgleich mit der verfügbaren Zeit und verschieben sich vor allem mit dem Aufwand für Grafik und Audio.

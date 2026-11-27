@@ -1,5 +1,5 @@
 {
-  "comment": "Lage der Gehege und der Bedienelemente auf der Zoo-Karte (1024 × 768). Gemeinsame Quelle für art/build_map.py, MapScene und den Test, dass alle Dekorationen sichtbar bleiben (tests/logic.mapLayout.test.ts). Bedienelemente: Mitte x/y, Breite w, Höhe h.",
+  "comment": "Lage der Gehege und der Bedienelemente auf der Zoo-Karte (1024 × 768). Gemeinsame Quelle für art/build_map.py, MapScene und den Test, dass alle Dekorationen sichtbar bleiben (tests/logic.mapLayout.test.ts). Bedienelemente: Mitte x/y, Breite w, Höhe h. signpost: Wegweiser zur anderen Karte auf dem Hauptweg (kleinerer Marker, Bild 96 px). streichelzoo: Gehege und Wegweiser der Streichelzoo-Karte (Bedienelemente und Leiste wie im großen Zoo). compactMarker: Maße des kleineren Markers (Wegweiser).",
   "areas": {
     "affenwald": {
       "x": 150,
@@ -80,5 +80,43 @@
   },
   "bar": {
     "top": 668
+  },
+  "signpost": {
+    "x": 517,
+    "y": 418
+  },
+  "streichelzoo": {
+    "areas": {
+      "ziegenwiese": {
+        "x": 200,
+        "y": 270
+      },
+      "hasenstall": {
+        "x": 512,
+        "y": 270
+      },
+      "meerschweinchen": {
+        "x": 824,
+        "y": 270
+      },
+      "eselweide": {
+        "x": 200,
+        "y": 560
+      },
+      "ponyhof": {
+        "x": 512,
+        "y": 560
+      }
+    },
+    "signpost": {
+      "x": 512,
+      "y": 418
+    }
+  },
+  "compactMarker": {
+    "iconScale": 0.6,
+    "iconY": -10,
+    "plateY": 36,
+    "hitH": 130
   }
 }
