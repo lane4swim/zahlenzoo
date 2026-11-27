@@ -980,5 +980,6 @@
   "strategy.shapes_1": "Formen",
   "task.prompt.decompose": "Ein paar Tiere haben schon einen Haken. Wie viele haben noch keinen?",
   "task.prompt.shapes1.same": "Welche Form ist gleich? Tippe sie an.",
-  "task.prompt.shapes1.hear": "Welche Form ist ein {name}? Tippe sie an."
+  "task.prompt.shapes1.hear": "Welche Form ist ein {name}? Tippe sie an.",
+  "task.aid.tenFrame": "Zehnerfeld"
 }

@@ -243,7 +243,8 @@ Plan: [`streichelzoo-klasse-1.md`](streichelzoo-klasse-1.md).
 - [x] Eselweide (Esel: Zerlegen, Plus und Minus bis 20, Lagewörter) und Ponyhof (Pony: Formen, Muster, Geld bis 20 €, volle Stunden), je mit Tier, Baby, Laut und Hintergründen; Teich und Heuballen der Karte entfernt
 - [ ] Lagewörter und Uhr für Klasse 1 ohne Wortkarten (bisher „unter dem Tisch“, „7 Uhr“ als Text; wird vorgelesen)
 - [x] Themen `count_20` (Antippen mit Häkchen), `quick_count_20` (Würfel- und Fingerbilder, Zehnerfelder), `addsub_10` (mit Bild, Bildrechengeschichten, Umkehraufgaben); höchstens drei Antwortkarten
-- [x] Klasse 1 in der Aufgabenansicht: kein Aufgaben-, Hinweis- und Lobtext, Vorlesen beim Erscheinen und bei jedem Hinweis, Knöpfe nur als Symbol, ohne Rechenhilfen der Klasse 2, Runden mit 7 Aufgaben
+- [x] Klasse 1 in der Aufgabenansicht: kein Aufgaben-, Hinweis- und Lobtext, Vorlesen beim Erscheinen und bei jedem Hinweis, Knöpfe nur als Symbol, Runden mit 7 Aufgaben
+- [x] Rechenhilfen passend zur Aufgabe (27.11.2026): bis 20 Zehnerfeld und Rechenstrich mit Sprung, über 20 Zehnerstangen, Rechenstrich und Hundertertafel (nur Startzahl markiert); Rechenstrich zeigt immer den Sprung, das Ergebnis bleibt verdeckt; Klasse 1 bekommt Zehnerfeld und Rechenstrich bei Rechnungen
 - [ ] Bildsymbol je Aufgabe (antippen, schau, gib)
 - [ ] Gehege, Rundenende und Karte für Klasse 1 ohne Text (bisher nur die Aufgabenansicht)
 - [ ] Größere Tippflächen (80 × 80) für Klasse 1

@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { BaseScene } from './BaseScene';
 import { areaFamilies, familyParams, findArea } from '../logic/content';
+import { aidsFor, knownNumbers, numberLineFor, tenFrameFor, type Aid } from '../logic/aids';
 import { areaMap, profileGrade } from '../logic/areas';
 import { dailyPlan } from '../logic/daily';
 import { explainDue, formatTime } from '../logic/skills';
@@ -87,8 +88,6 @@ import { Color, CssColor, FontFamily, FontSize, Layout, reducedMotion, Tex } fro
 
 const NEXT_DELAY = 1600;
 
-type Aid = 'tensOnes' | 'numberLine' | 'hundredBoard';
-
 // Aufteilung der Fläche 1024 × 768
 const PANEL = { x: 624, y: 262, width: 712 };
 /** Eingabe etwas weiter links als die Tafel, damit vier Antwortkarten Platz haben. */
@@ -101,6 +100,18 @@ const PLATE_Y = 428;
 const PLATE_H = 190;
 /** Uhr beim Lesen und Einstellen: unter dem Hinweistext, über den Antwortkarten */
 const CLOCK = { y: 432, radius: 105 };
+/** Symbol des Zehnerfeld-Knopfs: zwei Reihen zu fünf, die obere voll. */
+function drawTenFrameIcon(g: Phaser.GameObjects.Graphics): void {
+  const cell = 13;
+  g.lineStyle(2, Color.kontur, 1);
+  g.strokeRect(-2.5 * cell, -cell, 5 * cell, 2 * cell);
+  for (let c = 1; c < 5; c++) g.lineBetween((c - 2.5) * cell, -cell, (c - 2.5) * cell, cell);
+  g.lineBetween(-2.5 * cell, 0, 2.5 * cell, 0);
+  g.fillStyle(Color.orange, 1);
+  for (let c = 0; c < 5; c++) g.fillCircle((c - 2) * cell, -cell / 2, cell / 2 - 2);
+  for (let c = 0; c < 2; c++) g.fillCircle((c - 2) * cell, cell / 2, cell / 2 - 2);
+}
+
 /** Zehnerfeld und Punktefeld groß genug für den Blick aus normalem Abstand */
 const displayScale = (visual: Visual): number =>
   visual.type === 'ice' && visual.shown?.length
@@ -177,7 +188,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     | ComposeInput
     | SelectInput
     | BuildInput;
-  private aidButtons: Button[] = [];
+  private aidButtons = new Map<Aid, Button>();
   private feedbackIcon?: Phaser.GameObjects.Image;
   /** Frage, Sachtext, Einheit und Bild (werden je Aufgabe neu angelegt) */
   private storyObjects: Phaser.GameObjects.GameObject[] = [];
@@ -349,28 +360,38 @@ export class TaskScene extends BaseScene<TaskSceneData> {
   // -------------------------------------------------------------------------
   // Aufbau einer Aufgabe
 
+  /** Knöpfe für alle Rechenhilfen; welche zu sehen sind, entscheidet jede Aufgabe (aidsFor). */
   private createAidButtons(): void {
-    // Klasse 1: Zehnerstangen, Rechenstrich und Hundertertafel gehören zu Klasse 2;
-    // Zehnerfeld und Fingerbild kommen mit den Hinweisen.
-    if (this.firstGrade) {
-      this.aidButtons = [];
-      return;
-    }
-    const aids: Array<[Aid, string]> = [
-      ['tensOnes', Tex.aidTens],
-      ['numberLine', Tex.aidLine],
-      ['hundredBoard', Tex.aidHundred],
+    const icons: Array<
+      [Aid, { icon: string } | { drawIcon: (g: Phaser.GameObjects.Graphics) => void }]
+    > = [
+      ['tenFrame', { drawIcon: drawTenFrameIcon }],
+      ['tensOnes', { icon: Tex.aidTens }],
+      ['numberLine', { icon: Tex.aidLine }],
+      ['hundredBoard', { icon: Tex.aidHundred }],
     ];
-    this.aidButtons = aids.map(([aid, icon], i) =>
-      this.addButton({
-        x: Layout.margin + 48,
-        y: 420 + i * 112,
-        width: 96,
-        icon,
-        iconScale: 0.8,
-        onPress: () => this.toggleAid(aid),
-      }),
+    this.aidButtons = new Map(
+      icons.map(([aid, look]) => [
+        aid,
+        this.addButton({
+          x: Layout.margin + 48,
+          y: 420,
+          width: 96,
+          ...look,
+          iconScale: 0.8,
+          onPress: () => this.toggleAid(aid),
+        }),
+      ]),
     );
+  }
+
+  /** Rechenhilfen dieser Aufgabe untereinander links unter dem Tier. */
+  private layoutAids(aids: readonly Aid[]): void {
+    for (const [aid, button] of this.aidButtons) {
+      const i = aids.indexOf(aid);
+      button.setVisible(i >= 0);
+      if (i >= 0) button.setY(420 + i * 112);
+    }
   }
 
   private showTask(): void {
@@ -394,7 +415,9 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     this.display = undefined;
     this.displayHidden = false;
     this.taskStart = this.time.now;
-    if (this.support) this.aid = 'tensOnes';
+    const aids = aidsFor(task, this.firstGrade);
+    // Nach einem Stufenabstieg ist die erste passende Hilfe gleich offen.
+    this.aid = this.support ? aids[0] : this.aid && aids.includes(this.aid) ? this.aid : undefined;
 
     const { done, total } = progress(this.round);
     this.dots.setProgress(done, total);
@@ -417,11 +440,7 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     }
     this.panel.clear();
     this.expression?.setAnswer('');
-    // Rechenhilfen nur, wenn die Aufgabe Zahlen hat; beim Geldlegen sind Teller und
-    // Münzen die Darstellung.
-    for (const b of this.aidButtons) {
-      b.setVisible(!task.money && !task.share && this.knownNumbers().length > 0);
-    }
+    this.layoutAids(aids);
     const instruction = task.prompt.instructionKey ?? (task.money ? 'task.money.plate' : undefined);
     this.panelParts = [];
     if (instruction) {
@@ -1348,30 +1367,43 @@ export class TaskScene extends BaseScene<TaskSceneData> {
     this.showAid(aid);
   }
 
-  /** Bekannte Zahlen der Aufgabe (ohne die gesuchte). */
   private knownNumbers(): number[] {
-    const m = this.task.math;
-    if (m) return m.missing === 'b' ? [m.a, m.result] : [m.a, m.b];
-    const story = this.task.prompt.story;
-    if (story) {
-      return Object.values(story.params).filter((v): v is number => typeof v === 'number');
-    }
-    return this.task.prompt.terms.filter((t): t is number => typeof t === 'number');
+    return knownNumbers(this.task);
   }
 
   private showAid(aid: Aid): void {
     const known = this.knownNumbers();
     if (known.length === 0) return;
     this.picture?.setVisible(false);
+    const m = this.task.math;
     let visual: Phaser.GameObjects.GameObject;
-    if (aid === 'tensOnes') {
-      visual = new TensOnes(this, PANEL.x, VISUAL_Y - 10, known.slice(0, 3));
-    } else if (aid === 'numberLine') {
-      visual = new NumberLine(this, PANEL.x, VISUAL_Y + 40, PANEL.width - 80, known[0] ?? 0, []);
+    if (aid === 'tenFrame' && m) {
+      const f = tenFrameFor(m);
+      visual = new TenFrame(this, PANEL.x, VISUAL_Y + 20, f.first, f.second, f.op);
+      (visual as Phaser.GameObjects.Container).setScale(1.3);
+    } else if (aid === 'numberLine' && m) {
+      const l = numberLineFor(m);
+      visual = new NumberLine(
+        this,
+        PANEL.x,
+        VISUAL_Y + 40,
+        PANEL.width - 80,
+        l.start,
+        l.jumps,
+        l.hideResults,
+        l.hideJumps,
+      );
+    } else if (aid === 'hundredBoard') {
+      // Startzahl markieren; das Ziel sucht das Kind selbst
+      visual = new HundredBoard(this, PANEL.x, VISUAL_Y + 4, m ? [m.a] : known);
     } else {
-      visual = new HundredBoard(this, PANEL.x, VISUAL_Y + 4, known);
+      visual = new TensOnes(this, PANEL.x, VISUAL_Y - 10, known.slice(0, 3));
     }
-    this.panel.show(aid === 'hundredBoard' ? '' : this.t(`task.aid.${aid}`), undefined, visual);
+    this.panel.show(
+      aid === 'hundredBoard' || this.firstGrade ? '' : this.t(`task.aid.${aid}`),
+      undefined,
+      visual,
+    );
     this.fitBelowText(visual);
   }
 
